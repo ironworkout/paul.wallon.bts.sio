@@ -194,6 +194,7 @@
         .knockout-table td { min-width: 250px; }
         .knockout-table .fixture-team { min-width: 100px; }
 
+
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
         .team-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -301,13 +302,13 @@
 <body>
     <header>
         <div class="container header-container">
-            <a href="#accueil-section" class="logo">
+            <a href="#accueil-section-l1" class="logo">
                 <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
             <nav>
                 <ul>
-                    <li><a href="#accueil-section" class="active-nav-link"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="#accueil-section-l1" class="active-nav-link"><i class="fas fa-home"></i> Accueil</a></li>
                     <li><a href="#actualites-section-container"><i class="fas fa-newspaper"></i> Actualités</a></li>
                     <li><a href="#competitions-section"><i class="fas fa-trophy"></i> Ligues</a></li>
                     <li><a href="#billetterie-content"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
@@ -535,19 +536,16 @@
             }
         };
         
-        // Correction: leagueDataStore doit contenir les IDs DOM constants.
-        // Les données (teams, seasons, active_season_id) seront chargées ou initialisées dedans.
         let leagueDataStore = {};
         for (const leagueId in LEAGUE_FILENAMES) {
             leagueDataStore[leagueId] = {
-                ...JSON.parse(JSON.stringify(initialLeagueDataStructure)), // Structure de base pour les données
-                teams: JSON.parse(JSON.stringify(initialTeamData[leagueId] || {})), // Données initiales des équipes
-                filename: LEAGUE_FILENAMES[leagueId], // Nom du fichier Drive
-                fileId: null, // ID du fichier Drive (obtenu après chargement/création)
-                // IDs des éléments DOM pour cette ligue
+                ...JSON.parse(JSON.stringify(initialLeagueDataStructure)),
+                teams: JSON.parse(JSON.stringify(initialTeamData[leagueId] || {})),
+                filename: LEAGUE_FILENAMES[leagueId],
+                fileId: null,
                 teamsGridId: `${leagueId}-teams-grid`,
                 fixtureBodyId: leagueId === 'ldc' ? 'ldc-knockout-body' : `${leagueId}-fixtures-body`,
-                standingsBodyId: `${leagueId}-standings-body`
+                standingsBodyId: `${leagueId}-standings-body` 
             };
         }
 
@@ -596,7 +594,7 @@
                 if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
                 if(driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
                 try {
-                     await loadAllLeagueDataFromDrive(); // Cette fonction mettra à jour leagueDataStore
+                     await loadAllLeagueDataFromDrive();
                      showMessage("Données des ligues chargées.", 3000);
                      if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'error'); driveStatusElement.classList.add('success'); }
                      if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connecté';
@@ -702,29 +700,25 @@
                                 leagueDataStore[leagueId].standingsBodyId = initialLeagueData[leagueId].standingsBodyId;
                                 console.log(`Données ${leagueId.toUpperCase()} chargées avec succès depuis Drive.`);
                             } else {
-                                console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données initiales.`);
-                                leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
-                                leagueDataStore[leagueId].fileId = ref.fileId;
+                                console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données initiales (avec IDs DOM).`);
+                                leagueDataStore[leagueId] = { ...JSON.parse(JSON.stringify(initialLeagueData[leagueId])), fileId: ref.fileId };
                                 allDriveLoadsSuccessful = false;
                             }
                         } catch (e) {
                             console.error(`Erreur parsing ${leagueId.toUpperCase()} Drive:`, e); showMessage(`Données ${leagueId.toUpperCase()} Drive corrompues.`, 7000, true);
-                            leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
-                            leagueDataStore[leagueId].fileId = ref.fileId;
+                            leagueDataStore[leagueId] = { ...JSON.parse(JSON.stringify(initialLeagueData[leagueId])), fileId: ref.fileId };
                             allDriveLoadsSuccessful = false;
                         }
                     } else {
                          console.log(`Fichier ${ref.filename} vide sur Drive. Initialisation avec données par défaut locales.`);
-                         leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
-                         leagueDataStore[leagueId].fileId = ref.fileId; 
-                         // Sauvegarder cette structure par défaut sur Drive pour qu'elle existe.
+                         leagueDataStore[leagueId] = { ...JSON.parse(JSON.stringify(initialLeagueData[leagueId])), fileId: ref.fileId };
                          await saveLeagueDataToDrive(leagueId, true); 
                          allDriveLoadsSuccessful = false; 
                     }
                 } else {
                     console.warn(`Impossible trouver/créer le fichier ${ref.filename} sur Drive. Utilisation des données initiales.`);
                     showMessage(`Fichier ${ref.filename} Drive inaccessible.`, 7000, true);
-                    leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
+                    leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); // Garde les IDs DOM
                     allDriveLoadsSuccessful = false;
                 }
             }
@@ -743,7 +737,7 @@
                 leagueData.fileId = await findOrCreateFile(leagueData.filename, JSON.stringify(leagueData));
                 if(!leagueData.fileId){ showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); return; }
             } else if (!leagueData.fileId && isInitialSave) { 
-                console.error(`Sauvegarde initiale pour ${leagueId} mais fileId est manquant. Cela ne devrait pas arriver si findOrCreateFile a été appelé avant.`); return;
+                 console.error(`Sauvegarde initiale pour ${leagueId} mais fileId est manquant. Cela ne devrait pas arriver si findOrCreateFile a été appelé avant.`); return;
             }
 
             const activeSeason = leagueData.seasons.find(s => s.season_id === leagueData.active_season_id);
@@ -751,8 +745,14 @@
                 activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
             }
             
-            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive. Données:`, JSON.parse(JSON.stringify(leagueData)));
-            const success = await updateFileContent(leagueData.fileId, leagueData);
+            const dataToSaveOnDrive = { // Sauvegarder uniquement les données, pas les IDs DOM
+                teams: leagueData.teams,
+                seasons: leagueData.seasons,
+                active_season_id: leagueData.active_season_id
+            };
+
+            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive. Données:`, JSON.parse(JSON.stringify(dataToSaveOnDrive)));
+            const success = await updateFileContent(leagueData.fileId, dataToSaveOnDrive);
             if (success) { if(!isInitialSave) showMessage(`Données ${leagueId.toUpperCase()} sauvegardées !`, 2000); }
             else { if(!isInitialSave) showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true); }
         }
@@ -813,34 +813,28 @@
 
             const numTeamsForLDC = 16; 
             let qualifiedTeams = teams.slice(0, numTeamsForLDC);
-            while(qualifiedTeams.length < numTeamsForLDC && qualifiedTeams.length > 0 && qualifiedTeams.length % 2 !== 0) {
-                qualifiedTeams.push(`Qualifié ${qualifiedTeams.length + 1}`); 
-            }
-            if (qualifiedTeams.length % 2 !== 0 && qualifiedTeams.length > 1) qualifiedTeams.pop();
-
-            const createRound = (teamList, roundNamePrefix, numMatches) => {
+            
+            const createRound = (teamList, roundNamePrefix, numMatchesInRound) => {
                 const roundMatches = [];
-                for (let i = 0; i < numMatches; i++) {
-                     roundMatches.push({ 
-                        id_match: `${roundNamePrefix}${i+1}`, 
-                        equipe_dom: teamList[2*i] || null, // Prend les équipes par paires
-                        equipe_ext: teamList[2*i + 1] || null,
-                        score_dom: null, score_ext: null, vainqueur: null 
-                    });
+                for (let i = 0; i < numMatchesInRound; i++) {
+                     const equipeDom = teamList[2*i] || null;
+                     const equipeExt = teamList[2*i + 1] || null;
+                     if(equipeDom && equipeExt) { // Match normal
+                        roundMatches.push({ id_match: `${roundNamePrefix}${i+1}`, equipe_dom: equipeDom, equipe_ext: equipeExt, score_dom: null, score_ext: null, vainqueur: null });
+                     } else if (equipeDom && !equipeExt) { // Équipe qualifiée d'office (bye)
+                         roundMatches.push({ id_match: `${roundNamePrefix}${i+1}`, equipe_dom: equipeDom, equipe_ext: "BYE", score_dom: null, score_ext: null, vainqueur: equipeDom });
+                     }
                 }
                 return roundMatches;
             };
             
-            const huitiemes = qualifiedTeams.length >= 2 ? createRound(qualifiedTeams, 'h', Math.min(8, Math.floor(qualifiedTeams.length/2)) ) : [];
-            
-            // Initialiser les tours suivants vides, ils seront remplis par propagateKnockoutWinners
-            const quarts = []; for(let i=0; i<huitiemes.length/2; i++) quarts.push({id_match: `q${i+1}`, equipe_dom_ref: `vainqueur_h${2*i+1}`, equipe_ext_ref: `vainqueur_h${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
-            const demies = []; for(let i=0; i<quarts.length/2; i++) demies.push({id_match: `d${i+1}`, equipe_dom_ref: `vainqueur_q${2*i+1}`, equipe_ext_ref: `vainqueur_q${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
-            const finale = []; if(demies.length >=1) finale.push({id_match: `f1`, equipe_dom_ref: `vainqueur_d1`, equipe_ext_ref: `vainqueur_d2`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+            const huitiemes = qualifiedTeams.length >= 2 ? createRound(qualifiedTeams, 'h', 8 ) : []; // 8 matchs pour 8èmes
+            const quarts = []; for(let i=0; i<4; i++) quarts.push({id_match: `q${i+1}`, equipe_dom_ref: `vainqueur_h${2*i+1}`, equipe_ext_ref: `vainqueur_h${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+            const demies = []; for(let i=0; i<2; i++) demies.push({id_match: `d${i+1}`, equipe_dom_ref: `vainqueur_q${2*i+1}`, equipe_ext_ref: `vainqueur_q${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+            const finale = []; if(demies.length >=0) finale.push({id_match: `f1`, equipe_dom_ref: `vainqueur_d1`, equipe_ext_ref: `vainqueur_d2`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
 
             return { huitiemes, quarts, demies, finale, champion: null };
         }
-
 
         function calculateStandings(teamsInfo, fixturesData) {
             const standings = {}; Object.keys(teamsInfo).forEach(name => { standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 }; });
@@ -872,20 +866,23 @@
 
         function populateKnockoutStageDOM(knockoutBodyId, knockoutData, teamsInfo, leagueId) {
             const knockoutBody = document.getElementById(knockoutBodyId);
-            if (!knockoutBody || !knockoutData || !teamsInfo) { if(knockoutBody) knockoutBody.innerHTML = "<p>Tableau non disponible ou saison non sélectionnée.</p>"; return; }
+            if (!knockoutBody) { console.error(`Element ${knockoutBodyId} non trouvé`); return; }
+            if (!knockoutData || !teamsInfo) { knockoutBody.innerHTML = "<p>Tableau non disponible ou saison non sélectionnée.</p>"; return; }
             knockoutBody.innerHTML = ''; 
 
             const renderRound = (roundMatches, roundTitle, roundKey) => {
                 if (!roundMatches || roundMatches.length === 0) return '';
                 let html = `<h3 class="knockout-round-title">${roundTitle}</h3>`; html += '<table class="knockout-table"><tbody>';
                 roundMatches.forEach((match, matchIdx) => {
-                    const equipeDom = match.equipe_dom || (match.equipe_dom_ref ? `<i>Vainqueur ${match.equipe_dom_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À déterminer</i>');
-                    const equipeExt = match.equipe_ext || (match.equipe_ext_ref ? `<i>Vainqueur ${match.equipe_ext_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À déterminer</i>');
+                    const equipeDom = match.equipe_dom || (match.equipe_dom_ref ? `<i>Vainq. ${match.equipe_dom_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À dét.</i>');
+                    const equipeExt = match.equipe_ext || (match.equipe_ext_ref ? `<i>Vainq. ${match.equipe_ext_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À dét.</i>');
                     const logoDomSrc = match.equipe_dom && teamsInfo[match.equipe_dom] ? `${BASE_URL}${teamsInfo[match.equipe_dom].logo}` : `${BASE_URL}default_logo.png`;
                     const logoExtSrc = match.equipe_ext && teamsInfo[match.equipe_ext] ? `${BASE_URL}${teamsInfo[match.equipe_ext].logo}` : `${BASE_URL}default_logo.png`;
                     const scoreHomeVal = match.score_dom !== null ? match.score_dom : ''; const scoreAwayVal = match.score_ext !== null ? match.score_ext : '';
-                    const isDomDetermined = !!match.equipe_dom; const isExtDetermined = !!match.equipe_ext;
-                    html += `<tr><td>Match ${match.id_match.toUpperCase()}</td><td><div class="fixture-match"><div class="fixture-team home"><span>${equipeDom}</span>${isDomDetermined ? `<img src="${logoDomSrc}" alt="${match.equipe_dom}" class="team-logo">` : ''}</div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" value="${scoreHomeVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="dom" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}><span class="vs-separator">-</span><input type="number" class="fixture-score-input" value="${scoreAwayVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="ext" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}></div><div class="fixture-team away">${isExtDetermined ? `<img src="${logoExtSrc}" alt="${match.equipe_ext}" class="team-logo">` : ''}<span>${equipeExt}</span></div></div></td></tr>`;
+                    const isDomDetermined = !!match.equipe_dom && match.equipe_dom !== "BYE"; const isExtDetermined = !!match.equipe_ext && match.equipe_ext !== "BYE";
+                    const inputsDisabled = !(isDomDetermined && isExtDetermined) || match.vainqueur === match.equipe_dom || match.vainqueur === match.equipe_ext; // Disable if winner already determined by BYE or previous input
+
+                    html += `<tr><td>Match ${match.id_match.toUpperCase()}</td><td><div class="fixture-match"><div class="fixture-team home"><span>${equipeDom}</span>${isDomDetermined ? `<img src="${logoDomSrc}" alt="${match.equipe_dom}" class="team-logo">` : ''}</div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" value="${scoreHomeVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="dom" ${inputsDisabled ? 'disabled' : ''}><span class="vs-separator">-</span><input type="number" class="fixture-score-input" value="${scoreAwayVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="ext" ${inputsDisabled ? 'disabled' : ''}></div><div class="fixture-team away">${isExtDetermined ? `<img src="${logoExtSrc}" alt="${match.equipe_ext}" class="team-logo">` : ''}<span>${equipeExt}</span></div></div></td></tr>`;
                 });
                 html += '</tbody></table>'; return html;
             };
@@ -922,11 +919,8 @@
             let league = leagueDataStore[leagueId]; if (!league) return;
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
             if (!activeSeason || !activeSeason.fixtures || !activeSeason.fixtures[roundIndex] || !activeSeason.fixtures[roundIndex][matchIndex]) return;
-
             if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
-            
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
-            
             activeSeason.standings = calculateStandings(league.teams, activeSeason.fixtures);
             populateStandingsDOM(leagueDataStore[leagueId].standingsBodyId, activeSeason.standings, league.teams);
         }
@@ -949,54 +943,28 @@
         }
         function propagateKnockoutWinners(leagueId, tableau) {
             const advanceWinner = (sourceRoundKey, targetRoundKey) => {
-                const sourceRoundMatches = tableau[sourceRoundKey];
-                const targetRoundMatches = tableau[targetRoundKey];
+                const sourceRoundMatches = tableau[sourceRoundKey]; const targetRoundMatches = tableau[targetRoundKey];
                 if (!sourceRoundMatches || !targetRoundMatches) return;
-
-                for(let i = 0; i < targetRoundMatches.length; i++){ // Pour chaque match du tour cible
+                for(let i = 0; i < targetRoundMatches.length; i++){ 
                     const matchCible = targetRoundMatches[i];
-                    // Réinitialiser les équipes avant de les remplir à nouveau
-                    matchCible.equipe_dom = null;
-                    matchCible.equipe_ext = null;
-                    matchCible.score_dom = null;
-                    matchCible.score_ext = null;
-                    matchCible.vainqueur = null;
-
+                    matchCible.equipe_dom = null; matchCible.equipe_ext = null; matchCible.score_dom = null; matchCible.score_ext = null; matchCible.vainqueur = null; // Reset
                     const matchSource1 = sourceRoundMatches.find(m => m.id_match === matchCible.equipe_dom_ref?.replace('vainqueur_', ''));
                     const matchSource2 = sourceRoundMatches.find(m => m.id_match === matchCible.equipe_ext_ref?.replace('vainqueur_', ''));
-
-                    if (matchSource1 && matchSource1.vainqueur && matchSource1.vainqueur !== "Égalité" && matchSource1.vainqueur !== "BYE") {
-                        matchCible.equipe_dom = matchSource1.vainqueur;
-                    }
-                    if (matchSource2 && matchSource2.vainqueur && matchSource2.vainqueur !== "Égalité" && matchSource2.vainqueur !== "BYE") {
-                        matchCible.equipe_ext = matchSource2.vainqueur;
-                    }
+                    if (matchSource1 && matchSource1.vainqueur && matchSource1.vainqueur !== "Égalité" && matchSource1.vainqueur !== "BYE") matchCible.equipe_dom = matchSource1.vainqueur;
+                    if (matchSource2 && matchSource2.vainqueur && matchSource2.vainqueur !== "Égalité" && matchSource2.vainqueur !== "BYE") matchCible.equipe_ext = matchSource2.vainqueur;
                 }
             };
-            advanceWinner('huitiemes', 'quarts');
-            advanceWinner('quarts', 'demies');
-            advanceWinner('demies', 'finale');
-
-            if (tableau.finale && tableau.finale[0]?.vainqueur && tableau.finale[0].vainqueur !== "Égalité" && tableau.finale[0].vainqueur !== "BYE") {
-                tableau.champion = tableau.finale[0].vainqueur;
-            } else tableau.champion = null;
+            advanceWinner('huitiemes', 'quarts'); advanceWinner('quarts', 'demies'); advanceWinner('demies', 'finale');
+            if (tableau.finale && tableau.finale[0]?.vainqueur && tableau.finale[0].vainqueur !== "Égalité" && tableau.finale[0].vainqueur !== "BYE") tableau.champion = tableau.finale[0].vainqueur;
+            else tableau.champion = null;
         }
         function createNewSeason(leagueId) {
             const league = leagueDataStore[leagueId]; if (!league) return;
             const newSeasonId = league.seasons.length > 0 ? Math.max(...league.seasons.map(s => s.season_id)) + 1 : 1;
-            const newSeasonName = `Saison ${newSeasonId}`;
-            let teamNames = Object.keys(league.teams); 
+            const newSeasonName = `Saison ${newSeasonId}`; let teamNames = Object.keys(league.teams); 
             let newSeasonData = { season_id: newSeasonId, nom_saison: newSeasonName };
-            if (leagueId === 'ldc') {
-                shuffleArray(teamNames); 
-                newSeasonData.tableau = generateLDCKnockoutStage(teamNames);
-                newSeasonData.fixtures = []; newSeasonData.standings = {}; 
-            } else {
-                shuffleArray(teamNames);
-                newSeasonData.fixtures = generateFullSeasonFixtures(teamNames);
-                newSeasonData.standings = calculateStandings(league.teams, newSeasonData.fixtures);
-                newSeasonData.tableau = null; 
-            }
+            if (leagueId === 'ldc') { shuffleArray(teamNames); newSeasonData.tableau = generateLDCKnockoutStage(teamNames); newSeasonData.fixtures = []; newSeasonData.standings = {}; }
+            else { shuffleArray(teamNames); newSeasonData.fixtures = generateFullSeasonFixtures(teamNames); newSeasonData.standings = calculateStandings(league.teams, newSeasonData.fixtures); newSeasonData.tableau = null; }
             league.seasons.push(newSeasonData); league.active_season_id = newSeasonId;
             populateSeasonSelector(leagueId); populateSingleLeagueUI(leagueId);
             showMessage(`Nouvelle saison "${newSeasonName}" créée pour ${leagueId.toUpperCase()}!`, 2500);
@@ -1005,8 +973,7 @@
         function deleteSelectedSeason(leagueId) {
             const league = leagueDataStore[leagueId];
             if (!league || !league.seasons || league.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison.", 3000, true); return; }
-            const selector = document.getElementById(`${leagueId}-season-selector`);
-            const seasonIdToDelete = parseInt(selector.value);
+            const selector = document.getElementById(`${leagueId}-season-selector`); const seasonIdToDelete = parseInt(selector.value);
             const seasonNameToDelete = league.seasons.find(s=>s.season_id === seasonIdToDelete)?.nom_saison || `Saison ${seasonIdToDelete}`;
             if (confirm(`Êtes-vous sûr de vouloir supprimer la "${seasonNameToDelete}" ? Cette action est irréversible.`)) {
                 league.seasons = league.seasons.filter(s => s.season_id !== seasonIdToDelete);
@@ -1017,7 +984,7 @@
         }
         function populateSingleLeagueUI(leagueId) {
             const league = leagueDataStore[leagueId]; if (!league) { console.error(`Données non trouvées pour la ligue ${leagueId}`); return; }
-            const refIds = initialLeagueData[leagueId]; // Utiliser la structure `initialLeagueData` pour les ID DOM
+            const refIds = leagueDataStore[leagueId]; // Utiliser leagueDataStore directement car il contient les IDs DOM
             
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
             
@@ -1026,18 +993,13 @@
 
             if (leagueId === 'ldc') {
                 const knockoutBody = document.getElementById(refIds.fixtureBodyId); 
-                const standingsSectionLDC = document.getElementById('ldc-standings-section'); 
+                const standingsSectionLDC = document.getElementById(refIds.standingsBodyId)?.closest('.section'); 
                 if (standingsSectionLDC) standingsSectionLDC.style.display = 'none'; 
-
-                if (activeSeason && activeSeason.tableau) {
-                    populateKnockoutStageDOM(refIds.fixtureBodyId, activeSeason.tableau, league.teams, leagueId);
-                } else {
-                    if (knockoutBody) knockoutBody.innerHTML = '<p>Sélectionnez ou créez une saison pour afficher le tableau LDC.</p>';
-                }
+                if (activeSeason && activeSeason.tableau) populateKnockoutStageDOM(refIds.fixtureBodyId, activeSeason.tableau, league.teams, leagueId);
+                else if (knockoutBody) knockoutBody.innerHTML = '<p>Sélectionnez ou créez une saison pour afficher le tableau LDC.</p>';
             } else {
                  const standingsSection = document.getElementById(refIds.standingsBodyId)?.closest('.section');
                  if(standingsSection) standingsSection.style.display = 'block'; 
-
                 if (activeSeason) {
                     populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
                     populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
@@ -1068,7 +1030,7 @@
                 const mainNavLinks = document.querySelectorAll('header nav ul li a'); mainNavLinks.forEach(l => l.classList.remove('active-nav-link'));
                 if (tabId === "ligue1" || tabId === "ligue2" || tabId === "ligueChampions") document.querySelector('header nav ul li a[href="#competitions-section"]')?.classList.add('active-nav-link');
                 else if (tabId === "billetterie") document.querySelector('header nav ul li a[href="#billetterie-content"]')?.classList.add('active-nav-link');
-                else document.querySelector('header nav ul li a[href="#accueil-section"]')?.classList.add('active-nav-link');
+                else document.querySelector('header nav ul li a[href="#accueil-section-l1"]')?.classList.add('active-nav-link'); // Changed to #accueil-section-l1
             });
         });
         function initializeCarousel(carousel) {
@@ -1078,7 +1040,7 @@
             if (!inner || items.length === 0 || !prevBtn || !nextBtn) return; 
             if (items.length <= 1) { if (dots && dots.length > 0) dots.forEach(d => d.style.display = 'none'); prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; return; }
             let currentSlide = 0; const slideCount = items.length; let interval = null;
-            function updateCarousel() { inner.style.transform = `translateX(-${currentSlide * 100}%)`; if (dots.length > 0) dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
+            function updateCarousel() { items.forEach((item, idx) => item.classList.toggle('active', idx === currentSlide)); if (dots.length > 0) dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));} // Simpler opacity toggle
             function startAutoSlide() { stopAutoSlide(); if (carousel.closest('.tab-content.active') && slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
             function stopAutoSlide() { if (interval) clearInterval(interval); interval = null; }
             function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
@@ -1091,13 +1053,18 @@
         const hamburger = document.querySelector('.hamburger'); const nav = document.querySelector('header nav');
         hamburger.addEventListener('click', () => { nav.classList.toggle('active'); const icon = hamburger.querySelector('i'); icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); });
         nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => { // Ajout de 'e' pour event
                 if (window.innerWidth <= 768 && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; }
                  nav.querySelectorAll('a').forEach(l => l.classList.remove('active-nav-link')); link.classList.add('active-nav-link');
-                 const href = link.getAttribute('href'); const tabId = href.replace('#', '').replace('-content', '');
-                 const targetTabBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-                if (targetTabBtn) targetTabBtn.click(); 
-                else { tabBtns.forEach(b => b.classList.remove('active')); tabContents.forEach(c => c.classList.remove('active')); const targetSection = document.getElementById(href.replace('#', '')); if(targetSection) targetSection.classList.add('active'); }
+                 const href = link.getAttribute('href'); 
+                 if(href.startsWith("#")){ // Pour les ancres internes
+                    const tabId = href.replace('#', '').replace('-content', '').replace('-container','').replace('-section-l1','').replace('-section','');
+                    const targetTabBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+                    if (targetTabBtn) { targetTabBtn.click(); }
+                    else if (href === "#accueil-section-l1" || href === "#accueil-section"){ // Default to Ligue 1 tab for general Accueil
+                         document.querySelector('.tab-btn[data-tab="ligue1"]')?.click();
+                    }
+                 } // Ne pas empêcher la navigation pour les liens externes
             });
         });
         document.addEventListener('click', (e) => { const target = e.target; const isClickInsideNav = nav.contains(target) || hamburger.contains(target); if (!isClickInsideNav && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
@@ -1124,10 +1091,12 @@
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             const initialActiveTab = document.querySelector('.tab-btn.active');
             if(initialActiveTab) initialActiveTab.click(); else if(tabBtns.length > 0) tabBtns[0].click(); 
-            const defaultNavLink = document.querySelector('header nav ul li a[href="#accueil-section"]');
+            
+            const defaultNavLink = document.querySelector('header nav ul li a[href="#accueil-section-l1"]'); // Changé pour pointer vers accueil L1
             if(defaultNavLink) defaultNavLink.classList.add('active-nav-link');
+
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (avec gestion multi-saisons).");
+            console.log("Championnat Peluches Élite V2 Initialisé (avec gestion multi-saisons v2).");
         });
     </script>
 </body>

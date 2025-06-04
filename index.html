@@ -5,34 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Championnat des Peluches Élite V2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f0f2f5; /* Fond général clair moderne */
-            --primary-color: #1a237e; /* Bleu indigo profond */
-            --secondary-color: #007bff; /* Bleu vif classique */
-            --accent-gold: #ffc107; /* Or/Ambre moderne */
-            --accent-silver: #adb5bd; /* Argent/Gris clair */
+            --bg-color: #f0f2f5;
+            --primary-color: #1a237e;
+            --secondary-color: #007bff;
+            --accent-gold: #ffc107;
+            --accent-silver: #adb5bd;
             --text-color-light: #ffffff;
             --text-color-dark: #212529;
             --card-bg: #ffffff;
             --border-color: #dee2e6;
 
             --l1-color: var(--secondary-color);
-            --l2-color: #28a745; /* Vert moderne */
-            --ldc-color: #6f42c1; /* Violet LDC */
-            --billetterie-color: #fd7e14; /* Orange vif */
+            --l2-color: #28a745;
+            --ldc-color: #6f42c1;
+            --billetterie-color: #fd7e14;
+
+             --neon-green: #39FF14; 
+             --neon-red: #FF3131; 
+             --neon-yellow: #FFF01F;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Open Sans', sans-serif;
-            line-height: 1.7; color: var(--text-color-dark);
-            background-color: var(--bg-color);
-            overflow-x: hidden; scroll-behavior: smooth;
+            font-family: 'Open Sans', sans-serif; line-height: 1.7; color: var(--text-color-dark);
+            background-color: var(--bg-color); overflow-x: hidden; scroll-behavior: smooth;
         }
         .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px; }
 
@@ -42,7 +44,6 @@
         }
         .carousel-caption h2 { color: var(--text-color-light); }
 
-        /* Header */
         header {
             background-color: var(--primary-color); color: var(--text-color-light);
             padding: 15px 0; position: sticky; top: 0; z-index: 1000;
@@ -52,6 +53,26 @@
         .logo { display: flex; align-items: center; text-decoration: none; color: var(--text-color-light); }
         .logo img { height: 50px; margin-right: 15px; object-fit: contain; }
         .logo h1 { font-size: 1.8rem; color: var(--accent-gold); letter-spacing: 1px;}
+         .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+         #drive-status { 
+            display: inline-flex; align-items: center; gap: 5px; font-size: 0.9em; 
+            color: var(--text-color-light); opacity: 0.8; 
+            border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 4px;
+            transition: color 0.3s ease, border-color 0.3s ease;
+         }
+         #drive-status i { margin-right: 5px; }
+         #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); }
+         #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); }
+         #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); }
+         #signin-button { 
+            padding: 8px 15px; font-size: 0.9em; background-color: var(--accent-gold); 
+            color: var(--primary-color); border: none; border-radius: 4px; cursor: pointer;
+            transition: all 0.3s ease; font-weight: 600;
+         }
+         #signin-button:hover:not(:disabled) { background-color: #e6ac00; transform: translateY(-1px); }
+         #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+
         nav ul { display: flex; list-style: none; transition: all 0.3s ease-in-out; }
         nav ul li { margin-left: 25px; }
         nav ul li a {
@@ -74,13 +95,14 @@
             transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;
             font-weight: 500;
         }
-        .tab-btn:hover { background-color: var(--primary-color); color: var(--text-color-light); border-color: var(--primary-color); }
+        .tab-btn:hover:not(:disabled) { background-color: var(--primary-color); color: var(--text-color-light); border-color: var(--primary-color); }
         .tab-btn.active { font-weight: 700; background-color: var(--primary-color); color: var(--text-color-light); }
 
         .tab-btn[data-tab="ligue1"].active { background-color: var(--l1-color); border-color: var(--l1-color); }
         .tab-btn[data-tab="ligue2"].active { background-color: var(--l2-color); border-color: var(--l2-color); }
         .tab-btn[data-tab="ligueChampions"].active { background-color: var(--ldc-color); border-color: var(--ldc-color); }
         .tab-btn[data-tab="billetterie"].active { background-color: var(--billetterie-color); border-color: var(--billetterie-color); }
+         .tab-btn:disabled { opacity: 0.6; cursor: not-allowed; background-color: var(--bg-color); color: #6c757d; border-color: #dee2e6; }
 
 
         .tab-content { display: none; padding: 40px 0; animation: fadeIn 0.6s ease-out; }
@@ -90,27 +112,53 @@
         /* Carousel */
         .carousel { position: relative; height: 500px; overflow: hidden; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
         /* ... (carousel structure same, styles could be refined if needed) */
-        .carousel-caption h2 { font-size: 3.2rem; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .carousel-item { 
+             position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.6s ease;
+             background-size: cover; background-position: center;
+             display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+        .carousel-item.active { opacity: 1; }
+        .carousel-item img { display: none; /* Hide the img tag, use background-image */ }
+        .carousel-caption { z-index: 1; color: #fff; padding: 20px; background-color: rgba(0,0,0,0.5); border-radius: 8px; }
+
+        .carousel-controls { 
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2;
+            display: flex; gap: 10px;
+        }
+        .carousel-dot {
+            width: 12px; height: 12px; background-color: rgba(255,255,255,0.5); border-radius: 50%;
+            cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .carousel-dot.active { background-color: var(--accent-gold); transform: scale(1.2); }
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%); font-size: 2rem; color: rgba(255,255,255,0.8);
+            cursor: pointer; z-index: 2; padding: 10px; transition: color 0.3s ease;
+        }
+        .carousel-arrow:hover { color: var(--accent-gold); }
+        .carousel-prev { left: 10px; } .carousel-next { right: 10px; }
+
+
         .btn {
             display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light);
             text-decoration: none; border-radius: 50px; font-weight: 700; font-family: 'Oswald', sans-serif;
             text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        .btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .btn:hover:not(:disabled) { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 
         /* Section Styles */
         .section { margin-bottom: 50px; background-color: var(--card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); transition: opacity 0.6s ease, transform 0.6s ease; opacity: 0; transform: translateY(25px); }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
         .section-title { font-size: 2.2rem; letter-spacing: 1px; }
-        .section-link { color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .section-link { color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px; font-family: 'Oswald', sans-serif; text-transform: none;}
         .section-link:hover { color: var(--primary-color); }
 
         /* Tables Improved - More professional, responsive friendly */
-        .table-container { overflow-x: auto; /* Allows horizontal scroll on small screens for tables */ }
+        .table-container { overflow-x: auto; }
         .standings-table, .fixtures-table {
             width: 100%; border-collapse: collapse; margin-top: 20px;
-            font-size: 0.9rem; min-width: 600px; /* Prevent excessive squishing on small screens */
+            font-size: 0.9rem; min-width: 600px;
         }
         .standings-table th, .fixtures-table th {
             background-color: #f8f9fa; color: var(--primary-color); font-weight: 700;
@@ -126,7 +174,7 @@
             border-bottom: 1px solid var(--border-color); white-space: nowrap;
         }
         .standings-table tbody tr:hover, .fixtures-table tbody tr:hover { background-color: #f1f3f5; }
-        .team-info { display: flex; align-items: center; text-align: left; font-weight: 600; white-space: normal; /* Allow team names to wrap if needed */ }
+        .team-info { display: flex; align-items: center; text-align: left; font-weight: 600; white-space: normal; }
         .team-logo { width: 28px; height: 28px; margin-right: 10px; object-fit: contain; flex-shrink: 0; }
 
         .fixtures-table .fixture-match { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 5px 0; }
@@ -140,6 +188,7 @@
             border: 1px solid var(--border-color); border-radius: 4px; margin: 0 3px; padding: 6px 4px;
             font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.9em;
         }
+         .fixtures-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(var(--secondary-color-rgb), 0.3); }
         .fixtures-table .vs-separator { margin: 0 5px; color: var(--text-color-dark); font-weight: 700; }
 
 
@@ -166,7 +215,6 @@
         .billetterie-content .content-placeholder i { font-size: 3rem; margin-bottom: 20px; color: var(--billetterie-color); }
         .billetterie-content .btn { background-color: var(--billetterie-color); }
 
-        /* Footer (Restored & Styled) */
         footer { background-color: var(--primary-color); color: var(--text-color-light); padding: 50px 0 30px; border-top: 5px solid var(--accent-gold); }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
         .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; display: inline-block;}
@@ -176,7 +224,6 @@
         .footer-section ul li a:hover { color: var(--accent-gold); padding-left: 5px; }
         .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #2c3e50; font-size: 0.9rem; color: #95a5a6; }
 
-        /* Button Nouvelle Saison & Sauvegarde */
         .action-buttons { display:flex; justify-content: center; gap: 20px; margin-bottom: 20px;}
         .nouvelle-saison-btn, .sauvegarde-json-btn {
             padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase;
@@ -184,29 +231,30 @@
             border: none; border-radius: 5px; cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease;
         }
-        .nouvelle-saison-btn:hover, .sauvegarde-json-btn:hover { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .nouvelle-saison-btn:hover:not(:disabled), .sauvegarde-json-btn:hover:not(:disabled) { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .nouvelle-saison-btn:disabled, .sauvegarde-json-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
         .sauvegarde-json-btn { background-color: var(--accent-gold); color: var(--primary-color); }
-        .sauvegarde-json-btn:hover { background-color: #e6ac00; }
+        .sauvegarde-json-btn:hover:not(:disabled) { background-color: #e6ac00; }
 
 
         /* Responsive */
-        @media (max-width: 992px) { /* Tablet */
+        @media (max-width: 992px) {
             nav ul li { margin-left: 15px; }
             .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
         }
 
-        @media (max-width: 768px) { /* Mobile Landscape / Small Tablet */
-            .header-container { flex-direction: row; /* Keep horizontal but allow hamburger */ justify-content: space-between; padding: 10px 15px; }
+        @media (max-width: 768px) {
+            .header-container { flex-direction: row; justify-content: space-between; padding: 10px 15px; }
             .logo h1 { font-size: 1.5rem; }
-            .hamburger { display: block; order: 3; /* Ensure hamburger is on the far right */ }
+            .hamburger { display: block; order: 3; }
             nav {
-                order: 2; /* Nav can be before hamburger visually if needed, or handled by absolute pos */
-                width: 100%; position: absolute; top: calc(100% - 1px); /* Position below header border */
+                order: 2; width: 100%; position: absolute; top: calc(100% - 1px); 
                 left: 0; background-color: var(--primary-color);
                 max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
                 box-shadow: 0 5px 10px rgba(0,0,0,0.2);
             }
-            nav.active { max-height: 400px; /* Adjust based on number of items */ }
+            nav.active { max-height: 400px; }
             nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
             nav ul li { margin-left: 0; width: 100%; }
             nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -216,9 +264,9 @@
             .section-title { font-size: 1.8rem; }
             .standings-table th, .fixtures-table th { font-size: 0.8rem; padding: 10px 5px;}
             .standings-table td, .fixtures-table td { font-size: 0.75rem; padding: 8px 5px;}
-            .fixtures-table .fixture-match { white-space: normal; /* Allow wrapping in match cell */ }
+            .fixtures-table .fixture-match { white-space: normal; }
         }
-        @media (max-width: 576px) { /* Mobile Portrait */
+        @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
             .tab-btn { font-size: 0.9rem; padding: 8px 15px; }
             .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
@@ -228,7 +276,7 @@
             .fixtures-table .fixture-score-inputs input { width: 30px; font-size: 0.8em; }
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
-            .footer-section h3::after { /* Optional: center the underline */ content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
+            .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
 
         }
 
@@ -249,6 +297,12 @@
                     <li><a href="#billetterie-content"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
                 </ul>
             </nav>
+            <div class="header-actions">
+                 <div id="drive-status" style="display: none;"> 
+                    <span id="drive-status-text">Déconnecté</span>
+                 </div>
+                <button id="signin-button"><i class="fab fa-google"></i> Connecter Drive</button>
+            </div>
             <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </header>
@@ -267,17 +321,15 @@
         <div class="container l1-content">
             <div class="carousel" id="accueil-section">
                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Ligue 1 Peluches">
-                        <div class="carousel-caption">
+                    <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png');">
+                         <div class="carousel-caption">
                             <h2>Ligue 1 Peluches : L'Élite</h2>
                             <p>Le summum du football en peluche vous attend.</p>
                             <a href="#l1-fixtures-section" class="btn">Voir le Calendrier</a>
                         </div>
                     </div>
-                     <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png" alt="Ambiance stade L1">
-                        <div class="carousel-caption">
+                     <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png');">
+                         <div class="carousel-caption">
                             <h2>Passion & Ferveur</h2>
                             <p>Rejoignez des milliers de supporters passionnés.</p>
                             <a href="#l1-standings-section" class="btn">Classement L1</a>
@@ -291,7 +343,7 @@
             </div>
             <div class="section action-buttons">
                  <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn">Nouvelle Saison L1</button>
-                 <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn">Sauvegarder Classement L1 (JSON)</button>
+                 <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn">Sauvegarder L1</button>
             </div>
             <div class="section" id="l1-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Calendrier & Scores L1</h2></div>
@@ -313,17 +365,15 @@
          <div class="container">
             <div class="carousel">
                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png" alt="Ambiance L2">
-                        <div class="carousel-caption">
+                    <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png');">
+                         <div class="carousel-caption">
                             <h2>Ligue 2 des Ours : Terre de Talents</h2>
                             <p>L'antichambre de l'élite, pleine de promesses.</p>
                             <a href="#l2-fixtures-section" class="btn">Calendrier L2</a>
                         </div>
                     </div>
-                     <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png" alt="Equipes L2">
-                        <div class="carousel-caption">
+                     <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png');">
+                         <div class="carousel-caption">
                             <h2>Rêves de Montée</h2>
                             <p>Chaque match compte dans la course à la promotion.</p>
                             <a href="#l2-teams-section" class="btn">Nos Clubs L2</a>
@@ -337,7 +387,7 @@
             </div>
             <div class="section action-buttons">
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn">Nouvelle Saison L2</button>
-                <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn">Sauvegarder Classement L2 (JSON)</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn">Sauvegarder L2</button>
             </div>
             <div class="section" id="l2-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Calendrier & Scores L2</h2></div>
@@ -359,17 +409,15 @@
         <div class="container">
             <div class="carousel">
                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-shooting.png" alt="Action LDC">
-                        <div class="carousel-caption">
+                    <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/teddy-shooting.png');">
+                         <div class="carousel-caption">
                             <h2>Ligue des Champions des Peluches</h2>
                             <p>Le Graal Européen. Où les Légendes s'Écrivent.</p>
                             <a href="#ldc-fixtures-section" class="btn">Format & Matchs</a>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" alt="Célébration LDC">
-                        <div class="carousel-caption">
+                    <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png');">
+                         <div class="carousel-caption">
                             <h2>Nuits Étoilées</h2>
                             <p>Vibrez au son de l'hymne le plus prestigieux.</p>
                             <a href="#ldc-teams-section" class="btn">Clubs en Lice</a>
@@ -383,7 +431,7 @@
             </div>
             <div class="section action-buttons">
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-ldc-btn">Nouvelle Saison LDC (Démo)</button>
-                 <button class="sauvegarde-json-btn" id="sauvegarde-ldc-btn">Sauvegarder Groupes LDC (JSON)</button>
+                 <button class="sauvegarde-json-btn" id="sauvegarde-ldc-btn">Sauvegarder LDC</button>
             </div>
             <div class="section" id="ldc-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Phase de Groupes LDC (Exemple)</h2></div>
@@ -498,8 +546,21 @@
         </div>
     </footer>
 
+    <div id="message-area" class="message-area" role="status" aria-live="polite"></div>
+
+
     <script>
+        const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
+        const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file';
+        const LEAGUE_FILENAMES = { // New filenames for league data
+            'l1': 'peluches_l1_data.json',
+            'l2': 'peluches_l2_data.json',
+            'ldc': 'peluches_ldc_data.json'
+        };
+
         const BASE_URL = "https://ironworkout.github.io/paul.wallon.bts.sio/";
+        const GIS_CHECK_INTERVAL = 100; 
+        const GIS_MAX_RETRIES = 50; 
 
         let l1TeamsData = {
             "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." },
@@ -521,14 +582,335 @@
         };
         let l2FixturesData = [];
 
-        let ldcTeamsData = { // Example: 4 teams for a single group demo
+        let ldcTeamsData = { 
             "Champions FC": {"logo": "psg.png", "description": "Tenants du Titre"},
             "Galactiques Peluches": {"logo": "oo.png", "description": "Prétendants Étoilés"},
             "Doudous Invincibles": {"logo": "vafc.png", "description": "Rêve Européen"},
             "Oursons United": {"logo": "asset.png", "description": "Surprise du Chef"}
         };
         let ldcFixturesData = [];
+        
+        const leagueDataRefs = {
+            'l1': { teams: l1TeamsData, fixtures: l1FixturesData, fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body', filename: LEAGUE_FILENAMES.l1, fileId: null },
+            'l2': { teams: l2TeamsData, fixtures: l2FixturesData, fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body', filename: LEAGUE_FILENAMES.l2, fileId: null },
+            'ldc': { teams: ldcTeamsData, fixtures: ldcFixturesData, fixtureBodyId: 'ldc-fixtures-body', standingsBodyId: 'ldc-standings-body', filename: LEAGUE_FILENAMES.ldc, fileId: null }
+        };
 
+
+        let googleAccessToken = null, tokenClient = null;
+        let isSavingDriveData = false; 
+        let messageArea = null;
+        let messageTimeoutId = null;
+        let gisCheckRetries = 0;
+
+        function showMessage(msg, duration = 3000, isError = false) {
+            if (!messageArea) { messageArea = document.getElementById('message-area'); if (!messageArea) return; }
+            messageArea.textContent = msg; messageArea.classList.add('visible'); messageArea.classList.toggle('error-message', isError);
+            if (messageTimeoutId) clearTimeout(messageTimeoutId); 
+            messageTimeoutId = setTimeout(() => { messageArea.classList.remove('visible'); }, duration);
+        }
+
+        async function gisInitInternal() {
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+                try {
+                    tokenClient = google.accounts.oauth2.initTokenClient({
+                        client_id: GOOGLE_CLIENT_ID,
+                        scope: GOOGLE_DRIVE_SCOPES,
+                        callback: tokenCallback,
+                        error_callback: handleTokenError,
+                    });
+                     console.log("GIS initTokenClient réussi.");
+                     // Attempt silent sign-in for existing sessions
+                    tokenClient.requestAccessToken({ prompt: '' });
+                    const signInButton = document.getElementById('signin-button');
+                    if (signInButton) signInButton.disabled = false;
+                } catch (error) {
+                    console.error("Erreur GIS initTokenClient:", error);
+                    showMessage("Erreur initialisation services Google.", 5000, true);
+                    updateAuthUI(false);
+                     const signInButton = document.getElementById('signin-button');
+                    if (signInButton) signInButton.disabled = true;
+                }
+            } else {
+                console.warn("API Google (GIS) non chargée lors de gisInitInternal.");
+                 const signInButton = document.getElementById('signin-button');
+                if (signInButton) signInButton.disabled = true;
+            }
+        }
+
+        function checkAndInitGis() {
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2 && typeof google.accounts.oauth2.initTokenClient === 'function') {
+                gisInitInternal();
+            } else if (gisCheckRetries < GIS_MAX_RETRIES) {
+                gisCheckRetries++;
+                setTimeout(checkAndInitGis, GIS_CHECK_INTERVAL);
+            } else {
+                console.error("Échec détection API Google après plusieurs tentatives.");
+                showMessage("Erreur critique: API Google non disponible.", 10000, true);
+                const signInButton = document.getElementById('signin-button');
+                if (signInButton) signInButton.disabled = true;
+            }
+        }
+
+        function handleTokenError(error) {
+            console.error("Erreur Google Token:", error);
+            let userMessage = `Erreur Authentification Google: ${error.type || error.error || 'Inconnue'}`;
+            if (error.type === 'popup_closed_by_user' || error.error === 'popup_closed_by_user') userMessage = "Fenêtre de connexion Google fermée.";
+            else if (error.type === 'popup_failed_to_open') userMessage = "Impossible d'ouvrir la fenêtre de connexion. Vérifiez les bloqueurs de popups.";
+            else if (error.type === 'USER_CANCELLED' || error.error === 'access_denied') userMessage = "Accès aux données Drive refusé par l'utilisateur.";
+
+            const driveStatusElement = document.getElementById('drive-status');
+            const driveStatusTextElement = document.getElementById('drive-status-text');
+            if (driveStatusElement) { driveStatusElement.className = 'error'; driveStatusElement.style.display = 'inline-flex'; }
+            showMessage(userMessage, 7000, true);
+            if (driveStatusTextElement) driveStatusTextElement.textContent = 'Erreur Auth';
+            updateAuthUI(false);
+        }
+
+        async function tokenCallback(tokenResponse) {
+            const driveStatusElement = document.getElementById('drive-status');
+            const driveStatusTextElement = document.getElementById('drive-status-text');
+            if (driveStatusElement) driveStatusElement.className = '';
+
+            if (tokenResponse.error) {
+                 if (tokenResponse.error !== "popup_failed_to_open" && tokenResponse.error !== "popup_closed_by_user") handleTokenError(tokenResponse);
+                 else updateAuthUI(false);
+                 return;
+            }
+
+            if (tokenResponse && tokenResponse.access_token) {
+                googleAccessToken = tokenResponse.access_token;
+                showMessage("Connecté ! Chargement des données des ligues...", 2500);
+
+                if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
+                if(driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
+
+                try {
+                     await loadAllLeagueDataFromDrive();
+                     showMessage("Données des ligues chargées.", 3000);
+                     if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'error'); driveStatusElement.classList.add('success'); }
+                     if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connecté';
+
+                } catch (error) {
+                    console.error("Erreur majeure chargement données Drive:", error);
+                    showMessage("Erreur majeure lors du chargement des données Drive.", 6000, true);
+                    if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'success'); driveStatusElement.classList.add('error'); }
+                     if(driveStatusTextElement) driveStatusTextElement.textContent = 'Erreur Données';
+                } finally {
+                    updateAuthUI(true);
+                    // Toujours peupler l'UI avec les données en mémoire (qui peuvent être par défaut si Drive a échoué)
+                    populateLeagueData();
+                }
+            } else handleTokenError({ error: "Réponse de token invalide ou vide" });
+        }
+
+        function handleAuthClick() {
+            initAudioContext();
+            if (!tokenClient) { showMessage("Services Google non prêts. Veuillez patienter.", 3000); checkAndInitGis(); return; }
+            const driveStatusElement = document.getElementById('drive-status');
+            const driveStatusTextElement = document.getElementById('drive-status-text');
+
+            if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
+            if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connexion...';
+
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        }
+
+         function updateAuthUI(isLoggedIn) {
+            const signInButton = document.getElementById('signin-button');
+            const driveStatusElement = document.getElementById('drive-status');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const nouvelleSaisonButtons = document.querySelectorAll('.nouvelle-saison-btn');
+            const sauvegardeButtons = document.querySelectorAll('.sauvegarde-json-btn');
+
+
+            if (signInButton) signInButton.style.display = isLoggedIn ? 'none' : 'inline-flex';
+            if (driveStatusElement) driveStatusElement.style.display = isLoggedIn ? 'inline-flex' : 'none';
+
+            // Enable/Disable buttons based on login status AND if data is loaded/available
+            tabButtons.forEach(btn => btn.disabled = !isLoggedIn);
+            nouvelleSaisonButtons.forEach(btn => btn.disabled = !isLoggedIn); // Nouvelle Saison requiert une connexion pour initialiser dataRef
+            sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
+
+            // Specific handling for the message area content when logged out
+            const workoutPrompt = document.querySelector('#workout-info .workout-prompt');
+            if (workoutPrompt) {
+                 if (!isLoggedIn) {
+                     workoutPrompt.innerHTML = `<i class="fas fa-sign-in-alt"></i><span>Connectez-vous pour gérer les ligues.</span>`;
+                 } else if (isLoggedIn && !Object.keys(leagueDataRefs).some(key => leagueDataRefs[key].fileId !== null || leagueDataRefs[key].fixtures.length > 0)) {
+                     // This state should ideally not be reached if loadAllLeagueDataFromDrive populates defaults,
+                     // but as a fallback:
+                      workoutPrompt.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>Erreur chargement données ligues Drive.</span>`;
+                 } else if (isLoggedIn && Object.keys(leagueDataRefs).some(key => leagueDataRefs[key].fixtures.length > 0)) {
+                      // Data is loaded (either from Drive or initial default)
+                      workoutPrompt.innerHTML = `<i class="fas fa-hand-pointer"></i><span>Sélectionnez une ligue ci-dessus.</span>`;
+                 }
+            }
+        }
+
+        async function findOrCreateFile(filename, defaultContent = "", mimeType = 'application/json') {
+            if (!googleAccessToken) { console.warn("findOrCreateFile appelé sans token Google."); return null; }
+
+            const searchUrl = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(filename)}'+and+trashed=false&spaces=drive&fields=files(id,name)`;
+            try {
+                const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
+                if (!searchRes.ok) {
+                    if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); }
+                     console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`);
+                    return null;
+                }
+                const searchData = await searchRes.json();
+
+                if (searchData.files && searchData.files.length > 0) { console.log(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
+
+                console.log(`Fichier Drive '${filename}' non trouvé. Tentative de création...`);
+                const createUrl = `https://www.googleapis.com/drive/v3/files`;
+                const metadata = { name: filename, mimeType: mimeType };
+                const createRes = await fetch(createUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
+
+                if (!createRes.ok) {
+                     console.error(`Erreur ${createRes.status} lors de la création du fichier ${filename}.`);
+                     return null;
+                }
+                const createData = await createRes.json(); const newFileId = createData.id;
+                console.log(`Fichier Drive '${filename}' créé avec ID: ${newFileId}.`);
+                const writeSuccess = await updateFileContent(newFileId, defaultContent); // Write default content on creation
+                return writeSuccess ? newFileId : null;
+
+            } catch (error) { console.error(`Exception dans findOrCreateFile pour ${filename}:`, error); showMessage(`Erreur Drive gestion fichier ${filename}.`, 5000, true); return null; }
+        }
+
+        async function readFileContent(fileId) {
+            if (!googleAccessToken || !fileId) { console.warn("readFileContent appelé sans token ou fileId."); return null;}
+            const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
+            try {
+                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
+                if (!response.ok) {
+                    if (response.status === 404) { console.log(`Fichier ID ${fileId} non trouvé (erreur 404).`); return "";}
+                    if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); }
+                     console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`);
+                    return null;
+                }
+                console.log(`Lecture réussie du fichier ID ${fileId}.`);
+                return await response.text();
+            } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
+        }
+
+        async function updateFileContent(fileId, content) {
+            if (!googleAccessToken || !fileId) { console.warn("updateFileContent appelé sans token ou fileId."); return false; }
+            if (isSavingDriveData) { console.warn("Sauvegarde Drive déjà en cours, requête ignorée."); return false; }
+            isSavingDriveData = true; 
+            const driveStatusElement = document.getElementById('drive-status');
+            if (driveStatusElement) { driveStatusElement.textContent = 'Synchro...'; driveStatusElement.className = 'loading'; }
+
+            const url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`;
+            const isJson = typeof content === 'object'; 
+            const contentToSend = isJson ? JSON.stringify(content, null, 2) : content;
+            const contentType = isJson ? 'application/json; charset=UTF-8' : 'text/plain; charset=UTF-8'; 
+            let success = false;
+
+            try {
+                const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); }
+                    console.error(`Erreur ${response.status} lors de l'écriture du fichier ID ${fileId}.`);
+                    throw new Error(`HTTP error ${response.status}`);
+                } else {
+                    console.log(`Écriture réussie du fichier ID ${fileId}.`);
+                    success = true;
+                }
+            } catch (error) {
+                 console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error);
+                 showMessage(`Erreur sauvegarde fichier Drive.`, 5000, true);
+                 if (driveStatusElement) { driveStatusElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; }
+            } finally {
+                 isSavingDriveData = false; 
+                 if (driveStatusElement && !driveStatusElement.classList.contains('error')) { // Don't override error status
+                      driveStatusElement.textContent = 'Connecté'; driveStatusElement.className = 'success';
+                 }
+                 updateAuthUI(!!googleAccessToken); 
+            }
+            return success;
+        }
+
+
+        async function loadAllLeagueDataFromDrive() {
+            programsLoaded = false; // Renommé de programsLoaded car c'est spécifique aux ligues ici
+            let allLoaded = true;
+
+            for (const leagueId in leagueDataRefs) {
+                const ref = leagueDataRefs[leagueId];
+                 console.log(`Tentative de chargement des données pour ${leagueId.toUpperCase()} depuis Drive (${ref.filename})...`);
+
+                ref.fileId = await findOrCreateFile(ref.filename, "{}", "application/json"); // Find OR create if missing
+
+                if (ref.fileId) {
+                    const content = await readFileContent(ref.fileId);
+                    if (content && content.trim() !== "" && content.trim() !== "{}") {
+                        try {
+                            const parsedData = JSON.parse(content);
+                             if (parsedData && parsedData.teams && parsedData.fixtures) { // Minimal check for expected structure
+                                // Mise à jour des données en mémoire avec les données Drive
+                                leagueDataRefs[leagueId].teams = parsedData.teams;
+                                leagueDataRefs[leagueId].fixtures = parsedData.fixtures;
+                                console.log(`Données ${leagueId.toUpperCase()} chargées avec succès depuis Drive.`);
+                             } else {
+                                 console.error(`Données ${leagueId.toUpperCase()} malformées sur Drive.`);
+                                 showMessage(`Données ${leagueId.toUpperCase()} sur Drive malformées.`, 5000, true);
+                                 // Optionally reset to default or keep current if data is unusable
+                                 allLoaded = false;
+                             }
+                        } catch (e) {
+                            console.error(`Erreur parsing données ${leagueId.toUpperCase()} depuis Drive:`, e, "Contenu:", content.substring(0, 200) + "...");
+                            showMessage(`Données ${leagueId.toUpperCase()} sur Drive corrompues.`, 7000, true);
+                             allLoaded = false;
+                        }
+                    } else {
+                         console.log(`Fichier ${ref.filename} vide sur Drive. Initialisation par défaut locale.`);
+                         // Data remains the local default or empty, as set initially
+                         allLoaded = false; // Consider not fully loaded from Drive
+                    }
+                } else {
+                    console.warn(`Impossible de trouver ou créer le fichier ${ref.filename} sur Drive. Utilisation des données par défaut locale.`);
+                    showMessage(`Fichier ${ref.filename} non trouvé/créé sur Drive.`, 7000, true);
+                    allLoaded = false; // Consider not fully loaded from Drive
+                }
+            }
+             programsLoaded = allLoaded; // Renommé en loadedAllLeagueData
+             return allLoaded;
+        }
+
+        async function saveLeagueDataToDrive(leagueId) {
+            const ref = leagueDataRefs[leagueId];
+            if (!googleAccessToken) { showMessage("Connectez-vous à Google Drive pour sauvegarder.", 3000, true); return; }
+             if (!ref || !ref.fileId) { showMessage(`Impossible de sauvegarder ${leagueId.toUpperCase()} : ID de fichier Drive inconnu.`, 3000, true); return; }
+
+            const dataToSave = {
+                teams: ref.teams,
+                fixtures: ref.fixtures,
+                standings: calculateStandings(ref.teams, ref.fixtures) // Recalculate standings before saving
+            };
+
+            console.log(`Tentative de sauvegarde des données pour ${leagueId.toUpperCase()} sur Drive (${ref.filename}, ID: ${ref.fileId})...`, dataToSave);
+
+            const success = await updateFileContent(ref.fileId, dataToSave);
+
+            if (success) {
+                showMessage(`Classement ${leagueId.toUpperCase()} sauvegardé !`, 2000);
+                console.log(`Données ${leagueId.toUpperCase()} sauvegardées avec succès sur Drive.`);
+            } else {
+                 showMessage(`Échec de la sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true);
+                 console.error(`Échec de la sauvegarde des données ${leagueId.toUpperCase()} sur Drive.`);
+            }
+        }
+
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
         function generateBergerFixtures(teamNamesInput) {
             let teams = [...teamNamesInput];
@@ -571,22 +953,23 @@
             );
             return [...firstHalf, ...secondHalf];
         }
-         function generateLDCGroupFixtures(groupTeams) { // Simplified for 4 teams, play each other twice
+         function generateLDCGroupFixtures(groupTeams) {
             if (groupTeams.length !== 4) {
-                 console.warn("LDC Group fixture generation is simplified for 4 teams.");
-                 return generateFullSeasonFixtures(groupTeams).slice(0, (groupTeams.length-1)*2); // Play each other twice
+                 console.warn("LDC Group fixture generation is simplified for 4 teams, generating full season.");
+                 return generateFullSeasonFixtures(groupTeams); 
             }
-            return generateFullSeasonFixtures(groupTeams); // Full round robin for 4 teams (6 rounds)
+             // Berger table for 4 teams (3 rounds) + reverse (3 rounds)
+            return generateFullSeasonFixtures(groupTeams);
         }
 
 
         function calculateStandings(teamsInfo, fixturesData) {
             const standings = {};
             Object.keys(teamsInfo).forEach(name => {
-                standings[name] = { ...teamsInfo[name], points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 };
+                standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 };
             });
-            (fixturesData || []).forEach(round => { // Add guard for undefined fixturesData
-                (round || []).forEach(match => { // Add guard for undefined round
+            (fixturesData || []).forEach(round => {
+                (round || []).forEach(match => {
                     if (match && match.scoreHome !== null && match.scoreAway !== null && standings[match.home] && standings[match.away]) {
                         const home = standings[match.home];
                         const away = standings[match.away];
@@ -607,14 +990,14 @@
             const fixturesBody = document.getElementById(fixturesBodyId);
             if (!fixturesBody) return;
             fixturesBody.innerHTML = '';
-            const matchesPerDay = leagueId === 'ldc' && Object.keys(teamsInfo).length === 4 ? 2 : 3; // LDC 4-team group has 2 matches per day
+            const matchesPerDay = leagueId === 'ldc' && Object.keys(teamsInfo).length === 4 ? 2 : 3; 
 
             (fixturesData || []).forEach((round, index) => {
                 const row = document.createElement('tr');
                 let roundHtml = `<td>${leagueId === 'ldc' ? 'J.' : ''}${index + 1}</td>`;
                 (round || []).forEach((match, matchIdx) => {
                     if (!match || !teamsInfo[match.home] || !teamsInfo[match.away]) {
-                        roundHtml += '<td>Match Indisponible</td>'; // Placeholder if match data is incomplete
+                        roundHtml += '<td>Match Indisponible</td>'; 
                         return;
                     }
                     const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`;
@@ -661,6 +1044,7 @@
                 return b.bp - a.bp;
             });
             sortedTeams.forEach(([teamName, teamData], index) => {
+                 if(teamName === "BYE") return; // Don't display BYE team
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${index + 1}</td>
@@ -677,6 +1061,7 @@
             if (!teamsGrid) return;
             teamsGrid.innerHTML = '';
             Object.entries(teamsData).forEach(([teamName, teamData]) => {
+                 if(teamName === "BYE") return;
                 const teamCard = document.createElement('div');
                 teamCard.className = 'team-card';
                 teamCard.innerHTML = `
@@ -695,12 +1080,6 @@
             const leagueId = input.dataset.league;
             let score = input.value === '' ? null : parseInt(input.value);
 
-            if (score !== null && (isNaN(score) || score < 0)) {
-                let fixturesRef = leagueId === 'l1' ? l1FixturesData : (leagueId === 'l2' ? l2FixturesData : ldcFixturesData);
-                input.value = fixturesRef[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || '';
-                return;
-            }
-
             let fixturesRef, teamsRef, standingsBodyId;
             if (leagueId === 'l1') { fixturesRef = l1FixturesData; teamsRef = l1TeamsData; standingsBodyId = 'l1-standings-body'; }
             else if (leagueId === 'l2') { fixturesRef = l2FixturesData; teamsRef = l2TeamsData; standingsBodyId = 'l2-standings-body'; }
@@ -709,59 +1088,72 @@
 
             if (!fixturesRef || !fixturesRef[roundIndex] || !fixturesRef[roundIndex][matchIndex]) return;
 
+            if (score !== null && (isNaN(score) || score < 0)) {
+                input.value = fixturesRef[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || '';
+                return;
+            }
+
             if (teamType === 'home') fixturesRef[roundIndex][matchIndex].scoreHome = score;
             else fixturesRef[roundIndex][matchIndex].scoreAway = score;
 
-            const updatedStandings = calculateStandings(teamsRef, fixturesRef);
-            if (document.getElementById(standingsBodyId)) {
-                populateStandingsDOM(standingsBodyId, updatedStandings);
-            }
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            // Only recalculate standings if both scores for the match are set
+            if (fixturesRef[roundIndex][matchIndex].scoreHome !== null && fixturesRef[roundIndex][matchIndex].scoreAway !== null) {
+                 const updatedStandings = calculateStandings(teamsRef, fixturesRef);
+                 if (document.getElementById(standingsBodyId)) {
+                     populateStandingsDOM(standingsBodyId, updatedStandings);
+                 }
+            } else {
+                // If a score is cleared, recalculate standings as well
+                 const updatedStandings = calculateStandings(teamsRef, fixturesRef);
+                 if (document.getElementById(standingsBodyId)) {
+                     populateStandingsDOM(standingsBodyId, updatedStandings);
+                 }
             }
         }
 
         function startNewSeason(leagueId) {
             let teamsDataRef, fixturesBodyId, standingsBodyId;
-            let newFixturesData;
+            let initialFixtures;
 
-            if (leagueId === 'l1') {
-                teamsDataRef = l1TeamsData; fixturesBodyId = 'l1-fixtures-body'; standingsBodyId = 'l1-standings-body';
+             if (leagueId === 'l1') {
+                teamsDataRef = JSON.parse(JSON.stringify(l1TeamsData)); // Use original teams data for new season
+                fixturesBodyId = 'l1-fixtures-body'; standingsBodyId = 'l1-standings-body';
                 let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
-                l1FixturesData = generateFullSeasonFixtures(teamNames); newFixturesData = l1FixturesData;
+                initialFixtures = generateFullSeasonFixtures(teamNames); l1FixturesData = initialFixtures;
             } else if (leagueId === 'l2') {
-                teamsDataRef = l2TeamsData; fixturesBodyId = 'l2-fixtures-body'; standingsBodyId = 'l2-standings-body';
+                teamsDataRef = JSON.parse(JSON.stringify(l2TeamsData)); // Use original teams data
+                fixturesBodyId = 'l2-fixtures-body'; standingsBodyId = 'l2-standings-body';
                 let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
-                l2FixturesData = generateFullSeasonFixtures(teamNames); newFixturesData = l2FixturesData;
+                initialFixtures = generateFullSeasonFixtures(teamNames); l2FixturesData = initialFixtures;
             } else if (leagueId === 'ldc') {
-                teamsDataRef = ldcTeamsData; fixturesBodyId = 'ldc-fixtures-body'; standingsBodyId = 'ldc-standings-body';
+                teamsDataRef = JSON.parse(JSON.stringify(ldcTeamsData)); // Use original teams data
+                fixturesBodyId = 'ldc-fixtures-body'; standingsBodyId = 'ldc-standings-body';
                 let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
-                ldcFixturesData = generateLDCGroupFixtures(teamNames); newFixturesData = ldcFixturesData;
+                initialFixtures = generateLDCGroupFixtures(teamNames); ldcFixturesData = initialFixtures;
             } else return;
 
-            (newFixturesData || []).forEach(round => (round || []).forEach(match => { match.scoreHome = null; match.scoreAway = null; }));
-            const initialStandings = calculateStandings(teamsDataRef, newFixturesData);
-            populateFixturesDOM(fixturesBodyId, newFixturesData, teamsDataRef, leagueId);
+            const initialStandings = calculateStandings(teamsDataRef, initialFixtures);
+            populateFixturesDOM(fixturesBodyId, initialFixtures, teamsDataRef, leagueId);
             if (document.getElementById(standingsBodyId)) populateStandingsDOM(standingsBodyId, initialStandings);
-            console.log(`Nouvelle saison démarrée pour ${leagueId.toUpperCase()}!`);
-        }
+            showMessage(`Nouvelle saison démarrée pour ${leagueId.toUpperCase()}!`, 2000);
+             // Auto-save after starting a new season
+            if (googleAccessToken && leagueDataRefs[leagueId].fileId) { // Check if logged in and fileId exists
+                 saveLeagueDataToDrive(leagueId);
+            } else if (googleAccessToken && !leagueDataRefs[leagueId].fileId) {
+                 // Attempt to create and save if logged in but no file yet
+                 findOrCreateFile(leagueDataRefs[leagueId].filename, JSON.stringify({ teams: teamsDataRef, fixtures: initialFixtures, standings: initialStandings }), "application/json")
+                     .then(fileId => {
+                         if (fileId) {
+                             leagueDataRefs[leagueId].fileId = fileId;
+                             showMessage(`Fichier ${leagueDataRefs[leagueId].filename} créé sur Drive. Nouvelle saison sauvegardée.`, 3000);
+                         } else {
+                             showMessage(`Impossible de créer le fichier ${leagueDataRefs[leagueId].filename} sur Drive. Nouvelle saison non sauvegardée.`, 5000, true);
+                         }
+                     });
+            } else {
+                 showMessage(`Nouvelle saison démarrée localement. Connectez-vous pour sauvegarder.`, 3000);
+            }
 
-        // Save JSON to local download (NO Google Drive integration for security reasons)
-        function saveDataAsJSON(data, filename) {
-            const jsonData = JSON.stringify(data, null, 2); // Pretty print JSON
-            const blob = new Blob([jsonData], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
         }
 
 
@@ -774,17 +1166,15 @@
                     obs.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.05 }); // Trigger a bit earlier
+        }, { threshold: 0.05 });
 
         function observeActiveTabSections() {
-            document.querySelectorAll('.section').forEach(el => { // Observe all sections on any tab change initially
-                 if (el.style.opacity !== '1') { // Only reset if not already visible
+            document.querySelectorAll('.section').forEach(el => {
+                 if (el.style.opacity !== '1') {
                     el.style.opacity = '0'; el.style.transform = 'translateY(25px)';
                  }
                  observer.observe(el)
             });
-
-             // Explicitly trigger for already visible items in the new active tab
             const activeTabNode = document.querySelector('.tab-content.active');
             if (activeTabNode) {
                 activeTabNode.querySelectorAll('.section').forEach(section => {
@@ -795,6 +1185,31 @@
                     }
                 });
             }
+        }
+
+        function populateLeagueData() {
+            // Populate UI elements for each league based on loaded data
+            populateFixturesDOM(leagueDataRefs.l1.fixtureBodyId, leagueDataRefs.l1.fixtures, leagueDataRefs.l1.teams, 'l1');
+            populateStandingsDOM(leagueDataRefs.l1.standingsBodyId, calculateStandings(leagueDataRefs.l1.teams, leagueDataRefs.l1.fixtures));
+            populateTeamsGridDOM(leagueDataRefs.l1.teamsGridId, leagueDataRefs.l1.teams);
+
+            populateFixturesDOM(leagueDataRefs.l2.fixtureBodyId, leagueDataRefs.l2.fixtures, leagueDataRefs.l2.teams, 'l2');
+            populateStandingsDOM(leagueDataRefs.l2.standingsBodyId, calculateStandings(leagueDataRefs.l2.teams, leagueDataRefs.l2.fixtures));
+            populateTeamsGridDOM(leagueDataRefs.l2.teamsGridId, leagueDataRefs.l2.teams);
+
+            populateFixturesDOM(leagueDataRefs.ldc.fixtureBodyId, leagueDataRefs.ldc.fixtures, leagueDataRefs.ldc.teams, 'ldc');
+            populateStandingsDOM(leagueDataRefs.ldc.standingsBodyId, calculateStandings(leagueDataRefs.ldc.teams, leagueDataRefs.ldc.fixtures));
+            populateTeamsGridDOM(leagueDataRefs.ldc.teamsGridId, leagueDataRefs.ldc.teams);
+
+             // Ensure tab buttons are enabled if data (even default) is loaded
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => btn.disabled = false);
+
+            // Ensure action buttons are enabled if connected
+            const actionButtons = document.querySelectorAll('.action-buttons button');
+            actionButtons.forEach(btn => btn.disabled = !googleAccessToken);
+
+             observeActiveTabSections();
         }
 
 
@@ -819,7 +1234,7 @@
                     document.querySelector('header nav ul li a[href="#competitions-section"]').classList.add('active-nav-link');
                 } else if (tabId === "billetterie") {
                      document.querySelector('header nav ul li a[href="#billetterie-content"]').classList.add('active-nav-link');
-                } else {
+                } else { // Default to accueil if somehow not matching
                     document.querySelector('header nav ul li a[href="#accueil-section"]').classList.add('active-nav-link');
                 }
 
@@ -833,7 +1248,14 @@
             const dots = carousel.querySelectorAll('.carousel-dot');
             const prevBtn = carousel.querySelector('.carousel-prev');
             const nextBtn = carousel.querySelector('.carousel-next');
-            if (!inner || !items.length || items.length === 0 || !dots.length || !prevBtn || !nextBtn) return;
+            if (!inner || items.length <= 1 || !dots.length || !prevBtn || !nextBtn) {
+                 // Hide controls if only one item
+                 if (dots[0]) dots[0].style.display = 'none';
+                 if (prevBtn) prevBtn.style.display = 'none';
+                 if (nextBtn) nextBtn.style.display = 'none';
+                 return; // Don't initialize carousel instance
+             }
+
             let currentSlide = 0; const slideCount = items.length; let interval = null;
             function updateCarousel() { inner.style.transform = `translateX(-${currentSlide * 100}%)`; dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
             function startAutoSlide() { stopAutoSlide(); if (carousel.closest('.tab-content.active') && slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
@@ -855,56 +1277,71 @@
 
         nav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 768 && nav.classList.contains('active')) { // Only close if mobile menu is active
+                if (window.innerWidth <= 768 && nav.classList.contains('active')) {
                      nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars';
                 }
                  nav.querySelectorAll('a').forEach(l => l.classList.remove('active-nav-link'));
                  link.classList.add('active-nav-link');
 
-                 // If link points to a tab, switch tab
-                const href = link.getAttribute('href');
-                if (href === '#competitions-section') { // Generic link to competitions section
-                    // Potentially default to L1 or do nothing specific if already on a league tab
-                } else if (href === '#billetterie-content') {
-                    document.querySelector('.tab-btn[data-tab="billetterie"]').click();
-                } // Add more specific tab switching if nav links should trigger them
+                 const href = link.getAttribute('href');
+                 const tabId = href.replace('#', '').replace('-content', ''); // Get potential tab ID from href
+                 const targetTabBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+
+                if (targetTabBtn) {
+                   targetTabBtn.click(); // Trigger tab click if a matching tab button exists
+                } else {
+                    // For other links (like #accueil-section, #actualites-section-container)
+                    // Ensure no tab is active if we're navigating away from tabs
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    // Show the target section (handled by observer usually, but ensure visibility)
+                     const targetSection = document.getElementById(href.replace('#', ''));
+                     if(targetSection) {
+                        targetSection.classList.add('active'); // Use active class for visibility if not a tab-content
+                         // Need to ensure other sections are hidden if navigating manually like this?
+                         // For now, rely on observer for fade-in/transform.
+                     }
+                }
             });
         });
-        document.addEventListener('click', (e) => { if (!nav.contains(e.target) && !hamburger.contains(e.target) && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
+
+        document.addEventListener('click', (e) => { 
+            const target = e.target;
+            const isClickInsideNav = nav.contains(target) || hamburger.contains(target);
+            if (!isClickInsideNav && nav.classList.contains('active')) { 
+                nav.classList.remove('active'); 
+                hamburger.querySelector('i').className = 'fas fa-bars'; 
+            } 
+        });
 
         document.getElementById('nouvelle-saison-l1-btn').addEventListener('click', () => startNewSeason('l1'));
         document.getElementById('nouvelle-saison-l2-btn').addEventListener('click', () => startNewSeason('l2'));
         const ldcNewSeasonBtn = document.getElementById('nouvelle-saison-ldc-btn');
         if (ldcNewSeasonBtn) ldcNewSeasonBtn.addEventListener('click', () => startNewSeason('ldc'));
 
-        document.getElementById('sauvegarde-l1-btn').addEventListener('click', () => {
-            const standings = calculateStandings(l1TeamsData, l1FixturesData);
-            saveDataAsJSON({ teams: l1TeamsData, fixtures: l1FixturesData, standings }, 'classement_ligue1_peluches.json');
-        });
-        document.getElementById('sauvegarde-l2-btn').addEventListener('click', () => {
-            const standings = calculateStandings(l2TeamsData, l2FixturesData);
-            saveDataAsJSON({ teams: l2TeamsData, fixtures: l2FixturesData, standings }, 'classement_ligue2_ours.json');
-        });
+        document.getElementById('sauvegarde-l1-btn').addEventListener('click', () => saveLeagueDataToDrive('l1'));
+        document.getElementById('sauvegarde-l2-btn').addEventListener('click', () => saveLeagueDataToDrive('l2'));
          const ldcSaveBtn = document.getElementById('sauvegarde-ldc-btn');
-         if(ldcSaveBtn) {
-            ldcSaveBtn.addEventListener('click', () => {
-                const standings = calculateStandings(ldcTeamsData, ldcFixturesData);
-                saveDataAsJSON({ teams: ldcTeamsData, fixtures: ldcFixturesData, standings }, 'groupes_ldc_peluches.json');
-            });
-         }
+         if(ldcSaveBtn) ldcSaveBtn.addEventListener('click', () => saveLeagueDataToDrive('ldc'));
 
 
         document.addEventListener('DOMContentLoaded', () => {
-            startNewSeason('l1'); startNewSeason('l2');
-            if(Object.keys(ldcTeamsData).length >= 4) startNewSeason('ldc'); // Only if enough teams for LDC example
+            // Initial population with default data (empty season)
+            startNewSeason('l1');
+            startNewSeason('l2');
+             if(Object.keys(ldcTeamsData).length > 0) startNewSeason('ldc');
 
+
+            // Populate Teams Grids with initial data (either default or loaded later)
             populateTeamsGridDOM('l1-teams-grid', l1TeamsData);
             populateTeamsGridDOM('l2-teams-grid', l2TeamsData);
             if (document.getElementById('ldc-teams-grid')) populateTeamsGridDOM('ldc-teams-grid', ldcTeamsData);
 
+
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             observeActiveTabSections();
-            document.querySelector('header nav ul li a[href="#accueil-section"]')?.classList.add('active-nav-link');
+            document.querySelector('.tab-btn[data-tab="ligue1"]').click(); // Start on Ligue 1 tab
+            checkAndInitGis(); // Initiate Google Sign-In and Drive loading
         });
 
     </script>

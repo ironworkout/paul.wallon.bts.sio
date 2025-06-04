@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat des Peluches Élite V2 - Nav Unique</title>
+    <title>Championnat des Peluches Élite V2 - Nav Unique Corrigée</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,13 +88,17 @@
         nav ul li a i { font-size: 0.9em; }
 
         nav ul li a.active-nav-link:not([data-tab-link]) {
-            color: var(--accent-gold); background-color: rgba(255, 193, 7, 0.1); 
-            border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
+            color: var(--accent-gold);
+            background-color: rgba(255, 193, 7, 0.1); 
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); /* Correction RGB pour accent-gold */
         }
-        nav ul li a[data-tab-link].active-nav-link, 
+        nav ul li a[data-tab-link].active-nav-link,
         nav ul li a[data-tab-link].tab-active {
-            color: var(--text-color-light) !important; font-weight: 700;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2); transform: translateY(-2px);
+            color: var(--text-color-light) !important; 
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
         }
         nav ul li a[data-tab-link="ligue1"].tab-active { background-color: var(--nav-l1-color); border-color: var(--nav-l1-color); }
         nav ul li a[data-tab-link="ligue2"].tab-active { background-color: var(--nav-l2-color); border-color: var(--nav-l2-color); }
@@ -103,6 +107,7 @@
         
         nav ul li a:hover:not(.active-nav-link):not(.tab-active) {  color: var(--accent-gold); background-color: rgba(255,255,255,0.05); }
          nav ul li a[data-tab-link]:hover:not(.tab-active) { border-color: var(--accent-gold); }
+
 
         .hamburger { display: none; font-size: 1.8rem; color: var(--text-color-light); cursor: pointer; z-index: 1001; margin-left:15px;}
 
@@ -142,6 +147,7 @@
         }
         .carousel-arrow:hover { color: var(--accent-gold); background-color: rgba(0,0,0,0.6); transform: translateY(-50%) scale(1.1); }
         .carousel-prev { left: 20px; } .carousel-next { right: 20px; }
+
 
         .btn {
             display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light);
@@ -190,8 +196,8 @@
              vertical-align: middle;
             border-bottom: 1px solid var(--border-color); white-space: nowrap;
         }
-         .palmares-content .palmares-table td { border-color: var(--palmares-border); text-align: center; } /* Centrer contenu cellule trophée */
-         .palmares-content .palmares-table td.team-info { text-align: left; } /* Sauf pour nom équipe */
+         .palmares-content .palmares-table td { border-color: var(--palmares-border); text-align: center; } 
+         .palmares-content .palmares-table td.team-info { text-align: left; } 
 
 
         .standings-table tbody tr:hover, .fixtures-table tbody tr:hover, .palmares-table tbody tr:hover { background-color: #f1f3f5; }
@@ -305,15 +311,14 @@
         .message-area.error-message { background-color: rgba(var(--neon-red-rgb),0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
         @media (max-width: 1100px) { 
-             nav ul li { margin-left: 10px; } /* Encore un peu moins d'espace */
+             nav ul li { margin-left: 10px; } 
              nav ul li a { padding: 8px 10px; font-size: 0.8rem;}
         }
         @media (max-width: 992px) {
-            .header-container { flex-wrap: wrap; justify-content: space-between; } /* Espace entre logo et actions/hamburger */
-            .logo { flex-grow: 1; } /* Permet au logo de prendre l'espace disponible */
-            nav { order: 3; width: 100%; background-color: var(--primary-color); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
-            .header-actions { order: 1; margin-left: auto; /* Pousse les actions à droite */ }
-            .hamburger { display: block; order: 2; margin-left: 15px; /* Espace entre actions et hamburger */ }
+            .header-container { flex-wrap: wrap; }
+            .header-actions { order: 3; width: 100%; justify-content: center; margin-top:10px; }
+            nav {order:1; flex-grow: 0; margin-right: auto;} 
+            .hamburger {display: block; order: 2; margin-left: 15px;}
             nav.active { max-height: 500px; }
             nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
             nav ul li { margin-left: 0; width: 100%; }
@@ -340,8 +345,7 @@
         }
         @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
-            .tab-btn, .tab-btn-link { font-size: 0.9rem; padding: 8px 15px; } /* Pour la barre sous header si elle était visible */
-            nav ul li a {font-size: 1rem; padding: 12px 20px;} /* Taille pour menu hamburger */
+            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} /* Ajustement pour menu hamburger */
             .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
             .section-title { font-size: 1.6rem; }
             .btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -356,13 +360,12 @@
 <body>
     <header>
         <div class="container header-container">
-            <a href="#" data-tab-link="ligue1" class="logo nav-link">
+            <a href="#" data-tab-link="ligue1" class="logo nav-link"> 
                 <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
             <nav>
                 <ul>
-                    <!-- Accueil pointe vers Ligue 1 par défaut -->
                     <li><a href="#" class="nav-link active-nav-link" data-tab-link="ligue1"><i class="fas fa-futbol"></i> L1</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="ligue2"><i class="fas fa-shield-alt"></i> L2</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="palmares"><i class="fas fa-medal"></i> Palmarès</a></li>
@@ -531,8 +534,8 @@
     <footer>
         <div class="container footer-container">
             <div class="footer-section"><h3>À Propos</h3><ul><li><a href="#">Qui sommes-nous</a></li><li><a href="#">Histoire</a></li><li><a href="#">Partenaires</a></li><li><a href="#">Mentions Légales</a></li></ul></div>
-            <div class="footer-section"><h3>Compétitions</h3><ul><li><a href="#ligue1-content">Ligue 1</a></li><li><a href="#ligue2-content">Ligue 2</a></li><li><a href="champions.html">Ligue des Champions</a></li><li><a href="#">Coupe Nationale</a></li></ul></div>
-            <div class="footer-section"><h3>Services</h3><ul><li><a href="#billetterie-content">Billetterie</a></li><li><a href="#">Boutique</a></li><li><a href="#">Presse</a></li><li><a href="#">Rejoindre</a></li></ul></div>
+            <div class="footer-section"><h3>Compétitions</h3><ul><li><a href="#" data-tab-link-footer="ligue1">Ligue 1</a></li><li><a href="#" data-tab-link-footer="ligue2">Ligue 2</a></li><li><a href="champions.html">Ligue des Champions</a></li><li><a href="#">Coupe Nationale</a></li></ul></div>
+            <div class="footer-section"><h3>Services</h3><ul><li><a href="#" data-tab-link-footer="billetterie">Billetterie</a></li><li><a href="#">Boutique</a></li><li><a href="#">Presse</a></li><li><a href="#">Rejoindre</a></li></ul></div>
             <div class="footer-section"><h3>Contact</h3><ul><li><a href="mailto:contact@peluche-elite.com">Email</a></li><li><a href="#">FAQ</a></li><li><a href="#">Devenir Partenaire</a></li></ul></div>
         </div>
         <div class="copyright">© 2025 Championnat Peluche Élite. Tous droits réservés.</div>
@@ -947,15 +950,17 @@
             const league = leagueDataStore[leagueId]; if (!league) { console.error(`Données manquantes pour la ligue ${leagueId}`); return; }
             const refIds = initialLeagueData[leagueId]; 
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
+            const fixturesBody = document.getElementById(refIds.fixtureBodyId);
+            const standingsBody = document.getElementById(refIds.standingsBodyId);
+
             if (activeSeason) {
-                populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
-                populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
+                if(fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
+                if(standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
             } else { 
-                const fixturesBody = document.getElementById(refIds.fixtureBodyId); const standingsBody = document.getElementById(refIds.standingsBodyId);
-                const colsFixtures = document.querySelector(`#${refIds.fixtureBodyId} ~ thead th`)?.length || 4; // Utilisation de ~ pour le sélecteur de thead
-                const colsStandings = document.querySelector(`#${refIds.standingsBodyId} ~ thead th`)?.length || 7;
+                const colsFixtures = fixturesBody?.closest('table')?.querySelector('thead th')?.length || 4;
+                const colsStandings = standingsBody?.closest('table')?.querySelector('thead th')?.length || 7;
                 if (fixturesBody) fixturesBody.innerHTML = `<tr><td colspan="${colsFixtures}">Sélectionnez ou créez une saison.</td></tr>`;
-                if (standingsBody) standingsBody.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';
+                if (standingsBody) standingsBody.innerHTML = `<tr><td colspan="${colsStandings}">Sélectionnez ou créez une saison.</td></tr>`;
             }
             populateTeamsGridDOM(refIds.teamsGridId, league.teams);
             populateSeasonSelector(leagueId); 
@@ -980,6 +985,7 @@
                 let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
                 let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('');
 
+                // Correction: Assurer que les boutons sont DANS la cellule des actions
                 row.innerHTML = `
                     <td class="team-info"><img src="${BASE_URL}${allTeamsInStore[teamName].logo}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
                     <td class="trophy-cell">
@@ -1030,19 +1036,32 @@
         const tabContents = document.querySelectorAll('.tab-content');
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
         
+        function observeActiveTabSections() {
+            document.querySelectorAll('.section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el) });
+            const activeTabNode = document.querySelector('.tab-content.active');
+            if (activeTabNode) { activeTabNode.querySelectorAll('.section').forEach(section => { const rect = section.getBoundingClientRect(); if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') { section.style.opacity = '1'; section.style.transform = 'translateY(0)'; observer.unobserve(section); } }); }
+        }
+        
         function setActiveTab(tabId) {
             allNavLinks.forEach(l => {
                 l.classList.remove('active-nav-link', 'tab-active');
-                if (l.dataset.tabLink === tabId || (tabId === 'accueil-section-l1' && l.dataset.tabLink === 'ligue1') ) { // L'accueil est L1
+                if (l.dataset.tabLink === tabId) { 
                     l.classList.add('active-nav-link', 'tab-active');
                 }
             });
+            // Gérer le lien "Accueil L1" spécifiquement
+            if (tabId === 'ligue1') {
+                 document.querySelector('header nav ul li a[href="#"][data-tab-link="ligue1"]')?.classList.add('active-nav-link','tab-active');
+            }
+
+
             tabContents.forEach(c => c.classList.remove('active'));
             const targetContent = document.getElementById(`${tabId}-content`);
             if (targetContent) {
                 targetContent.classList.add('active');
-            } else if (tabId === 'accueil-section-l1') { // Cas spécifique de l'accueil
+            } else if (tabId === 'accueil-section-l1' || tabId === 'ligue1') { // Si on clique sur Accueil L1 ou l'onglet L1
                  document.getElementById('ligue1-content')?.classList.add('active');
+                 document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
             }
              observeActiveTabSections();
              document.querySelectorAll('.carousel').forEach(carousel => {
@@ -1053,29 +1072,31 @@
         
         allNavLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
                 const isTabLink = link.hasAttribute('data-tab-link');
+                const href = link.getAttribute('href');
 
-                if (isTabLink && href === "#") { // Empêche le scroll si c'est un data-tab-link pointant sur '#'
-                    e.preventDefault();
-                }
+                if (isTabLink && href === "#") e.preventDefault();
                 
                 if (isTabLink) {
                     const tabId = link.dataset.tabLink;
                     setActiveTab(tabId);
-                } else if (href && href.startsWith("#")) { // Pour les liens d'ancre simples comme "Actualités"
+                } else if (href && href.startsWith("#") && href !== "#") { 
                      allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
                      link.classList.add('active-nav-link');
-                     tabContents.forEach(c => c.classList.remove('active')); // Désactive tous les contenus d'onglets
-                     // Le scroll vers l'ancre est géré par le navigateur
+                     tabContents.forEach(c => c.classList.remove('active')); 
+                     // Pour les ancres simples comme #actualites-section-container, on ne change pas l'onglet actif
+                     // On pourrait vouloir réactiver l'onglet précédent si on navigue depuis une ancre.
+                     // Pour l'instant, on désactive tous les onglets et laisse le scroll faire.
+                     const currentActiveTabContent = document.querySelector('.tab-content.active');
+                     if (currentActiveTabContent) currentActiveTabContent.classList.remove('active'); // Cacher l'onglet actif
                 }
-                 // Pour les liens externes (comme champions.html), la navigation standard se fait
+                
                 if (window.innerWidth <= 768 && nav.classList.contains('active')) { 
                     nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; 
                 }
             });
         });
-        
+
         function initializeCarousel(carousel) {
              if (carousel.carouselInstance) return;
             const inner = carousel.querySelector('.carousel-inner'); const items = carousel.querySelectorAll('.carousel-item');
@@ -1119,16 +1140,10 @@
             messageArea = document.getElementById('message-area');
             populateAllLeaguesUI(); populatePalmaresTable();
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
-            
-            const initialActiveNavLink = document.querySelector('header nav ul li a.active-nav-link[data-tab-link]');
-            if (initialActiveNavLink) {
-                setActiveTab(initialActiveNavLink.dataset.tabLink);
-            } else { // Fallback si aucun lien n'est explicitement actif avec data-tab-link
-                setActiveTab('ligue1'); // Active L1 par défaut
-            }
-            observeActiveTabSections(); // Observer après avoir potentiellement activé un onglet
+            setActiveTab('ligue1'); // Active L1 par défaut au chargement
+            observeActiveTabSections();
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Navigation Unique v2).");
+            console.log("Championnat Peluches Élite V2 Initialisé (Nav Unique Corrigée).");
         });
     </script>
 </body>

@@ -23,7 +23,7 @@
 
             --l1-color: var(--secondary-color);
             --l2-color: #28a745;
-            --ldc-color: #6f42c1; /* Violet LDC */
+            --ldc-color: #6f42c1; 
             --billetterie-color: #fd7e14;
 
              --neon-green: #39FF14; 
@@ -333,7 +333,7 @@
 
     <div class="tab-content active" id="ligue1-content">
         <div class="container l1-content">
-            <div class="carousel" id="accueil-section">
+            <div class="carousel">
                  <div class="carousel-inner">
                     <div class="carousel-item active"><img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Ligue 1 Peluches">
                          <div class="carousel-caption"><h2>Ligue 1 Peluches : L'Élite</h2><p>Le summum du football en peluche vous attend.</p><a href="#l1-fixtures-section" class="btn">Voir le Calendrier</a></div>
@@ -346,11 +346,6 @@
                 <div class="carousel-arrow carousel-prev">❮</div><div class="carousel-arrow carousel-next">❯</div>
             </div>
             <div class="section action-buttons">
-                 <div class="season-selector-container">
-                     <label for="l1-season-selector">Saison :</label>
-                     <select id="l1-season-selector" data-league="l1"></select>
-                     <button class="delete-season-btn" id="delete-season-l1-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
-                 </div>
                  <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison L1</button>
                  <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn" disabled><i class="fas fa-save"></i> Sauvegarder L1</button>
             </div>
@@ -384,11 +379,6 @@
                 <div class="carousel-arrow carousel-prev">❮</div><div class="carousel-arrow carousel-next">❯</div>
             </div>
             <div class="section action-buttons">
-                <div class="season-selector-container">
-                     <label for="l2-season-selector">Saison :</label>
-                     <select id="l2-season-selector" data-league="l2"></select>
-                     <button class="delete-season-btn" id="delete-season-l2-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
-                 </div>
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison L2</button>
                 <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn" disabled><i class="fas fa-save"></i> Sauvegarder L2</button>
             </div>
@@ -430,13 +420,13 @@
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-ldc-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Phase Finale LDC</button>
                  <button class="sauvegarde-json-btn" id="sauvegarde-ldc-btn" disabled><i class="fas fa-save"></i> Sauvegarder LDC</button>
             </div>
-            <div class="section" id="ldc-playoffs-section"> <!-- Changé l'ID -->
+            <div class="section" id="ldc-playoffs-section"> 
                 <div class="section-header"><h2 class="section-title">Tableau Éliminatoire LDC</h2></div>
                 <div class="section-content" id="ldc-playoff-tree-container">
                     </div>
             </div>
             <div class="section" id="ldc-teams-section">
-                <div class="section-header"><h2 class="section-title">Équipes Qualifiées LDC</h2></div>
+                <div class="section-header"><h2 class="section-title">Équipes Qualifiées LDC (Phase Finale)</h2></div>
                 <div class="section-content"><div class="teams-grid" id="ldc-teams-grid"></div></div>
             </div>
         </div>
@@ -504,13 +494,19 @@
         const GIS_CHECK_INTERVAL = 100; 
         const GIS_MAX_RETRIES = 50; 
 
-        const initialLeagueDataStructure = { // Structure de base pour une nouvelle ligue ou si le fichier Drive est vide/corrompu
+        const initialLeagueDataStructure = { 
             teams: {},
             seasons: [],
             active_season_id: null
         };
+        
+        const leagueUIDRefs = {
+            'l1': { teamsGridId: 'l1-teams-grid', fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body', playoffContainerId: null, seasonSelectorId: 'l1-season-selector', deleteSeasonBtnId: 'delete-season-l1-btn' },
+            'l2': { teamsGridId: 'l2-teams-grid', fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body', playoffContainerId: null, seasonSelectorId: 'l2-season-selector', deleteSeasonBtnId: 'delete-season-l2-btn' },
+            'ldc': { teamsGridId: 'ldc-teams-grid', fixtureBodyId: null, standingsBodyId: null, playoffContainerId: 'ldc-playoff-tree-container', seasonSelectorId: 'ldc-season-selector', deleteSeasonBtnId: 'delete-season-ldc-btn' }
+        };
 
-        let leagueDataStore = { // Contiendra les données pour chaque ligue
+        let leagueDataStore = { 
             'l1': JSON.parse(JSON.stringify({...initialLeagueDataStructure, teams: {
                 "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." }, "Toulours FC": { "logo": "tfc.png", "description": "La Fierté des Pingouins." },
                 "Peluche FC": { "logo": "pfc.png", "description": "Les Titans de la Capitale." }, "PSG Peluches": { "logo": "psg.png", "description": "L'Élégance Parisienne." },
@@ -526,13 +522,6 @@
                 "Doudous Invincibles": {"logo": "vafc.png", "description": "Rêve Européen"}, "Oursons United": {"logo": "asset.png", "description": "Surprise du Chef"}
             }, filename: LEAGUE_FILENAMES.ldc, fileId: null}))
         };
-        
-        const leagueUIDRefs = { // Références aux IDs des éléments DOM pour chaque ligue
-            'l1': { teamsGridId: 'l1-teams-grid', fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body', playoffContainerId: null },
-            'l2': { teamsGridId: 'l2-teams-grid', fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body', playoffContainerId: null },
-            'ldc': { teamsGridId: 'ldc-teams-grid', fixtureBodyId: null, standingsBodyId: null, playoffContainerId: 'ldc-playoff-tree-container' } // Pas de fixture/standings classiques pour LDC
-        };
-
 
         let googleAccessToken = null, tokenClient = null;
         let isSavingDriveData = false; 
@@ -618,8 +607,8 @@
             nouvelleSaisonButtons.forEach(btn => btn.disabled = !isLoggedIn); 
             sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
             deleteSeasonButtons.forEach(btn => {
-                const leagueId = btn.id.split('-')[2];
-                btn.disabled = !isLoggedIn || !leagueDataStore[leagueId] || leagueDataStore[leagueId].seasons.length <= 1;
+                const leagueId = btn.id.includes('l1') ? 'l1' : (btn.id.includes('l2') ? 'l2' : 'ldc');
+                btn.disabled = !isLoggedIn || !leagueDataStore[leagueId] || !leagueDataStore[leagueId].seasons || leagueDataStore[leagueId].seasons.length <= 1;
             });
         }
         async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
@@ -666,7 +655,7 @@
         }
         
         async function loadAllLeagueDataFromDrive() {
-            let allLoadedOrInitialized = true; // True si toutes les ligues ont soit chargé, soit initialisé un fichier Drive
+            let allLoadedOrInitialized = true;
             for (const leagueId in leagueDataStore) {
                 const leagueStorage = leagueDataStore[leagueId];
                 console.log(`Chargement ${leagueId.toUpperCase()} depuis Drive (${leagueStorage.filename})...`);
@@ -678,38 +667,53 @@
                     if (content && content.trim() !== "") {
                         try {
                             const parsedData = JSON.parse(content);
-                            if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.seasons)) {
-                                leagueDataStore[leagueId] = parsedData; // Remplacer les données en mémoire
-                                leagueDataStore[leagueId].fileId = leagueStorage.fileId; // S'assurer que fileId est conservé
-                                leagueDataStore[leagueId].filename = leagueStorage.filename; // S'assurer que filename est conservé
-                                console.log(`Données ${leagueId.toUpperCase()} chargées depuis Drive.`);
-                            } else {
-                                console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Fichier réinitialisé avec la structure par défaut.`);
-                                await updateFileContent(leagueStorage.fileId, JSON.stringify(initialLeagueData[leagueId])); // Réécrire avec le défaut
-                                leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); // Utiliser le défaut en mémoire
-                                leagueDataStore[leagueId].fileId = leagueStorage.fileId;
-                                leagueDataStore[leagueId].filename = leagueStorage.filename;
-                                allLoadedOrInitialized = false;
+                            // Vérifier la structure spécifique pour L1/L2 et LDC
+                            if (leagueId === 'ldc') {
+                                if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.seasons)) {
+                                    leagueDataStore[leagueId] = parsedData; 
+                                    leagueDataStore[leagueId].fileId = leagueStorage.fileId; 
+                                    leagueDataStore[leagueId].filename = leagueStorage.filename; 
+                                    console.log(`Données ${leagueId.toUpperCase()} (Playoffs) chargées depuis Drive.`);
+                                } else {
+                                    console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données par défaut.`);
+                                    leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); 
+                                    leagueDataStore[leagueId].fileId = leagueStorage.fileId; leagueDataStore[leagueId].filename = leagueStorage.filename;
+                                    allLoadedOrInitialized = false;
+                                }
+                            } else { // Pour L1 et L2
+                                if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.fixtures)) {
+                                    leagueDataStore[leagueId] = { // Reconstruire la structure attendue pour L1/L2
+                                        teams: parsedData.teams,
+                                        seasons: [{ season_id: 1, nom_saison: "Saison Actuelle", fixtures: parsedData.fixtures, standings: parsedData.standings || calculateStandings(parsedData.teams, parsedData.fixtures) }],
+                                        active_season_id: 1,
+                                        fileId: leagueStorage.fileId,
+                                        filename: leagueStorage.filename
+                                    };
+                                    console.log(`Données ${leagueId.toUpperCase()} (Championnat) chargées et adaptées depuis Drive.`);
+                                } else {
+                                    console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données par défaut.`);
+                                    leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
+                                    leagueDataStore[leagueId].fileId = leagueStorage.fileId; leagueDataStore[leagueId].filename = leagueStorage.filename;
+                                    allLoadedOrInitialized = false;
+                                }
                             }
                         } catch (e) {
-                            console.error(`Erreur parsing ${leagueId.toUpperCase()} Drive:`, e); showMessage(`Données ${leagueId.toUpperCase()} Drive corrompues. Fichier réinitialisé.`, 7000, true);
-                            await updateFileContent(leagueStorage.fileId, JSON.stringify(initialLeagueData[leagueId]));
-                            leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
-                            leagueDataStore[leagueId].fileId = leagueStorage.fileId;
-                            leagueDataStore[leagueId].filename = leagueStorage.filename;
+                            console.error(`Erreur parsing ${leagueId.toUpperCase()} Drive:`, e); showMessage(`Données ${leagueId.toUpperCase()} Drive corrompues. Fichier réinitialisé avec défaut.`, 7000, true);
+                            leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); // Réinitialise au défaut
+                            await updateFileContent(leagueStorage.fileId, JSON.stringify(leagueDataStore[leagueId])); // Sauvegarde la structure défaut sur Drive
+                            leagueDataStore[leagueId].fileId = leagueStorage.fileId; leagueDataStore[leagueId].filename = leagueStorage.filename;
                             allLoadedOrInitialized = false;
                         }
                     } else {
-                         console.log(`Fichier ${leagueStorage.filename} vide sur Drive. Structure par défaut écrite sur Drive.`);
-                         await updateFileContent(leagueStorage.fileId, JSON.stringify(initialLeagueData[leagueId]));
+                         console.log(`Fichier ${leagueStorage.filename} vide sur Drive. Initialisation avec structure par défaut et sauvegarde sur Drive.`); 
                          leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
-                         leagueDataStore[leagueId].fileId = leagueStorage.fileId;
-                         leagueDataStore[leagueId].filename = leagueStorage.filename;
+                         leagueDataStore[leagueId].fileId = leagueStorage.fileId; leagueDataStore[leagueId].filename = leagueStorage.filename;
+                         await saveLeagueDataToDrive(leagueId, true); 
                          allLoadedOrInitialized = false; 
                     }
                 } else {
-                    console.warn(`Impossible de trouver ou créer le fichier ${leagueStorage.filename} sur Drive. Utilisation des données locales par défaut.`);
-                    showMessage(`Fichier ${leagueStorage.filename} Drive inaccessible. Données locales utilisées.`, 7000, true);
+                    console.warn(`Impossible trouver/créer ${leagueStorage.filename} Drive. Données locales par défaut conservées.`);
+                    showMessage(`Fichier ${leagueStorage.filename} Drive inaccessible.`, 7000, true);
                     // leagueDataStore[leagueId] conserve déjà les initialLeagueData
                     allLoadedOrInitialized = false;
                 }
@@ -729,55 +733,72 @@
                 leagueData.fileId = await findOrCreateFile(leagueData.filename, JSON.stringify(leagueData));
                 if(!leagueData.fileId){ showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); return; }
             } else if (!leagueData.fileId && isInitialSave) { 
-                console.error(`Sauvegarde initiale pour ${leagueId} mais fileId est manquant. Cela ne devrait pas arriver si findOrCreateFile a fonctionné.`); return;
+                 console.error(`Sauvegarde initiale pour ${leagueId} mais fileId est manquant.`); return;
             }
 
-            const activeSeason = leagueData.seasons.find(s => s.season_id === leagueData.active_season_id);
-            if (activeSeason) { 
-                if (leagueId === 'ldc' && activeSeason.playoff_tree) {
-                    // Pour LDC, le "classement" est implicite dans la progression du playoff_tree
-                } else if (activeSeason.fixtures) {
-                    activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
-                }
+            let dataToSaveOnDrive = {};
+            if (leagueId === 'ldc') { // LDC a une structure multi-saisons
+                dataToSaveOnDrive = {
+                    teams: leagueData.teams,
+                    seasons: leagueData.seasons.map(s => ({
+                        season_id: s.season_id,
+                        nom_saison: s.nom_saison,
+                        playoff_tree: s.playoff_tree, // Le champion est dans playoff_tree
+                        champion: s.playoff_tree?.champion // S'assurer qu'il est bien là
+                    })),
+                    active_season_id: leagueData.active_season_id
+                };
+            } else { // L1 et L2 ont une structure simple avec une seule saison implicite
+                const currentSeasonL1L2 = leagueData.seasons[0] || { fixtures: [], standings: {} }; // Prenez la première ou une vide
+                dataToSaveOnDrive = {
+                    teams: leagueData.teams,
+                    fixtures: currentSeasonL1L2.fixtures,
+                    standings: calculateStandings(leagueData.teams, currentSeasonL1L2.fixtures)
+                };
             }
             
-            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive. Données:`, JSON.parse(JSON.stringify(leagueData)));
-            const success = await updateFileContent(leagueData.fileId, leagueData);
+            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive. Données:`, JSON.parse(JSON.stringify(dataToSaveOnDrive)));
+            const success = await updateFileContent(leagueData.fileId, dataToSaveOnDrive);
             if (success) { if(!isInitialSave) showMessage(`Données ${leagueId.toUpperCase()} sauvegardées !`, 2000); }
             else { if(!isInitialSave) showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true); }
         }
 
         function populateSeasonSelector(leagueId) {
-            const selector = document.getElementById(`${leagueId}-season-selector`);
-            const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
+            const selector = document.getElementById(leagueUIDRefs[leagueId].seasonSelectorId);
+            const deleteBtn = document.getElementById(leagueUIDRefs[leagueId].deleteSeasonBtnId);
             if (!selector || !leagueDataStore[leagueId]) return;
             selector.innerHTML = '';
             const league = leagueDataStore[leagueId];
 
-            if (league.seasons && league.seasons.length > 0) {
-                league.seasons.forEach(season => {
-                    const option = document.createElement('option');
-                    option.value = season.season_id;
-                    option.textContent = season.nom_saison || `Saison ${season.season_id}`;
-                    if (season.season_id === league.active_season_id) {
-                        option.selected = true;
-                    }
-                    selector.appendChild(option);
-                });
-                if(deleteBtn) deleteBtn.disabled = !googleAccessToken || league.seasons.length <= 1;
-            } else {
-                const option = document.createElement('option'); option.textContent = "Aucune saison"; selector.appendChild(option);
-                if(deleteBtn) deleteBtn.disabled = true;
+            if (leagueId === 'ldc') { // Uniquement pour LDC
+                selector.style.display = 'inline-block';
+                if(deleteBtn) deleteBtn.style.display = 'inline-flex';
+
+                if (league.seasons && league.seasons.length > 0) {
+                    league.seasons.forEach(season => {
+                        const option = document.createElement('option');
+                        option.value = season.season_id;
+                        option.textContent = season.nom_saison || `Saison ${season.season_id}`;
+                        if (season.season_id === league.active_season_id) option.selected = true;
+                        selector.appendChild(option);
+                    });
+                    if(deleteBtn) deleteBtn.disabled = !googleAccessToken || league.seasons.length <= 1;
+                } else {
+                    const option = document.createElement('option'); option.textContent = "Aucune saison"; selector.appendChild(option);
+                    if(deleteBtn) deleteBtn.disabled = true;
+                }
+            } else { // Cacher pour L1 et L2
+                selector.style.display = 'none';
+                if(deleteBtn) deleteBtn.style.display = 'none';
+                const label = selector.previousElementSibling; // Cacher le label aussi
+                if (label && label.tagName === 'LABEL') label.style.display = 'none';
             }
         }
 
         function handleSeasonChange(event) {
             const leagueId = event.target.dataset.league;
             const selectedSeasonId = parseInt(event.target.value);
-            if (!leagueDataStore[leagueId] || isNaN(selectedSeasonId) || !leagueDataStore[leagueId].seasons.find(s => s.season_id === selectedSeasonId)) {
-                console.warn(`Saison ${selectedSeasonId} non trouvée pour la ligue ${leagueId}. Ne rien faire.`);
-                return;
-            }
+            if (!leagueDataStore[leagueId] || isNaN(selectedSeasonId) || !leagueDataStore[leagueId].seasons.find(s => s.season_id === selectedSeasonId)) return;
             
             leagueDataStore[leagueId].active_season_id = selectedSeasonId;
             populateSingleLeagueUI(leagueId);
@@ -799,50 +820,33 @@
         }
         function generateFullSeasonFixtures(teamNames) { if (teamNames.length < 2) return []; const firstHalf = generateBergerFixtures(teamNames); const secondHalf = firstHalf.map(round => round.map(match => ({ home: match.away, away: match.home, scoreHome: null, scoreAway: null }))); return [...firstHalf, ...secondHalf]; }
         
-        function initializePlayoffTree(numTeams = 4) { // Pour 4 équipes: demi, finale
+        function initializePlayoffTree(numTeams = 4) { 
             let playoff_tree = {
-                demi_finale: [],
+                quart_de_finale: [], demi_finale: [],
                 finale: [{ id: "F1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }],
                 champion: null
             };
-            if (numTeams === 4) {
-                playoff_tree.demi_finale = [
-                    { id: "DF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null },
-                    { id: "DF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }
-                ];
-            } else if (numTeams === 8) { // Extension pour 8 équipes
-                 playoff_tree.quart_de_finale = [
-                    { id: "QF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null },
-                    { id: "QF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null },
-                    { id: "QF3", home: null, away: null, scoreHome: null, scoreAway: null, winner: null },
-                    { id: "QF4", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }
-                 ];
-                 playoff_tree.demi_finale = [ // Les participants seront remplis plus tard
-                    { id: "DF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null },
-                    { id: "DF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }
-                ];
+            if (numTeams === 8) {
+                 playoff_tree.quart_de_finale = [ { id: "QF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }, { id: "QF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }, { id: "QF3", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }, { id: "QF4", home: null, away: null, scoreHome: null, scoreAway: null, winner: null } ];
+                 playoff_tree.demi_finale = [ { id: "DF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }, { id: "DF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null } ];
+            } else if (numTeams === 4) { // Directement en demi-finales
+                playoff_tree.demi_finale = [ { id: "DF1", home: null, away: null, scoreHome: null, scoreAway: null, winner: null }, { id: "DF2", home: null, away: null, scoreHome: null, scoreAway: null, winner: null } ];
             }
             return playoff_tree;
         }
 
-        function generateLDCPlayoffs(teamsArray) { // Attend un tableau de noms d'équipes
+        function generateLDCPlayoffs(teamsArray) { 
             let playoffTree = initializePlayoffTree(teamsArray.length);
-            shuffleArray(teamsArray); // Mélanger les équipes pour les affectations initiales
+            shuffleArray(teamsArray); 
 
-            if (teamsArray.length === 4 && playoffTree.demi_finale) {
-                playoffTree.demi_finale[0].home = teamsArray[0];
-                playoffTree.demi_finale[0].away = teamsArray[1];
-                playoffTree.demi_finale[1].home = teamsArray[2];
-                playoffTree.demi_finale[1].away = teamsArray[3];
-            } else if (teamsArray.length === 8 && playoffTree.quart_de_finale) {
-                 for(let i=0; i < 4; i++) {
-                     playoffTree.quart_de_finale[i].home = teamsArray[i*2];
-                     playoffTree.quart_de_finale[i].away = teamsArray[i*2 + 1];
-                 }
+            if (teamsArray.length === 8 && playoffTree.quart_de_finale) {
+                 for(let i=0; i < 4; i++) { playoffTree.quart_de_finale[i].home = teamsArray[i*2]; playoffTree.quart_de_finale[i].away = teamsArray[i*2 + 1]; }
+            } else if (teamsArray.length === 4 && playoffTree.demi_finale) {
+                playoffTree.demi_finale[0].home = teamsArray[0]; playoffTree.demi_finale[0].away = teamsArray[1];
+                playoffTree.demi_finale[1].home = teamsArray[2]; playoffTree.demi_finale[1].away = teamsArray[3];
             }
             return playoffTree;
         }
-
 
         function calculateStandings(teamsInfo, fixturesData) {
             const standings = {}; Object.keys(teamsInfo).forEach(name => { standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 }; });
@@ -855,10 +859,9 @@
             Object.values(standings).forEach(team => team.diff = team.bp - team.bc);
             return standings;
         }
-
         function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
-            const matchesPerDay = 3; // Pour L1 et L2
+            const matchesPerDay = 3; 
             (fixturesData || []).forEach((round, index) => {
                 const row = document.createElement('tr'); let roundHtml = `<td>J.${index + 1}</td>`;
                 (round || []).forEach((match, matchIdx) => {
@@ -875,18 +878,18 @@
 
         function populatePlayoffTreeDOM(containerId, playoffTree, teamsInfo, leagueId) {
             const container = document.getElementById(containerId);
-            if (!container || !playoffTree) { if (container) container.innerHTML = "<p>Tableau non disponible.</p>"; return; }
+            if (!container || !playoffTree) { if (container) container.innerHTML = "<p>Tableau non disponible pour cette saison.</p>"; return; }
             container.innerHTML = ''; 
 
-            const renderMatchInput = (match, roundName, matchIndex) => {
+            const renderMatchInput = (match, roundName, matchIndexInRound) => { // Renommé matchIndex en matchIndexInRound
                 if (!match) return '<td>Match à déterminer</td>';
                 const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : '';
                 const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
-                const homeTeamName = match.home || `<i>Vainqueur préc.</i>`;
-                const awayTeamName = match.away || `<i>Vainqueur préc.</i>`;
+                const homeTeamName = match.home || `<i>À déterminer</i>`;
+                const awayTeamName = match.away || `<i>À déterminer</i>`;
                 const homeLogo = match.home && teamsInfo[match.home] ? `${BASE_URL}${teamsInfo[match.home].logo}` : `${BASE_URL}default_logo.png`;
                 const awayLogo = match.away && teamsInfo[match.away] ? `${BASE_URL}${teamsInfo[match.away].logo}` : `${BASE_URL}default_logo.png`;
-                const isDisabled = !match.home || !match.away || match.winner; // Désactiver si équipes non connues ou match joué
+                const isDisabled = !match.home || !match.away || match.winner;
 
                 return `
                     <td>
@@ -897,10 +900,10 @@
                             </div>
                             <div class="fixture-score-inputs">
                                 <input type="number" class="fixture-score-input" value="${scoreHomeVal}" min="0" 
-                                       data-round="${roundName}" data-matchid="${match.id}" data-team="home" data-league="${leagueId}" ${isDisabled ? 'disabled' : ''}>
+                                       data-roundname="${roundName}" data-matchid="${match.id}" data-team="home" data-league="${leagueId}" ${isDisabled ? 'disabled' : ''}>
                                 <span class="vs-separator">-</span>
                                 <input type="number" class="fixture-score-input" value="${scoreAwayVal}" min="0" 
-                                       data-round="${roundName}" data-matchid="${match.id}" data-team="away" data-league="${leagueId}" ${isDisabled ? 'disabled' : ''}>
+                                       data-roundname="${roundName}" data-matchid="${match.id}" data-team="away" data-league="${leagueId}" ${isDisabled ? 'disabled' : ''}>
                             </div>
                             <div class="fixture-team away">
                                 <img src="${awayLogo}" alt="${match.away || '?'}" class="team-logo">
@@ -931,7 +934,7 @@
             }
             if (playoffTree.finale && playoffTree.finale.length > 0) {
                 html += '<thead><tr><th colspan="2" class="round-title">Finale</th></tr></thead><tbody>';
-                html += `<tr>${renderMatchInput(playoffTree.finale[0], 'finale', 0)}<td></td></tr></tbody>`; // Finale sur une seule colonne
+                html += `<tr>${renderMatchInput(playoffTree.finale[0], 'finale', 0)}<td></td></tr></tbody>`; 
             }
              if (playoffTree.champion) {
                 html += `<tfoot><tr><td colspan="2" class="champion-display"><i class="fas fa-crown"></i> Champion: ${playoffTree.champion} <i class="fas fa-crown"></i></td></tr></tfoot>`;
@@ -943,8 +946,6 @@
                 input.addEventListener('change', handleLDCScoreChange);
             });
         }
-
-
         function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos) {
             const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
             const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
@@ -965,7 +966,7 @@
                 teamsGrid.appendChild(teamCard);
             });
         }
-        function handleScoreChange(event) { // Pour L1 et L2
+        function handleScoreChange(event) { 
             const input = event.target; const roundIndex = parseInt(input.dataset.round); const matchIndex = parseInt(input.dataset.matchidx);
             const teamType = input.dataset.team; const leagueId = input.dataset.league; let score = input.value === '' ? null : parseInt(input.value);
             let league = leagueDataStore[leagueId]; if (!league) return;
@@ -977,23 +978,25 @@
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
             
             activeSeason.standings = calculateStandings(league.teams, activeSeason.fixtures);
-            if (document.getElementById(leagueUIDRefs[leagueId].standingsBodyId)) populateStandingsDOM(leagueUIDRefs[leagueId].standingsBodyId, activeSeason.standings, league.teams);
+            const ref = leagueUIDRefs[leagueId];
+            if (document.getElementById(ref.standingsBodyId)) populateStandingsDOM(ref.standingsBodyId, activeSeason.standings, league.teams);
         }
 
         function handleLDCScoreChange(event) {
             const input = event.target;
-            const roundName = input.dataset.round; // 'quart_de_finale', 'demi_finale', 'finale'
-            const matchId = input.dataset.matchid; // 'QF1', 'DF2', etc.
-            const teamType = input.dataset.team; // 'home' ou 'away'
-            const leagueId = input.dataset.league; // devrait être 'ldc'
+            const roundName = input.dataset.roundname; 
+            const matchId = input.dataset.matchid; 
+            const teamType = input.dataset.team; 
+            const leagueId = input.dataset.league; 
             let score = input.value === '' ? null : parseInt(input.value);
 
             const league = leagueDataStore[leagueId];
-            if (!league) return;
+            if (!league || leagueId !== 'ldc') return;
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
             if (!activeSeason || !activeSeason.playoff_tree || !activeSeason.playoff_tree[roundName]) return;
 
-            const match = activeSeason.playoff_tree[roundName].find(m => m.id === matchId);
+            const matchArray = activeSeason.playoff_tree[roundName];
+            const match = matchArray.find(m => m.id === matchId);
             if (!match) return;
 
             if (score !== null && (isNaN(score) || score < 0)) {
@@ -1002,13 +1005,14 @@
             }
             if (teamType === 'home') match.scoreHome = score; else match.scoreAway = score;
 
-            // Mettre à jour le gagnant et propager
             if (typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number') {
                 if (match.scoreHome > match.scoreAway) match.winner = match.home;
                 else if (match.scoreAway > match.scoreHome) match.winner = match.away;
-                else match.winner = null; // Match nul non géré pour la propagation, ou décider d'une règle (ex: tirs au but)
+                else { // Gestion des matchs nuls (par ex. pour prolongations / t.a.b. si implémenté)
+                    match.winner = null; 
+                    showMessage("Match nul! Précisez un vainqueur si applicable (non géré automatiquement).", 3000, true);
+                }
 
-                // Propager le gagnant au tour suivant
                 if (match.winner) {
                     if (roundName === 'quart_de_finale') {
                         if (match.id === 'QF1') activeSeason.playoff_tree.demi_finale[0].home = match.winner;
@@ -1034,7 +1038,9 @@
             let newSeasonData = { season_id: newSeasonId, nom_saison: newSeasonName };
 
             if (leagueId === 'ldc') {
-                if(teamNames.length < 4) { showMessage(`Pas assez d'équipes (${teamNames.length}) pour un tableau LDC (min 4).`, 3000, true); return;}
+                if(teamNames.length < 4 || teamNames.length % 2 !== 0 ) { // Pour 8 équipes QF, 4 équipes DF. Ajuster si besoin.
+                     showMessage(`Nombre d'équipes insuffisant ou incorrect (${teamNames.length}) pour un tableau LDC. Il faut 4 ou 8 équipes.`, 4000, true); return;
+                }
                 newSeasonData.playoff_tree = generateLDCPlayoffs(teamNames);
             } else {
                 shuffleArray(teamNames);
@@ -1053,7 +1059,7 @@
         function deleteSelectedSeason(leagueId) {
             const league = leagueDataStore[leagueId];
             if (!league || !league.seasons || league.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison.", 3000, true); return; }
-            const selector = document.getElementById(`${leagueId}-season-selector`);
+            const selector = document.getElementById(leagueUIDRefs[leagueId].seasonSelectorId);
             const seasonIdToDelete = parseInt(selector.value);
             const seasonNameToDelete = league.seasons.find(s=>s.season_id === seasonIdToDelete)?.nom_saison || `Saison ${seasonIdToDelete}`;
 
@@ -1070,39 +1076,48 @@
             const refIds = leagueUIDRefs[leagueId]; 
 
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
-            if (activeSeason) {
-                if (leagueId === 'ldc') { // Spécifique LDC
+            
+            // Affichage spécifique LDC
+            const ldcPlayoffSection = document.getElementById('ldc-playoffs-section');
+            const l1l2FixturesSection = document.getElementById(`${leagueId}-fixtures-section`);
+            const l1l2StandingsSection = document.getElementById(`${leagueId}-standings-section`);
+
+            if (leagueId === 'ldc') {
+                if(ldcPlayoffSection) ldcPlayoffSection.style.display = 'block';
+                if(l1l2FixturesSection) l1l2FixturesSection.style.display = 'none';
+                if(l1l2StandingsSection) l1l2StandingsSection.style.display = 'none';
+                if (activeSeason && activeSeason.playoff_tree) {
                     populatePlayoffTreeDOM(refIds.playoffContainerId, activeSeason.playoff_tree, league.teams, leagueId);
-                    // Masquer les tableaux de classement/fixtures classiques s'ils existent pour LDC
-                    if (document.getElementById(refIds.fixtureBodyId)) document.getElementById(refIds.fixtureBodyId).closest('.section').style.display = 'none';
-                    if (document.getElementById(refIds.standingsBodyId)) document.getElementById(refIds.standingsBodyId).closest('.section').style.display = 'none';
-                    if (document.getElementById('ldc-fixtures-section').querySelector('p')) document.getElementById('ldc-fixtures-section').querySelector('p').style.display = 'none';
+                } else {
+                    const container = document.getElementById(refIds.playoffContainerId);
+                    if (container) container.innerHTML = '<p>Sélectionnez ou créez une saison pour voir le tableau.</p>';
+                }
+            } else { // Pour L1 et L2
+                if(ldcPlayoffSection && leagueId !== 'ldc') { // S'assurer que le conteneur LDC est masqué si on n'est pas sur l'onglet LDC
+                    const ldcTabContent = document.getElementById('ligueChampions-content');
+                    if (!ldcTabContent || !ldcTabContent.classList.contains('active')) {
+                         ldcPlayoffSection.style.display = 'none';
+                    }
+                }
+                if(l1l2FixturesSection) l1l2FixturesSection.style.display = 'block';
+                if(l1l2StandingsSection) l1l2StandingsSection.style.display = 'block';
 
-
-                } else { // Pour L1 et L2
+                if (activeSeason && activeSeason.fixtures) {
                     populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
                     populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
-                     if (document.getElementById(refIds.fixtureBodyId)) document.getElementById(refIds.fixtureBodyId).closest('.section').style.display = 'block';
-                    if (document.getElementById(refIds.standingsBodyId)) document.getElementById(refIds.standingsBodyId).closest('.section').style.display = 'block';
-                    if (document.getElementById(refIds.playoffContainerId)) document.getElementById(refIds.playoffContainerId).closest('.section').style.display = 'none';
-
+                } else { 
+                    const fixturesBody = document.getElementById(refIds.fixtureBodyId); const standingsBody = document.getElementById(refIds.standingsBodyId);
+                    if (fixturesBody) fixturesBody.innerHTML = '<tr><td colspan="4">Sélectionnez ou créez une saison.</td></tr>';
+                    if (standingsBody) standingsBody.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';
                 }
-            } else { 
-                if (refIds.fixtureBodyId) { const fb = document.getElementById(refIds.fixtureBodyId); if(fb) fb.innerHTML = '<tr><td colspan="4">Sélectionnez ou créez une saison.</td></tr>';}
-                if (refIds.standingsBodyId) { const sb = document.getElementById(refIds.standingsBodyId); if(sb) sb.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';}
-                if (refIds.playoffContainerId) { const ptc = document.getElementById(refIds.playoffContainerId); if(ptc) ptc.innerHTML = '<p>Sélectionnez ou créez une saison.</p>';}
             }
             populateTeamsGridDOM(refIds.teamsGridId, league.teams);
             populateSeasonSelector(leagueId); 
             observeActiveTabSections();
-            const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
-            if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !league.seasons || league.seasons.length <= 1;
         }
 
         function populateAllLeaguesUI() {
-            for (const leagueId in leagueDataStore) {
-                populateSingleLeagueUI(leagueId);
-            }
+            for (const leagueId in leagueDataStore) populateSingleLeagueUI(leagueId);
         }
 
         const tabBtns = document.querySelectorAll('.tab-btn'); const tabContents = document.querySelectorAll('.tab-content');
@@ -1121,6 +1136,11 @@
                 if (tabId === "ligue1" || tabId === "ligue2" || tabId === "ligueChampions") document.querySelector('header nav ul li a[href="#competitions-section"]')?.classList.add('active-nav-link');
                 else if (tabId === "billetterie") document.querySelector('header nav ul li a[href="#billetterie-content"]')?.classList.add('active-nav-link');
                 else document.querySelector('header nav ul li a[href="#accueil-section"]')?.classList.add('active-nav-link');
+                // S'assurer que la bonne UI est affichée pour la LDC
+                if (tabId === "ligueChampions") populateSingleLeagueUI('ldc');
+                else if (tabId === "ligue1") populateSingleLeagueUI('l1');
+                else if (tabId === "ligue2") populateSingleLeagueUI('l2');
+
             });
         });
         function initializeCarousel(carousel) {
@@ -1176,10 +1196,12 @@
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             const initialActiveTab = document.querySelector('.tab-btn.active');
             if(initialActiveTab) initialActiveTab.click(); else if(tabBtns.length > 0) tabBtns[0].click(); 
+            
             const defaultNavLink = document.querySelector('header nav ul li a[href="#accueil-section"]');
             if(defaultNavLink) defaultNavLink.classList.add('active-nav-link');
+
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Mode Drive, Multi-Saisons).");
+            console.log("Championnat Peluches Élite V2 Initialisé (Mode Drive, Multi-Saisons LDC).");
         });
     </script>
 </body>

@@ -75,51 +75,36 @@
          #signin-button:hover:not(:disabled) { background-color: #e6ac00; transform: translateY(-1px); }
          #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        nav { flex-grow: 1; display: flex; justify-content: center; } /* Centre la nav */
+        nav { flex-grow: 1; display: flex; justify-content: center; } 
         nav ul { display: flex; list-style: none; margin:0; padding:0; flex-wrap: wrap; justify-content: center;}
-        nav ul li { margin: 0 5px; } /* Espacement ajusté */
-        nav ul li a {
+        nav ul li { margin: 0 5px; } 
+        nav ul li a { 
             color: var(--text-color-light); text-decoration: none; font-weight: 500;
-            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; padding: 10px 15px; /* Padding ajusté */
+            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; padding: 10px 15px; 
             display: inline-flex; align-items: center; gap: 8px;
-            border-radius: 25px; /* Bordures arrondies pour effet "pilule" */
-            border: 2px solid transparent;
+            border-radius: 25px; border: 2px solid transparent;
             font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size:0.9rem; letter-spacing: 0.5px;
         }
         nav ul li a i { font-size: 0.9em; }
 
-        /* Style pour les liens qui ne sont PAS des onglets quand ils sont actifs */
         nav ul li a.active-nav-link:not([data-tab-link]) {
-            color: var(--accent-gold);
-            background-color: rgba(255, 193, 7, 0.1); /* Fond léger doré */
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 8px rgba(var(--accent-gold-rgb, 255, 193, 7), 0.4);
+            color: var(--accent-gold); background-color: rgba(255, 193, 7, 0.1); 
+            border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
         }
-         /* Style pour les liens qui SONT des onglets quand ils sont actifs */
-        nav ul li a[data-tab-link].active-nav-link, /* Appliquer aussi quand c'est le lien de nav actif */
+        nav ul li a[data-tab-link].active-nav-link, 
         nav ul li a[data-tab-link].tab-active {
-            color: var(--text-color-light) !important; /* Forcer blanc pour contraste */
-            font-weight: 700;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transform: translateY(-2px);
+            color: var(--text-color-light) !important; font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); transform: translateY(-2px);
         }
         nav ul li a[data-tab-link="ligue1"].tab-active { background-color: var(--nav-l1-color); border-color: var(--nav-l1-color); }
         nav ul li a[data-tab-link="ligue2"].tab-active { background-color: var(--nav-l2-color); border-color: var(--nav-l2-color); }
         nav ul li a[data-tab-link="palmares"].tab-active { background-color: var(--nav-palmares-color); border-color: var(--nav-palmares-color); color: var(--accent-gold) !important; }
         nav ul li a[data-tab-link="billetterie"].tab-active { background-color: var(--nav-billetterie-color); border-color: var(--nav-billetterie-color); }
         
-        nav ul li a:hover:not(.active-nav-link):not(.tab-active) { /* Hover général pour les non-actifs */
-             color: var(--accent-gold);
-             background-color: rgba(255,255,255,0.05);
-        }
-         nav ul li a[data-tab-link]:hover:not(.tab-active) { /* Hover spécifique pour les liens-onglets non actifs */
-             border-color: var(--accent-gold);
-        }
-
+        nav ul li a:hover:not(.active-nav-link):not(.tab-active) {  color: var(--accent-gold); background-color: rgba(255,255,255,0.05); }
+         nav ul li a[data-tab-link]:hover:not(.tab-active) { border-color: var(--accent-gold); }
 
         .hamburger { display: none; font-size: 1.8rem; color: var(--text-color-light); cursor: pointer; z-index: 1001; margin-left:15px;}
-
-        /* Main Tabs container supprimé */
 
         .tab-content { display: none; padding: 40px 0; animation: fadeIn 0.6s ease-out; }
         .tab-content.active { display: block; }
@@ -158,7 +143,6 @@
         .carousel-arrow:hover { color: var(--accent-gold); background-color: rgba(0,0,0,0.6); transform: translateY(-50%) scale(1.1); }
         .carousel-prev { left: 20px; } .carousel-next { right: 20px; }
 
-
         .btn {
             display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light);
             text-decoration: none; border-radius: 50px; font-weight: 700; font-family: 'Oswald', sans-serif;
@@ -186,9 +170,9 @@
         .l1-content .standings-table th, .l1-content .fixtures-table th { background-color: var(--nav-l1-color); color: var(--text-color-light); }
         .l2-content .standings-table th, .l2-content .fixtures-table th { background-color: var(--nav-l2-color); color: var(--text-color-light); }
         
-        .palmares-content .section { background: linear-gradient(145deg, var(--palmares-bg-dark) 0%, #1a1e23 100%); box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3); }
+        .palmares-content .section { background: linear-gradient(145deg, var(--palmares-bg-dark) 0%, #1f242b 100%); box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3); }
         .palmares-content .section-title { color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.7); }
-        .palmares-content .palmares-table { background-color: rgba(10,20,40,0.4); border: 2px solid var(--palmares-border); border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 25px rgba(0,0,0,0.6);}
+        .palmares-content .palmares-table { background-color: rgba(10,20,40,0.4); border: 1px solid var(--palmares-border); border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 25px rgba(0,0,0,0.6);}
         .palmares-content .palmares-table th { 
             background-color: rgba(0,0,0,0.5); 
             color: var(--accent-gold); font-size: 1.25rem; letter-spacing: 1.8px;
@@ -206,11 +190,12 @@
              vertical-align: middle;
             border-bottom: 1px solid var(--border-color); white-space: nowrap;
         }
-         .palmares-content .palmares-table td { border-color: var(--palmares-border); }
+         .palmares-content .palmares-table td { border-color: var(--palmares-border); text-align: center; } /* Centrer contenu cellule trophée */
+         .palmares-content .palmares-table td.team-info { text-align: left; } /* Sauf pour nom équipe */
+
 
         .standings-table tbody tr:hover, .fixtures-table tbody tr:hover, .palmares-table tbody tr:hover { background-color: #f1f3f5; }
         .palmares-content .palmares-table tbody tr:hover { background-color: rgba(var(--accent-gold-rgb, 255, 193, 7), 0.1); }
-
 
         .team-info { display: flex; align-items: center; text-align: left; font-weight: 600; white-space: normal; }
         .team-logo { width: 32px; height: 32px; margin-right: 12px; object-fit: contain; flex-shrink: 0; } 
@@ -231,7 +216,7 @@
 
         .palmares-table .trophy-cell { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap;} 
         .palmares-table .trophy-icon { 
-            font-size: 2.2em; /* Trophées encore plus grands */
+            font-size: 2.2em; 
             transition: transform 0.2s ease-out, text-shadow 0.3s ease; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 0 15px currentColor, 0 0 25px currentColor; 
             line-height: 1; 
@@ -248,7 +233,7 @@
             color: var(--palmares-text-light); transition: all 0.2s ease; opacity: 0.8;
         }
         .palmares-table .action-cell button:hover { opacity: 1; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.3); }
-        .palmares-table .action-cell button.remove-trophy { color: #ff8a80; border-color: #ef9a9a;}
+        .palmares-table .action-cell button.remove-trophy { color: #ffcdd2; border-color: #ef9a9a;}
         .palmares-table .action-cell button.remove-trophy:hover { background-color: rgba(255,138,128,0.3); color:var(--neon-red); }
         .palmares-table .action-cell button.add-trophy { color: #c8e6c9; border-color: #a5d6a7;}
         .palmares-table .action-cell button.add-trophy:hover { background-color: rgba(165,214,167,0.3); color: var(--neon-green); }
@@ -320,26 +305,29 @@
         .message-area.error-message { background-color: rgba(var(--neon-red-rgb),0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
         @media (max-width: 1100px) { 
-             nav ul li { margin-left: 15px; }
-             nav ul li a { padding: 8px 10px; font-size: 0.85rem;}
+             nav ul li { margin-left: 10px; } /* Encore un peu moins d'espace */
+             nav ul li a { padding: 8px 10px; font-size: 0.8rem;}
         }
         @media (max-width: 992px) {
-            .header-container { flex-wrap: wrap; }
-            .header-actions { order: 3; width: 100%; justify-content: center; margin-top:10px; }
-            nav {order:1; flex-grow: 0; margin-right: auto;} /* Pour que la nav ne prenne pas toute la place à côté du logo */
-            .hamburger {order: 2; margin-left: auto;} /* Hamburger à droite des actions drive si actions visibles */
-            .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
-        }
-        @media (max-width: 768px) {
-            .header-container { flex-direction: row; justify-content: space-between; padding: 10px 15px; }
-            nav { order: 3; width: 100%; position: absolute; top: calc(100% - 1px); left: 0; background-color: var(--primary-color); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
-            .header-actions {order: 2; margin-top:0;} /* Actions Drive avant Hamburger */
-            .hamburger { display: block; order: 3; }
+            .header-container { flex-wrap: wrap; justify-content: space-between; } /* Espace entre logo et actions/hamburger */
+            .logo { flex-grow: 1; } /* Permet au logo de prendre l'espace disponible */
+            nav { order: 3; width: 100%; background-color: var(--primary-color); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
+            .header-actions { order: 1; margin-left: auto; /* Pousse les actions à droite */ }
+            .hamburger { display: block; order: 2; margin-left: 15px; /* Espace entre actions et hamburger */ }
             nav.active { max-height: 500px; }
             nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
             nav ul li { margin-left: 0; width: 100%; }
-            nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); border-radius:0; }
-            nav ul li:last-child a { border-bottom: none; }
+            nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); border-radius:0; justify-content: flex-start; }
+            nav ul li a:hover, nav ul li a.active-nav-link, nav ul li a.tab-active { background-color: rgba(255,255,255,0.1); border-color:transparent; color: var(--accent-gold); transform: none; box-shadow: none;}
+            nav ul li a[data-tab-link="ligue1"].tab-active { background-color: var(--nav-l1-color) !important; color:var(--text-color-light) !important;}
+            nav ul li a[data-tab-link="ligue2"].tab-active { background-color: var(--nav-l2-color) !important; color:var(--text-color-light) !important;}
+            nav ul li a[data-tab-link="palmares"].tab-active { background-color: var(--nav-palmares-color) !important; color:var(--accent-gold) !important;}
+            nav ul li a[data-tab-link="billetterie"].tab-active { background-color: var(--nav-billetterie-color) !important; color:var(--text-color-light) !important;}
+
+            .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            .logo h1 { font-size: 1.5rem; }
             .carousel { height: 350px; } .carousel-caption h2 { font-size: 2rem; }
             .section-title { font-size: 1.8rem; }
             .standings-table th, .fixtures-table th, .palmares-table th { font-size: 0.8rem; padding: 10px 5px;}
@@ -352,7 +340,8 @@
         }
         @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
-            .tab-btn, .tab-btn-link, nav ul li a { font-size: 0.9rem; padding: 8px 12px; } /* Unifier padding mobile */
+            .tab-btn, .tab-btn-link { font-size: 0.9rem; padding: 8px 15px; } /* Pour la barre sous header si elle était visible */
+            nav ul li a {font-size: 1rem; padding: 12px 20px;} /* Taille pour menu hamburger */
             .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
             .section-title { font-size: 1.6rem; }
             .btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -367,12 +356,13 @@
 <body>
     <header>
         <div class="container header-container">
-            <a href="#" data-tab-link="ligue1" class="logo nav-link"> <!-- #accueil-section-l1 enlevé, géré par JS -->
+            <a href="#" data-tab-link="ligue1" class="logo nav-link">
                 <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
             <nav>
                 <ul>
+                    <!-- Accueil pointe vers Ligue 1 par défaut -->
                     <li><a href="#" class="nav-link active-nav-link" data-tab-link="ligue1"><i class="fas fa-futbol"></i> L1</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="ligue2"><i class="fas fa-shield-alt"></i> L2</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="palmares"><i class="fas fa-medal"></i> Palmarès</a></li>
@@ -391,9 +381,7 @@
         </div>
     </header>
 
-    <!-- Main tabs supprimés -->
-
-    <div class="tab-content active" id="ligue1-content"> <!-- L1 active par défaut -->
+    <div class="tab-content active" id="ligue1-content">
         <div class="container l1-content">
             <div class="carousel" id="accueil-section-l1">
                  <div class="carousel-inner">
@@ -406,7 +394,7 @@
                         <div class="carousel-caption"><h2>BUTS ET ÉMOTIONS GARANTIS !</h2><p>Chaque match est une explosion de joie (et de rembourrage).</p><a href="#actualites-section-container" class="btn">Actualités L1</a></div>
                     </div>
                     <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/vafc.png" alt="Action de jeu Valenciennes FC">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/vafc.png" alt="Action de jeu Valenciennes FC"> 
                         <div class="carousel-caption"><h2>VALENCIENNES FC : LES GUERRIERS DU NORD !</h2><p>Suivez les exploits des héros locaux en Ligue 1.</p><a href="#l1-teams-section" class="btn">Découvrir les Équipes</a></div>
                     </div>
                 </div>
@@ -680,7 +668,6 @@
                 btn.disabled = !isLoggedIn || !league || !league.seasons || league.seasons.length <= 1;
             });
             if(savePalmaresBtn) savePalmaresBtn.disabled = !isLoggedIn;
-            // Les boutons d'onglet de la nav principale ne sont pas désactivés
         }
         async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
             if (!googleAccessToken) { console.warn("findOrCreateFile appelé sans token Google."); return null; }
@@ -965,8 +952,8 @@
                 populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
             } else { 
                 const fixturesBody = document.getElementById(refIds.fixtureBodyId); const standingsBody = document.getElementById(refIds.standingsBodyId);
-                const colsFixtures = document.querySelector(`#${refIds.fixtureBodyId} + thead th`)?.length || 4; // Doit être thead > tr > th
-                const colsStandings = document.querySelector(`#${refIds.standingsBodyId} + thead th`)?.length || 7;
+                const colsFixtures = document.querySelector(`#${refIds.fixtureBodyId} ~ thead th`)?.length || 4; // Utilisation de ~ pour le sélecteur de thead
+                const colsStandings = document.querySelector(`#${refIds.standingsBodyId} ~ thead th`)?.length || 7;
                 if (fixturesBody) fixturesBody.innerHTML = `<tr><td colspan="${colsFixtures}">Sélectionnez ou créez une saison.</td></tr>`;
                 if (standingsBody) standingsBody.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';
             }
@@ -1042,56 +1029,53 @@
         const allNavLinks = document.querySelectorAll('header nav ul li a');
         const tabContents = document.querySelectorAll('.tab-content');
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
-        function observeActiveTabSections() {
-            document.querySelectorAll('.section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el) });
-            const activeTabNode = document.querySelector('.tab-content.active');
-            if (activeTabNode) { activeTabNode.querySelectorAll('.section').forEach(section => { const rect = section.getBoundingClientRect(); if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') { section.style.opacity = '1'; section.style.transform = 'translateY(0)'; observer.unobserve(section); } }); }
+        
+        function setActiveTab(tabId) {
+            allNavLinks.forEach(l => {
+                l.classList.remove('active-nav-link', 'tab-active');
+                if (l.dataset.tabLink === tabId || (tabId === 'accueil-section-l1' && l.dataset.tabLink === 'ligue1') ) { // L'accueil est L1
+                    l.classList.add('active-nav-link', 'tab-active');
+                }
+            });
+            tabContents.forEach(c => c.classList.remove('active'));
+            const targetContent = document.getElementById(`${tabId}-content`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            } else if (tabId === 'accueil-section-l1') { // Cas spécifique de l'accueil
+                 document.getElementById('ligue1-content')?.classList.add('active');
+            }
+             observeActiveTabSections();
+             document.querySelectorAll('.carousel').forEach(carousel => {
+                 const ci = carousel.carouselInstance;
+                 if (ci) carousel.closest('.tab-content.active') ? ci.startAutoSlide() : ci.stopAutoSlide();
+             });
         }
         
         allNavLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                const isTabLink = link.hasAttribute('data-tab-link');
                 const href = link.getAttribute('href');
+                const isTabLink = link.hasAttribute('data-tab-link');
 
-                allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
-                link.classList.add('active-nav-link');
-
-                if (isTabLink && href.startsWith("#")) {
+                if (isTabLink && href === "#") { // Empêche le scroll si c'est un data-tab-link pointant sur '#'
                     e.preventDefault();
-                    const tabId = link.dataset.tabLink;
-                    link.classList.add('tab-active');
-                    
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    const targetContent = document.getElementById(`${tabId}-content`);
-                    if (targetContent) targetContent.classList.add('active');
-                    
-                    observeActiveTabSections();
-                    document.querySelectorAll('.carousel').forEach(carousel => {
-                        const ci = carousel.carouselInstance;
-                        if (ci) carousel.closest('.tab-content.active') ? ci.startAutoSlide() : ci.stopAutoSlide();
-                    });
-                } else if (href && href.startsWith("#")) { 
-                    // Pour les liens d'ancre simples comme "Actualités"
-                    tabContents.forEach(c => c.classList.remove('active'));
-                     // Si on clique sur "Accueil L1" via le logo, on veut activer l'onglet L1.
-                    if(link.classList.contains('logo') || href === '#accueil-section-l1'){
-                        document.querySelector('nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
-                        document.getElementById('ligue1-content')?.classList.add('active');
-                    }
-                    const targetSection = document.getElementById(href.substring(1));
-                     if(targetSection && !targetSection.classList.contains('tab-content')){
-                        // Si la section n'est pas un tab-content (ex: Actualités), s'assurer qu'elle est visible
-                        // et qu'aucun autre onglet n'est marqué comme actif visuellement s'il ne correspond pas.
-                        targetSection.scrollIntoView({behavior: 'smooth'});
-                     }
                 }
-                // Les liens externes (comme champions.html) fonctionnent normalement.
+                
+                if (isTabLink) {
+                    const tabId = link.dataset.tabLink;
+                    setActiveTab(tabId);
+                } else if (href && href.startsWith("#")) { // Pour les liens d'ancre simples comme "Actualités"
+                     allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
+                     link.classList.add('active-nav-link');
+                     tabContents.forEach(c => c.classList.remove('active')); // Désactive tous les contenus d'onglets
+                     // Le scroll vers l'ancre est géré par le navigateur
+                }
+                 // Pour les liens externes (comme champions.html), la navigation standard se fait
                 if (window.innerWidth <= 768 && nav.classList.contains('active')) { 
                     nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; 
                 }
             });
         });
-
+        
         function initializeCarousel(carousel) {
              if (carousel.carouselInstance) return;
             const inner = carousel.querySelector('.carousel-inner'); const items = carousel.querySelectorAll('.carousel-item');
@@ -1136,15 +1120,15 @@
             populateAllLeaguesUI(); populatePalmaresTable();
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             
-            // Activer le premier onglet "L1" par défaut
-            const initialActiveNavLink = document.querySelector('header nav ul li a[data-tab-link="ligue1"]');
+            const initialActiveNavLink = document.querySelector('header nav ul li a.active-nav-link[data-tab-link]');
             if (initialActiveNavLink) {
-                initialActiveNavLink.click(); // Simule un clic pour initialiser l'onglet et le contenu
-            } else { // Fallback si le lien L1 n'est pas trouvé, pour une raison quelconque
-                observeActiveTabSections();
+                setActiveTab(initialActiveNavLink.dataset.tabLink);
+            } else { // Fallback si aucun lien n'est explicitement actif avec data-tab-link
+                setActiveTab('ligue1'); // Active L1 par défaut
             }
+            observeActiveTabSections(); // Observer après avoir potentiellement activé un onglet
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Navigation Unique).");
+            console.log("Championnat Peluches Élite V2 Initialisé (Navigation Unique v2).");
         });
     </script>
 </body>

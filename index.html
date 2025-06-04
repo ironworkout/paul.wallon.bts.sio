@@ -23,7 +23,7 @@
 
             --l1-color: var(--secondary-color);
             --l2-color: #28a745;
-            --ldc-color: #6f42c1; /* Violet LDC */
+            --ldc-color: #6f42c1; 
             --billetterie-color: #fd7e14;
 
              --neon-green: #39FF14; 
@@ -190,11 +190,9 @@
          .fixtures-table .fixture-score-inputs input:focus, .knockout-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3); } 
         .fixtures-table .vs-separator, .knockout-table .vs-separator { margin: 0 5px; color: var(--text-color-dark); font-weight: 700; }
 
-        /* Specific for Knockout Stage */
         .knockout-round-title { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: var(--ldc-color); margin-top: 30px; margin-bottom: 15px; text-align: center; border-bottom: 2px solid var(--ldc-color); padding-bottom: 8px;}
-        .knockout-table td { min-width: 250px; /* Ensure enough space for team names and scores */ }
+        .knockout-table td { min-width: 250px; }
         .knockout-table .fixture-team { min-width: 100px; }
-
 
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
@@ -336,7 +334,7 @@
 
     <div class="tab-content active" id="ligue1-content">
         <div class="container l1-content">
-            <div class="carousel" id="accueil-section">
+            <div class="carousel" id="accueil-section-l1">
                  <div class="carousel-inner">
                     <div class="carousel-item active"><img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Ligue 1 Peluches">
                          <div class="carousel-caption"><h2>Ligue 1 Peluches : L'Élite</h2><p>Le summum du football en peluche vous attend.</p><a href="#l1-fixtures-section" class="btn">Voir le Calendrier</a></div>
@@ -436,7 +434,6 @@
             <div class="section" id="ldc-knockout-section"> 
                 <div class="section-header"><h2 class="section-title">Tableau Éliminatoire LDC</h2></div>
                 <div class="section-content" id="ldc-knockout-body">
-                    <!-- Le tableau sera généré ici par JS -->
                      <p>Chargez une saison ou démarrez-en une nouvelle pour voir le tableau.</p>
                 </div>
             </div>
@@ -513,7 +510,6 @@
             teams: {},
             seasons: [],
             active_season_id: null,
-            // Les fileId, filename, etc. sont spécifiques à leagueDataStore
         };
 
         const initialTeamData = {
@@ -530,7 +526,6 @@
             'ldc': { 
                 "Champions FC": {"logo": "psg.png", "description": "Tenants du Titre"}, "Galactiques Peluches": {"logo": "oo.png", "description": "Prétendants Étoilés"},
                 "Doudous Invincibles": {"logo": "vafc.png", "description": "Rêve Européen"}, "Oursons United": {"logo": "asset.png", "description": "Surprise du Chef"},
-                // Ajouter jusqu'à 16 équipes pour un tableau LDC de base
                 "Tigres Rayés": {"logo": "pfc.png", "description": "Force Félidée"}, "Aigles Royaux": {"logo": "tfc.png", "description": "Envergure Royale"},
                 "Dragons de Feu": {"logo": "ascl.png", "description": "Souffle Ardent"}, "Loups Solitaires": {"logo": "usla.png", "description": "Instinct de Chasseur"},
                 "Requins Affamés": {"logo": "clermandala.png", "description": "Prédateurs des Mers"}, "Cobras Venimeux": {"logo": "fcp.png", "description": "Attaque Fulgurante"},
@@ -540,16 +535,18 @@
             }
         };
         
+        // Correction: leagueDataStore doit contenir les IDs DOM constants.
+        // Les données (teams, seasons, active_season_id) seront chargées ou initialisées dedans.
         let leagueDataStore = {};
         for (const leagueId in LEAGUE_FILENAMES) {
             leagueDataStore[leagueId] = {
-                ...JSON.parse(JSON.stringify(initialLeagueDataStructure)), // Copie de la structure de base
-                teams: JSON.parse(JSON.stringify(initialTeamData[leagueId] || {})),
-                filename: LEAGUE_FILENAMES[leagueId],
-                fileId: null,
-                // IDs DOM spécifiques à chaque ligue
+                ...JSON.parse(JSON.stringify(initialLeagueDataStructure)), // Structure de base pour les données
+                teams: JSON.parse(JSON.stringify(initialTeamData[leagueId] || {})), // Données initiales des équipes
+                filename: LEAGUE_FILENAMES[leagueId], // Nom du fichier Drive
+                fileId: null, // ID du fichier Drive (obtenu après chargement/création)
+                // IDs des éléments DOM pour cette ligue
                 teamsGridId: `${leagueId}-teams-grid`,
-                fixtureBodyId: leagueId === 'ldc' ? 'ldc-knockout-body' : `${leagueId}-fixtures-body`, // Spécifique LDC
+                fixtureBodyId: leagueId === 'ldc' ? 'ldc-knockout-body' : `${leagueId}-fixtures-body`,
                 standingsBodyId: `${leagueId}-standings-body`
             };
         }
@@ -599,7 +596,7 @@
                 if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
                 if(driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
                 try {
-                     await loadAllLeagueDataFromDrive();
+                     await loadAllLeagueDataFromDrive(); // Cette fonction mettra à jour leagueDataStore
                      showMessage("Données des ligues chargées.", 3000);
                      if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'error'); driveStatusElement.classList.add('success'); }
                      if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connecté';
@@ -638,9 +635,8 @@
             nouvelleSaisonButtons.forEach(btn => btn.disabled = !isLoggedIn); 
             sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
             deleteSeasonButtons.forEach(btn => {
-                const leagueId = btn.id.split('-')[2]; // l1, l2, ldc
-                const league = leagueDataStore[leagueId];
-                btn.disabled = !isLoggedIn || !league || !league.seasons || league.seasons.length <= 1;
+                const leagueId = btn.id.replace('delete-season-', '').replace('-btn','');
+                btn.disabled = !isLoggedIn || !leagueDataStore[leagueId] || !leagueDataStore[leagueId].seasons || leagueDataStore[leagueId].seasons.length <= 1;
             });
         }
         async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
@@ -699,17 +695,16 @@
                             const parsedData = JSON.parse(content);
                             if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.seasons)) {
                                 leagueDataStore[leagueId] = parsedData; 
-                                leagueDataStore[leagueId].fileId = ref.fileId; // S'assurer que fileId est conservé
-                                leagueDataStore[leagueId].filename = ref.filename; // S'assurer que filename est conservé
-                                leagueDataStore[leagueId].teamsGridId = ref.teamsGridId; // Conserver les IDs DOM
-                                leagueDataStore[leagueId].fixtureBodyId = ref.fixtureBodyId;
-                                leagueDataStore[leagueId].standingsBodyId = ref.standingsBodyId;
-
+                                leagueDataStore[leagueId].fileId = ref.fileId; 
+                                leagueDataStore[leagueId].filename = ref.filename; 
+                                leagueDataStore[leagueId].teamsGridId = initialLeagueData[leagueId].teamsGridId; 
+                                leagueDataStore[leagueId].fixtureBodyId = initialLeagueData[leagueId].fixtureBodyId;
+                                leagueDataStore[leagueId].standingsBodyId = initialLeagueData[leagueId].standingsBodyId;
                                 console.log(`Données ${leagueId.toUpperCase()} chargées avec succès depuis Drive.`);
                             } else {
                                 console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données initiales.`);
-                                leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); // Réinitialise au défaut si malformé
-                                leagueDataStore[leagueId].fileId = ref.fileId; // Conserver fileId même si on reset aux défauts locaux
+                                leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
+                                leagueDataStore[leagueId].fileId = ref.fileId;
                                 allDriveLoadsSuccessful = false;
                             }
                         } catch (e) {
@@ -719,20 +714,22 @@
                             allDriveLoadsSuccessful = false;
                         }
                     } else {
-                         console.log(`Fichier ${ref.filename} vide sur Drive. Utilisation des données initiales.`);
+                         console.log(`Fichier ${ref.filename} vide sur Drive. Initialisation avec données par défaut locales.`);
                          leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
                          leagueDataStore[leagueId].fileId = ref.fileId; 
+                         // Sauvegarder cette structure par défaut sur Drive pour qu'elle existe.
+                         await saveLeagueDataToDrive(leagueId, true); 
                          allDriveLoadsSuccessful = false; 
                     }
                 } else {
-                    console.warn(`Impossible trouver/créer ${ref.filename} Drive. Utilisation des données initiales.`);
+                    console.warn(`Impossible trouver/créer le fichier ${ref.filename} sur Drive. Utilisation des données initiales.`);
                     showMessage(`Fichier ${ref.filename} Drive inaccessible.`, 7000, true);
                     leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId]));
                     allDriveLoadsSuccessful = false;
                 }
             }
             programsLoaded = allDriveLoadsSuccessful; 
-            if (allDriveLoadsSuccessful) console.log("Toutes les données des ligues chargées avec succès depuis Drive.");
+            if (allDriveLoadsSuccessful) console.log("Toutes les données des ligues chargées/initialisées avec succès depuis Drive.");
             else console.warn("Certaines données de ligue ont utilisé des valeurs par défaut ou initiales.");
         }
 
@@ -741,15 +738,16 @@
             if (!googleAccessToken) { if(!isInitialSave) showMessage("Connectez-vous pour sauvegarder.", 3000, true); return; }
             if (!leagueData || !leagueData.filename) { console.error(`Données de ligue ou nom de fichier manquant pour ${leagueId}`); return; }
             
-            // Assurer que fileId est présent, le créer sinon (important pour la première sauvegarde après "Nouvelle Saison" sans connexion préalable)
-            if (!leagueData.fileId) {
-                 console.warn(`Sauvegarde de ${leagueId} sans fileId. Tentative de création du fichier...`);
-                 leagueData.fileId = await findOrCreateFile(leagueData.filename, JSON.stringify(leagueData));
-                 if(!leagueData.fileId){ showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); return; }
+            if (!leagueData.fileId && !isInitialSave) { 
+                console.warn(`Tentative de sauvegarde de ${leagueId} sans fileId. Tentative de création du fichier...`);
+                leagueData.fileId = await findOrCreateFile(leagueData.filename, JSON.stringify(leagueData));
+                if(!leagueData.fileId){ showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); return; }
+            } else if (!leagueData.fileId && isInitialSave) { 
+                console.error(`Sauvegarde initiale pour ${leagueId} mais fileId est manquant. Cela ne devrait pas arriver si findOrCreateFile a été appelé avant.`); return;
             }
 
             const activeSeason = leagueData.seasons.find(s => s.season_id === leagueData.active_season_id);
-            if (activeSeason) { 
+            if (activeSeason && leagueId !== 'ldc') { 
                 activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
             }
             
@@ -809,45 +807,38 @@
         function generateFullSeasonFixtures(teamNames) { if (teamNames.length < 2) return []; const firstHalf = generateBergerFixtures(teamNames); const secondHalf = firstHalf.map(round => round.map(match => ({ home: match.away, away: match.home, scoreHome: null, scoreAway: null }))); return [...firstHalf, ...secondHalf]; }
         
         function generateLDCKnockoutStage(teamsInput) {
-            let teams = [...teamsInput]; // Copie pour ne pas modifier l'original
+            let teams = [...teamsInput]; 
             if (teams.length < 2) return { huitiemes: [], quarts: [], demies: [], finale: [], champion: null };
-            shuffleArray(teams); // Mélanger les équipes pour le tirage au sort initial
+            shuffleArray(teams); 
 
-            const numTeamsForLDC = 16; // On vise un tableau de 16
+            const numTeamsForLDC = 16; 
             let qualifiedTeams = teams.slice(0, numTeamsForLDC);
-            // Si moins de 16 équipes, on complète avec des "BYE" virtuels qui perdront automatiquement
             while(qualifiedTeams.length < numTeamsForLDC && qualifiedTeams.length > 0 && qualifiedTeams.length % 2 !== 0) {
-                qualifiedTeams.push(`Qualifié ${qualifiedTeams.length + 1}`); // Placeholder pour équipes manquantes
+                qualifiedTeams.push(`Qualifié ${qualifiedTeams.length + 1}`); 
             }
-             // Assurer un nombre pair pour les tours
             if (qualifiedTeams.length % 2 !== 0 && qualifiedTeams.length > 1) qualifiedTeams.pop();
 
-
-            const createRound = (teamList, roundNamePrefix) => {
+            const createRound = (teamList, roundNamePrefix, numMatches) => {
                 const roundMatches = [];
-                for (let i = 0; i < teamList.length; i += 2) {
-                    if (teamList[i+1]) { // S'il y a un adversaire
-                         roundMatches.push({ 
-                            id_match: `${roundNamePrefix}${i/2 + 1}`, 
-                            equipe_dom: teamList[i], 
-                            equipe_ext: teamList[i+1], 
-                            score_dom: null, score_ext: null, vainqueur: null 
-                        });
-                    } else { // Équipe exempte (devrait moins arriver avec la complétion)
-                         roundMatches.push({ 
-                            id_match: `${roundNamePrefix}${i/2 + 1}`, 
-                            equipe_dom: teamList[i], 
-                            equipe_ext: "BYE", 
-                            score_dom: null, score_ext: null, vainqueur: teamList[i] // Avance automatiquement
-                        });
-                    }
+                for (let i = 0; i < numMatches; i++) {
+                     roundMatches.push({ 
+                        id_match: `${roundNamePrefix}${i+1}`, 
+                        equipe_dom: teamList[2*i] || null, // Prend les équipes par paires
+                        equipe_ext: teamList[2*i + 1] || null,
+                        score_dom: null, score_ext: null, vainqueur: null 
+                    });
                 }
                 return roundMatches;
             };
             
-            const huitiemes = createRound(qualifiedTeams.slice(0,16), 'h'); // Max 16 équipes pour 8èmes
-            // Les tours suivants seront remplis dynamiquement
-            return { huitiemes, quarts: [], demies: [], finale: [], champion: null };
+            const huitiemes = qualifiedTeams.length >= 2 ? createRound(qualifiedTeams, 'h', Math.min(8, Math.floor(qualifiedTeams.length/2)) ) : [];
+            
+            // Initialiser les tours suivants vides, ils seront remplis par propagateKnockoutWinners
+            const quarts = []; for(let i=0; i<huitiemes.length/2; i++) quarts.push({id_match: `q${i+1}`, equipe_dom_ref: `vainqueur_h${2*i+1}`, equipe_ext_ref: `vainqueur_h${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+            const demies = []; for(let i=0; i<quarts.length/2; i++) demies.push({id_match: `d${i+1}`, equipe_dom_ref: `vainqueur_q${2*i+1}`, equipe_ext_ref: `vainqueur_q${2*i+2}`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+            const finale = []; if(demies.length >=1) finale.push({id_match: `f1`, equipe_dom_ref: `vainqueur_d1`, equipe_ext_ref: `vainqueur_d2`, equipe_dom: null, equipe_ext: null, score_dom: null, score_ext: null, vainqueur: null});
+
+            return { huitiemes, quarts, demies, finale, champion: null };
         }
 
 
@@ -864,7 +855,7 @@
         }
         function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
-            const matchesPerDay = 3; // Pour L1 et L2
+            const matchesPerDay = 3; 
             (fixturesData || []).forEach((round, index) => {
                 const row = document.createElement('tr'); let roundHtml = `<td>J.${index + 1}</td>`;
                 (round || []).forEach((match, matchIdx) => {
@@ -881,69 +872,30 @@
 
         function populateKnockoutStageDOM(knockoutBodyId, knockoutData, teamsInfo, leagueId) {
             const knockoutBody = document.getElementById(knockoutBodyId);
-            if (!knockoutBody || !knockoutData || !teamsInfo) {
-                if(knockoutBody) knockoutBody.innerHTML = "<p>Tableau non disponible ou saison non sélectionnée.</p>";
-                return;
-            }
-            knockoutBody.innerHTML = ''; // Clear previous content
+            if (!knockoutBody || !knockoutData || !teamsInfo) { if(knockoutBody) knockoutBody.innerHTML = "<p>Tableau non disponible ou saison non sélectionnée.</p>"; return; }
+            knockoutBody.innerHTML = ''; 
 
             const renderRound = (roundMatches, roundTitle, roundKey) => {
                 if (!roundMatches || roundMatches.length === 0) return '';
-                let html = `<h3 class="knockout-round-title">${roundTitle}</h3>`;
-                html += '<table class="knockout-table"><tbody>';
+                let html = `<h3 class="knockout-round-title">${roundTitle}</h3>`; html += '<table class="knockout-table"><tbody>';
                 roundMatches.forEach((match, matchIdx) => {
                     const equipeDom = match.equipe_dom || (match.equipe_dom_ref ? `<i>Vainqueur ${match.equipe_dom_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À déterminer</i>');
                     const equipeExt = match.equipe_ext || (match.equipe_ext_ref ? `<i>Vainqueur ${match.equipe_ext_ref.replace('vainqueur_', '').toUpperCase()}</i>` : '<i>À déterminer</i>');
                     const logoDomSrc = match.equipe_dom && teamsInfo[match.equipe_dom] ? `${BASE_URL}${teamsInfo[match.equipe_dom].logo}` : `${BASE_URL}default_logo.png`;
                     const logoExtSrc = match.equipe_ext && teamsInfo[match.equipe_ext] ? `${BASE_URL}${teamsInfo[match.equipe_ext].logo}` : `${BASE_URL}default_logo.png`;
-                    const scoreHomeVal = match.score_dom !== null ? match.score_dom : '';
-                    const scoreAwayVal = match.score_ext !== null ? match.score_ext : '';
-                    const isDomDetermined = !!match.equipe_dom;
-                    const isExtDetermined = !!match.equipe_ext;
-
-                    html += `
-                        <tr>
-                            <td>Match ${match.id_match.toUpperCase()}</td>
-                            <td>
-                                <div class="fixture-match">
-                                    <div class="fixture-team home">
-                                        <span>${equipeDom}</span>
-                                        ${isDomDetermined ? `<img src="${logoDomSrc}" alt="${match.equipe_dom}" class="team-logo">` : ''}
-                                    </div>
-                                    <div class="fixture-score-inputs">
-                                        <input type="number" class="fixture-score-input" value="${scoreHomeVal}" min="0" 
-                                               data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="dom" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}>
-                                        <span class="vs-separator">-</span>
-                                        <input type="number" class="fixture-score-input" value="${scoreAwayVal}" min="0" 
-                                               data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="ext" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}>
-                                    </div>
-                                    <div class="fixture-team away">
-                                        ${isExtDetermined ? `<img src="${logoExtSrc}" alt="${match.equipe_ext}" class="team-logo">` : ''}
-                                        <span>${equipeExt}</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>`;
+                    const scoreHomeVal = match.score_dom !== null ? match.score_dom : ''; const scoreAwayVal = match.score_ext !== null ? match.score_ext : '';
+                    const isDomDetermined = !!match.equipe_dom; const isExtDetermined = !!match.equipe_ext;
+                    html += `<tr><td>Match ${match.id_match.toUpperCase()}</td><td><div class="fixture-match"><div class="fixture-team home"><span>${equipeDom}</span>${isDomDetermined ? `<img src="${logoDomSrc}" alt="${match.equipe_dom}" class="team-logo">` : ''}</div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" value="${scoreHomeVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="dom" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}><span class="vs-separator">-</span><input type="number" class="fixture-score-input" value="${scoreAwayVal}" min="0" data-league="${leagueId}" data-roundkey="${roundKey}" data-matchid="${match.id_match}" data-team="ext" ${!(isDomDetermined && isExtDetermined) ? 'disabled' : ''}></div><div class="fixture-team away">${isExtDetermined ? `<img src="${logoExtSrc}" alt="${match.equipe_ext}" class="team-logo">` : ''}<span>${equipeExt}</span></div></div></td></tr>`;
                 });
-                html += '</tbody></table>';
-                return html;
+                html += '</tbody></table>'; return html;
             };
-
             knockoutBody.innerHTML += renderRound(knockoutData.huitiemes, "8èmes de Finale", "huitiemes");
             knockoutBody.innerHTML += renderRound(knockoutData.quarts, "Quarts de Finale", "quarts");
             knockoutBody.innerHTML += renderRound(knockoutData.demies, "Demi-Finales", "demies");
             knockoutBody.innerHTML += renderRound(knockoutData.finale, "Finale", "finale");
-
-            if (knockoutData.champion) {
-                knockoutBody.innerHTML += `<h3 class="knockout-round-title" style="color: var(--accent-gold); border-color: var(--accent-gold);">🏆 Champion : ${knockoutData.champion} 🏆</h3>`;
-            }
-            
-            document.querySelectorAll(`#${knockoutBodyId} .fixture-score-input`).forEach(input => {
-                input.addEventListener('change', handleKnockoutScoreChange);
-            });
+            if (knockoutData.champion) knockoutBody.innerHTML += `<h3 class="knockout-round-title" style="color: var(--accent-gold); border-color: var(--accent-gold);">🏆 Champion : ${knockoutData.champion} 🏆</h3>`;
+            document.querySelectorAll(`#${knockoutBodyId} .fixture-score-input`).forEach(input => input.addEventListener('change', handleKnockoutScoreChange));
         }
-
-
         function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos) {
             const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
             const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
@@ -976,120 +928,86 @@
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
             
             activeSeason.standings = calculateStandings(league.teams, activeSeason.fixtures);
-            if (document.getElementById(leagueDataStore[leagueId].standingsBodyId)) populateStandingsDOM(leagueDataStore[leagueId].standingsBodyId, activeSeason.standings, league.teams);
+            populateStandingsDOM(leagueDataStore[leagueId].standingsBodyId, activeSeason.standings, league.teams);
         }
         function handleKnockoutScoreChange(event) {
-            const input = event.target;
-            const leagueId = input.dataset.league;
-            const roundKey = input.dataset.roundkey; // e.g., "huitiemes", "quarts"
-            const matchId = input.dataset.matchid;   // e.g., "h1", "q2"
-            const teamScoreType = input.dataset.team; // "dom" ou "ext"
-            let score = input.value === '' ? null : parseInt(input.value);
-
-            const league = leagueDataStore[leagueId];
-            if (!league || !league.active_season_id) return;
+            const input = event.target; const leagueId = input.dataset.league; const roundKey = input.dataset.roundkey; 
+            const matchId = input.dataset.matchid; const teamScoreType = input.dataset.team; let score = input.value === '' ? null : parseInt(input.value);
+            const league = leagueDataStore[leagueId]; if (!league || !league.active_season_id) return;
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
             if (!activeSeason || !activeSeason.tableau || !activeSeason.tableau[roundKey]) return;
-
-            const match = activeSeason.tableau[roundKey].find(m => m.id_match === matchId);
-            if (!match) return;
-
-            if (score !== null && (isNaN(score) || score < 0)) {
-                input.value = match[teamScoreType === 'dom' ? 'score_dom' : 'score_ext'] || '';
-                return;
-            }
-
-            if (teamScoreType === 'dom') match.score_dom = score;
-            else match.score_ext = score;
-
-            // Déterminer le vainqueur et propager si les deux scores sont entrés
+            const match = activeSeason.tableau[roundKey].find(m => m.id_match === matchId); if (!match) return;
+            if (score !== null && (isNaN(score) || score < 0)) { input.value = match[teamScoreType === 'dom' ? 'score_dom' : 'score_ext'] || ''; return; }
+            if (teamScoreType === 'dom') match.score_dom = score; else match.score_ext = score;
             if (typeof match.score_dom === 'number' && typeof match.score_ext === 'number') {
                 if (match.score_dom > match.score_ext) match.vainqueur = match.equipe_dom;
                 else if (match.score_ext > match.score_dom) match.vainqueur = match.equipe_ext;
-                else match.vainqueur = "Égalité"; // Gérer les égalités si nécessaire (ex: tirs au but)
-
-                // Propagation au tour suivant
+                else match.vainqueur = "Égalité"; 
                 propagateKnockoutWinners(leagueId, activeSeason.tableau);
-            } else {
-                match.vainqueur = null; // Réinitialiser le vainqueur si un score est effacé
-            }
+            } else match.vainqueur = null; 
             populateKnockoutStageDOM(leagueDataStore[leagueId].fixtureBodyId, activeSeason.tableau, league.teams, leagueId);
         }
-
         function propagateKnockoutWinners(leagueId, tableau) {
-            const advanceWinner = (sourceRoundMatches, targetRoundMatches, targetTeamKeyPrefix) => {
-                sourceRoundMatches.forEach((match, index) => {
-                    if (match.vainqueur && match.vainqueur !== "Égalité" && match.vainqueur !== "BYE") {
-                        const targetMatchIndex = Math.floor(index / 2);
-                        const targetTeamSlot = index % 2 === 0 ? 'equipe_dom' : 'equipe_ext';
-                        const targetTeamRefSlot = index % 2 === 0 ? 'equipe_dom_ref' : 'equipe_ext_ref';
-                        
-                        if (targetRoundMatches[targetMatchIndex]) {
-                            targetRoundMatches[targetMatchIndex][targetTeamSlot] = match.vainqueur;
-                            // On peut aussi effacer la ref si on veut que le nom s'affiche directement
-                             delete targetRoundMatches[targetMatchIndex][targetTeamRefSlot]; 
-                        }
+            const advanceWinner = (sourceRoundKey, targetRoundKey) => {
+                const sourceRoundMatches = tableau[sourceRoundKey];
+                const targetRoundMatches = tableau[targetRoundKey];
+                if (!sourceRoundMatches || !targetRoundMatches) return;
+
+                for(let i = 0; i < targetRoundMatches.length; i++){ // Pour chaque match du tour cible
+                    const matchCible = targetRoundMatches[i];
+                    // Réinitialiser les équipes avant de les remplir à nouveau
+                    matchCible.equipe_dom = null;
+                    matchCible.equipe_ext = null;
+                    matchCible.score_dom = null;
+                    matchCible.score_ext = null;
+                    matchCible.vainqueur = null;
+
+                    const matchSource1 = sourceRoundMatches.find(m => m.id_match === matchCible.equipe_dom_ref?.replace('vainqueur_', ''));
+                    const matchSource2 = sourceRoundMatches.find(m => m.id_match === matchCible.equipe_ext_ref?.replace('vainqueur_', ''));
+
+                    if (matchSource1 && matchSource1.vainqueur && matchSource1.vainqueur !== "Égalité" && matchSource1.vainqueur !== "BYE") {
+                        matchCible.equipe_dom = matchSource1.vainqueur;
                     }
-                });
+                    if (matchSource2 && matchSource2.vainqueur && matchSource2.vainqueur !== "Égalité" && matchSource2.vainqueur !== "BYE") {
+                        matchCible.equipe_ext = matchSource2.vainqueur;
+                    }
+                }
             };
+            advanceWinner('huitiemes', 'quarts');
+            advanceWinner('quarts', 'demies');
+            advanceWinner('demies', 'finale');
 
-            if (tableau.huitiemes && tableau.quarts) {
-                 tableau.quarts.forEach(qMatch => { qMatch.equipe_dom = null; qMatch.equipe_ext = null; }); // Reset
-                advanceWinner(tableau.huitiemes, tableau.quarts, 'q');
-            }
-            if (tableau.quarts && tableau.demies) {
-                 tableau.demies.forEach(dMatch => { dMatch.equipe_dom = null; dMatch.equipe_ext = null; }); // Reset
-                advanceWinner(tableau.quarts, tableau.demies, 'd');
-            }
-            if (tableau.demies && tableau.finale) {
-                 tableau.finale.forEach(fMatch => { fMatch.equipe_dom = null; fMatch.equipe_ext = null; }); // Reset
-                advanceWinner(tableau.demies, tableau.finale, 'f');
-            }
-            if (tableau.finale && tableau.finale[0]?.vainqueur && tableau.finale[0].vainqueur !== "Égalité") {
+            if (tableau.finale && tableau.finale[0]?.vainqueur && tableau.finale[0].vainqueur !== "Égalité" && tableau.finale[0].vainqueur !== "BYE") {
                 tableau.champion = tableau.finale[0].vainqueur;
-            } else {
-                tableau.champion = null;
-            }
+            } else tableau.champion = null;
         }
-
         function createNewSeason(leagueId) {
             const league = leagueDataStore[leagueId]; if (!league) return;
             const newSeasonId = league.seasons.length > 0 ? Math.max(...league.seasons.map(s => s.season_id)) + 1 : 1;
             const newSeasonName = `Saison ${newSeasonId}`;
             let teamNames = Object.keys(league.teams); 
-            
-            let newSeasonData = {
-                season_id: newSeasonId,
-                nom_saison: newSeasonName,
-            };
-
+            let newSeasonData = { season_id: newSeasonId, nom_saison: newSeasonName };
             if (leagueId === 'ldc') {
-                shuffleArray(teamNames); // Mélanger pour le tirage au sort LDC
+                shuffleArray(teamNames); 
                 newSeasonData.tableau = generateLDCKnockoutStage(teamNames);
-                newSeasonData.fixtures = []; // Pas de fixtures de type championnat pour LDC
-                newSeasonData.standings = {}; // Pas de classement de groupe pour un tableau direct
+                newSeasonData.fixtures = []; newSeasonData.standings = {}; 
             } else {
                 shuffleArray(teamNames);
                 newSeasonData.fixtures = generateFullSeasonFixtures(teamNames);
                 newSeasonData.standings = calculateStandings(league.teams, newSeasonData.fixtures);
-                newSeasonData.tableau = null; // Pas de tableau pour L1/L2
+                newSeasonData.tableau = null; 
             }
-            
-            league.seasons.push(newSeasonData);
-            league.active_season_id = newSeasonId;
-            
+            league.seasons.push(newSeasonData); league.active_season_id = newSeasonId;
             populateSeasonSelector(leagueId); populateSingleLeagueUI(leagueId);
             showMessage(`Nouvelle saison "${newSeasonName}" créée pour ${leagueId.toUpperCase()}!`, 2500);
             if (googleAccessToken) saveLeagueDataToDrive(leagueId);
         }
-        
         function deleteSelectedSeason(leagueId) {
             const league = leagueDataStore[leagueId];
             if (!league || !league.seasons || league.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison.", 3000, true); return; }
             const selector = document.getElementById(`${leagueId}-season-selector`);
             const seasonIdToDelete = parseInt(selector.value);
             const seasonNameToDelete = league.seasons.find(s=>s.season_id === seasonIdToDelete)?.nom_saison || `Saison ${seasonIdToDelete}`;
-
             if (confirm(`Êtes-vous sûr de vouloir supprimer la "${seasonNameToDelete}" ? Cette action est irréversible.`)) {
                 league.seasons = league.seasons.filter(s => s.season_id !== seasonIdToDelete);
                 if (league.active_season_id === seasonIdToDelete) { league.active_season_id = league.seasons.length > 0 ? league.seasons[league.seasons.length - 1].season_id : null; }
@@ -1097,20 +1015,19 @@
                 showMessage("Saison supprimée.", 2000); if (googleAccessToken) saveLeagueDataToDrive(leagueId);
             }
         }
-
         function populateSingleLeagueUI(leagueId) {
-            const league = leagueDataStore[leagueId]; if (!league) return;
-            const refIds = initialLeagueData[leagueId]; // Utiliser initialLeagueData pour les IDs DOM constants
-
+            const league = leagueDataStore[leagueId]; if (!league) { console.error(`Données non trouvées pour la ligue ${leagueId}`); return; }
+            const refIds = initialLeagueData[leagueId]; // Utiliser la structure `initialLeagueData` pour les ID DOM
+            
             const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
             
             populateTeamsGridDOM(refIds.teamsGridId, league.teams);
             populateSeasonSelector(leagueId); 
 
             if (leagueId === 'ldc') {
-                const knockoutBody = document.getElementById(refIds.fixtureBodyId); // fixtureBodyId pour LDC est ldc-knockout-body
-                const standingsSection = document.getElementById(refIds.standingsBodyId)?.closest('.section'); // LDC n'a pas de classement de groupe traditionnel
-                if (standingsSection) standingsSection.style.display = 'none'; // Cacher la section classement pour LDC
+                const knockoutBody = document.getElementById(refIds.fixtureBodyId); 
+                const standingsSectionLDC = document.getElementById('ldc-standings-section'); 
+                if (standingsSectionLDC) standingsSectionLDC.style.display = 'none'; 
 
                 if (activeSeason && activeSeason.tableau) {
                     populateKnockoutStageDOM(refIds.fixtureBodyId, activeSeason.tableau, league.teams, leagueId);
@@ -1119,7 +1036,7 @@
                 }
             } else {
                  const standingsSection = document.getElementById(refIds.standingsBodyId)?.closest('.section');
-                 if(standingsSection) standingsSection.style.display = 'block'; // Afficher classement pour L1/L2
+                 if(standingsSection) standingsSection.style.display = 'block'; 
 
                 if (activeSeason) {
                     populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
@@ -1134,12 +1051,7 @@
             const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
             if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !league.seasons || league.seasons.length <= 1;
         }
-
-        function populateAllLeaguesUI() {
-            for (const leagueId in leagueDataStore) {
-                populateSingleLeagueUI(leagueId);
-            }
-        }
+        function populateAllLeaguesUI() { for (const leagueId in leagueDataStore) populateSingleLeagueUI(leagueId); }
 
         const tabBtns = document.querySelectorAll('.tab-btn'); const tabContents = document.querySelectorAll('.tab-content');
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
@@ -1191,15 +1103,15 @@
         document.addEventListener('click', (e) => { const target = e.target; const isClickInsideNav = nav.contains(target) || hamburger.contains(target); if (!isClickInsideNav && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
         
         document.querySelectorAll('.nouvelle-saison-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2]; // e.g., 'nouvelle-saison-l1-btn' -> 'l1'
+            const leagueId = btn.id.replace('nouvelle-saison-', '').replace('-btn','');
             btn.addEventListener('click', () => createNewSeason(leagueId));
         });
         document.querySelectorAll('.sauvegarde-json-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[1]; // e.g., 'sauvegarde-l1-btn' -> 'l1'
+            const leagueId = btn.id.replace('sauvegarde-', '').replace('-btn','');
             btn.addEventListener('click', () => saveLeagueDataToDrive(leagueId));
         });
          document.querySelectorAll('.delete-season-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2]; 
+            const leagueId = btn.id.replace('delete-season-', '').replace('-btn','');
             btn.addEventListener('click', () => deleteSelectedSeason(leagueId));
         });
         document.querySelectorAll('.season-selector-container select').forEach(selector => {
@@ -1208,19 +1120,14 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            // Initialise UI avec les données locales par défaut, mais ne génère pas de "nouvelle saison" automatiquement ici.
-            // Cela sera fait par loadAllLeagueDataFromDrive si les fichiers Drive sont vides/nouveaux.
             populateAllLeaguesUI(); 
-
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             const initialActiveTab = document.querySelector('.tab-btn.active');
             if(initialActiveTab) initialActiveTab.click(); else if(tabBtns.length > 0) tabBtns[0].click(); 
-            
             const defaultNavLink = document.querySelector('header nav ul li a[href="#accueil-section"]');
             if(defaultNavLink) defaultNavLink.classList.add('active-nav-link');
-
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé.");
+            console.log("Championnat Peluches Élite V2 Initialisé (avec gestion multi-saisons).");
         });
     </script>
 </body>

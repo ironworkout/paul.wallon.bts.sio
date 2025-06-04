@@ -3,1704 +3,910 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat des Peluches - Site Officiel</title>
+    <title>Championnat des Peluches Élite V2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #0b2d5c;
-            --secondary-color: #00a651;
-            --accent-color: #ff4612;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --l1-color: #0b2d5c;
-            --l2-color: #7b3f00;
-            --dncg-color: #77b5fe;
+            --bg-color: #f0f2f5; /* Fond général clair moderne */
+            --primary-color: #1a237e; /* Bleu indigo profond */
+            --secondary-color: #007bff; /* Bleu vif classique */
+            --accent-gold: #ffc107; /* Or/Ambre moderne */
+            --accent-silver: #adb5bd; /* Argent/Gris clair */
+            --text-color-light: #ffffff;
+            --text-color-dark: #212529;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+
+            --l1-color: var(--secondary-color);
+            --l2-color: #28a745; /* Vert moderne */
+            --ldc-color: #6f42c1; /* Violet LDC */
+            --billetterie-color: #fd7e14; /* Orange vif */
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Montserrat', Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--dark-color);
-            background-color: #f0f2f5;
-            overflow-x: hidden;
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.7; color: var(--text-color-dark);
+            background-color: var(--bg-color);
+            overflow-x: hidden; scroll-behavior: smooth;
         }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+        .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px; }
+
+        h1, h2, h3, h4, .section-title {
+            font-family: 'Oswald', sans-serif; font-weight: 700;
+            color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px;
         }
-        
+        .carousel-caption h2 { color: var(--text-color-light); }
+
         /* Header */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--primary-color); color: var(--text-color-light);
+            padding: 15px 0; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo img {
-            height: 50px;
-            margin-right: 10px;
-        }
-        
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; text-decoration: none; color: var(--text-color-light); }
+        .logo img { height: 50px; margin-right: 15px; object-fit: contain; }
+        .logo h1 { font-size: 1.8rem; color: var(--accent-gold); letter-spacing: 1px;}
+        nav ul { display: flex; list-style: none; transition: all 0.3s ease-in-out; }
+        nav ul li { margin-left: 25px; }
         nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-            padding: 10px 15px;
-            border-radius: 5px;
+            color: var(--text-color-light); text-decoration: none; font-weight: 600;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease; padding: 10px 5px;
+            display: block; border-bottom: 3px solid transparent; position: relative;
         }
-        
-        nav ul li a:hover {
-            color: var(--accent-color);
+        nav ul li a:hover, nav ul li a.active-nav-link {
+            color: var(--accent-gold); border-bottom-color: var(--accent-gold);
         }
-        
-        /* Main Navigation Tabs */
-        .main-tabs {
-            background-color: var(--light-color);
-            padding: 15px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tabs-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        
+        .hamburger { display: none; font-size: 1.8rem; color: var(--text-color-light); cursor: pointer; z-index: 1001; }
+
+        /* Main Tabs */
+        .main-tabs { background-color: #ffffff; padding: 20px 0; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .tabs-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .tab-btn {
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background-color: #e9ecef;
-            color: var(--dark-color);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .tab-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: transparent;
-            transition: background-color 0.3s;
-        }
-        
-        .tab-btn:hover {
-            background-color: #dee2e6;
-        }
-        
-        .tab-btn.active {
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tab-btn.active::after {
-            background-color: var(--accent-color);
-        }
-        
-        .tab-btn[data-tab="ligue1"].active::after {
-            background-color: var(--l1-color);
-        }
-        
-        .tab-btn[data-tab="ligue2"].active::after {
-            background-color: var(--l2-color);
-        }
-        
-        .tab-btn[data-tab="dncg"].active::after {
-            background-color: var(--dncg-color);
-        }
-        
-        /* Tab Content */
-        .tab-content {
-            display: none;
-            padding: 30px 0;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 500px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hero-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.7);
-        }
-        
-        .hero-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            width: 80%;
-            z-index: 1;
-        }
-        
-        .hero-content h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: var(--accent-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        
-        .btn:hover {
-            background-color: #e63e00;
-            transform: translateY(-2px);
-        }
-        
-        /* Section Styles */
-        .section {
-            margin-bottom: 40px;
-            background-color: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            position: relative;
-            padding-left: 15px;
-        }
-        
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 5px;
-            height: 25px;
-            background-color: var(--accent-color);
-            border-radius: 2px;
-        }
-        
-        .section-link {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        
-        .section-link:hover {
-            color: #e63e00;
-        }
-        
-        /* Standings Table */
-        .standings-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .standings-table th,
-        .standings-table td {
-            padding: 12px 15px;
-            text-align: center;
-        }
-        
-        .standings-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: var(--dark-color);
-            position: sticky;
-            top: 0;
-        }
-        
-        .standings-table tr {
-            border-bottom: 1px solid #e9ecef;
-            transition: background-color 0.3s;
-        }
-        
-        .standings-table tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .standings-table td:first-child {
-            font-weight: 600;
-        }
-        
-        .team-info {
-            display: flex;
-            align-items: center;
-            text-align: left;
-        }
-        
-        .team-logo {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            object-fit: contain;
-        }
-        
-        /* Results Section */
-        .results-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .match-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .match-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .match-header {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        
-        .match-teams {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .match-team {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 40%;
-        }
-        
-        .match-team img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 5px;
-        }
-        
-        .match-team-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-align: center;
-        }
-        
-        .match-score {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            width: 20%;
-        }
-        
-        /* Teams Section */
-        .teams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .team-card {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .team-card img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-        
-        .team-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-        
-        /* News Section */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .news-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .news-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        
-        .news-content {
-            padding: 20px;
-        }
-        
-        .news-date {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-bottom: 10px;
-        }
-        
-        .news-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .news-excerpt {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-bottom: 15px;
-        }
-        
-        /* DNCG Section */
-        .dncg-container {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        .dncg-tabs {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        
-        .dncg-tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border: none;
-            background-color: #f0f0f0;
-            transition: background-color 0.3s, transform 0.1s;
-            flex-grow: 1;
-            text-align: center;
-        }
-        
-        .dncg-tab:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .dncg-tab:active, .dncg-tab.active {
-            background-color: #d0d0d0;
-            transform: scale(0.98);
-        }
-        
-        #victoires { color: green; }
-        #nuls { color: blue; }
-        #defaites { color: red; }
-        
-        #generer {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-        
-        #generer:hover {
-            background-color: #45a049;
-        }
-        
-        #generer:active {
-            transform: scale(0.98);
-        }
-        
-        #resultat {
-            font-size: 24px;
-            text-align: center;
-            margin-top: 20px;
-            min-height: 100px;
-        }
-        
-        @keyframes appear {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate {
-            animation: appear 0.5s;
-        }
-        
-        .confetti, .thumbs-down {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            pointer-events: none;
-        }
-        
-        .confetti {
-            background-color: #f0f0f0;
-            animation: confetti-fall 3s ease-out infinite;
-        }
-        
-        .thumbs-down {
-            color: red;
-            font-size: 20px;
-            animation: thumbs-down-fall 3s ease-out infinite;
-        }
-        
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        
-        @keyframes thumbs-down-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 40px 0 20px;
-        }
-        
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .footer-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 2px;
-            background-color: var(--accent-color);
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-section ul li a {
-            color: #e9ecef;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-section ul li a:hover {
-            color: var(--accent-color);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .social-links a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: white;
-            text-decoration: none;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-3px);
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            color: #adb5bd;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-            }
-            
-            .hero {
-                height: 400px;
-            }
-            
-            .hero-content h2 {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
-            
-            .standings-table th,
-            .standings-table td {
-                padding: 8px;
-            }
-            
-            .team-info {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .team-logo {
-                margin-right: 0;
-                margin-bottom: 5px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 5px;
-            }
-            
-            .tabs-container {
-                flex-direction: column;
-            }
-            
-            .hero {
-                height: 300px;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.5rem;
-            }
-            
-            .hero-content p {
-                font-size: 1rem;
-            }
-            
-            .standings-table {
-                font-size: 0.8rem;
-            }
-        }
-        
+            padding: 10px 25px; font-size: 1.1rem; font-family: 'Oswald', sans-serif;
+            border: 2px solid transparent; color: var(--primary-color);
+            background-color: var(--bg-color); border-radius: 30px; cursor: pointer;
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .tab-btn:hover { background-color: var(--primary-color); color: var(--text-color-light); border-color: var(--primary-color); }
+        .tab-btn.active { font-weight: 700; background-color: var(--primary-color); color: var(--text-color-light); }
+
+        .tab-btn[data-tab="ligue1"].active { background-color: var(--l1-color); border-color: var(--l1-color); }
+        .tab-btn[data-tab="ligue2"].active { background-color: var(--l2-color); border-color: var(--l2-color); }
+        .tab-btn[data-tab="ligueChampions"].active { background-color: var(--ldc-color); border-color: var(--ldc-color); }
+        .tab-btn[data-tab="billetterie"].active { background-color: var(--billetterie-color); border-color: var(--billetterie-color); }
+
+
+        .tab-content { display: none; padding: 40px 0; animation: fadeIn 0.6s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         /* Carousel */
-        .carousel {
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .carousel { position: relative; height: 500px; overflow: hidden; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+        /* ... (carousel structure same, styles could be refined if needed) */
+        .carousel-caption h2 { font-size: 3.2rem; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .btn {
+            display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light);
+            text-decoration: none; border-radius: 50px; font-weight: 700; font-family: 'Oswald', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
-        .carousel-inner {
-            display: flex;
-            transition: transform 0.5s ease;
+        .btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+
+
+        /* Section Styles */
+        .section { margin-bottom: 50px; background-color: var(--card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); transition: opacity 0.6s ease, transform 0.6s ease; opacity: 0; transform: translateY(25px); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .section-title { font-size: 2.2rem; letter-spacing: 1px; }
+        .section-link { color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .section-link:hover { color: var(--primary-color); }
+
+        /* Tables Improved - More professional, responsive friendly */
+        .table-container { overflow-x: auto; /* Allows horizontal scroll on small screens for tables */ }
+        .standings-table, .fixtures-table {
+            width: 100%; border-collapse: collapse; margin-top: 20px;
+            font-size: 0.9rem; min-width: 600px; /* Prevent excessive squishing on small screens */
         }
-        
-        .carousel-item {
-            min-width: 100%;
-            position: relative;
+        .standings-table th, .fixtures-table th {
+            background-color: #f8f9fa; color: var(--primary-color); font-weight: 700;
+            padding: 12px 10px; text-align: center; border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
         }
-        
-        .carousel-item img {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-            filter: brightness(0.7);
+        .l1-content .standings-table th, .l1-content .fixtures-table th { background-color: var(--l1-color); color: var(--text-color-light); }
+        .l2-content .standings-table th, .l2-content .fixtures-table th { background-color: var(--l2-color); color: var(--text-color-light); }
+        .ldc-content .standings-table th, .ldc-content .fixtures-table th { background-color: var(--ldc-color); color: var(--text-color-light); }
+
+        .standings-table td, .fixtures-table td {
+            padding: 10px; text-align: center; vertical-align: middle;
+            border-bottom: 1px solid var(--border-color); white-space: nowrap;
         }
-        
-        .carousel-caption {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            width: 80%;
-            z-index: 1;
+        .standings-table tbody tr:hover, .fixtures-table tbody tr:hover { background-color: #f1f3f5; }
+        .team-info { display: flex; align-items: center; text-align: left; font-weight: 600; white-space: normal; /* Allow team names to wrap if needed */ }
+        .team-logo { width: 28px; height: 28px; margin-right: 10px; object-fit: contain; flex-shrink: 0; }
+
+        .fixtures-table .fixture-match { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 5px 0; }
+        .fixtures-table .fixture-team { display: flex; align-items: center; flex: 1; }
+        .fixtures-table .fixture-team.home { justify-content: flex-end; text-align: right; }
+        .fixtures-table .fixture-team.away { justify-content: flex-start; text-align: left; }
+        .fixtures-table .fixture-team span { margin: 0 5px; }
+        .fixtures-table .fixture-score-inputs { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .fixtures-table .fixture-score-inputs input {
+            width: 40px; text-align: center; background-color: var(--card-bg); color: var(--text-color-dark);
+            border: 1px solid var(--border-color); border-radius: 4px; margin: 0 3px; padding: 6px 4px;
+            font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.9em;
         }
-        
-        .carousel-caption h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        .fixtures-table .vs-separator { margin: 0 5px; color: var(--text-color-dark); font-weight: 700; }
+
+
+        /* Teams Grid */
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
+        .team-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .team-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px; }
+        .team-card h4 { font-size: 1.3rem; margin-bottom: 8px; }
+
+        /* News Section */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .news-card { background-color: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .news-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .news-image { width: 100%; height: 190px; object-fit: cover; }
+        .news-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .news-date { font-size: 0.8rem; color: #6c757d; margin-bottom: 8px; }
+        .news-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--primary-color); line-height: 1.35; }
+        .news-excerpt { font-size: 0.9rem; color: #555; margin-bottom: 15px; flex-grow: 1; }
+        .news-content .section-link { align-self: flex-start; color: var(--secondary-color); font-family: 'Open Sans', sans-serif; text-transform: none;}
+
+        /* Billetterie Section */
+        .billetterie-content .content-placeholder { text-align: center; padding: 50px 20px; background-color: #fff3e0; border: 1px dashed var(--billetterie-color); border-radius: 10px;}
+        .billetterie-content .content-placeholder i { font-size: 3rem; margin-bottom: 20px; color: var(--billetterie-color); }
+        .billetterie-content .btn { background-color: var(--billetterie-color); }
+
+        /* Footer (Restored & Styled) */
+        footer { background-color: var(--primary-color); color: var(--text-color-light); padding: 50px 0 30px; border-top: 5px solid var(--accent-gold); }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+        .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; display: inline-block;}
+        .footer-section ul { list-style: none; padding: 0;}
+        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section ul li a { color: #bdc3c7; text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
+        .footer-section ul li a:hover { color: var(--accent-gold); padding-left: 5px; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #2c3e50; font-size: 0.9rem; color: #95a5a6; }
+
+        /* Button Nouvelle Saison & Sauvegarde */
+        .action-buttons { display:flex; justify-content: center; gap: 20px; margin-bottom: 20px;}
+        .nouvelle-saison-btn, .sauvegarde-json-btn {
+            padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase;
+            color: var(--text-color-light); background-color: var(--secondary-color);
+            border: none; border-radius: 5px; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease;
         }
-        
-        .carousel-caption p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        .nouvelle-saison-btn:hover, .sauvegarde-json-btn:hover { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .sauvegarde-json-btn { background-color: var(--accent-gold); color: var(--primary-color); }
+        .sauvegarde-json-btn:hover { background-color: #e6ac00; }
+
+
+        /* Responsive */
+        @media (max-width: 992px) { /* Tablet */
+            nav ul li { margin-left: 15px; }
+            .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
         }
-        
-        .carousel-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
+
+        @media (max-width: 768px) { /* Mobile Landscape / Small Tablet */
+            .header-container { flex-direction: row; /* Keep horizontal but allow hamburger */ justify-content: space-between; padding: 10px 15px; }
+            .logo h1 { font-size: 1.5rem; }
+            .hamburger { display: block; order: 3; /* Ensure hamburger is on the far right */ }
+            nav {
+                order: 2; /* Nav can be before hamburger visually if needed, or handled by absolute pos */
+                width: 100%; position: absolute; top: calc(100% - 1px); /* Position below header border */
+                left: 0; background-color: var(--primary-color);
+                max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+            nav.active { max-height: 400px; /* Adjust based on number of items */ }
+            nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
+            nav ul li { margin-left: 0; width: 100%; }
+            nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            nav ul li:last-child a { border-bottom: none; }
+
+            .carousel { height: 350px; } .carousel-caption h2 { font-size: 2rem; }
+            .section-title { font-size: 1.8rem; }
+            .standings-table th, .fixtures-table th { font-size: 0.8rem; padding: 10px 5px;}
+            .standings-table td, .fixtures-table td { font-size: 0.75rem; padding: 8px 5px;}
+            .fixtures-table .fixture-match { white-space: normal; /* Allow wrapping in match cell */ }
         }
-        
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: background-color 0.3s;
+        @media (max-width: 576px) { /* Mobile Portrait */
+            .logo h1 { font-size: 1.3rem; }
+            .tab-btn { font-size: 0.9rem; padding: 8px 15px; }
+            .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
+            .section-title { font-size: 1.6rem; }
+            .btn { padding: 10px 20px; font-size: 0.9rem; }
+            .nouvelle-saison-btn, .sauvegarde-json-btn { padding: 8px 15px; font-size: 0.9rem;}
+            .fixtures-table .fixture-score-inputs input { width: 30px; font-size: 0.8em; }
+            .footer-container { grid-template-columns: 1fr; text-align: center; }
+            .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
+            .footer-section h3::after { /* Optional: center the underline */ content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
+
         }
-        
-        .carousel-dot.active {
-            background-color: white;
-        }
-        
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            z-index: 2;
-        }
-        
-        .carousel-arrow:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-        
-        .carousel-prev {
-            left: 20px;
-        }
-        
-        .carousel-next {
-            right: 20px;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideInLeft {
-            from { transform: translateX(-50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideInUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .animate-fade-in {
-            animation: fadeIn 1s;
-        }
-        
-        .animate-slide-right {
-            animation: slideInRight 1s;
-        }
-        
-        .animate-slide-left {
-            animation: slideInLeft 1s;
-        }
-        
-        .animate-slide-up {
-            animation: slideInUp 1s;
-        }
-        
-        /* Ligue 2 Specific Styles */
-        .l2-content {
-            --primary-color: var(--l2-color);
-        }
-        
-        .l2-content .section-title {
-            color: var(--l2-color);
-        }
-        
-        .l2-content .section-title::before {
-            background-color: #a86032;
-        }
-        
-        .l2-content .btn {
-            background-color: #a86032;
-        }
-        
-        .l2-content .btn:hover {
-            background-color: #8d4d25;
-        }
+
     </style>
 </head>
 <body>
     <header>
         <div class="container header-container">
-            <div class="logo">
-                <img src="psg.png" alt="Logo Championnat des Peluches">
-                <h1>Championnat des Peluches</h1>
-            </div>
+            <a href="#accueil-section" class="logo">
+                <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
+                <h1>Peluche Élite</h1>
+            </a>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Accueil</a></li>
-                    <li><a href="#"><i class="fas fa-newspaper"></i> Actualités</a></li>
-                    <li><a href="#"><i class="fas fa-trophy"></i> Compétitions</a></li>
-                    <li><a href="#"><i class="fas fa-users"></i> Équipes</a></li>
-                    <li><a href="#"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
+                    <li><a href="#accueil-section" class="active-nav-link"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="#actualites-section-container"><i class="fas fa-newspaper"></i> Actualités</a></li>
+                    <li><a href="#competitions-section"><i class="fas fa-trophy"></i> Ligues</a></li>
+                    <li><a href="#billetterie-content"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
                 </ul>
             </nav>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </header>
-    
-    <div class="main-tabs">
+
+    <div class="main-tabs" id="competitions-section">
         <div class="container tabs-container">
             <button class="tab-btn active" data-tab="ligue1">Ligue 1 Peluches</button>
-            <button class="tab-btn" data-tab="ligue2">Teddy Championship</button>
-            <button class="tab-btn" data-tab="dncg">DNCG</button>
+            <button class="tab-btn" data-tab="ligue2">Ligue 2 des Ours</button>
+            <button class="tab-btn" data-tab="ligueChampions">Ligue des Champions</button>
+            <button class="tab-btn" data-tab="billetterie">Billetterie</button>
         </div>
     </div>
-    
+
     <!-- Ligue 1 Content -->
     <div class="tab-content active" id="ligue1-content">
-        <div class="container">
-            <div class="carousel">
-                <div class="carousel-inner">
+        <div class="container l1-content">
+            <div class="carousel" id="accueil-section">
+                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="teddy-crowd.png" alt="Supporters Ligue 1 Peluches">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Ligue 1 Peluches">
                         <div class="carousel-caption">
-                            <h2>Bienvenue sur le site officiel de la Ligue 1 Peluches</h2>
-                            <p>Suivez toute l'actualité du championnat, les résultats, le classement et les performances de vos équipes préférées.</p>
-                            <a href="#" class="btn">Voir le classement</a>
+                            <h2>Ligue 1 Peluches : L'Élite</h2>
+                            <p>Le summum du football en peluche vous attend.</p>
+                            <a href="#l1-fixtures-section" class="btn">Voir le Calendrier</a>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="teddy-shooting.png" alt="Action Ligue 1 Peluches">
+                     <div class="carousel-item">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png" alt="Ambiance stade L1">
                         <div class="carousel-caption">
-                            <h2>Les plus belles actions du championnat</h2>
-                            <p>Revivez les moments forts de la saison avec les meilleures actions de vos joueurs préférés.</p>
-                            <a href="#" class="btn">Voir les highlights</a>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="peluches-celebration.png" alt="Célébration Ligue 1 Peluches">
-                        <div class="carousel-caption">
-                            <h2>L'émotion à l'état pur</h2>
-                            <p>Partagez la joie et l'enthousiasme des supporters lors des plus beaux moments de la saison.</p>
-                            <a href="#" class="btn">Galerie photos</a>
+                            <h2>Passion & Ferveur</h2>
+                            <p>Rejoignez des milliers de supporters passionnés.</p>
+                            <a href="#l1-standings-section" class="btn">Classement L1</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-controls">
-                    <div class="carousel-dot active" data-slide="0"></div>
-                    <div class="carousel-dot" data-slide="1"></div>
-                    <div class="carousel-dot" data-slide="2"></div>
+                    <div class="carousel-dot active" data-slide="0"></div><div class="carousel-dot" data-slide="1"></div>
                 </div>
-                <div class="carousel-arrow carousel-prev">&#10094;</div>
-                <div class="carousel-arrow carousel-next">&#10095;</div>
+                <div class="carousel-arrow carousel-prev">❮</div><div class="carousel-arrow carousel-next">❯</div>
             </div>
-            
-            <div class="section animate-fade-in">
-                <div class="section-header">
-                    <h2 class="section-title">Classement</h2>
-                    <a href="#" class="section-link">Voir tout</a>
-                </div>
-                <div class="section-content">
-                    <table class="standings-table">
-                        <thead>
-                            <tr>
-                                <th>Pos</th>
-                                <th>Équipe</th>
-                                <th>Pts</th>
-                                <th>J</th>
-                                <th>BP</th>
-                                <th>BC</th>
-                                <th>Diff</th>
-                            </tr>
-                        </thead>
-                        <tbody id="l1-standings-body">
-                            <!-- Dynamically filled with JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
+            <div class="section action-buttons">
+                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn">Nouvelle Saison L1</button>
+                 <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn">Sauvegarder Classement L1 (JSON)</button>
             </div>
-            
-            <div class="section animate-slide-right">
-                <div class="section-header">
-                    <h2 class="section-title">Résultats</h2>
-                    <a href="#" class="section-link">Voir tout</a>
-                </div>
-                <div class="section-content">
-                    <div class="results-container" id="l1-results-container">
-                        <!-- Dynamically filled with JavaScript -->
-                    </div>
-                </div>
+            <div class="section" id="l1-fixtures-section">
+                <div class="section-header"><h2 class="section-title">Calendrier & Scores L1</h2></div>
+                <div class="section-content table-container"><table class="fixtures-table"><thead><tr><th>Journée</th><th>Match 1</th><th>Match 2</th><th>Match 3</th></tr></thead><tbody id="l1-fixtures-body"></tbody></table></div>
             </div>
-            
-            <div class="section animate-slide-left">
-                <div class="section-header">
-                    <h2 class="section-title">Équipes</h2>
-                    <a href="#" class="section-link">Voir toutes les équipes</a>
-                </div>
-                <div class="section-content">
-                    <div class="teams-grid" id="l1-teams-grid">
-                        <!-- Dynamically filled with JavaScript -->
-                    </div>
-                </div>
+            <div class="section" id="l1-standings-section">
+                <div class="section-header"><h2 class="section-title">Classement L1</h2></div>
+                <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="l1-standings-body"></tbody></table></div>
             </div>
-            
-            <div class="section animate-slide-up">
-                <div class="section-header">
-                    <h2 class="section-title">Actualités</h2>
-                    <a href="#" class="section-link">Toutes les actualités</a>
-                </div>
-                <div class="section-content">
-                    <div class="news-grid">
-                        <div class="news-card">
-                            <img src="valenciennes-supporters.png" class="news-image" alt="Actualité Ligue 1 Peluches">
-                            <div class="news-content">
-                                <div class="news-date">03 Juin 2025</div>
-                                <h3 class="news-title">Valenciennes Footbalours Club en tête du championnat</h3>
-                                <p class="news-excerpt">Après un début de saison prometteur, le Valenciennes Footbalours Club prend la tête du classement avec une victoire importante.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                        <div class="news-card">
-                            <img src="rabbit-goalkeeper.png" class="news-image" alt="Actualité Ligue 1 Peluches">
-                            <div class="news-content">
-                                <div class="news-date">02 Juin 2025</div>
-                                <h3 class="news-title">Le gardien des Associations Carrotes Lapines élu joueur du mois</h3>
-                                <p class="news-excerpt">Grâce à ses performances exceptionnelles, le gardien des ACL remporte le titre de joueur du mois de mai.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                        <div class="news-card">
-                            <img src="peluches-entree-joueurs.png" class="news-image" alt="Actualité Ligue 1 Peluches">
-                            <div class="news-content">
-                                <div class="news-date">01 Juin 2025</div>
-                                <h3 class="news-title">Début de saison prometteur pour les Peluches</h3>
-                                <p class="news-excerpt">La nouvelle saison de la Ligue 1 Peluches s'annonce passionnante avec des équipes plus motivées que jamais.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="section" id="l1-teams-section">
+                <div class="section-header"><h2 class="section-title">Équipes L1</h2></div>
+                <div class="section-content"><div class="teams-grid" id="l1-teams-grid"></div></div>
             </div>
         </div>
     </div>
-    
-    <!-- Ligue 2 Content -->
-    <div class="tab-content" id="ligue2-content">
-        <div class="container l2-content">
+
+    <!-- Ligue 2 des Ours Content -->
+    <div class="tab-content l2-content" id="ligue2-content">
+         <div class="container">
             <div class="carousel">
-                <div class="carousel-inner">
+                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="peluches-bras-dessus-bras-dessous.png" alt="Supporters Teddy Championship">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png" alt="Ambiance L2">
                         <div class="carousel-caption">
-                            <h2>Bienvenue sur le site officiel du Teddy Championship</h2>
-                            <p>Où les rêves d'enfance rencontrent la passion du football</p>
-                            <a href="#" class="btn">Découvrir le championnat</a>
+                            <h2>Ligue 2 des Ours : Terre de Talents</h2>
+                            <p>L'antichambre de l'élite, pleine de promesses.</p>
+                            <a href="#l2-fixtures-section" class="btn">Calendrier L2</a>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="tifo-peluches.png" alt="Tifo Teddy Championship">
+                     <div class="carousel-item">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png" alt="Equipes L2">
                         <div class="carousel-caption">
-                            <h2>L'ambiance incroyable des stades</h2>
-                            <p>Vivez l'expérience unique des tribunes du Teddy Championship</p>
-                            <a href="#" class="btn">Galerie photos</a>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="teddy-championship-logo.png" alt="Logo Teddy Championship">
-                        <div class="carousel-caption">
-                            <h2>Le championnat des nounours</h2>
-                            <p>Suivez les aventures des équipes les plus douces du football</p>
-                            <a href="#" class="btn">Voir les équipes</a>
+                            <h2>Rêves de Montée</h2>
+                            <p>Chaque match compte dans la course à la promotion.</p>
+                            <a href="#l2-teams-section" class="btn">Nos Clubs L2</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-controls">
-                    <div class="carousel-dot active" data-slide="0"></div>
-                    <div class="carousel-dot" data-slide="1"></div>
-                    <div class="carousel-dot" data-slide="2"></div>
+                    <div class="carousel-dot active" data-slide="0"></div><div class="carousel-dot" data-slide="1"></div>
                 </div>
-                <div class="carousel-arrow carousel-prev">&#10094;</div>
-                <div class="carousel-arrow carousel-next">&#10095;</div>
+                <div class="carousel-arrow carousel-prev">❮</div><div class="carousel-arrow carousel-next">❯</div>
             </div>
-            
-            <div class="section animate-fade-in">
-                <div class="section-header">
-                    <h2 class="section-title">Classement</h2>
-                    <a href="#" class="section-link">Voir tout</a>
-                </div>
-                <div class="section-content">
-                    <table class="standings-table">
-                        <thead>
-                            <tr>
-                                <th>Pos</th>
-                                <th>Équipe</th>
-                                <th>Pts</th>
-                                <th>J</th>
-                                <th>BP</th>
-                                <th>BC</th>
-                                <th>Diff</th>
-                            </tr>
-                        </thead>
-                        <tbody id="l2-standings-body">
-                            <tr>
-                                <td>1</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Bearcelona FC" class="team-logo">
-                                    <span>Bearcelona FC</span>
-                                </td>
-                                <td>3</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>0</td>
-                                <td>+2</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Teddy United" class="team-logo">
-                                    <span>Teddy United</span>
-                                </td>
-                                <td>3</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>+1</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Cuddly City" class="team-logo">
-                                    <span>Cuddly City</span>
-                                </td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Grizzly Rangers" class="team-logo">
-                                    <span>Grizzly Rangers</span>
-                                </td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Panda Wanderers" class="team-logo">
-                                    <span>Panda Wanderers</span>
-                                </td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>-1</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td class="team-info">
-                                    <img src="l2.png" alt="Polar Express FC" class="team-logo">
-                                    <span>Polar Express FC</span>
-                                </td>
-                                <td>0</td>
-                                <td>1</td>
-                                <td>0</td>
-                                <td>2</td>
-                                <td>-2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="section action-buttons">
+                <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn">Nouvelle Saison L2</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn">Sauvegarder Classement L2 (JSON)</button>
             </div>
-            
-            <div class="section animate-slide-right">
-                <div class="section-header">
-                    <h2 class="section-title">Résultats</h2>
-                    <a href="#" class="section-link">Voir tout</a>
-                </div>
-                <div class="section-content">
-                    <div class="results-container">
-                        <div class="match-card">
-                            <div class="match-header">Journée 1 • 01/06/2025</div>
-                            <div class="match-teams">
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Bearcelona FC">
-                                    <div class="match-team-name">Bearcelona FC</div>
-                                </div>
-                                <div class="match-score">2 - 0</div>
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Polar Express FC">
-                                    <div class="match-team-name">Polar Express FC</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="match-card">
-                            <div class="match-header">Journée 1 • 01/06/2025</div>
-                            <div class="match-teams">
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Teddy United">
-                                    <div class="match-team-name">Teddy United</div>
-                                </div>
-                                <div class="match-score">1 - 0</div>
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Panda Wanderers">
-                                    <div class="match-team-name">Panda Wanderers</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="match-card">
-                            <div class="match-header">Journée 1 • 01/06/2025</div>
-                            <div class="match-teams">
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Cuddly City">
-                                    <div class="match-team-name">Cuddly City</div>
-                                </div>
-                                <div class="match-score">1 - 1</div>
-                                <div class="match-team">
-                                    <img src="l2.png" alt="Grizzly Rangers">
-                                    <div class="match-team-name">Grizzly Rangers</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="section" id="l2-fixtures-section">
+                <div class="section-header"><h2 class="section-title">Calendrier & Scores L2</h2></div>
+                <div class="section-content table-container"><table class="fixtures-table"><thead><tr><th>Journée</th><th>Match 1</th><th>Match 2</th><th>Match 3</th></tr></thead><tbody id="l2-fixtures-body"></tbody></table></div>
             </div>
-            
-            <div class="section animate-slide-left">
-                <div class="section-header">
-                    <h2 class="section-title">Équipes</h2>
-                    <a href="#" class="section-link">Voir toutes les équipes</a>
-                </div>
-                <div class="section-content">
-                    <div class="teams-grid">
-                        <div class="team-card">
-                            <img src="l2.png" alt="Bearcelona FC">
-                            <h4>Bearcelona FC</h4>
-                            <p>Ours bruns élégants connus pour leur jeu technique</p>
-                        </div>
-                        <div class="team-card">
-                            <img src="l2.png" alt="Teddy United">
-                            <h4>Teddy United</h4>
-                            <p>Équipe historique d'ours en peluche classiques</p>
-                        </div>
-                        <div class="team-card">
-                            <img src="l2.png" alt="Cuddly City">
-                            <h4>Cuddly City</h4>
-                            <p>Nouveau riche du championnat avec des peluches modernes</p>
-                        </div>
-                        <div class="team-card">
-                            <img src="l2.png" alt="Grizzly Rangers">
-                            <h4>Grizzly Rangers</h4>
-                            <p>Équipe robuste connue pour son jeu physique</p>
-                        </div>
-                        <div class="team-card">
-                            <img src="l2.png" alt="Panda Wanderers">
-                            <h4>Panda Wanderers</h4>
-                            <p>Club avec une forte identité visuelle noir et blanc</p>
-                        </div>
-                        <div class="team-card">
-                            <img src="l2.png" alt="Polar Express FC">
-                            <h4>Polar Express FC</h4>
-                            <p>Spécialistes du jeu défensif avec des ours blancs</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="section" id="l2-standings-section">
+                <div class="section-header"><h2 class="section-title">Classement L2</h2></div>
+                <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="l2-standings-body"></tbody></table></div>
             </div>
-            
-            <div class="section animate-slide-up">
-                <div class="section-header">
-                    <h2 class="section-title">Actualités</h2>
-                    <a href="#" class="section-link">Toutes les actualités</a>
-                </div>
-                <div class="section-content">
-                    <div class="news-grid">
-                        <div class="news-card">
-                            <img src="teddy-shooting.png" class="news-image" alt="Actualité Teddy Championship">
-                            <div class="news-content">
-                                <div class="news-date">03 Juin 2025</div>
-                                <h3 class="news-title">Bearcelona FC démarre fort la saison</h3>
-                                <p class="news-excerpt">Les ours catalans impressionnent pour leur entrée en lice avec une victoire convaincante 2-0 face à Polar Express FC.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                        <div class="news-card">
-                            <img src="peluches-celebration.png" class="news-image" alt="Actualité Teddy Championship">
-                            <div class="news-content">
-                                <div class="news-date">02 Juin 2025</div>
-                                <h3 class="news-title">Le "Nounours d'Or" sera décerné en fin de saison</h3>
-                                <p class="news-excerpt">La ligue annonce la création d'un nouveau trophée pour récompenser le meilleur joueur du championnat.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                        <div class="news-card">
-                            <img src="tifo-peluches.png" class="news-image" alt="Actualité Teddy Championship">
-                            <div class="news-content">
-                                <div class="news-date">01 Juin 2025</div>
-                                <h3 class="news-title">Lancement officiel du Teddy Championship</h3>
-                                <p class="news-excerpt">Le nouveau championnat des nounours est officiellement lancé avec une cérémonie émouvante et colorée.</p>
-                                <a href="#" class="section-link">Lire la suite</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="section" id="l2-teams-section">
+                <div class="section-header"><h2 class="section-title">Équipes L2</h2></div>
+                <div class="section-content"><div class="teams-grid" id="l2-teams-grid"></div></div>
             </div>
         </div>
     </div>
-    
-    <!-- DNCG Content -->
-    <div class="tab-content" id="dncg-content">
+
+    <!-- Ligue des Champions Peluches Content -->
+    <div class="tab-content ldc-content" id="ligueChampions-content">
         <div class="container">
+            <div class="carousel">
+                 <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-shooting.png" alt="Action LDC">
+                        <div class="carousel-caption">
+                            <h2>Ligue des Champions des Peluches</h2>
+                            <p>Le Graal Européen. Où les Légendes s'Écrivent.</p>
+                            <a href="#ldc-fixtures-section" class="btn">Format & Matchs</a>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" alt="Célébration LDC">
+                        <div class="carousel-caption">
+                            <h2>Nuits Étoilées</h2>
+                            <p>Vibrez au son de l'hymne le plus prestigieux.</p>
+                            <a href="#ldc-teams-section" class="btn">Clubs en Lice</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                     <div class="carousel-dot active" data-slide="0"></div><div class="carousel-dot" data-slide="1"></div>
+                </div>
+                <div class="carousel-arrow carousel-prev">❮</div><div class="carousel-arrow carousel-next">❯</div>
+            </div>
+            <div class="section action-buttons">
+                <button class="nouvelle-saison-btn" id="nouvelle-saison-ldc-btn">Nouvelle Saison LDC (Démo)</button>
+                 <button class="sauvegarde-json-btn" id="sauvegarde-ldc-btn">Sauvegarder Groupes LDC (JSON)</button>
+            </div>
+            <div class="section" id="ldc-fixtures-section">
+                <div class="section-header"><h2 class="section-title">Phase de Groupes LDC (Exemple)</h2></div>
+                <div class="section-content table-container"><p>Format typique : 8 groupes de 4 équipes. Ici, un exemple avec un seul groupe.</p><table class="fixtures-table"><thead><tr><th>Journée</th><th>Match 1</th><th>Match 2</th></tr></thead><tbody id="ldc-fixtures-body"></tbody></table></div>
+            </div>
+            <div class="section" id="ldc-standings-section">
+                <div class="section-header"><h2 class="section-title">Classement Groupe A (Exemple)</h2></div>
+                <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="ldc-standings-body"></tbody></table></div>
+            </div>
+            <div class="section" id="ldc-teams-section">
+                <div class="section-header"><h2 class="section-title">Équipes en LDC (Exemple Groupe A)</h2></div>
+                <div class="section-content"><div class="teams-grid" id="ldc-teams-grid"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Billetterie Content -->
+    <div class="tab-content billetterie-content" id="billetterie-content">
+         <div class="container">
             <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">DNCG des Peluches</h2>
-                </div>
+                <div class="section-header"><h2 class="section-title">Billetterie Officielle</h2></div>
                 <div class="section-content">
-                    <div class="dncg-container">
-                        <h1>Calculs de la DNCG :</h1>
-                        <div class="dncg-tabs">
-                            <button class="dncg-tab active" id="victoires">Victoires</button>
-                            <button class="dncg-tab" id="nuls">Match nul</button>
-                            <button class="dncg-tab" id="defaites">Défaites</button>
-                        </div>
-                        <button id="generer">Générer</button>
-                        <div id="resultat"></div>
+                    <div class="content-placeholder">
+                         <i class="fas fa-ticket-alt"></i>
+                         <h2>Réservez Vos Places !</h2>
+                         <p>Vivez l'émotion du Championnat des Peluches en direct depuis les tribunes !</p>
+                         <a href="#" class="btn">Acheter des Billets (Prochainement)</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- Actualités Section (Shared visually, could be dynamic per tab in a more complex app) -->
+    <div class="container" id="actualites-section-container">
+        <div class="section" id="actualites-section">
+            <div class="section-header"><h2 class="section-title">Dernières Actualités</h2></div>
+            <div class="section-content">
+                <div class="news-grid" id="shared-news-grid">
+                    <div class="news-card">
+                        <img src="https://raw.githubusercontent.com/ironworkout/paul.wallon.bts.sio/main/envahissement.jpg" class="news-image" alt="Envahissement de terrain">
+                        <div class="news-content">
+                            <div class="news-date">15 Juin 2025</div>
+                            <h3 class="news-title">SCÈNES DE LIESSE APRÈS LA MONTÉE !</h3>
+                            <p class="news-excerpt">Les supporters ont célébré avec ferveur la promotion de leur équipe. Un moment inoubliable immortalisé par cet envahissement de terrain joyeux et coloré.</p>
+                            <a href="#" class="section-link">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                     <div class="news-card">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" class="news-image" alt="Célébration but">
+                        <div class="news-content">
+                            <div class="news-date">12 Juin 2025</div>
+                            <h3 class="news-title">BUT DÉCISIF À LA DERNIÈRE MINUTE !</h3>
+                            <p class="news-excerpt">Un final à couper le souffle ! Revivez ce but qui a scellé la victoire et enflammé le stade.</p>
+                            <a href="#" class="section-link">Voir le Replay <i class="fas fa-play-circle"></i></a>
+                        </div>
+                    </div>
+                     <div class="news-card">
+                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/valenciennes-supporters.png" class="news-image" alt="Supporters">
+                        <div class="news-content">
+                            <div class="news-date">10 Juin 2025</div>
+                            <h3 class="news-title">LES SUPPORTERS, CŒUR DU CLUB</h3>
+                            <p class="news-excerpt">Enquête sur la passion des fans qui animent les tribunes chaque semaine.</p>
+                            <a href="#" class="section-link">Découvrir les Fans <i class="fas fa-users"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="container footer-container">
             <div class="footer-section">
-                <h3>À propos</h3>
+                <h3>À Propos</h3>
                 <ul>
                     <li><a href="#">Qui sommes-nous</a></li>
-                    <li><a href="#">Histoire du championnat</a></li>
-                    <li><a href="#">Partenaires</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">Histoire du Championnat</a></li>
+                    <li><a href="#">Partenaires Officiels</a></li>
+                    <li><a href="#">Mentions Légales & CGU</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>Compétitions</h3>
                 <ul>
-                    <li><a href="#">Ligue 1 Peluches</a></li>
-                    <li><a href="#">Teddy Championship</a></li>
-                    <li><a href="#">Coupe des Doudous</a></li>
-                    <li><a href="#">Trophée des Champions</a></li>
+                    <li><a href="#ligue1-content">Ligue 1 Peluches</a></li>
+                    <li><a href="#ligue2-content">Ligue 2 des Ours</a></li>
+                    <li><a href="#ligueChampions-content">Ligue des Champions</a></li>
+                    <li><a href="#">Coupe Nationale des Doudous</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Services</h3>
+                <h3>Services & Support</h3>
                 <ul>
-                    <li><a href="#">Billetterie</a></li>
-                    <li><a href="#">Boutique officielle</a></li>
-                    <li><a href="#">Espace presse</a></li>
-                    <li><a href="#">Recrutement</a></li>
+                    <li><a href="#billetterie-content">Billetterie</a></li>
+                    <li><a href="#">Boutique Officielle</a></li>
+                    <li><a href="#">Espace Presse</a></li>
+                    <li><a href="#">Nous Rejoindre</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
-                <h3>Suivez-nous</h3>
-                <p>Restez connectés avec toute l'actualité du championnat des peluches</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
+             <div class="footer-section">
+                <h3>Contactez-Nous</h3>
+                 <ul>
+                    <li><a href="mailto:contact@peluche-elite.com">contact@peluche-elite.com</a></li>
+                    <li><a href="#">Centre d'Aide (FAQ)</a></li>
+                    <li><a href="#">Devenir Partenaire</a></li>
+                </ul>
             </div>
         </div>
         <div class="copyright">
-            &copy; 2025 Championnat des Peluches. Tous droits réservés.
+            © 2025 Championnat Peluche Élite. Tous droits réservés. Une création ludique.
         </div>
     </footer>
-    
+
     <script>
-        // Tab Navigation
+        const BASE_URL = "https://ironworkout.github.io/paul.wallon.bts.sio/";
+
+        let l1TeamsData = {
+            "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." },
+            "Toulours FC": { "logo": "tfc.png", "description": "La Fierté des Pingouins." },
+            "Peluche FC": { "logo": "pfc.png", "description": "Les Titans de la Capitale." },
+            "PSG Peluches": { "logo": "psg.png", "description": "L'Élégance Parisienne." },
+            "Olympique Ours": { "logo": "oo.png", "description": "La Griffe Lyonnaise." },
+            "AS Carrotes": { "logo": "ascl.png", "description": "Les Flèches Vertes." }
+        };
+        let l1FixturesData = [];
+
+        let l2TeamsData = {
+             "AS Saint-Ettours": { "logo": "asset.png", "description": "Ferveur Légendaire." },
+             "Patapouf FC": { "logo": "patapouf.png", "description": "Puissance Éléphantesque." },
+             "Tours FC": { "logo": "tours.png", "description": "Les Rois du Château." },
+             "USL Abeille": { "logo": "usla.png", "description": "Le Dard Offensif." },
+             "Clermandala 63": { "logo": "clermandala.png", "description": "Magie Auvergnate." },
+             "FC Poussins": { "logo": "fcp.png", "description": "L'Avenir en Marche." }
+        };
+        let l2FixturesData = [];
+
+        let ldcTeamsData = { // Example: 4 teams for a single group demo
+            "Champions FC": {"logo": "psg.png", "description": "Tenants du Titre"},
+            "Galactiques Peluches": {"logo": "oo.png", "description": "Prétendants Étoilés"},
+            "Doudous Invincibles": {"logo": "vafc.png", "description": "Rêve Européen"},
+            "Oursons United": {"logo": "asset.png", "description": "Surprise du Chef"}
+        };
+        let ldcFixturesData = [];
+
+
+        function generateBergerFixtures(teamNamesInput) {
+            let teams = [...teamNamesInput];
+            if (teams.length === 0) return [];
+            const isOdd = teams.length % 2 !== 0;
+            if (isOdd) teams.push("BYE");
+
+            const numTeams = teams.length;
+            const numRounds = numTeams - 1;
+            const matchesPerRound = numTeams / 2;
+            const rounds = [];
+
+            for (let r = 0; r < numRounds; r++) {
+                const currentRoundMatches = [];
+                for (let i = 0; i < matchesPerRound; i++) {
+                    const home = teams[i];
+                    const away = teams[numTeams - 1 - i];
+                    if (home !== "BYE" && away !== "BYE") {
+                        if (r % 2 === 0 || i > 0) {
+                             currentRoundMatches.push({ home, away, scoreHome: null, scoreAway: null });
+                        } else {
+                             currentRoundMatches.push({ home: away, away: home, scoreHome: null, scoreAway: null });
+                        }
+                    }
+                }
+                rounds.push(currentRoundMatches);
+                const last = teams.pop();
+                teams.splice(1, 0, last);
+            }
+            return rounds;
+        }
+
+        function generateFullSeasonFixtures(teamNames) {
+            if (teamNames.length < 2) return [];
+            const firstHalf = generateBergerFixtures(teamNames);
+            const secondHalf = firstHalf.map(round =>
+                round.map(match => ({
+                    home: match.away, away: match.home, scoreHome: null, scoreAway: null
+                }))
+            );
+            return [...firstHalf, ...secondHalf];
+        }
+         function generateLDCGroupFixtures(groupTeams) { // Simplified for 4 teams, play each other twice
+            if (groupTeams.length !== 4) {
+                 console.warn("LDC Group fixture generation is simplified for 4 teams.");
+                 return generateFullSeasonFixtures(groupTeams).slice(0, (groupTeams.length-1)*2); // Play each other twice
+            }
+            return generateFullSeasonFixtures(groupTeams); // Full round robin for 4 teams (6 rounds)
+        }
+
+
+        function calculateStandings(teamsInfo, fixturesData) {
+            const standings = {};
+            Object.keys(teamsInfo).forEach(name => {
+                standings[name] = { ...teamsInfo[name], points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 };
+            });
+            (fixturesData || []).forEach(round => { // Add guard for undefined fixturesData
+                (round || []).forEach(match => { // Add guard for undefined round
+                    if (match && match.scoreHome !== null && match.scoreAway !== null && standings[match.home] && standings[match.away]) {
+                        const home = standings[match.home];
+                        const away = standings[match.away];
+                        home.matchs++; away.matchs++;
+                        home.bp += match.scoreHome; home.bc += match.scoreAway;
+                        away.bp += match.scoreAway; away.bc += match.scoreHome;
+                        if (match.scoreHome > match.scoreAway) home.points += 3;
+                        else if (match.scoreAway > match.scoreHome) away.points += 3;
+                        else { home.points += 1; away.points += 1; }
+                    }
+                });
+            });
+            Object.values(standings).forEach(team => team.diff = team.bp - team.bc);
+            return standings;
+        }
+
+        function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
+            const fixturesBody = document.getElementById(fixturesBodyId);
+            if (!fixturesBody) return;
+            fixturesBody.innerHTML = '';
+            const matchesPerDay = leagueId === 'ldc' && Object.keys(teamsInfo).length === 4 ? 2 : 3; // LDC 4-team group has 2 matches per day
+
+            (fixturesData || []).forEach((round, index) => {
+                const row = document.createElement('tr');
+                let roundHtml = `<td>${leagueId === 'ldc' ? 'J.' : ''}${index + 1}</td>`;
+                (round || []).forEach((match, matchIdx) => {
+                    if (!match || !teamsInfo[match.home] || !teamsInfo[match.away]) {
+                        roundHtml += '<td>Match Indisponible</td>'; // Placeholder if match data is incomplete
+                        return;
+                    }
+                    const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`;
+                    const scoreAwayInputId = `${leagueId}-r${index}-m${matchIdx}-a`;
+                    const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : '';
+                    const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
+
+                    roundHtml += `
+                        <td>
+                            <div class="fixture-match">
+                                <div class="fixture-team home">
+                                    <span>${match.home}</span>
+                                    <img src="${BASE_URL}${teamsInfo[match.home].logo}" alt="${match.home}" class="team-logo">
+                                </div>
+                                <div class="fixture-score-inputs">
+                                    <input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}">
+                                    <span class="vs-separator">-</span>
+                                    <input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}">
+                                </div>
+                                <div class="fixture-team away">
+                                    <img src="${BASE_URL}${teamsInfo[match.away].logo}" alt="${match.away}" class="team-logo">
+                                    <span>${match.away}</span>
+                                </div>
+                            </div>
+                        </td>`;
+                });
+                for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
+                row.innerHTML = roundHtml;
+                fixturesBody.appendChild(row);
+            });
+            document.querySelectorAll(`#${fixturesBodyId} .fixture-score-input`).forEach(input => {
+                input.addEventListener('change', handleScoreChange);
+            });
+        }
+
+
+        function populateStandingsDOM(standingsBodyId, calculatedStandings) {
+            const standingsBody = document.getElementById(standingsBodyId);
+            if (!standingsBody) return;
+            standingsBody.innerHTML = '';
+            const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if (b.diff !== a.diff) return b.diff - a.diff;
+                return b.bp - a.bp;
+            });
+            sortedTeams.forEach(([teamName, teamData], index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="team-info"><img src="${BASE_URL}${teamData.logo}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
+                    <td>${teamData.points}</td><td>${teamData.matchs}</td>
+                    <td>${teamData.bp}</td><td>${teamData.bc}</td>
+                    <td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
+                standingsBody.appendChild(row);
+            });
+        }
+
+        function populateTeamsGridDOM(teamsGridId, teamsData) {
+            const teamsGrid = document.getElementById(teamsGridId);
+            if (!teamsGrid) return;
+            teamsGrid.innerHTML = '';
+            Object.entries(teamsData).forEach(([teamName, teamData]) => {
+                const teamCard = document.createElement('div');
+                teamCard.className = 'team-card';
+                teamCard.innerHTML = `
+                    <img src="${BASE_URL}${teamData.logo}" alt="${teamName}">
+                    <h4>${teamName}</h4>
+                    ${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
+                teamsGrid.appendChild(teamCard);
+            });
+        }
+
+        function handleScoreChange(event) {
+            const input = event.target;
+            const roundIndex = parseInt(input.dataset.round);
+            const matchIndex = parseInt(input.dataset.matchidx);
+            const teamType = input.dataset.team;
+            const leagueId = input.dataset.league;
+            let score = input.value === '' ? null : parseInt(input.value);
+
+            if (score !== null && (isNaN(score) || score < 0)) {
+                let fixturesRef = leagueId === 'l1' ? l1FixturesData : (leagueId === 'l2' ? l2FixturesData : ldcFixturesData);
+                input.value = fixturesRef[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || '';
+                return;
+            }
+
+            let fixturesRef, teamsRef, standingsBodyId;
+            if (leagueId === 'l1') { fixturesRef = l1FixturesData; teamsRef = l1TeamsData; standingsBodyId = 'l1-standings-body'; }
+            else if (leagueId === 'l2') { fixturesRef = l2FixturesData; teamsRef = l2TeamsData; standingsBodyId = 'l2-standings-body'; }
+            else if (leagueId === 'ldc') { fixturesRef = ldcFixturesData; teamsRef = ldcTeamsData; standingsBodyId = 'ldc-standings-body';}
+            else return;
+
+            if (!fixturesRef || !fixturesRef[roundIndex] || !fixturesRef[roundIndex][matchIndex]) return;
+
+            if (teamType === 'home') fixturesRef[roundIndex][matchIndex].scoreHome = score;
+            else fixturesRef[roundIndex][matchIndex].scoreAway = score;
+
+            const updatedStandings = calculateStandings(teamsRef, fixturesRef);
+            if (document.getElementById(standingsBodyId)) {
+                populateStandingsDOM(standingsBodyId, updatedStandings);
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startNewSeason(leagueId) {
+            let teamsDataRef, fixturesBodyId, standingsBodyId;
+            let newFixturesData;
+
+            if (leagueId === 'l1') {
+                teamsDataRef = l1TeamsData; fixturesBodyId = 'l1-fixtures-body'; standingsBodyId = 'l1-standings-body';
+                let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
+                l1FixturesData = generateFullSeasonFixtures(teamNames); newFixturesData = l1FixturesData;
+            } else if (leagueId === 'l2') {
+                teamsDataRef = l2TeamsData; fixturesBodyId = 'l2-fixtures-body'; standingsBodyId = 'l2-standings-body';
+                let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
+                l2FixturesData = generateFullSeasonFixtures(teamNames); newFixturesData = l2FixturesData;
+            } else if (leagueId === 'ldc') {
+                teamsDataRef = ldcTeamsData; fixturesBodyId = 'ldc-fixtures-body'; standingsBodyId = 'ldc-standings-body';
+                let teamNames = Object.keys(teamsDataRef); shuffleArray(teamNames);
+                ldcFixturesData = generateLDCGroupFixtures(teamNames); newFixturesData = ldcFixturesData;
+            } else return;
+
+            (newFixturesData || []).forEach(round => (round || []).forEach(match => { match.scoreHome = null; match.scoreAway = null; }));
+            const initialStandings = calculateStandings(teamsDataRef, newFixturesData);
+            populateFixturesDOM(fixturesBodyId, newFixturesData, teamsDataRef, leagueId);
+            if (document.getElementById(standingsBodyId)) populateStandingsDOM(standingsBodyId, initialStandings);
+            console.log(`Nouvelle saison démarrée pour ${leagueId.toUpperCase()}!`);
+        }
+
+        // Save JSON to local download (NO Google Drive integration for security reasons)
+        function saveDataAsJSON(data, filename) {
+            const jsonData = JSON.stringify(data, null, 2); // Pretty print JSON
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-        
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)';
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05 }); // Trigger a bit earlier
+
+        function observeActiveTabSections() {
+            document.querySelectorAll('.section').forEach(el => { // Observe all sections on any tab change initially
+                 if (el.style.opacity !== '1') { // Only reset if not already visible
+                    el.style.opacity = '0'; el.style.transform = 'translateY(25px)';
+                 }
+                 observer.observe(el)
+            });
+
+             // Explicitly trigger for already visible items in the new active tab
+            const activeTabNode = document.querySelector('.tab-content.active');
+            if (activeTabNode) {
+                activeTabNode.querySelectorAll('.section').forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') {
+                        section.style.opacity = '1'; section.style.transform = 'translateY(0)';
+                        observer.unobserve(section);
+                    }
+                });
+            }
+        }
+
+
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabId = btn.getAttribute('data-tab');
-                
-                // Remove active class from all buttons and contents
-                tabBtns.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked button and corresponding content
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                document.getElementById(`${tabId}-content`).classList.add('active');
+                const targetContent = document.getElementById(`${tabId}-content`);
+                if(targetContent) targetContent.classList.add('active');
+
+                observeActiveTabSections();
+                document.querySelectorAll('.carousel').forEach(carousel => {
+                    const ci = carousel.carouselInstance;
+                    if (ci) carousel.closest('.tab-content.active') ? ci.startAutoSlide() : ci.stopAutoSlide();
+                });
+                 // Update active nav link based on tab
+                const mainNavLinks = document.querySelectorAll('header nav ul li a');
+                mainNavLinks.forEach(l => l.classList.remove('active-nav-link'));
+                if (tabId === "ligue1" || tabId === "ligue2" || tabId === "ligueChampions") {
+                    document.querySelector('header nav ul li a[href="#competitions-section"]').classList.add('active-nav-link');
+                } else if (tabId === "billetterie") {
+                     document.querySelector('header nav ul li a[href="#billetterie-content"]').classList.add('active-nav-link');
+                } else {
+                    document.querySelector('header nav ul li a[href="#accueil-section"]').classList.add('active-nav-link');
+                }
+
             });
         });
-        
-        // Carousel
-        const carousels = document.querySelectorAll('.carousel');
-        
-        carousels.forEach(carousel => {
+
+        function initializeCarousel(carousel) {
+             if (carousel.carouselInstance) return;
             const inner = carousel.querySelector('.carousel-inner');
             const items = carousel.querySelectorAll('.carousel-item');
             const dots = carousel.querySelectorAll('.carousel-dot');
             const prevBtn = carousel.querySelector('.carousel-prev');
             const nextBtn = carousel.querySelector('.carousel-next');
-            
-            let currentSlide = 0;
-            const slideCount = items.length;
-            
-            // Set initial position
-            updateCarousel();
-            
-            // Event listeners
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentSlide = index;
-                    updateCarousel();
-                });
-            });
-            
-            prevBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-                updateCarousel();
-            });
-            
-            nextBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-            });
-            
-            // Auto slide
-            let interval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-            }, 5000);
-            
-            carousel.addEventListener('mouseenter', () => {
-                clearInterval(interval);
-            });
-            
-            carousel.addEventListener('mouseleave', () => {
-                interval = setInterval(() => {
-                    currentSlide = (currentSlide + 1) % slideCount;
-                    updateCarousel();
-                }, 5000);
-            });
-            
-            function updateCarousel() {
-                inner.style.transform = `translateX(-${currentSlide * 100}%)`;
-                
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentSlide);
-                });
-            }
-        });
-        
-        // DNCG Functionality
-        const dncgTabs = document.querySelectorAll('.dncg-tab');
-        const genererBtn = document.getElementById('generer');
-        const resultat = document.getElementById('resultat');
-        let activeTab = 'victoires';
-        
-        dncgTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                dncgTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                activeTab = tab.id;
-            });
-        });
-        
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+            if (!inner || !items.length || items.length === 0 || !dots.length || !prevBtn || !nextBtn) return;
+            let currentSlide = 0; const slideCount = items.length; let interval = null;
+            function updateCarousel() { inner.style.transform = `translateX(-${currentSlide * 100}%)`; dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
+            function startAutoSlide() { stopAutoSlide(); if (carousel.closest('.tab-content.active') && slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
+            function stopAutoSlide() { if (interval) clearInterval(interval); interval = null; }
+            function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
+            dots.forEach((dot, index) => dot.addEventListener('click', () => { currentSlide = index; updateCarousel(); resetAutoSlide(); }));
+            prevBtn.addEventListener('click', () => { currentSlide = (currentSlide - 1 + slideCount) % slideCount; updateCarousel(); resetAutoSlide(); });
+            nextBtn.addEventListener('click', () => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); resetAutoSlide(); });
+            carousel.addEventListener('mouseenter', stopAutoSlide); carousel.addEventListener('mouseleave', startAutoSlide);
+            carousel.carouselInstance = { startAutoSlide, stopAutoSlide }; updateCarousel(); startAutoSlide();
         }
-        
-        function createParticles(type) {
-            const particleCount = type === 'confetti' ? 50 : 20;
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add(type === 'confetti' ? 'confetti' : 'thumbs-down');
-                if (type === 'thumbs-down') {
-                    particle.innerHTML = '👎';
+
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('header nav');
+        hamburger.addEventListener('click', () => {
+            nav.classList.toggle('active'); const icon = hamburger.querySelector('i');
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
+        });
+
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && nav.classList.contains('active')) { // Only close if mobile menu is active
+                     nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars';
                 }
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 3}s`;
-                if (type === 'confetti') {
-                    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                }
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 3000);
-            }
-        }
-        
-        genererBtn.addEventListener('click', () => {
-            let montant, message;
-            switch (activeTab) {
-                case 'victoires':
-                    montant = getRandomInt(150, 300);
-                    message = `${montant}€ - Excellent !`;
-                    createParticles('confetti');
-                    break;
-                case 'nuls':
-                    montant = getRandomInt(0, 150);
-                    message = `${montant}€ - Pas mal !`;
-                    break;
-                case 'defaites':
-                    montant = getRandomInt(-150, 0);
-                    message = `${montant}€ - Dommage...`;
-                    createParticles('thumbs-down');
-                    break;
-            }
-            resultat.textContent = message;
-            resultat.style.color = getComputedStyle(document.getElementById(activeTab)).color;
-            resultat.classList.remove('animate');
-            void resultat.offsetWidth; // Force reflow
-            resultat.classList.add('animate');
-        });
-        
-        // Populate Ligue 1 data
-        const l1Teams = {
-            "Valenciennes Footbalours Club": {
-                "logo": "vafc.png",
-                "points": 1,
-                "matchs": 1,
-                "butsPour": 1,
-                "butsContre": 1
-            },
-            "Toulours Football Club": {
-                "logo": "tfc.png",
-                "points": 1,
-                "matchs": 1,
-                "butsPour": 1,
-                "butsContre": 1
-            },
-            "Peluche Football Club": {
-                "logo": "pfc.png",
-                "points": 0,
-                "matchs": 0,
-                "butsPour": 0,
-                "butsContre": 0
-            },
-            "Peluche Saint-Germours": {
-                "logo": "psg.png",
-                "points": 0,
-                "matchs": 0,
-                "butsPour": 0,
-                "butsContre": 0
-            },
-            "Olympique d'Ours FC": {
-                "logo": "oo.png",
-                "points": 0,
-                "matchs": 0,
-                "butsPour": 0,
-                "butsContre": 0
-            },
-            "Associations Carrotes Lapines": {
-                "logo": "ascl.png",
-                "points": 0,
-                "matchs": 0,
-                "butsPour": 0,
-                "butsContre": 0
-            }
-        };
-        
-        const l1Results = [
-            [
-                {
-                    "Valenciennes Footbalours Club": 1,
-                    "Toulours Football Club": 1
-                },
-                null,
-                null
-            ],
-            null,
-            null
-        ];
-        
-        // Populate standings table
-        const l1StandingsBody = document.getElementById('l1-standings-body');
-        
-        // Sort teams by points
-        const sortedTeams = Object.entries(l1Teams).sort((a, b) => {
-            if (b[1].points !== a[1].points) {
-                return b[1].points - a[1].points;
-            }
-            return b[1].butsPour - a[1].butsPour;
-        });
-        
-        sortedTeams.forEach((team, index) => {
-            const teamName = team[0];
-            const teamData = team[1];
-            const diff = teamData.butsPour - teamData.butsContre;
-            
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td class="team-info">
-                    <img src="${teamData.logo}" alt="${teamName}" class="team-logo">
-                    <span>${teamName}</span>
-                </td>
-                <td>${teamData.points}</td>
-                <td>${teamData.matchs}</td>
-                <td>${teamData.butsPour}</td>
-                <td>${teamData.butsContre}</td>
-                <td>${diff > 0 ? '+' + diff : diff}</td>
-            `;
-            
-            l1StandingsBody.appendChild(row);
-        });
-        
-        // Populate results
-        const l1ResultsContainer = document.getElementById('l1-results-container');
-        
-        // Check if there are results
-        if (l1Results[0] && l1Results[0][0]) {
-            const match = l1Results[0][0];
-            const teams = Object.keys(match);
-            
-            if (teams.length === 2) {
-                const matchCard = document.createElement('div');
-                matchCard.className = 'match-card';
-                matchCard.innerHTML = `
-                    <div class="match-header">Journée 1 • 03/06/2025</div>
-                    <div class="match-teams">
-                        <div class="match-team">
-                            <img src="${l1Teams[teams[0]].logo}" alt="${teams[0]}">
-                            <div class="match-team-name">${teams[0]}</div>
-                        </div>
-                        <div class="match-score">${match[teams[0]]} - ${match[teams[1]]}</div>
-                        <div class="match-team">
-                            <img src="${l1Teams[teams[1]].logo}" alt="${teams[1]}">
-                            <div class="match-team-name">${teams[1]}</div>
-                        </div>
-                    </div>
-                `;
-                
-                l1ResultsContainer.appendChild(matchCard);
-            }
-        }
-        
-        // Add placeholder matches for upcoming games
-        const upcomingMatches = [
-            {
-                day: "Journée 1 • 05/06/2025",
-                team1: "Peluche Football Club",
-                team2: "Peluche Saint-Germours"
-            },
-            {
-                day: "Journée 1 • 06/06/2025",
-                team1: "Olympique d'Ours FC",
-                team2: "Associations Carrotes Lapines"
-            }
-        ];
-        
-        upcomingMatches.forEach(match => {
-            const matchCard = document.createElement('div');
-            matchCard.className = 'match-card';
-            matchCard.innerHTML = `
-                <div class="match-header">${match.day}</div>
-                <div class="match-teams">
-                    <div class="match-team">
-                        <img src="${l1Teams[match.team1].logo}" alt="${match.team1}">
-                        <div class="match-team-name">${match.team1}</div>
-                    </div>
-                    <div class="match-score">- - -</div>
-                    <div class="match-team">
-                        <img src="${l1Teams[match.team2].logo}" alt="${match.team2}">
-                        <div class="match-team-name">${match.team2}</div>
-                    </div>
-                </div>
-            `;
-            
-            l1ResultsContainer.appendChild(matchCard);
-        });
-        
-        // Populate teams grid
-        const l1TeamsGrid = document.getElementById('l1-teams-grid');
-        
-        Object.entries(l1Teams).forEach(team => {
-            const teamName = team[0];
-            const teamData = team[1];
-            
-            const teamCard = document.createElement('div');
-            teamCard.className = 'team-card';
-            teamCard.innerHTML = `
-                <img src="${teamData.logo}" alt="${teamName}">
-                <h4>${teamName}</h4>
-            `;
-            
-            l1TeamsGrid.appendChild(teamCard);
-        });
-        
-        // Scroll animations
-        const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-right, .animate-slide-left, .animate-slide-up');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+                 nav.querySelectorAll('a').forEach(l => l.classList.remove('active-nav-link'));
+                 link.classList.add('active-nav-link');
+
+                 // If link points to a tab, switch tab
+                const href = link.getAttribute('href');
+                if (href === '#competitions-section') { // Generic link to competitions section
+                    // Potentially default to L1 or do nothing specific if already on a league tab
+                } else if (href === '#billetterie-content') {
+                    document.querySelector('.tab-btn[data-tab="billetterie"]').click();
+                } // Add more specific tab switching if nav links should trigger them
             });
-        }, { threshold: 0.1 });
-        
-        animatedElements.forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(element);
         });
+        document.addEventListener('click', (e) => { if (!nav.contains(e.target) && !hamburger.contains(e.target) && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
+
+        document.getElementById('nouvelle-saison-l1-btn').addEventListener('click', () => startNewSeason('l1'));
+        document.getElementById('nouvelle-saison-l2-btn').addEventListener('click', () => startNewSeason('l2'));
+        const ldcNewSeasonBtn = document.getElementById('nouvelle-saison-ldc-btn');
+        if (ldcNewSeasonBtn) ldcNewSeasonBtn.addEventListener('click', () => startNewSeason('ldc'));
+
+        document.getElementById('sauvegarde-l1-btn').addEventListener('click', () => {
+            const standings = calculateStandings(l1TeamsData, l1FixturesData);
+            saveDataAsJSON({ teams: l1TeamsData, fixtures: l1FixturesData, standings }, 'classement_ligue1_peluches.json');
+        });
+        document.getElementById('sauvegarde-l2-btn').addEventListener('click', () => {
+            const standings = calculateStandings(l2TeamsData, l2FixturesData);
+            saveDataAsJSON({ teams: l2TeamsData, fixtures: l2FixturesData, standings }, 'classement_ligue2_ours.json');
+        });
+         const ldcSaveBtn = document.getElementById('sauvegarde-ldc-btn');
+         if(ldcSaveBtn) {
+            ldcSaveBtn.addEventListener('click', () => {
+                const standings = calculateStandings(ldcTeamsData, ldcFixturesData);
+                saveDataAsJSON({ teams: ldcTeamsData, fixtures: ldcFixturesData, standings }, 'groupes_ldc_peluches.json');
+            });
+         }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startNewSeason('l1'); startNewSeason('l2');
+            if(Object.keys(ldcTeamsData).length >= 4) startNewSeason('ldc'); // Only if enough teams for LDC example
+
+            populateTeamsGridDOM('l1-teams-grid', l1TeamsData);
+            populateTeamsGridDOM('l2-teams-grid', l2TeamsData);
+            if (document.getElementById('ldc-teams-grid')) populateTeamsGridDOM('ldc-teams-grid', ldcTeamsData);
+
+            document.querySelectorAll('.carousel').forEach(initializeCarousel);
+            observeActiveTabSections();
+            document.querySelector('header nav ul li a[href="#accueil-section"]')?.classList.add('active-nav-link');
+        });
+
     </script>
 </body>
 </html>

@@ -183,7 +183,7 @@
             border: 1px solid var(--border-color); border-radius: 4px; margin: 0 3px; padding: 6px 4px;
             font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.9em;
         }
-         .fixtures-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(var(--secondary-color-rgb, 0, 123, 255), 0.3); } /* secondary-color-rgb for fallback */
+         .fixtures-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(var(--secondary-color-rgb, 0, 123, 255), 0.3); }
         .fixtures-table .vs-separator { margin: 0 5px; color: var(--text-color-dark); font-weight: 700; }
 
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
@@ -240,30 +240,22 @@
         .message-area.visible { opacity: 1; visibility: visible; transform: translate(-50%, -15px) ; pointer-events: auto; }
         .message-area.error-message { background-color: rgba(var(--neon-red-rgb),0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
-
         @media (max-width: 992px) {
             .header-container { flex-wrap: wrap; }
             .header-actions { order: 3; width: 100%; justify-content: center; margin-top:10px; }
             nav ul li { margin-left: 15px; }
             .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
         }
-
         @media (max-width: 768px) {
             .header-container { flex-direction: row; justify-content: space-between; padding: 10px 15px; }
             .logo h1 { font-size: 1.5rem; }
             .hamburger { display: block; order: 3; }
-            nav {
-                order: 2; width: 100%; position: absolute; top: calc(100% - 1px); 
-                left: 0; background-color: var(--primary-color);
-                max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
-                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-            }
+            nav { order: 2; width: 100%; position: absolute; top: calc(100% - 1px); left: 0; background-color: var(--primary-color); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
             nav.active { max-height: 400px; }
             nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
             nav ul li { margin-left: 0; width: 100%; }
             nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
             nav ul li:last-child a { border-bottom: none; }
-
             .carousel { height: 350px; } .carousel-caption h2 { font-size: 2rem; }
             .section-title { font-size: 1.8rem; }
             .standings-table th, .fixtures-table th { font-size: 0.8rem; padding: 10px 5px;}
@@ -281,9 +273,7 @@
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
             .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
-
         }
-
     </style>
 </head>
 <body>
@@ -293,12 +283,6 @@
                 <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
-             <div class="header-actions">
-                 <div id="drive-status" style="display: none;"> 
-                    <i class="fab fa-google-drive"></i> <span id="drive-status-text">Déconnecté</span>
-                 </div>
-                <button id="signin-button"><i class="fab fa-google"></i> Drive</button>
-            </div>
             <nav>
                 <ul>
                     <li><a href="#accueil-section" class="active-nav-link"><i class="fas fa-home"></i> Accueil</a></li>
@@ -307,6 +291,12 @@
                     <li><a href="#billetterie-content"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
                 </ul>
             </nav>
+            <div class="header-actions">
+                 <div id="drive-status" style="display: none;"> 
+                    <i class="fab fa-google-drive"></i> <span id="drive-status-text">Déconnecté</span>
+                 </div>
+                <button id="signin-button" disabled><i class="fab fa-google"></i> Drive</button>
+            </div>
             <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </header>
@@ -320,22 +310,19 @@
         </div>
     </div>
 
-    <!-- Ligue 1 Content -->
     <div class="tab-content active" id="ligue1-content">
         <div class="container l1-content">
             <div class="carousel" id="accueil-section">
                  <div class="carousel-inner">
                     <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png');">
                          <div class="carousel-caption">
-                            <h2>Ligue 1 Peluches : L'Élite</h2>
-                            <p>Le summum du football en peluche vous attend.</p>
+                            <h2>Ligue 1 Peluches : L'Élite</h2><p>Le summum du football en peluche vous attend.</p>
                             <a href="#l1-fixtures-section" class="btn">Voir le Calendrier</a>
                         </div>
                     </div>
                      <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png');">
                          <div class="carousel-caption">
-                            <h2>Passion & Ferveur</h2>
-                            <p>Rejoignez des milliers de supporters passionnés.</p>
+                            <h2>Passion & Ferveur</h2><p>Rejoignez des milliers de supporters passionnés.</p>
                             <a href="#l1-standings-section" class="btn">Classement L1</a>
                         </div>
                     </div>
@@ -364,22 +351,19 @@
         </div>
     </div>
 
-    <!-- Ligue 2 des Ours Content -->
     <div class="tab-content l2-content" id="ligue2-content">
          <div class="container">
             <div class="carousel">
                  <div class="carousel-inner">
                     <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png');">
                          <div class="carousel-caption">
-                            <h2>Ligue 2 des Ours : Terre de Talents</h2>
-                            <p>L'antichambre de l'élite, pleine de promesses.</p>
+                            <h2>Ligue 2 des Ours : Terre de Talents</h2><p>L'antichambre de l'élite, pleine de promesses.</p>
                             <a href="#l2-fixtures-section" class="btn">Calendrier L2</a>
                         </div>
                     </div>
                      <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png');">
                          <div class="carousel-caption">
-                            <h2>Rêves de Montée</h2>
-                            <p>Chaque match compte dans la course à la promotion.</p>
+                            <h2>Rêves de Montée</h2><p>Chaque match compte dans la course à la promotion.</p>
                             <a href="#l2-teams-section" class="btn">Nos Clubs L2</a>
                         </div>
                     </div>
@@ -408,22 +392,19 @@
         </div>
     </div>
 
-    <!-- Ligue des Champions Peluches Content -->
     <div class="tab-content ldc-content" id="ligueChampions-content">
         <div class="container">
             <div class="carousel">
                  <div class="carousel-inner">
                     <div class="carousel-item active" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/teddy-shooting.png');">
                          <div class="carousel-caption">
-                            <h2>Ligue des Champions des Peluches</h2>
-                            <p>Le Graal Européen. Où les Légendes s'Écrivent.</p>
+                            <h2>Ligue des Champions des Peluches</h2><p>Le Graal Européen. Où les Légendes s'Écrivent.</p>
                             <a href="#ldc-fixtures-section" class="btn">Format & Matchs</a>
                         </div>
                     </div>
                     <div class="carousel-item" style="background-image: url('https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png');">
                          <div class="carousel-caption">
-                            <h2>Nuits Étoilées</h2>
-                            <p>Vibrez au son de l'hymne le plus prestigieux.</p>
+                            <h2>Nuits Étoilées</h2><p>Vibrez au son de l'hymne le plus prestigieux.</p>
                             <a href="#ldc-teams-section" class="btn">Clubs en Lice</a>
                         </div>
                     </div>
@@ -452,7 +433,6 @@
         </div>
     </div>
 
-    <!-- Billetterie Content -->
     <div class="tab-content billetterie-content" id="billetterie-content">
          <div class="container">
             <div class="section">
@@ -476,30 +456,15 @@
                 <div class="news-grid" id="shared-news-grid">
                     <div class="news-card">
                         <img src="https://raw.githubusercontent.com/ironworkout/paul.wallon.bts.sio/main/envahissement.jpg" class="news-image" alt="Envahissement de terrain">
-                        <div class="news-content">
-                            <div class="news-date">15 Juin 2025</div>
-                            <h3 class="news-title">SCÈNES DE LIESSE APRÈS LA MONTÉE !</h3>
-                            <p class="news-excerpt">Les supporters ont célébré avec ferveur la promotion de leur équipe. Un moment inoubliable immortalisé par cet envahissement de terrain joyeux et coloré.</p>
-                            <a href="#" class="section-link">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                        </div>
+                        <div class="news-content"><div class="news-date">15 Juin 2025</div><h3 class="news-title">SCÈNES DE LIESSE APRÈS LA MONTÉE !</h3><p class="news-excerpt">Les supporters ont célébré avec ferveur la promotion de leur équipe.</p><a href="#" class="section-link">Lire la suite <i class="fas fa-arrow-right"></i></a></div>
                     </div>
                      <div class="news-card">
                         <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" class="news-image" alt="Célébration but">
-                        <div class="news-content">
-                            <div class="news-date">12 Juin 2025</div>
-                            <h3 class="news-title">BUT DÉCISIF À LA DERNIÈRE MINUTE !</h3>
-                            <p class="news-excerpt">Un final à couper le souffle ! Revivez ce but qui a scellé la victoire et enflammé le stade.</p>
-                            <a href="#" class="section-link">Voir le Replay <i class="fas fa-play-circle"></i></a>
-                        </div>
+                        <div class="news-content"><div class="news-date">12 Juin 2025</div><h3 class="news-title">BUT DÉCISIF À LA DERNIÈRE MINUTE !</h3><p class="news-excerpt">Un final à couper le souffle ! Revivez ce but.</p><a href="#" class="section-link">Voir le Replay <i class="fas fa-play-circle"></i></a></div>
                     </div>
                      <div class="news-card">
                         <img src="https://ironworkout.github.io/paul.wallon.bts.sio/valenciennes-supporters.png" class="news-image" alt="Supporters">
-                        <div class="news-content">
-                            <div class="news-date">10 Juin 2025</div>
-                            <h3 class="news-title">LES SUPPORTERS, CŒUR DU CLUB</h3>
-                            <p class="news-excerpt">Enquête sur la passion des fans qui animent les tribunes chaque semaine.</p>
-                            <a href="#" class="section-link">Découvrir les Fans <i class="fas fa-users"></i></a>
-                        </div>
+                        <div class="news-content"><div class="news-date">10 Juin 2025</div><h3 class="news-title">LES SUPPORTERS, CŒUR DU CLUB</h3><p class="news-excerpt">Enquête sur la passion des fans.</p><a href="#" class="section-link">Découvrir les Fans <i class="fas fa-users"></i></a></div>
                     </div>
                 </div>
             </div>
@@ -637,83 +602,129 @@
                     else { driveStatusElement.classList.add('success'); driveStatusTextElement.textContent = 'Connecté'; }
                 } else driveStatusTextElement.textContent = 'Déconnecté';
             }
-            tabButtons.forEach(btn => btn.disabled = false); // Tabs always enabled
+            
+            const dataIsEffectivelyLoaded = Object.values(leagueDataRefs).some(ref => ref.fixtures && ref.fixtures.length > 0);
+
+            tabButtons.forEach(btn => btn.disabled = false); // Tabs are always usable with local data.
             nouvelleSaisonButtons.forEach(btn => btn.disabled = !isLoggedIn); 
-            sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
+            sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn); 
         }
         async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
             if (!googleAccessToken) { console.warn("findOrCreateFile appelé sans token Google."); return null; }
             const searchUrl = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(filename)}'+and+trashed=false&spaces=drive&fields=files(id,name)`;
             try {
                 const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${searchRes.status} recherche ${filename}.`); return null; }
+                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
                 const searchData = await searchRes.json();
-                if (searchData.files && searchData.files.length > 0) { console.log(`Fichier Drive '${filename}' trouvé: ${searchData.files[0].id}`); return searchData.files[0].id; }
+                if (searchData.files && searchData.files.length > 0) { console.log(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
                 console.log(`Fichier Drive '${filename}' non trouvé. Création...`);
-                const createUrl = `https://www.googleapis.com/drive/v3/files`; const metadata = { name: filename, mimeType: mimeType };
+                const createUrl = `https://www.googleapis.com/drive/v3/files`;
+                const metadata = { name: filename, mimeType: mimeType };
                 const createRes = await fetch(createUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
-                if (!createRes.ok) { console.error(`Erreur ${createRes.status} création ${filename}.`); return null; }
-                const createData = await createRes.json(); const newFileId = createData.id; console.log(`Fichier Drive '${filename}' créé: ${newFileId}.`);
+                if (!createRes.ok) { console.error(`Erreur ${createRes.status} lors de la création du fichier ${filename}.`); return null; }
+                const createData = await createRes.json(); const newFileId = createData.id;
+                console.log(`Fichier Drive '${filename}' créé avec ID: ${newFileId}.`);
                 const writeSuccess = await updateFileContent(newFileId, defaultContentStr);
                 return writeSuccess ? newFileId : null;
-            } catch (error) { console.error(`Exception findOrCreateFile ${filename}:`, error); showMessage(`Erreur Drive gestion fichier ${filename}.`, 5000, true); return null; }
+            } catch (error) { console.error(`Exception dans findOrCreateFile pour ${filename}:`, error); showMessage(`Erreur Drive gestion fichier ${filename}.`, 5000, true); return null; }
         }
         async function readFileContent(fileId) {
-            if (!googleAccessToken || !fileId) { console.warn("readFileContent sans token/fileId."); return null;}
+            if (!googleAccessToken || !fileId) { console.warn("readFileContent appelé sans token ou fileId."); return null;}
             const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!response.ok) { if (response.status === 404) { console.log(`Fichier ID ${fileId} non trouvé (404).`); return "";} if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lecture fichier ID ${fileId}.`); return null; }
-                console.log(`Lecture réussie fichier ID ${fileId}.`); return await response.text();
-            } catch (error) { console.error(`Exception readFileContent ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
+                if (!response.ok) { if (response.status === 404) { console.log(`Fichier ID ${fileId} non trouvé (erreur 404).`); return "";} if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
+                console.log(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
+            } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
         }
         async function updateFileContent(fileId, content) {
-            if (!googleAccessToken || !fileId) { console.warn("updateFileContent sans token/fileId."); return false; }
+            if (!googleAccessToken || !fileId) { console.warn("updateFileContent appelé sans token ou fileId."); return false; }
             if (isSavingDriveData) { console.warn("Sauvegarde Drive en cours, requête ignorée."); return false; }
-            isSavingDriveData = true; const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
+            isSavingDriveData = true; 
+            const driveStatusElement = document.getElementById('drive-status');
+            const driveStatusTextElement = document.getElementById('drive-status-text');
             if (driveStatusElement) { driveStatusTextElement.textContent = 'Synchro...'; driveStatusElement.className = 'loading'; }
+
             const url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`;
-            const isJson = typeof content === 'object'; const contentToSend = isJson ? JSON.stringify(content, null, 2) : content;
-            const contentType = isJson ? 'application/json; charset=UTF-8' : 'text/plain; charset=UTF-8'; let success = false;
+            const isJson = typeof content === 'object'; 
+            const contentToSend = isJson ? JSON.stringify(content, null, 2) : content;
+            const contentType = isJson ? 'application/json; charset=UTF-8' : 'text/plain; charset=UTF-8'; 
+            let success = false;
+
             try {
                 const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
-                if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
-                else { console.log(`Écriture réussie ID ${fileId}.`); success = true; }
-            } catch (error) { console.error(`Exception updateFileContent ID ${fileId}:`, error); showMessage(`Erreur sauvegarde Drive.`, 5000, true); if (driveStatusElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; } }
-            finally { isSavingDriveData = false; if (driveStatusElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success';} updateAuthUI(!!googleAccessToken); }
+                if (!response.ok) { 
+                    if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } 
+                    console.error(`Erreur ${response.status} lors de l'écriture du fichier ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); 
+                } else { console.log(`Écriture réussie du fichier ID ${fileId}.`); success = true; }
+            } catch (error) {
+                 console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error);
+                 showMessage(`Erreur sauvegarde fichier Drive.`, 5000, true);
+                 if (driveStatusElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; }
+            } finally {
+                 isSavingDriveData = false; 
+                 if (driveStatusElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success';} 
+                 updateAuthUI(!!googleAccessToken); 
+            }
             return success;
         }
         async function loadAllLeagueDataFromDrive() {
-            programsLoaded = false; let allLoadedSuccessfully = true;
+            let allLoadedSuccessfully = true;
             for (const leagueId in leagueDataRefs) {
-                const ref = leagueDataRefs[leagueId]; console.log(`Chargement ${leagueId.toUpperCase()} depuis Drive (${ref.filename})...`);
+                const ref = leagueDataRefs[leagueId];
+                console.log(`Chargement ${leagueId.toUpperCase()} depuis Drive (${ref.filename})...`);
                 ref.fileId = await findOrCreateFile(ref.filename, JSON.stringify({ teams: ref.teams, fixtures: [], standings: {} }));
                 if (ref.fileId) {
                     const content = await readFileContent(ref.fileId);
                     if (content && content.trim() !== "") {
                         try {
                             const parsedData = JSON.parse(content);
-                            if (parsedData && parsedData.teams && parsedData.fixtures) {
-                                leagueDataRefs[leagueId].teams = parsedData.teams || ref.teams; // Fallback to initial if teams missing
-                                leagueDataRefs[leagueId].fixtures = parsedData.fixtures || [];
-                                console.log(`Données ${leagueId.toUpperCase()} chargées depuis Drive.`);
-                            } else { console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données locales.`); allLoadedSuccessfully = false;}
-                        } catch (e) { console.error(`Erreur parsing ${leagueId.toUpperCase()} Drive:`, e); showMessage(`Données ${leagueId.toUpperCase()} Drive corrompues.`, 7000, true); allLoadedSuccessfully = false;}
-                    } else console.log(`Fichier ${ref.filename} vide sur Drive. Données locales conservées.`);
-                } else { console.warn(`Impossible trouver/créer ${ref.filename} Drive. Données locales conservées.`); showMessage(`Fichier ${ref.filename} Drive inaccessible.`, 7000, true); allLoadedSuccessfully = false; }
+                             if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.fixtures)) {
+                                leagueDataRefs[leagueId].teams = parsedData.teams;
+                                leagueDataRefs[leagueId].fixtures = parsedData.fixtures;
+                                console.log(`Données ${leagueId.toUpperCase()} chargées avec succès depuis Drive.`);
+                             } else {
+                                 console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive (structure teams/fixtures attendue). Utilisation des données locales par défaut.`);
+                                 // Conserver les données locales par défaut si le fichier Drive est malformé
+                                 allLoadedSuccessfully = false;
+                             }
+                        } catch (e) {
+                            console.error(`Erreur parsing données ${leagueId.toUpperCase()} depuis Drive:`, e, "Contenu:", content.substring(0, 200) + "...");
+                            showMessage(`Données ${leagueId.toUpperCase()} sur Drive corrompues. Utilisation des données locales.`, 7000, true);
+                            allLoadedSuccessfully = false;
+                        }
+                    } else {
+                         console.log(`Fichier ${ref.filename} vide sur Drive. Initialisation par défaut locale.`);
+                         // Les données locales initiales seront utilisées (ou celles générées par startNewSeason)
+                         // On considère que ce n'est pas un chargement "complet" depuis Drive si le fichier était vide.
+                         allLoadedSuccessfully = false; 
+                    }
+                } else {
+                    console.warn(`Impossible trouver/créer le fichier ${ref.filename} sur Drive. Utilisation des données locales par défaut.`);
+                    showMessage(`Fichier ${ref.filename} Drive inaccessible.`, 7000, true);
+                    allLoadedSuccessfully = false;
+                }
             }
-            programsLoaded = allLoadedSuccessfully; // Reflects if ALL leagues were perfectly loaded from Drive
+            programsLoaded = allLoadedSuccessfully; 
             if (allLoadedSuccessfully) console.log("Toutes les données des ligues chargées avec succès depuis Drive.");
-            else console.warn("Certaines données de ligue n'ont pas pu être chargées depuis Drive, utilisant les valeurs par défaut locales ou les dernières valeurs valides.");
+            else console.warn("Certaines données de ligue n'ont pas pu être chargées depuis Drive comme attendu, des données locales ou par défaut peuvent être utilisées.");
         }
         async function saveLeagueDataToDrive(leagueId) {
             const ref = leagueDataRefs[leagueId];
             if (!googleAccessToken) { showMessage("Connectez-vous pour sauvegarder.", 3000, true); return; }
-            if (!ref || !ref.fileId) { showMessage(`Impossible de sauvegarder ${leagueId.toUpperCase()}: Fichier Drive non initialisé.`, 3000, true); console.error(`Tentative de sauvegarde ${leagueId} sans fileId.`); return; }
+            if (!ref || !ref.fileId) { 
+                console.warn(`Tentative de sauvegarde de ${leagueId} sans fileId. Tentative de création du fichier...`);
+                ref.fileId = await findOrCreateFile(ref.filename, JSON.stringify({ teams: ref.teams, fixtures: ref.fixtures, standings: calculateStandings(ref.teams, ref.fixtures) }));
+                if(!ref.fileId){
+                     showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); 
+                     return;
+                }
+            }
             const dataToSave = { teams: ref.teams, fixtures: ref.fixtures, standings: calculateStandings(ref.teams, ref.fixtures) };
-            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive (ID: ${ref.fileId}). Données:`, JSON.parse(JSON.stringify(dataToSave))); // Deep copy for logging
+            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive. Données:`, JSON.parse(JSON.stringify(dataToSave)));
             const success = await updateFileContent(ref.fileId, dataToSave);
-            if (success) showMessage(`Classement ${leagueId.toUpperCase()} sauvegardé !`, 2000); else showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true);
+            if (success) showMessage(`Classement ${leagueId.toUpperCase()} sauvegardé !`, 2000); 
+            else showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true);
         }
 
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
@@ -730,16 +741,18 @@
             } return rounds;
         }
         function generateFullSeasonFixtures(teamNames) { if (teamNames.length < 2) return []; const firstHalf = generateBergerFixtures(teamNames); const secondHalf = firstHalf.map(round => round.map(match => ({ home: match.away, away: match.home, scoreHome: null, scoreAway: null }))); return [...firstHalf, ...secondHalf]; }
-        function generateLDCGroupFixtures(groupTeams) { if (groupTeams.length !== 4) { console.warn("LDC Group fixture generation is simplified for 4 teams."); return generateFullSeasonFixtures(groupTeams).slice(0, (groupTeams.length-1)*2); } return generateFullSeasonFixtures(groupTeams); }
+        function generateLDCGroupFixtures(groupTeams) { if (groupTeams.length !== 4) { console.warn("LDC Group fixture generation for non-4 teams might produce unexpected round count."); } return generateFullSeasonFixtures(groupTeams); }
         function calculateStandings(teamsInfo, fixturesData) {
             const standings = {}; Object.keys(teamsInfo).forEach(name => { standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 }; });
             (fixturesData || []).forEach(round => { (round || []).forEach(match => {
-                if (match && match.scoreHome !== null && match.scoreAway !== null && standings[match.home] && standings[match.away]) {
+                if (match && typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number' && standings[match.home] && standings[match.away]) { // Stricter check for scores
                     const home = standings[match.home]; const away = standings[match.away];
                     home.matchs++; away.matchs++; home.bp += match.scoreHome; home.bc += match.scoreAway; away.bp += match.scoreAway; away.bc += match.scoreHome;
                     if (match.scoreHome > match.scoreAway) home.points += 3; else if (match.scoreAway > match.scoreHome) away.points += 3; else { home.points += 1; away.points += 1; }
                 } }); });
-            Object.values(standings).forEach(team => team.diff = team.bp - team.bc); return standings;
+            Object.values(standings).forEach(team => team.diff = team.bp - team.bc);
+            // console.log("Calculated standings:", standings); // Log pour débogage
+            return standings;
         }
         function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
@@ -759,11 +772,15 @@
         }
         function populateStandingsDOM(standingsBodyId, calculatedStandings) {
             const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
+             const leagueId = standingsBodyId.substring(0, standingsBodyId.indexOf('-')); // Extract leagueId (l1, l2, ldc)
+            const teamsForLogos = leagueDataRefs[leagueId]?.teams || {};
+
             const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
             sortedTeams.forEach(([teamName, teamData], index) => {
                  if(teamName === "BYE") return; 
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${BASE_URL}${teamData.logo || leagueDataRefs[standingsBodyId.substring(0,standingsBodyId.indexOf('-'))].teams[teamName]?.logo || ''}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
+                const logoSrc = teamsForLogos[teamName] ? `${BASE_URL}${teamsForLogos[teamName].logo}` : `${BASE_URL}default_logo.png`; // Fallback logo
+                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
                 standingsBody.appendChild(row);
             });
         }
@@ -783,10 +800,8 @@
             if (score !== null && (isNaN(score) || score < 0)) { input.value = leagueRef.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
             if (!leagueRef.fixtures || !leagueRef.fixtures[roundIndex] || !leagueRef.fixtures[roundIndex][matchIndex]) return;
             if (teamType === 'home') leagueRef.fixtures[roundIndex][matchIndex].scoreHome = score; else leagueRef.fixtures[roundIndex][matchIndex].scoreAway = score;
-            if (leagueRef.fixtures[roundIndex][matchIndex].scoreHome !== null && leagueRef.fixtures[roundIndex][matchIndex].scoreAway !== null) {
-                 const updatedStandings = calculateStandings(leagueRef.teams, leagueRef.fixtures);
-                 if (document.getElementById(leagueRef.standingsBodyId)) populateStandingsDOM(leagueRef.standingsBodyId, updatedStandings);
-            } else { const updatedStandings = calculateStandings(leagueRef.teams, leagueRef.fixtures); if (document.getElementById(leagueRef.standingsBodyId)) populateStandingsDOM(leagueRef.standingsBodyId, updatedStandings); }
+            const updatedStandings = calculateStandings(leagueRef.teams, leagueRef.fixtures);
+            if (document.getElementById(leagueRef.standingsBodyId)) populateStandingsDOM(leagueRef.standingsBodyId, updatedStandings);
         }
         function startNewSeason(leagueId) {
             let leagueRef = leagueDataRefs[leagueId]; if (!leagueRef) return;
@@ -798,15 +813,27 @@
             populateFixturesDOM(leagueRef.fixtureBodyId, leagueRef.fixtures, leagueRef.teams, leagueId);
             if (document.getElementById(leagueRef.standingsBodyId)) populateStandingsDOM(leagueRef.standingsBodyId, initialStandings);
             showMessage(`Nouvelle saison démarrée pour ${leagueId.toUpperCase()}!`, 2000);
-            if (googleAccessToken && leagueRef.fileId) saveLeagueDataToDrive(leagueId);
-            else if (googleAccessToken && !leagueRef.fileId) {
-                 findOrCreateFile(leagueRef.filename, JSON.stringify({ teams: leagueRef.teams, fixtures: leagueRef.fixtures, standings: initialStandings }), "application/json")
-                     .then(fileId => { if (fileId) { leagueRef.fileId = fileId; showMessage(`Fichier ${leagueRef.filename} créé. Saison sauvegardée.`, 3000); } else { showMessage(`Erreur création fichier ${leagueRef.filename}. Saison non sauvegardée.`, 5000, true); } });
-            } else showMessage(`Nouvelle saison locale. Connectez-vous pour sauvegarder.`, 3000);
+            if (googleAccessToken) { // Only try to save if logged in
+                if (!leagueRef.fileId) { // If fileId is not yet known (e.g., first time after login, file not on Drive)
+                    console.log(`Tentative de création et sauvegarde pour la nouvelle saison de ${leagueId}`);
+                    findOrCreateFile(leagueRef.filename, JSON.stringify({ teams: leagueRef.teams, fixtures: leagueRef.fixtures, standings: initialStandings }), "application/json")
+                        .then(fileId => {
+                            if (fileId) {
+                                leagueRef.fileId = fileId; // Store the new fileId
+                                showMessage(`Fichier ${leagueRef.filename} créé. Saison sauvegardée.`, 3000);
+                            } else {
+                                showMessage(`Impossible de créer le fichier ${leagueRef.filename} sur Drive. Saison non sauvegardée.`, 5000, true);
+                            }
+                        });
+                } else { // FileId exists, just save
+                    saveLeagueDataToDrive(leagueId);
+                }
+            } else { showMessage(`Nouvelle saison locale. Connectez-vous pour sauvegarder.`, 3000); }
         }
         function populateLeagueData() {
             for (const leagueId in leagueDataRefs) {
                 const ref = leagueDataRefs[leagueId];
+                console.log(`Populating UI for ${leagueId}, fixtures:`, ref.fixtures);
                 populateFixturesDOM(ref.fixtureBodyId, ref.fixtures, ref.teams, leagueId);
                 populateStandingsDOM(ref.standingsBodyId, calculateStandings(ref.teams, ref.fixtures));
                 populateTeamsGridDOM(ref.teamsGridId, ref.teams);
@@ -829,14 +856,18 @@
                 const mainNavLinks = document.querySelectorAll('header nav ul li a'); mainNavLinks.forEach(l => l.classList.remove('active-nav-link'));
                 if (tabId === "ligue1" || tabId === "ligue2" || tabId === "ligueChampions") document.querySelector('header nav ul li a[href="#competitions-section"]').classList.add('active-nav-link');
                 else if (tabId === "billetterie") document.querySelector('header nav ul li a[href="#billetterie-content"]').classList.add('active-nav-link');
-                else document.querySelector('header nav ul li a[href="#accueil-section"]').classList.add('active-nav-link');
+                else document.querySelector('header nav ul li a[href="#accueil-section"]')?.classList.add('active-nav-link');
             });
         });
         function initializeCarousel(carousel) {
              if (carousel.carouselInstance) return;
             const inner = carousel.querySelector('.carousel-inner'); const items = carousel.querySelectorAll('.carousel-item');
             const dots = carousel.querySelectorAll('.carousel-dot'); const prevBtn = carousel.querySelector('.carousel-prev'); const nextBtn = carousel.querySelector('.carousel-next');
-            if (!inner || items.length <= 1 || !dots.length || !prevBtn || !nextBtn) { if (dots[0]) dots[0].style.display = 'none'; if (prevBtn) prevBtn.style.display = 'none'; if (nextBtn) nextBtn.style.display = 'none'; return; }
+            if (!inner || items.length === 0 || !prevBtn || !nextBtn) return; // Allow carousel with 1 item but no dots/arrows
+            if (items.length <= 1) {
+                if (dots[0]) dots.forEach(d => d.style.display = 'none');
+                prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; return;
+            }
             let currentSlide = 0; const slideCount = items.length; let interval = null;
             function updateCarousel() { inner.style.transform = `translateX(-${currentSlide * 100}%)`; dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
             function startAutoSlide() { stopAutoSlide(); if (carousel.closest('.tab-content.active') && slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
@@ -870,18 +901,18 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            populateLeagueData(); // Populate with initial default data
+            // Init local data first (will be overwritten by Drive if available)
+            startNewSeason('l1'); startNewSeason('l2'); if(Object.keys(ldcTeamsData).length > 0) startNewSeason('ldc');
+            populateLeagueData(); // Populate UI with initial local data
+
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
-            observeActiveTabSections();
             const initialActiveTab = document.querySelector('.tab-btn.active');
-            if(initialActiveTab) initialActiveTab.click(); // Ensure first tab content is processed for observer
-            else if(tabBtns.length > 0) tabBtns[0].click(); // Fallback to first tab if none marked active
-            
+            if(initialActiveTab) initialActiveTab.click(); else if(tabBtns.length > 0) tabBtns[0].click(); 
             const defaultNavLink = document.querySelector('header nav ul li a[href="#accueil-section"]');
             if(defaultNavLink) defaultNavLink.classList.add('active-nav-link');
 
-            checkAndInitGis(); 
-            updateAuthUI(false); // Set initial UI to logged-out state
+            checkAndInitGis(); updateAuthUI(false);
+            console.log("Championnat Peluches Élite V2 Initialisé.");
         });
     </script>
 </body>

@@ -122,6 +122,7 @@
         .btn-ldc { background-color: var(--accent-gold); color: var(--ldc-theme-color-darker); }
         .btn-ldc:hover:not(:disabled) { background-color: #e6ac00; }
 
+
         .section { margin-bottom: 50px; background-color: var(--card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
         .section-title { font-size: 2.2rem; letter-spacing: 1px; }
@@ -131,7 +132,7 @@
             width: 100%; border-collapse: separate; margin-top: 20px; border-spacing: 0 10px;
             font-size: 0.9rem; 
         }
-        .fixtures-table td { /* Cellule de match */
+        .fixtures-table td { 
             background-color: #fff;
             padding: 15px; text-align: center; vertical-align: middle;
             border: 1px solid var(--border-color);
@@ -172,6 +173,7 @@
         #ldc-winner-section .section-title { color: var(--ldc-theme-color-darker); text-shadow: 1px 1px 1px #fff5cc; }
         #ldc-winner-display { font-size: 2.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight:700; margin-top: 15px; }
         #ldc-winner-display .trophy-ldc {font-size: 3.5rem; margin-right: 20px; vertical-align: middle; color: var(--ldc-theme-color-darker); text-shadow: 0 0 10px #fff;}
+
 
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; } 
         .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
@@ -283,7 +285,7 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="index.html"><i class="fas fa-futbol"></i> Ligues Nat.</a></li>
+                    <li><a href="index.html"><i class="fas fa-shield-alt"></i> Ligues Nat.</a></li>
                     <li><a href="champions.html" class="active-nav-link"><i class="fas fa-trophy"></i> LDC</a></li> 
                     <li><a href="index.html#actualites-section-container"><i class="fas fa-newspaper"></i> Actualités</a></li>
                 </ul>
@@ -351,7 +353,8 @@
 
     <div id="message-area" class="message-area" role="status" aria-live="polite"></div>
 
-    <audio id="audio-ldc" src="https://ironworkout.github.io/paul.wallon.bts.sio/ldc.mp3" loop preload="auto"></audio>
+    <audio id="ldc-audio-player" src="https://ironworkout.github.io/paul.wallon.bts.sio/ldc.mp3" loop preload="auto"></audio>
+
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
@@ -383,8 +386,7 @@
         let messageTimeoutId = null;
         let gisCheckRetries = 0;
         let audioContext = null;
-        let currentPlayingAudio = null; 
-        let audioLdc = null; // Déclaration unique globale
+        let ldcAudioPlayer = null; // Renommé pour éviter conflit avec la variable globale précédente
 
         function showMessage(msg, duration = 3000, isError = false) {
             if (!messageArea) { messageArea = document.getElementById('message-area'); if (!messageArea) return; }
@@ -597,36 +599,42 @@
         function populateLdcTeamsGridDOM(teamsData) {
             const teamsGrid = document.getElementById('ldc-teams-grid'); if (!teamsGrid) return; teamsGrid.innerHTML = '';
             if(!teamsData || Object.keys(teamsData).length === 0) {teamsGrid.innerHTML = "<p>Aucune équipe LDC définie.</p>"; return;}
-            Object.entries(teamsData).forEach(([teamName, teamData]) => {
-                 if(teamName === "BYE") return;
+            const activeSeason = ldcDataStore.seasons.find(s => s.season_id === ldcDataStore.active_season_id);
+            const teamsInCurrentTournament = activeSeason ? activeSeason.teams_in_tournament || [] : Object.keys(teamsData); // Fallback si pas de saison active ou pas de teams_in_tournament
+
+            teamsInCurrentTournament.forEach(teamName => {
+                const teamData = teamsData[teamName];
+                 if(teamName === "BYE" || !teamData) return;
                 const teamCard = document.createElement('div'); teamCard.className = 'team-card';
                 teamCard.innerHTML = `<img src="${BASE_URL}${teamData.logo}" alt="${teamName}"><h4>${teamName}</h4>`;
                 teamsGrid.appendChild(teamCard);
             });
         }
         
-        function generateKnockoutStage(stageName, numMatches, teamsAvailable, previousStageWinners = null) {
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
+
+        function generateKnockoutStage(stageName, numExpectedMatches, teamsAvailable, previousStageWinners = null) {
             const stageFixtures = [];
             let currentTeams = previousStageWinners ? [...previousStageWinners] : [...teamsAvailable];
             
-            if (currentTeams.length < numMatches * 2 && stageName !== "Finale") {
-                console.warn(`Pas assez d'équipes pour ${stageName}. Reçu: ${currentTeams.length}, Besoin: ${numMatches * 2}. Remplissage...`);
-                for (let i = 0; i < numMatches; i++) {
-                    const homeTeam = currentTeams[i*2] || `À déterminer ${i*2 + 1}`;
-                    const awayTeam = currentTeams[i*2 + 1] || `À déterminer ${i*2 + 2}`;
+            if (currentTeams.length < numExpectedMatches * 2 && stageName !== "Finale") {
+                console.warn(`Pas assez d'équipes pour ${stageName}. Reçu: ${currentTeams.length}, Besoin: ${numExpectedMatches * 2}. Remplissage...`);
+                for (let i = 0; i < numExpectedMatches; i++) {
+                    const homeTeam = currentTeams[i*2] || `À déterminer`;
+                    const awayTeam = currentTeams[i*2 + 1] || `À déterminer`;
                     stageFixtures.push({ home: homeTeam, away: awayTeam, scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
                 }
                 return stageFixtures;
             }
-            shuffleArray(currentTeams); // Mélanger pour le tirage au sort
+            shuffleArray(currentTeams); 
             
-            for (let i = 0; i < numMatches; i++) {
+            for (let i = 0; i < numExpectedMatches; i++) {
                 if (currentTeams.length >= 2) {
                     const team1 = currentTeams.pop(); const team2 = currentTeams.pop();
                     stageFixtures.push({ home: (i%2 === 0 ? team1 : team2), away: (i%2 === 0 ? team2 : team1), scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
-                } else if (currentTeams.length === 1 && stageName === "Finale") { // Cas spécial pour la finale si une seule équipe avance
+                } else if (currentTeams.length === 1 && stageName === "Finale") { 
                     stageFixtures.push({ home: currentTeams.pop(), away: "En attente...", scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
-                } else if (currentTeams.length > 0) { // S'il reste des équipes mais pas assez pour un match complet
+                } else if (currentTeams.length > 0) { 
                      stageFixtures.push({ home: currentTeams.pop(), away: "BYE", scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
                 }
             }
@@ -639,38 +647,28 @@
             const newSeasonName = `LDC Saison ${newSeasonId}`;
             
             let qualifiedTeams = Object.keys(ldcDataStore.teams || initialLdcData.teams); 
-            if (qualifiedTeams.length < 2) {
-                 showMessage("Pas assez d'équipes définies pour démarrer une saison LDC.", 4000, true);
-                 return;
-            }
+            if (qualifiedTeams.length < 2) { showMessage("Pas assez d'équipes pour démarrer une saison LDC.", 4000, true); return; }
+            
             shuffleArray(qualifiedTeams);
             
-            // Déterminer le nombre de tours basé sur le nombre d'équipes (ex: 16 -> 8emes, 8 -> quarts)
-            let initialStage, initialStageName;
-            if (qualifiedTeams.length >= 16) { initialStageName = "Huitièmes"; initialStage = generateKnockoutStage(initialStageName, 8, qualifiedTeams); }
-            else if (qualifiedTeams.length >= 8) { initialStageName = "Quarts"; initialStage = generateKnockoutStage(initialStageName, 4, qualifiedTeams); }
-            else if (qualifiedTeams.length >= 4) { initialStageName = "Demies"; initialStage = generateKnockoutStage(initialStageName, 2, qualifiedTeams); }
-            else if (qualifiedTeams.length >= 2) { initialStageName = "Finale"; initialStage = generateKnockoutStage(initialStageName, 1, qualifiedTeams); }
-            else { showMessage("Pas assez d'équipes pour un tournoi.",3000,true); return; }
-
+            let numTeamsForTournament = 16; // Default pour 16èmes
+            if (qualifiedTeams.length < 16) numTeamsForTournament = 8; // Passer aux quarts
+            if (qualifiedTeams.length < 8) numTeamsForTournament = 4; // Passer aux demies
+            if (qualifiedTeams.length < 4) numTeamsForTournament = 2; // Directement en finale
+            
+            const selectedTeams = qualifiedTeams.slice(0, numTeamsForTournament);
 
             const newSeason = { 
                 season_id: newSeasonId, nom_saison: newSeasonName, format: "elimination_directe",
-                teams_in_tournament: qualifiedTeams.slice(0, (initialStage.length * 2) ), // Seulement les équipes qui jouent le premier tour
-                phase_elimination: {
-                    huitiemes: initialStageName === "Huitièmes" ? initialStage : [],
-                    quarts: initialStageName === "Quarts" ? initialStage : [],
-                    demies: initialStageName === "Demies" ? initialStage : [],
-                    finale: initialStageName === "Finale" ? initialStage : []
-                },
+                teams_in_tournament: [...selectedTeams], 
+                phase_elimination: { huitiemes: [], quarts: [], demies: [], finale: [] },
                 vainqueur: null
             };
-            // S'assurer que les tours non joués initialement sont vides
-            if (initialStageName !== "Huitièmes") newSeason.phase_elimination.huitiemes = [];
-            if (initialStageName !== "Quarts" && initialStageName !== "Huitièmes") newSeason.phase_elimination.quarts = [];
-            if (initialStageName !== "Demies" && initialStageName !== "Quarts" && initialStageName !== "Huitièmes") newSeason.phase_elimination.demies = [];
-            if (initialStageName !== "Finale" && initialStageName !== "Demies" && initialStageName !== "Quarts" && initialStageName !== "Huitièmes") newSeason.phase_elimination.finale = [];
 
+            if (numTeamsForTournament >= 16) newSeason.phase_elimination.huitiemes = generateKnockoutStage("Huitièmes", 8, selectedTeams);
+            else if (numTeamsForTournament >= 8) newSeason.phase_elimination.quarts = generateKnockoutStage("Quarts", 4, selectedTeams);
+            else if (numTeamsForTournament >= 4) newSeason.phase_elimination.demies = generateKnockoutStage("Demies", 2, selectedTeams);
+            else if (numTeamsForTournament >= 2) newSeason.phase_elimination.finale = generateKnockoutStage("Finale", 1, selectedTeams);
 
             ldcDataStore.seasons.push(newSeason);
             ldcDataStore.active_season_id = newSeasonId;
@@ -766,45 +764,65 @@
             if(typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number') {
                 if(match.scoreHome > match.scoreAway) match.winner = match.home;
                 else if (match.scoreAway > match.scoreHome) match.winner = match.away;
-                else match.winner = null; // Match nul, à gérer (ex: tirs au but) - pour l'instant, pas de vainqueur direct
-            } else {
-                match.winner = null;
-            }
+                else match.winner = null; 
+            } else match.winner = null;
             checkAndAdvanceLdcStage(activeSeason); displayLdcWinner(activeSeason); 
         }
 
         function checkAndAdvanceLdcStage(activeSeason) {
             if (!activeSeason || !activeSeason.phase_elimination) return;
             const pe = activeSeason.phase_elimination;
-            
             const stagesOrder = ['huitiemes', 'quarts', 'demies', 'finale'];
-            let currentStageIndex = stagesOrder.findIndex(stageKey => pe[stageKey] && pe[stageKey].length > 0 && !pe[stageKey].every(m => m.winner));
+            let currentStageFullyPlayed = false;
+            let nextStageToGenerateKey = null;
+            let winnersFromCurrentStage = [];
 
-            if (currentStageIndex === -1 && pe.finale && pe.finale.length > 0 && pe.finale[0].winner) { // Tournoi terminé
-                activeSeason.vainqueur = pe.finale[0].winner;
-                return;
-            }
-            if (currentStageIndex === -1) currentStageIndex = 0; // Si tous les matchs d'un tour sont finis mais le suivant n'est pas généré
+            for(let i = 0; i < stagesOrder.length; i++) {
+                const stageKey = stagesOrder[i];
+                const nextKey = stagesOrder[i+1];
 
-            const currentStageKey = stagesOrder[currentStageIndex];
-            const nextStageKey = stagesOrder[currentStageIndex + 1];
-            
-            if (pe[currentStageKey] && pe[currentStageKey].every(m => m.scoreHome !== null && m.scoreAway !== null) && nextStageKey && (!pe[nextStageKey] || pe[nextStageKey].length === 0)) {
-                const winners = pe[currentStageKey].map(m => {
-                    if (m.scoreHome > m.scoreAway) return m.home;
-                    if (m.scoreAway > m.scoreHome) return m.away;
-                    return null; // Gérer les nuls si prolongations/TAB ne sont pas implémentés ici
-                }).filter(Boolean);
-
-                if (winners.length === pe[currentStageKey].length) { // Tous les matchs ont un vainqueur
-                    const numNextMatches = nextStageKey === 'finale' ? 1 : winners.length / 2;
-                    if (winners.length >= numNextMatches * 2 || (nextStageKey === 'finale' && winners.length >=1) ) {
-                        pe[nextStageKey] = generateKnockoutStage(nextStageKey.charAt(0).toUpperCase() + nextStageKey.slice(1), numNextMatches, [], winners);
-                        populateLdcFixturesDOM(activeSeason);
+                if(pe[stageKey] && pe[stageKey].length > 0) {
+                    if(pe[stageKey].every(m => m.winner)) { // Tous les matchs de ce tour ont un vainqueur
+                        currentStageFullyPlayed = true;
+                        winnersFromCurrentStage = pe[stageKey].map(m => m.winner);
+                        if(nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) {
+                             nextStageToGenerateKey = nextKey;
+                             break; 
+                        }
                     } else {
-                        console.log(`Pas assez de vainqueurs de ${currentStageKey} pour générer ${nextStageKey}. Vainqueurs: ${winners.length}`);
+                        currentStageFullyPlayed = false; // Un match de ce tour n'est pas encore fini
+                        break;
                     }
+                } else if (nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) { // Le tour actuel est vide, mais le suivant pourrait être généré
+                    //  Cela se produit si on commence par ex. par les quarts, huitiemes est vide.
+                    // On cherche les vainqueurs du tour précédent effectif.
+                    let previousEffectiveStageKey = null;
+                    for(let j = i-1; j >=0; j--){
+                        if(pe[stagesOrder[j]] && pe[stagesOrder[j]].length > 0 && pe[stagesOrder[j]].every(m => m.winner)){
+                            previousEffectiveStageKey = stagesOrder[j];
+                            winnersFromCurrentStage = pe[previousEffectiveStageKey].map(m => m.winner);
+                            break;
+                        }
+                    }
+                    if(winnersFromCurrentStage.length > 0 || (i === 0 && activeSeason.teams_in_tournament.length > 0)){ // Si on a des vainqueurs ou si c'est le premier tour à générer
+                         nextStageToGenerateKey = stageKey; // On veut générer le tour actuel car il est vide
+                    }
+                    break;
                 }
+            }
+
+            if (nextStageToGenerateKey) {
+                const numNextMatches = nextStageToGenerateKey === 'finale' ? 1 : (nextStageToGenerateKey === 'demies' ? 2 : (nextStageToGenerateKey === 'quarts' ? 4 : 8));
+                const teamsForNextStage = winnersFromCurrentStage.length > 0 ? winnersFromCurrentStage : activeSeason.teams_in_tournament;
+                
+                if (teamsForNextStage.length >= numNextMatches * 2 || (nextStageToGenerateKey === 'finale' && teamsForNextStage.length >=1) || (teamsForNextStage.length > 0 && numNextMatches * 2 > teamsForNextStage.length )) {
+                     pe[nextStageToGenerateKey] = generateKnockoutStage(nextStageToGenerateKey.charAt(0).toUpperCase() + nextStageToGenerateKey.slice(1), numNextMatches, teamsForNextStage);
+                     populateLdcFixturesDOM(activeSeason);
+                } else {
+                    console.log(`Pas assez d'équipes/vainqueurs pour générer ${nextStageToGenerateKey}. Requis: ${numNextMatches*2}, Dispo: ${teamsForNextStage.length}`);
+                }
+            } else if (pe.finale && pe.finale.length > 0 && pe.finale[0].winner) {
+                activeSeason.vainqueur = pe.finale[0].winner;
             }
         }
         
@@ -818,7 +836,6 @@
         }
         
         const allNavLinks = document.querySelectorAll('header nav ul li a');
-        const tabContents = document.querySelectorAll('.tab-content'); // Sur la page principale, il y en aura, ici non mais le sélecteur reste
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
         function observeActiveTabSections() {
             document.querySelectorAll('.section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el) });
@@ -832,7 +849,7 @@
             if (items.length <= 1) { if (dots && dots.length > 0) dots.forEach(d => d.style.display = 'none'); prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; return; }
             let currentSlide = 0; const slideCount = items.length; let interval = null;
             function updateCarousel() { items.forEach((item, idx) => item.classList.toggle('active', idx === currentSlide)); if (dots.length > 0) dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
-            function startAutoSlide() { stopAutoSlide(); if (slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); } // Pas de closest('.tab-content.active')
+            function startAutoSlide() { stopAutoSlide(); if (slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
             function stopAutoSlide() { if (interval) clearInterval(interval); interval = null; }
             function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
             if (dots.length > 0) dots.forEach((dot, index) => dot.addEventListener('click', () => { currentSlide = index; updateCarousel(); resetAutoSlide(); }));
@@ -855,20 +872,17 @@
         });
         
         const ldcMusicBtn = document.getElementById('ldc-music-btn');
-        if (ldcMusicBtn) { // audioLdc sera défini dans DOMContentLoaded
+        if (ldcMusicBtn) { 
             ldcMusicBtn.addEventListener('click', () => {
                 initAudioContext(); 
-                if (!audioLdc) audioLdc = document.getElementById('audio-ldc'); // S'assurer qu'il est initialisé
-                if (!audioLdc) return;
-
+                if (!ldcAudioPlayer) ldcAudioPlayer = document.getElementById('ldc-audio-player'); 
+                if (!ldcAudioPlayer) return;
                 const icon = ldcMusicBtn.querySelector('i');
-                if (audioLdc.paused || audioLdc.ended) {
-                    audioLdc.play().catch(e => console.warn("Erreur lecture audio LDC:", e));
-                    currentPlayingAudio = audioLdc;
+                if (ldcAudioPlayer.paused || ldcAudioPlayer.ended) {
+                    ldcAudioPlayer.play().catch(e => console.warn("Erreur lecture audio LDC:", e));
                     icon.classList.remove('fa-play'); icon.classList.add('fa-pause');
                 } else {
-                    audioLdc.pause();
-                    currentPlayingAudio = null;
+                    ldcAudioPlayer.pause();
                     icon.classList.remove('fa-pause'); icon.classList.add('fa-play');
                 }
             });
@@ -881,9 +895,9 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            audioLdc = document.getElementById('audio-ldc'); 
+            ldcAudioPlayer = document.getElementById('ldc-audio-player'); 
             
-            populateLdcUI(); // Populate UI with initial local data or empty state
+            populateLdcUI(); 
             observeActiveTabSections();
             
             const activeNavLink = document.querySelector('header nav ul li a[href="champions.html"]');

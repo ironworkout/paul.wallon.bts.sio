@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat des Peluches Élite V2 - Nav Unique Corrigée</title>
+    <title>Championnat des Peluches Élite V2 - Ambiance Sonore</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,9 +91,9 @@
             color: var(--accent-gold);
             background-color: rgba(255, 193, 7, 0.1); 
             border-color: var(--accent-gold);
-            box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); /* Correction RGB pour accent-gold */
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); 
         }
-        nav ul li a[data-tab-link].active-nav-link,
+        nav ul li a[data-tab-link].active-nav-link, 
         nav ul li a[data-tab-link].tab-active {
             color: var(--text-color-light) !important; 
             font-weight: 700;
@@ -345,7 +345,7 @@
         }
         @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
-            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} /* Ajustement pour menu hamburger */
+            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} /* Unifier padding mobile */
             .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
             .section-title { font-size: 1.6rem; }
             .btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -543,6 +543,11 @@
 
     <div id="message-area" class="message-area" role="status" aria-live="polite"></div>
 
+    <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
+    <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
+    <!-- Pas d'audio LDC sur cette page, il sera sur champions.html -->
+
+
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
         const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file';
@@ -585,6 +590,10 @@
         let messageArea = null;
         let messageTimeoutId = null;
         let gisCheckRetries = 0;
+        let audioContext = null;
+        let currentPlayingAudio = null;
+        let audioElements = {};
+
 
         function showMessage(msg, duration = 3000, isError = false) {
             if (!messageArea) { messageArea = document.getElementById('message-area'); if (!messageArea) return; }
@@ -638,6 +647,7 @@
             } else handleTokenError({ error: "Réponse de token invalide" });
         }
         function handleAuthClick() {
+            initAudioContext(); // Init audio context on first user interaction
             if (!tokenClient) { showMessage("Services Google non prêts.", 3000); checkAndInitGis(); return; }
             const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
             if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
@@ -957,8 +967,8 @@
                 if(fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
                 if(standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
             } else { 
-                const colsFixtures = fixturesBody?.closest('table')?.querySelector('thead th')?.length || 4;
-                const colsStandings = standingsBody?.closest('table')?.querySelector('thead th')?.length || 7;
+                const colsFixtures = fixturesBody?.closest('table')?.querySelector('thead tr th')?.length || 4;
+                const colsStandings = standingsBody?.closest('table')?.querySelector('thead tr th')?.length || 7;
                 if (fixturesBody) fixturesBody.innerHTML = `<tr><td colspan="${colsFixtures}">Sélectionnez ou créez une saison.</td></tr>`;
                 if (standingsBody) standingsBody.innerHTML = `<tr><td colspan="${colsStandings}">Sélectionnez ou créez une saison.</td></tr>`;
             }
@@ -985,7 +995,6 @@
                 let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
                 let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('');
 
-                // Correction: Assurer que les boutons sont DANS la cellule des actions
                 row.innerHTML = `
                     <td class="team-info"><img src="${BASE_URL}${allTeamsInStore[teamName].logo}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
                     <td class="trophy-cell">
@@ -1042,6 +1051,39 @@
             if (activeTabNode) { activeTabNode.querySelectorAll('.section').forEach(section => { const rect = section.getBoundingClientRect(); if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') { section.style.opacity = '1'; section.style.transform = 'translateY(0)'; observer.unobserve(section); } }); }
         }
         
+        const audioL1 = document.getElementById('audio-l1');
+        const audioL2 = document.getElementById('audio-l2');
+        // const audioLDC = document.getElementById('audio-ldc'); // Pourrait être géré sur champions.html
+
+        function playLeagueMusic(leagueId) {
+            initAudioContext(); // S'assurer que l'audio context est prêt
+            [audioL1, audioL2].forEach(audio => {
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+
+            if (leagueId === 'ligue1' && audioL1) {
+                currentPlayingAudio = audioL1;
+                audioL1.play().catch(e => console.warn("Erreur lecture audio L1:", e));
+            } else if (leagueId === 'ligue2' && audioL2) {
+                currentPlayingAudio = audioL2;
+                audioL2.play().catch(e => console.warn("Erreur lecture audio L2:", e));
+            } else {
+                currentPlayingAudio = null;
+            }
+        }
+        function stopAllLeagueMusic() {
+            [audioL1, audioL2].forEach(audio => {
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+            currentPlayingAudio = null;
+        }
+
         function setActiveTab(tabId) {
             allNavLinks.forEach(l => {
                 l.classList.remove('active-nav-link', 'tab-active');
@@ -1049,9 +1091,9 @@
                     l.classList.add('active-nav-link', 'tab-active');
                 }
             });
-            // Gérer le lien "Accueil L1" spécifiquement
-            if (tabId === 'ligue1') {
-                 document.querySelector('header nav ul li a[href="#"][data-tab-link="ligue1"]')?.classList.add('active-nav-link','tab-active');
+            // Si c'est un lien "Accueil L1" depuis le logo/header, il faut aussi activer l'onglet "L1"
+            if (tabId === 'ligue1' && !document.querySelector('header nav ul li a[data-tab-link="ligue1"].tab-active')) {
+                 document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link','tab-active');
             }
 
 
@@ -1059,9 +1101,14 @@
             const targetContent = document.getElementById(`${tabId}-content`);
             if (targetContent) {
                 targetContent.classList.add('active');
-            } else if (tabId === 'accueil-section-l1' || tabId === 'ligue1') { // Si on clique sur Accueil L1 ou l'onglet L1
-                 document.getElementById('ligue1-content')?.classList.add('active');
-                 document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
+                playLeagueMusic(tabId); // Jouer la musique de la ligue activée
+            } else {
+                stopAllLeagueMusic(); // Arrêter la musique si aucun onglet de ligue n'est actif
+                if (tabId === 'accueil-section-l1') { // Cas spécifique de l'accueil
+                     document.getElementById('ligue1-content')?.classList.add('active');
+                     document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
+                     playLeagueMusic('ligue1');
+                }
             }
              observeActiveTabSections();
              document.querySelectorAll('.carousel').forEach(carousel => {
@@ -1075,22 +1122,31 @@
                 const isTabLink = link.hasAttribute('data-tab-link');
                 const href = link.getAttribute('href');
 
-                if (isTabLink && href === "#") e.preventDefault();
-                
-                if (isTabLink) {
+                // Gestion du contexte audio lors du premier clic utilisateur
+                if(!audioContext) initAudioContext(); 
+
+                if (isTabLink && (href === "#" || href === "#" + link.dataset.tabLink + "-content" || href === "#accueil-section-l1" && link.dataset.tabLink === "ligue1" )) {
+                    e.preventDefault();
                     const tabId = link.dataset.tabLink;
                     setActiveTab(tabId);
                 } else if (href && href.startsWith("#") && href !== "#") { 
                      allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
                      link.classList.add('active-nav-link');
                      tabContents.forEach(c => c.classList.remove('active')); 
-                     // Pour les ancres simples comme #actualites-section-container, on ne change pas l'onglet actif
-                     // On pourrait vouloir réactiver l'onglet précédent si on navigue depuis une ancre.
-                     // Pour l'instant, on désactive tous les onglets et laisse le scroll faire.
-                     const currentActiveTabContent = document.querySelector('.tab-content.active');
-                     if (currentActiveTabContent) currentActiveTabContent.classList.remove('active'); // Cacher l'onglet actif
+                     stopAllLeagueMusic();
+                     const targetSectionId = href.substring(1);
+                     const targetSection = document.getElementById(targetSectionId);
+                     if (targetSection) {
+                        // Si l'ancre est dans un contenu d'onglet non actif, activer cet onglet
+                        const parentTabContent = targetSection.closest('.tab-content');
+                        if (parentTabContent && !parentTabContent.classList.contains('active')) {
+                            const parentTabId = parentTabContent.id.replace('-content', '');
+                            setActiveTab(parentTabId); // Ceci va aussi gérer la musique
+                        }
+                        targetSection.scrollIntoView({behavior: 'smooth'});
+                     }
                 }
-                
+                // Les liens externes (comme champions.html) fonctionnent normalement.
                 if (window.innerWidth <= 768 && nav.classList.contains('active')) { 
                     nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; 
                 }
@@ -1138,12 +1194,19 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
+            audioElements = {
+                l1: document.getElementById('audio-l1'),
+                l2: document.getElementById('audio-l2')
+                // ldc: document.getElementById('audio-ldc') // si géré ici
+            };
+
             populateAllLeaguesUI(); populatePalmaresTable();
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
-            setActiveTab('ligue1'); // Active L1 par défaut au chargement
+            
+            setActiveTab('ligue1');
             observeActiveTabSections();
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Nav Unique Corrigée).");
+            console.log("Championnat Peluches Élite V2 Initialisé (Nav Unique, Palmarès Épique).");
         });
     </script>
 </body>

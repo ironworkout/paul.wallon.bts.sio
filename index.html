@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat des Peluches Élite V2 - Ambiance Sonore</title>
+    <title>Championnat des Peluches Élite V2 - Audio Corrigé</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -308,7 +308,7 @@
             max-width: 90%; text-align: center; 
         }
         .message-area.visible { opacity: 1; visibility: visible; transform: translate(-50%, -15px) ; pointer-events: auto; }
-        .message-area.error-message { background-color: rgba(var(--neon-red-rgb),0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
+        .message-area.error-message { background-color: rgba(255, 49, 49, 0.8); /* Utilisation var(--neon-red-rgb) indirectement */ border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
         @media (max-width: 1100px) { 
              nav ul li { margin-left: 10px; } 
@@ -345,7 +345,7 @@
         }
         @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
-            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} /* Unifier padding mobile */
+            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} 
             .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
             .section-title { font-size: 1.6rem; }
             .btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -545,7 +545,7 @@
 
     <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
     <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
-    <!-- Pas d'audio LDC sur cette page, il sera sur champions.html -->
+    <audio id="audio-ldc-preload" src="https://ironworkout.github.io/paul.wallon.bts.sio/ldc.mp3" preload="auto"></audio>
 
 
     <script>
@@ -593,6 +593,12 @@
         let audioContext = null;
         let currentPlayingAudio = null;
         let audioElements = {};
+        
+        function initAudioContext() { // Définition de la fonction
+            if (audioContext && audioContext.state === 'running') return; 
+            if (!audioContext) { try { window.AudioContext = window.AudioContext || window.webkitAudioContext; if (window.AudioContext) audioContext = new AudioContext(); else return; } catch (e) { return; } }
+            if (audioContext.state === 'suspended') audioContext.resume().catch(e => {});
+        }
 
 
         function showMessage(msg, duration = 3000, isError = false) {
@@ -647,7 +653,7 @@
             } else handleTokenError({ error: "Réponse de token invalide" });
         }
         function handleAuthClick() {
-            initAudioContext(); // Init audio context on first user interaction
+            initAudioContext(); 
             if (!tokenClient) { showMessage("Services Google non prêts.", 3000); checkAndInitGis(); return; }
             const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
             if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
@@ -1053,34 +1059,26 @@
         
         const audioL1 = document.getElementById('audio-l1');
         const audioL2 = document.getElementById('audio-l2');
-        // const audioLDC = document.getElementById('audio-ldc'); // Pourrait être géré sur champions.html
+        let currentPlayingAudio = null;
 
         function playLeagueMusic(leagueId) {
-            initAudioContext(); // S'assurer que l'audio context est prêt
+            initAudioContext(); 
             [audioL1, audioL2].forEach(audio => {
-                if (audio && !audio.paused) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
+                if (audio && currentPlayingAudio === audio && !audio.paused) return; // Déjà en train de jouer
+                if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; }
             });
 
-            if (leagueId === 'ligue1' && audioL1) {
-                currentPlayingAudio = audioL1;
-                audioL1.play().catch(e => console.warn("Erreur lecture audio L1:", e));
-            } else if (leagueId === 'ligue2' && audioL2) {
-                currentPlayingAudio = audioL2;
-                audioL2.play().catch(e => console.warn("Erreur lecture audio L2:", e));
-            } else {
-                currentPlayingAudio = null;
-            }
+            let audioToPlay = null;
+            if (leagueId === 'ligue1' && audioL1) audioToPlay = audioL1;
+            else if (leagueId === 'ligue2' && audioL2) audioToPlay = audioL2;
+            
+            if (audioToPlay) {
+                currentPlayingAudio = audioToPlay;
+                audioToPlay.play().catch(e => console.warn("Erreur lecture audio:", e));
+            } else { currentPlayingAudio = null; }
         }
         function stopAllLeagueMusic() {
-            [audioL1, audioL2].forEach(audio => {
-                if (audio && !audio.paused) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
-            });
+            [audioL1, audioL2].forEach(audio => { if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; } });
             currentPlayingAudio = null;
         }
 
@@ -1091,9 +1089,12 @@
                     l.classList.add('active-nav-link', 'tab-active');
                 }
             });
-            // Si c'est un lien "Accueil L1" depuis le logo/header, il faut aussi activer l'onglet "L1"
-            if (tabId === 'ligue1' && !document.querySelector('header nav ul li a[data-tab-link="ligue1"].tab-active')) {
-                 document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link','tab-active');
+             // Gérer le logo comme "Accueil L1"
+            const logoLink = document.querySelector('.logo.nav-link');
+            if (tabId === 'ligue1') {
+                logoLink?.classList.add('active-nav-link', 'tab-active');
+            } else {
+                logoLink?.classList.remove('active-nav-link', 'tab-active');
             }
 
 
@@ -1101,10 +1102,10 @@
             const targetContent = document.getElementById(`${tabId}-content`);
             if (targetContent) {
                 targetContent.classList.add('active');
-                playLeagueMusic(tabId); // Jouer la musique de la ligue activée
+                playLeagueMusic(tabId); 
             } else {
-                stopAllLeagueMusic(); // Arrêter la musique si aucun onglet de ligue n'est actif
-                if (tabId === 'accueil-section-l1') { // Cas spécifique de l'accueil
+                stopAllLeagueMusic(); 
+                if (tabId === 'accueil-section-l1' || tabId === 'ligue1') { 
                      document.getElementById('ligue1-content')?.classList.add('active');
                      document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
                      playLeagueMusic('ligue1');
@@ -1122,10 +1123,9 @@
                 const isTabLink = link.hasAttribute('data-tab-link');
                 const href = link.getAttribute('href');
 
-                // Gestion du contexte audio lors du premier clic utilisateur
-                if(!audioContext) initAudioContext(); 
+                if(!audioContext && isTabLink) initAudioContext(); // Init audio au premier clic sur un onglet avec musique
 
-                if (isTabLink && (href === "#" || href === "#" + link.dataset.tabLink + "-content" || href === "#accueil-section-l1" && link.dataset.tabLink === "ligue1" )) {
+                if (isTabLink && (href === "#" || href.startsWith("#") && document.getElementById(href.substring(1))?.classList.contains('tab-content'))) {
                     e.preventDefault();
                     const tabId = link.dataset.tabLink;
                     setActiveTab(tabId);
@@ -1137,16 +1137,15 @@
                      const targetSectionId = href.substring(1);
                      const targetSection = document.getElementById(targetSectionId);
                      if (targetSection) {
-                        // Si l'ancre est dans un contenu d'onglet non actif, activer cet onglet
                         const parentTabContent = targetSection.closest('.tab-content');
                         if (parentTabContent && !parentTabContent.classList.contains('active')) {
                             const parentTabId = parentTabContent.id.replace('-content', '');
-                            setActiveTab(parentTabId); // Ceci va aussi gérer la musique
+                            setActiveTab(parentTabId); 
                         }
-                        targetSection.scrollIntoView({behavior: 'smooth'});
+                        // Le scroll vers l'ancre se fait naturellement pour les liens d'ancre.
                      }
                 }
-                // Les liens externes (comme champions.html) fonctionnent normalement.
+                
                 if (window.innerWidth <= 768 && nav.classList.contains('active')) { 
                     nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; 
                 }
@@ -1194,17 +1193,12 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            audioElements = {
-                l1: document.getElementById('audio-l1'),
-                l2: document.getElementById('audio-l2')
-                // ldc: document.getElementById('audio-ldc') // si géré ici
-            };
+            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2') };
 
             populateAllLeaguesUI(); populatePalmaresTable();
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
             
-            setActiveTab('ligue1');
-            observeActiveTabSections();
+            setActiveTab('ligue1'); // Active L1 par défaut au chargement
             checkAndInitGis(); updateAuthUI(false);
             console.log("Championnat Peluches Élite V2 Initialisé (Nav Unique, Palmarès Épique).");
         });

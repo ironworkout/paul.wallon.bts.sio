@@ -23,7 +23,7 @@
             --ldc-border-color: rgba(0, 174, 255, 0.4);
             --ldc-border-color-subtle: rgba(0, 174, 255, 0.2);
             --ldc-team-bg: rgba(230, 230, 240, 0.9);
-            --ldc-team-bg-winner: rgba(96, 165, 250, 0.8);
+            --ldc-team-bg-winner: rgba(96, 165, 250, 0.8); /* Un bleu plus distinctif pour le gagnant */
 
             --neon-green: #39FF14; 
             --neon-red: #FF3131; 
@@ -217,6 +217,12 @@
             width: 20px; height: 20px;
             margin-right: 8px; object-fit: contain;
         }
+        .team-slot span.placeholder-logo {
+             width: 20px; height: 20px; margin-right: 8px;
+             display: inline-flex; align-items: center; justify-content: center;
+             background-color: rgba(0,0,0,0.1); border-radius: 50%;
+             font-weight: bold; color: var(--ldc-mid-blue);
+        }
         .team-slot .team-name {
             flex-grow: 1; white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis;
@@ -232,14 +238,30 @@
         .team-slot input[type="number"].score-input-bracket::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
-        .team-slot.winner { background-color: var(--ldc-team-bg-winner); color: var(--ldc-text-light); }
-        .team-slot.loser { opacity: 0.7; }
+        .team-slot.winner { 
+            background-color: var(--ldc-team-bg-winner); 
+            color: var(--ldc-deep-blue); /* Ou var(--ldc-text-light) si meilleur contraste */
+            font-weight: bold;
+            box-shadow: 0 0 8px var(--ldc-light-blue);
+        }
+        .team-slot.loser { opacity: 0.6; filter: grayscale(50%); }
         .match-label {
-            position: absolute; background-color: var(--ldc-mid-blue);
+            position: absolute; 
+            top: 50%; transform: translateY(-50%);
+            left: calc(100% + 5px); /* Position à droite du match */
+            background-color: var(--ldc-mid-blue);
             color: var(--ldc-silver); font-size: 0.7rem;
             padding: 1px 4px; border-radius: 3px;
-            border: 1px solid var(--ldc-border-color); z-index: 1;
+            border: 1px solid var(--ldc-border-color); 
+            z-index: 1;
+            white-space: nowrap;
         }
+         /* Pour les colonnes de droite, mettre le label à gauche */
+        .column-r16-right .match-label, .column-qf-right .match-label, .column-sf-right .match-label {
+            left: auto;
+            right: calc(100% + 5px);
+        }
+
         .bracket-centerpiece-visual {
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
@@ -250,7 +272,7 @@
             filter: drop-shadow(0 0 15px var(--current-accent-gold));
             margin-bottom: 20px;
         }
-        .final-match-placeholder { width: 220px; }
+        .final-match-placeholder { width: 220px; } /* S'assurer qu'il y a assez de place pour le match final */
         
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; } 
         .team-card { 
@@ -297,7 +319,7 @@
             .knockout-bracket-visual { padding: 15px 5px; }
             .bracket-column.rounds-8-4, .bracket-column.round-semi { min-width: 160px; }
             .team-slot { font-size: 0.8rem; padding: 6px 8px; }
-            .team-slot img.team-logo { width: 18px; height: 18px; margin-right: 6px; }
+            .team-slot img.team-logo, .team-slot span.placeholder-logo { width: 18px; height: 18px; margin-right: 6px; }
         }
         @media (max-width: 992px) {
             .header-container { flex-wrap: wrap; }
@@ -311,6 +333,7 @@
             nav ul li a:hover, nav ul li a.active-nav-link { background-color: rgba(0, 174, 255, 0.2); border-color:transparent; color: var(--current-accent-gold); transform: none; box-shadow: none;}
             .teams-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } 
             .bracket-centerpiece-visual .trophy-icon { font-size: 4rem; }
+            .match-label { font-size: 0.65rem; padding: 1px 3px; }
         }
         @media (max-width: 768px) {
             .logo h1 { font-size: 1.5rem; }
@@ -319,6 +342,30 @@
             .action-buttons { flex-direction: column; align-items: stretch;}
             .season-selector-container { flex-direction: column; align-items: stretch; width: 100%;}
             .season-selector-container select { width: 100%; margin-bottom: 10px;}
+            /* For smaller screens, stack bracket columns if necessary */
+            .knockout-bracket-visual {
+                flex-direction: column;
+                align-items: center;
+                min-height: unset; /* Remove fixed min-height */
+            }
+            .bracket-column { 
+                width: 100%; /* Full width for stacked columns */
+                max-width: 400px; /* Limit width of individual columns */
+                min-width: unset; /* Reset min-width for stacking */
+                margin-bottom: 20px; /* Space between stacked columns */
+                padding: 0;
+            }
+            .bracket-column.rounds-8-4, .bracket-column.round-semi { min-width: unset; }
+            .match-label {
+                 /* position: static; transform: none;  Could also put label inside match item */
+                 font-size: 0.75rem; padding: 2px 5px; margin-top: 5px;
+                 display: inline-block; /* Or block if centered */
+            }
+             /* Adjust label positioning for stacked view if needed */
+            .match-label,
+            .column-r16-right .match-label, .column-qf-right .match-label, .column-sf-right .match-label {
+                position: relative; transform: none; left: auto; right: auto; margin-top: 5px;
+            }
         }
          @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
@@ -328,11 +375,12 @@
             .section-title { font-size: 1.6rem; }
             .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn { padding: 10px 15px; font-size: 0.9rem;}
             .team-slot { font-size: 0.75rem; padding: 5px; }
-            .team-slot img.team-logo { width: 16px; height: 16px; }
+            .team-slot img.team-logo, .team-slot span.placeholder-logo { width: 16px; height: 16px; }
             .team-slot input[type="number"].score-input-bracket { width: 25px; font-size:0.7rem; }
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
             .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--current-accent-gold); margin: 5px auto 0; }
+            .final-match-placeholder { width: 100%; max-width: 280px; }
         }
 
     </style>
@@ -531,8 +579,8 @@
                 console.log("Token reçu.");
                 googleAccessToken = tokenResponse.access_token;
                 localStorage.setItem('google_access_token_ldc', googleAccessToken);
-                updateAuthUI(true); // Met à jour l'UI avant de charger les données
-                await loadLdcDataFromDrive(); // loadLdcDataFromDrive mettra à jour le statut Drive
+                updateAuthUI(true); 
+                await loadLdcDataFromDrive(); 
                 populateLdcUI(); 
             } else {
                 console.error("Réponse de token invalide:", tokenResponse);
@@ -570,7 +618,7 @@
             const driveStatusText = document.getElementById('drive-status-text');
             const driveStatusDiv = document.getElementById('drive-status');
 
-            if (!signinButton || !driveStatusDiv ) return; // driveStatusText est optionnel ici
+            if (!signinButton || !driveStatusDiv ) return;
 
             if (isLoggedIn) {
                 signinButton.innerHTML = '<i class="fab fa-google-drive"></i> Déconnexion Drive';
@@ -609,7 +657,6 @@
 
                 if (searchResult.files && searchResult.files.length > 0) {
                     if(driveStatusText) driveStatusText.textContent = "Fichier trouvé";
-                    // Ne pas mettre 'success' ici, la fonction appelante (loadLdcDataFromDrive) le fera après lecture.
                     return searchResult.files[0].id;
                 } else {
                     if(driveStatusText) driveStatusText.textContent = "Création fichier...";
@@ -639,7 +686,6 @@
         
         async function readFileContent(fileId) {
             if (!googleAccessToken || !fileId) return null;
-            // Le statut 'loading' est géré par la fonction appelante (loadLdcDataFromDrive)
             try {
                 const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
                     headers: { 'Authorization': `Bearer ${googleAccessToken}` }
@@ -649,7 +695,6 @@
             } catch (error) {
                 console.error('Erreur Drive (readFileContent):', error);
                 showMessage(`Erreur lecture Drive: ${error.message}`, 5000, true);
-                // Le statut 'error' sera géré par la fonction appelante
                 return null;
             }
         }
@@ -674,7 +719,7 @@
                 if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
                 setTimeout(() => { 
                     if(driveStatusText && driveStatusText.textContent === "Sauvegardé!" && googleAccessToken) {
-                        driveStatusText.textContent = "Connecté"; // Retour à l'état normal après succès
+                        driveStatusText.textContent = "Connecté"; 
                         if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
                     }
                  }, 2000);
@@ -724,7 +769,7 @@
                     fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
                 }
             }
-            ldcDataStore.fileId = fileId; // S'assurer que le store a le bon fileId
+            ldcDataStore.fileId = fileId; 
 
 
             if (ldcDataStore.fileId) {
@@ -818,7 +863,7 @@
             if (teamsInCurrentTournament.length === 0 && activeSeason) {
                  teamsGrid.innerHTML = "<p>Aucune équipe qualifiée pour cette saison. Les équipes seront affichées une fois la saison commencée.</p>";
                  return;
-            } else if (!activeSeason) { // Si aucune saison active, ne rien afficher ou afficher un message.
+            } else if (!activeSeason) { 
                  teamsGrid.innerHTML = "<p>Veuillez sélectionner ou créer une saison.</p>";
                  return;
             }
@@ -883,7 +928,6 @@
                 phase_elimination: { huitiemes: [], quarts: [], demies: [], finale: [] },
                 vainqueur: null
             };
-            // La génération des matchs de la première phase se fera dans checkAndAdvanceLdcStage appelé par populateLdcUI
             ldcDataStore.seasons.push(newSeason); ldcDataStore.active_season_id = newSeasonId;
             populateLdcUI();
             showMessage(`Nouvelle saison LDC "${newSeasonName}" créée avec ${numTeamsForTournament} équipes!`, 2500);
@@ -913,6 +957,7 @@
             if(googleAccessToken) saveLdcDataToDrive(); 
         }
 
+        // ---------- CORRECTION APPLIQUÉE ICI -----------
         function populateLdcFixturesDOM(activeSeason) {
             const bracketContainer = document.getElementById('ldc-knockout-stages');
             if (!bracketContainer || !activeSeason || !activeSeason.phase_elimination) {
@@ -923,21 +968,20 @@
 
             const teamsInfo = ldcDataStore.teams || {};
             const pe = activeSeason.phase_elimination;
-            let numTeamsTournament = activeSeason.teams_in_tournament.length;
-            
+
             const createTeamSlotHTML = (teamName, score, stageKey, matchIdx, teamType, match) => {
                 const teamData = teamsInfo[teamName];
                 const logo = teamData ? `<img src="${BASE_URL}${teamData.logo}" alt="${teamName}" class="team-logo">` : (teamName && teamName !== "À déterminer" && teamName !== "BYE" ? '<span class="team-logo placeholder-logo">?</span>' : '');
                 const scoreVal = score !== null ? score : '';
                 let scoreInputHTML = '';
-                // S'assurer que match est bien un objet avant d'accéder à ses propriétés
                 if (teamName && teamName !== "À déterminer" && teamName !== "BYE" && match && typeof match === 'object' && match.home !== "BYE" && match.away !== "BYE") {
                      scoreInputHTML = `<input type="number" class="score-input-bracket" value="${scoreVal}" min="0" data-stagekey="${stageKey}" data-matchidx="${matchIdx}" data-team="${teamType}">`;
                 }
                 
                 let winnerClass = '';
                 if(match && typeof match === 'object' && match.winner === teamName && teamName !== "BYE") winnerClass = 'winner';
-                else if (match && typeof match === 'object' && match.winner && match.winner !== teamName && teamName !== "BYE") winnerClass = 'loser';
+                else if (match && typeof match === 'object' && match.winner && match.winner !== teamName && teamName !== "BYE" && teamName !== "À déterminer") winnerClass = 'loser';
+
 
                 return `<div class="team-slot ${winnerClass}" data-team-name="${teamName || ''}">
                             ${logo}
@@ -946,59 +990,68 @@
                         </div>`;
             };
 
-            const createMatchItemHTML = (match, stageKey, matchIdxParam = -1) => {
-                 const matchIndex = matchIdxParam !== -1 ? matchIdxParam : (pe[stageKey] ? pe[stageKey].indexOf(match) : -1) ;
-                 if (matchIndex === -1 && matchIdxParam === -1) { 
-                    console.warn("Index de match invalide:", match, stageKey);
+            const createMatchItemHTML = (match, stageKey, matchIdxParam) => {
+                 const matchIndex = matchIdxParam; 
+                 if (matchIndex === -1 || typeof matchIndex === 'undefined') { 
+                    console.warn("Index de match invalide pour createMatchItemHTML:", match, stageKey, matchIdxParam);
                     return ''; 
                  }
 
                 const labelText = `${stageKey.substring(0,2).toUpperCase()}-${matchIndex + 1}`; 
-                let labelStyle = ''; 
                 
                 return `<div class="bracket-match-item" data-match-id="${match.match_id || `${stageKey}-${matchIndex}`}">
                             ${createTeamSlotHTML(match.home, match.scoreHome, stageKey, matchIndex, 'home', match)}
                             ${createTeamSlotHTML(match.away, match.scoreAway, stageKey, matchIndex, 'away', match)}
-                            ${stageKey !== 'finale' ? `<div class="match-label" style="${labelStyle}">${labelText}</div>` : ''}
+                            ${stageKey !== 'finale' ? `<div class="match-label">${labelText}</div>` : ''}
                         </div>`;
             };
             
             const columns = { r16L: null, qfL: null, sfL: null, final: null, sfR: null, qfR: null, r16R: null };
 
-            if (numTeamsTournament >= 16) {
+            // Afficher les Huitièmes si des matchs existent pour cette phase
+            if (pe.huitiemes && pe.huitiemes.length > 0) {
                 columns.r16L = document.createElement('div'); columns.r16L.className = 'bracket-column rounds-8-4 column-r16-left';
                 columns.r16R = document.createElement('div'); columns.r16R.className = 'bracket-column rounds-8-4 column-r16-right';
-                for (let i = 0; i < 8; i++) { 
-                    if (pe.huitiemes && pe.huitiemes[i]) {
-                        if (i < 4) columns.r16L.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
+                const midPoint = Math.ceil(pe.huitiemes.length / 2);
+                for (let i = 0; i < pe.huitiemes.length; i++) { 
+                    if (pe.huitiemes[i]) {
+                        if (i < midPoint) columns.r16L.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
                         else columns.r16R.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
                     }
                 }
             }
-            if (numTeamsTournament >= 8) {
-                columns.qfL = columns.qfL || document.createElement('div'); columns.qfL.className = 'bracket-column rounds-8-4 column-qf-left';
-                columns.qfR = columns.qfR || document.createElement('div'); columns.qfR.className = 'bracket-column rounds-8-4 column-qf-right';
-                 for (let i = 0; i < 4; i++) { 
-                    if (pe.quarts && pe.quarts[i]) {
-                        if (i < 2) columns.qfL.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
+            
+            // Afficher les Quarts si des matchs existent
+            if (pe.quarts && pe.quarts.length > 0) {
+                columns.qfL = document.createElement('div'); columns.qfL.className = 'bracket-column rounds-8-4 column-qf-left';
+                columns.qfR = document.createElement('div'); columns.qfR.className = 'bracket-column rounds-8-4 column-qf-right';
+                 const midPoint = Math.ceil(pe.quarts.length / 2);
+                 for (let i = 0; i < pe.quarts.length; i++) { 
+                    if (pe.quarts[i]) {
+                        if (i < midPoint) columns.qfL.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
                         else columns.qfR.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
                     }
                  }
             }
-            if (numTeamsTournament >= 4) {
-                columns.sfL = columns.sfL || document.createElement('div'); columns.sfL.className = 'bracket-column round-semi column-sf-left';
-                columns.sfR = columns.sfR || document.createElement('div'); columns.sfR.className = 'bracket-column round-semi column-sf-right';
-                 for (let i = 0; i < 2; i++) { 
-                    if (pe.demies && pe.demies[i]) {
-                        if (i < 1) columns.sfL.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
+
+            // Afficher les Demies si des matchs existent
+            if (pe.demies && pe.demies.length > 0) {
+                columns.sfL = document.createElement('div'); columns.sfL.className = 'bracket-column round-semi column-sf-left';
+                columns.sfR = document.createElement('div'); columns.sfR.className = 'bracket-column round-semi column-sf-right';
+                 const midPoint = Math.ceil(pe.demies.length / 2);
+                 for (let i = 0; i < pe.demies.length; i++) { 
+                    if (pe.demies[i]) {
+                        if (i < midPoint) columns.sfL.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
                         else columns.sfR.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
                     }
                  }
             }
-            if (numTeamsTournament >= 2) {
-                columns.final = columns.final || document.createElement('div'); columns.final.className = 'bracket-centerpiece-visual';
+
+            // Afficher la Finale si un match existe
+            if (pe.finale && pe.finale.length > 0) {
+                columns.final = document.createElement('div'); columns.final.className = 'bracket-centerpiece-visual';
                 columns.final.innerHTML = '<i class="fas fa-trophy trophy-icon"></i>';
-                if (pe.finale && pe.finale[0]) {
+                if (pe.finale[0]) {
                     const finalMatchDiv = document.createElement('div');
                     finalMatchDiv.className = 'final-match-placeholder';
                     finalMatchDiv.innerHTML = createMatchItemHTML(pe.finale[0], 'finale', 0);
@@ -1009,7 +1062,7 @@
             if(columns.r16L && columns.r16L.innerHTML.trim() !== '') bracketContainer.appendChild(columns.r16L);
             if(columns.qfL && columns.qfL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.qfL);
             if(columns.sfL && columns.sfL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.sfL);
-            if(columns.final && columns.final.innerHTML.trim() !== '<i class="fas fa-trophy trophy-icon"></i>') bracketContainer.appendChild(columns.final); // N'ajoute pas si seulement le trophée
+            if(columns.final) bracketContainer.appendChild(columns.final); 
             if(columns.sfR && columns.sfR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.sfR);
             if(columns.qfR && columns.qfR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.qfR);
             if(columns.r16R && columns.r16R.innerHTML.trim() !== '') bracketContainer.appendChild(columns.r16R);
@@ -1018,6 +1071,8 @@
                 input.addEventListener('change', handleLdcScoreChange);
             });
         }
+        // ---------- FIN DE LA CORRECTION -----------
+
 
         function handleLdcScoreChange(event) {
             const input = event.target; const stageKey = input.dataset.stagekey; const matchIndex = parseInt(input.dataset.matchidx);
@@ -1051,7 +1106,7 @@
                 const stageKey = stagesOrder[i];
                 const nextKey = stagesOrder[i+1];
                 
-                if((!pe[stageKey] || pe[stageKey].length === 0) && activeSeason.teams_in_tournament.length > 0) {
+                if((!pe[stageKey] || pe[stageKey].length === 0) && activeSeason.teams_in_tournament && activeSeason.teams_in_tournament.length > 0) {
                     let teamsForThisStage = [];
                     let numMatchesForThisStage = 0;
 
@@ -1060,7 +1115,7 @@
                         const prevStageKey = stagesOrder[i-1];
                         if (pe[prevStageKey] && pe[prevStageKey].every(m => m.winner || m.home === "BYE" || m.away === "BYE")) {
                            teamsForThisStage = pe[prevStageKey].map(m => m.winner).filter(Boolean);
-                        } else { // Si la phase précédente n'est pas complète, on ne génère pas cette phase
+                        } else { 
                             break; 
                         }
                     }
@@ -1073,7 +1128,7 @@
                     if (numMatchesForThisStage > 0 && teamsForThisStage.length > 0) {
                          console.log(`Génération des matchs pour ${stageKey}. Équipes: ${teamsForThisStage.length}, Matchs: ${numMatchesForThisStage}`);
                          pe[stageKey] = generateKnockoutStage(stageKey.charAt(0).toUpperCase() + stageKey.slice(1), numMatchesForThisStage, [], teamsForThisStage);
-                    } else if (teamsForThisStage.length === 0 && i > 0) { // Pas de vainqueurs de la phase précédente
+                    } else if (teamsForThisStage.length === 0 && i > 0) { 
                         break; 
                     }
                 }
@@ -1128,7 +1183,7 @@
                 ['huitiemes', 'quarts', 'demies', 'finale'].forEach(phase => {
                     if (!activeSeason.phase_elimination[phase]) activeSeason.phase_elimination[phase] = [];
                 });
-                checkAndAdvanceLdcStage(activeSeason); 
+                checkAndAdvanceLdcStage(activeSeason); // Cela appellera populateLdcFixturesDOM
                 displayLdcWinner(activeSeason);
             } else {
                 const bracketContainer = document.getElementById('ldc-knockout-stages');
@@ -1161,20 +1216,36 @@
                     const target = e.target; 
                     if (!navEl.contains(target) && !hamburgerEl.contains(target) && navEl.classList.contains('active')) { 
                         navEl.classList.remove('active'); 
-                        hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
+                        if(hamburgerEl) hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
                     } 
                 });
             }
 
             const allNavLinksList = document.querySelectorAll('header nav ul li a');
             allNavLinksList.forEach(link => {
-                link.addEventListener('click', () => {
+                link.addEventListener('click', (e) => { // Ajout du paramètre e
+                    // e.preventDefault(); // Décommenter si la navigation cause des problèmes de rechargement
                     if (window.innerWidth <= 992 && navEl && navEl.classList.contains('active')) { 
                         navEl.classList.remove('active'); 
                         if(hamburgerEl) hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
                     }
                     allNavLinksList.forEach(l => l.classList.remove('active-nav-link'));
                     link.classList.add('active-nav-link');
+
+                    // Si c'est un lien interne à la page (ex: #actualites), on peut gérer le scroll
+                    const href = link.getAttribute('href');
+                    if (href && href.startsWith('index.html#')) {
+                        // Rediriger vers index.html puis scroller
+                        const targetId = href.split('#')[1];
+                        window.location.href = `index.html#${targetId}`;
+                    } else if (href && href.startsWith('#')) {
+                         const targetId = href.substring(1);
+                         const targetElement = document.getElementById(targetId);
+                         if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                         }
+                    }
+                    // Pour les liens vers d'autres pages, le comportement par défaut (chargement de page) suffit.
                 });
             });
         

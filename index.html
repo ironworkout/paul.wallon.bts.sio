@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat des Peluches Élite V2 - Audio Corrigé v2</title>
+    <title>Championnat des Peluches Élite V2 - Audio Ajusté</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -545,7 +545,7 @@
 
     <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
     <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
-    <audio id="audio-ldc-preload" src="https://ironworkout.github.io/paul.wallon.bts.sio/ldc.mp3" preload="auto"></audio>
+    <!-- <audio id="audio-ldc-preload" src="https://ironworkout.github.io/paul.wallon.bts.sio/ldc.mp3" preload="auto"></audio> -->
 
 
     <script>
@@ -591,14 +591,17 @@
         let messageTimeoutId = null;
         let gisCheckRetries = 0;
         let audioContext = null;
-        let currentPlayingAudio = null; // Déclaré une seule fois
+        let currentPlayingAudio = null; 
         let audioElements = {};
         
         function initAudioContext() {
             if (audioContext && audioContext.state === 'running') return; 
             if (!audioContext) { try { window.AudioContext = window.AudioContext || window.webkitAudioContext; if (window.AudioContext) audioContext = new AudioContext(); else return; } catch (e) { return; } }
-            if (audioContext.state === 'suspended') audioContext.resume().catch(e => {});
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().catch(e => console.warn("Reprise AudioContext échouée:", e));
+            }
         }
+
 
         function showMessage(msg, duration = 3000, isError = false) {
             if (!messageArea) { messageArea = document.getElementById('message-area'); if (!messageArea) return; }
@@ -824,7 +827,7 @@
             }
             const activeSeason = leagueData.seasons.find(s => s.season_id === leagueData.active_season_id);
             if (activeSeason) activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
-            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive.`); // Données non loggées pour éviter surcharge console
+            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive.`); 
             const success = await updateFileContent(leagueData.fileId, leagueData);
             if (success) { if(!isInitialSave) showMessage(`Données ${leagueId.toUpperCase()} sauvegardées !`, 2000); }
             else { if(!isInitialSave) showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true); }
@@ -979,7 +982,7 @@
             }
             populateTeamsGridDOM(refIds.teamsGridId, league.teams);
             populateSeasonSelector(leagueId); 
-            observeActiveTabSections(); // Replacé ici pour s'exécuter après le peuplement
+            observeActiveTabSections();
             const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
             if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !league.seasons || league.seasons.length <= 1;
         }
@@ -1056,28 +1059,23 @@
             if (activeTabNode) { activeTabNode.querySelectorAll('.section').forEach(section => { const rect = section.getBoundingClientRect(); if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') { section.style.opacity = '1'; section.style.transform = 'translateY(0)'; observer.unobserve(section); } }); }
         }
         
-        const audioL1 = document.getElementById('audio-l1');
-        const audioL2 = document.getElementById('audio-l2');
-        // let currentPlayingAudio = null; // Déjà déclaré globalement
-
         function playLeagueMusic(leagueId) {
             initAudioContext(); 
-            [audioL1, audioL2].forEach(audio => {
-                if (audio && currentPlayingAudio === audio && !audio.paused) return; 
+            Object.values(audioElements).forEach(audio => {
                 if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; }
             });
 
             let audioToPlay = null;
-            if (leagueId === 'ligue1' && audioL1) audioToPlay = audioL1;
-            else if (leagueId === 'ligue2' && audioL2) audioToPlay = audioL2;
+            if (leagueId === 'ligue1' && audioElements.l1) audioToPlay = audioElements.l1;
+            else if (leagueId === 'ligue2' && audioElements.l2) audioToPlay = audioElements.l2;
             
             if (audioToPlay) {
                 currentPlayingAudio = audioToPlay;
-                audioToPlay.play().catch(e => console.warn("Erreur lecture audio:", leagueId, e));
+                currentPlayingAudio.play().catch(e => console.warn("Erreur lecture audio:", leagueId, e));
             } else { currentPlayingAudio = null; }
         }
         function stopAllLeagueMusic() {
-            [audioL1, audioL2].forEach(audio => { if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; } });
+            Object.values(audioElements).forEach(audio => { if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; } });
             currentPlayingAudio = null;
         }
 
@@ -1089,10 +1087,12 @@
                 }
             });
             
-            const logoLinkIsActive = tabId === 'ligue1'; // L'accueil (logo) est la L1
+            const logoLinkIsActive = tabId === 'ligue1'; 
             const logoLink = document.querySelector('.logo.nav-link');
-            if (logoLink) logoLink.classList.toggle('active-nav-link', logoLinkIsActive);
-            if (logoLink) logoLink.classList.toggle('tab-active', logoLinkIsActive && logoLink.dataset.tabLink === 'ligue1');
+            if (logoLink) {
+                 logoLink.classList.toggle('active-nav-link', logoLinkIsActive);
+                 logoLink.classList.toggle('tab-active', logoLinkIsActive); 
+            }
 
 
             tabContents.forEach(c => c.classList.remove('active'));
@@ -1134,12 +1134,11 @@
                             const parentTabId = parentTabContent.id.replace('-content', '');
                             setActiveTab(parentTabId); 
                         }
-                        // Le scroll vers l'ancre se fait naturellement, mais on peut le forcer si besoin
                         setTimeout(() => targetSection.scrollIntoView({behavior: 'smooth'}), 50); 
                      }
-                } else if (href && !href.startsWith("#") && !isTabLink) { // Lien externe (comme LDC)
+                } else if (href && !href.startsWith("#") && !isTabLink) { 
                      allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
-                     link.classList.add('active-nav-link'); // Activer le lien cliqué
+                     link.classList.add('active-nav-link'); 
                      stopAllLeagueMusic();
                 }
                 
@@ -1194,8 +1193,8 @@
                 const tabId = link.dataset.tabLinkFooter;
                 const targetNavEquivalent = document.querySelector(`header nav a[data-tab-link="${tabId}"]`);
                 if(targetNavEquivalent) {
-                    targetNavEquivalent.click(); // Simule un clic sur le lien de navigation principal
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); // Remonte en haut de page
+                    targetNavEquivalent.click(); 
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
                 }
             });
         });
@@ -1209,7 +1208,7 @@
             
             setActiveTab('ligue1');
             checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Nav Unique, Audio Corrigé).");
+            console.log("Championnat Peluches Élite V2 Initialisé (Audio Corrigé).");
         });
     </script>
 </body>

@@ -11,131 +11,160 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Palette UCL inspirée de l'image */
-            --ucl-deep-purple: #100822; 
-            --ucl-mid-purple: #231249;  
-            --ucl-light-accent: #8A2BE2; 
-            --ucl-connector-blue: #60A5FA; 
-            --ucl-connector-blue-transparent: rgba(96, 165, 250, 0.7);
-            --ucl-team-bg: rgba(230, 230, 240, 0.9); 
-            --ucl-team-bg-winner: rgba(96, 165, 250, 0.8); 
-            --ucl-text-primary: #FFFFFF; 
-            --ucl-text-secondary: #B0B0D0; 
-            --ucl-input-bg: rgba(0, 0, 0, 0.3);
-            --ucl-border-color: rgba(96, 165, 250, 0.3);
+            /* Palette LDC originale (bleu/violet) */
+            --ldc-deep-blue: #0f0c29; 
+            --ldc-mid-blue: #0b215c; 
+            --ldc-purple: #4f0a70;   
+            --ldc-light-blue: #00aeff; 
+            --ldc-gold: #FFD700; 
+            --ldc-silver: #C0C0C0; 
+            --ldc-text-light: #f0f0f8; 
+            --ldc-card-bg: rgba(0, 20, 60, 0.4); 
+            --ldc-border-color: rgba(0, 174, 255, 0.4);
+            --ldc-border-color-subtle: rgba(0, 174, 255, 0.2);
+            --ldc-team-bg: rgba(230, 230, 240, 0.9); /* Fond des équipes (blanc cassé/gris clair) */
+            --ldc-team-bg-winner: rgba(96, 165, 250, 0.8); /* Fond équipe gagnante (bleu clair) */
+
 
             --neon-green: #39FF14; 
             --neon-red: #FF3131; 
             --neon-yellow: #FFF01F;
 
-            --current-bg-color: var(--ucl-deep-purple);
-            --current-primary-color: var(--ucl-mid-purple);
-            --current-secondary-color: var(--ucl-light-accent);
-            --current-accent-gold: #FFD700; 
-            --current-text-light: var(--ucl-text-primary);
-            --current-card-bg: rgba(35, 18, 73, 0.5); 
-            --current-border-color: var(--ucl-border-color);
-            --current-line-color: var(--ucl-connector-blue);
+            --current-bg-color: var(--ldc-deep-blue);
+            --current-primary-color: var(--ldc-mid-blue);
+            --current-secondary-color: var(--ldc-light-blue);
+            --current-accent-gold: var(--ldc-gold);
+            --current-text-light: var(--ldc-text-light);
+            --current-card-bg: var(--ldc-card-bg);
+            --current-border-color: var(--ldc-border-color);
+            --current-line-color: var(--ldc-light-blue);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Open Sans', sans-serif; line-height: 1.6; color: var(--current-text-light);
-            background-color: var(--ucl-deep-purple);
-            background-image: radial-gradient(circle at top right, var(--ucl-mid-purple) 0%, transparent 50%),
-                              radial-gradient(circle at bottom left, var(--ucl-mid-purple) 0%, transparent 40%),
-                              linear-gradient(135deg, var(--ucl-deep-purple) 0%, var(--ucl-mid-purple) 60%, var(--ucl-deep-purple) 100%);
+            background: linear-gradient(135deg, var(--ldc-deep-blue) 0%, var(--ldc-purple) 100%);
             overflow-x: hidden; scroll-behavior: smooth;
             min-height: 100vh;
         }
         .container { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 20px; }
 
         h1, h2, h3, h4, .section-title {
-            font-family: 'Oswald', sans-serif; font-weight: 500;
-            color: var(--current-text-light);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+            font-family: 'Oswald', sans-serif; font-weight: 700;
+            color: var(--current-accent-gold);
+            text-transform: uppercase; letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255,215,0,0.5); 
         }
-        .page-title-bar h1 { color: var(--current-accent-gold); text-shadow: 0 0 12px rgba(255,215,0,0.7); }
         
         header {
-            background-color: rgba(16, 8, 34, 0.7); 
+            background-color: rgba(15, 12, 41, 0.7); 
             backdrop-filter: blur(10px);
             padding: 10px 0; position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid var(--ucl-border-color);
+            border-bottom: 1px solid var(--ldc-border-color-subtle);
         }
-        .logo img { filter: drop-shadow(0 0 8px var(--current-accent-gold));} 
-        .logo h1 { color: var(--current-accent-gold); }
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; text-decoration: none; }
+        .logo img { 
+            height: 45px; 
+            margin-right: 12px; 
+            filter: drop-shadow(0 0 8px var(--current-accent-gold));
+        } 
+        .logo h1 { font-size: 1.6rem; color: var(--current-accent-gold); letter-spacing: 1px;}
         
-        #drive-status { display: inline-flex; align-items: center; gap: 5px; font-size: 0.85em; padding: 4px 8px; border-radius: 4px; transition: color 0.3s ease, border-color 0.3s ease; white-space: nowrap; border: 1px solid var(--ucl-connector-blue); }
-        #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); }
-        #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); }
-        #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); }
-        #drive-status i { margin-right: 5px; color: var(--ucl-connector-blue); }
-
-        #signin-button { background-color: var(--ucl-connector-blue); color: var(--ucl-deep-purple); padding: 7px 12px; font-size: 0.85em; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; white-space: nowrap;}
-        #signin-button:hover:not(:disabled) { background-color: var(--ucl-text-primary); }
-        #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-
+        nav { flex-grow: 1; display: flex; justify-content: center; } 
+        nav ul { display: flex; list-style: none; margin:0; padding:0; flex-wrap: wrap; justify-content: center;}
+        nav ul li { margin: 0 5px; } 
+        nav ul li a { 
+            color: var(--current-text-light); 
+            text-decoration: none !important; 
+            font-weight: 500;
+            transition: all 0.3s ease; padding: 10px 15px; 
+            display: inline-flex; align-items: center; gap: 8px;
+            border-radius: 25px; border: 2px solid transparent;
+            font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size:0.9rem; letter-spacing: 0.5px;
+        }
+        nav ul li a i { font-size: 0.9em; }
         nav ul li a:hover, nav ul li a.active-nav-link {
-            color: var(--ucl-connector-blue); 
-            background-color: rgba(96, 165, 250, 0.1); 
-            border-color: var(--ucl-connector-blue);
-            box-shadow: 0 0 10px rgba(96, 165, 250, 0.4); 
+            color: var(--current-accent-gold); 
+            background-color: rgba(0, 174, 255, 0.15); 
+            border-color: var(--current-secondary-color);
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5); 
         }
         .hamburger { display: none; font-size: 1.8rem; color: var(--current-text-light); cursor: pointer; z-index: 1001; margin-left:15px;}
 
+        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+        #drive-status { 
+            display: inline-flex; align-items: center; gap: 5px; font-size: 0.85em; 
+            padding: 4px 8px; border-radius: 4px;
+            transition: color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease; white-space: nowrap;
+            border: 1px solid var(--ldc-silver); 
+            color: var(--ldc-silver); 
+            opacity: 0.9;
+        }
+        #drive-status i { margin-right: 5px; transition: color 0.3s ease; }
+        #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); opacity: 1;}
+        #drive-status.loading i { color: var(--neon-yellow); }
+        #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); opacity: 1;}
+        #drive-status.success i { color: var(--neon-green); }
+        #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); opacity: 1;}
+        #drive-status.error i { color: var(--neon-red); }
+
+        #signin-button { 
+            padding: 7px 12px; font-size: 0.85em; background-color: var(--current-secondary-color); 
+            color: var(--ldc-deep-blue); border: none; border-radius: 4px; cursor: pointer;
+            transition: all 0.3s ease; font-weight: 600; white-space: nowrap;
+        }
+        #signin-button:hover:not(:disabled) { background-color: #fff; transform: translateY(-1px); }
+        #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .page-title-bar {
             background: transparent; 
-            padding: 40px 0; margin-bottom: 30px;
-            border-bottom: 2px solid var(--ucl-connector-blue-transparent);
+            padding: 30px 0; text-align: center; margin-bottom: 40px;
+            border-bottom: 2px solid var(--ldc-border-color); 
         }
-        .page-title-bar h1 { font-size: 3rem; }
+        .page-title-bar h1 { font-size: 3.5rem; }
         .page-title-bar h1 i { margin: 0 15px; animation: subtleTrophyPulse 2s infinite ease-in-out; }
         @keyframes subtleTrophyPulse { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
 
-
         .section { 
-            margin-bottom: 40px; background-color: var(--current-card-bg); 
-            border-radius: 10px; padding: 25px; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5); 
+            margin-bottom: 50px; background-color: var(--current-card-bg); 
+            border-radius: 12px; padding: 30px; 
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4); 
             border: 1px solid var(--current-border-color);
         }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--current-border-color); }
-        .section-title { font-size: 2rem; color: var(--current-text-light);}
+        .section-title { font-size: 2.2rem; }
         
         .action-buttons { display:flex; align-items:center; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;}
         .league-music-btn {
-            background-color: var(--ucl-connector-blue); color: var(--ucl-deep-purple); border: 1px solid var(--ucl-deep-purple);
+            background-color: var(--current-secondary-color); color: var(--ldc-deep-blue); border: 1px solid var(--ldc-deep-blue);
             padding: 10px 18px; border-radius: 25px; font-family: 'Oswald', sans-serif;
             cursor: pointer; transition: all 0.3s ease; font-weight: 600;
         }
-        .league-music-btn:hover { background-color: var(--ucl-mid-purple); color: var(--ucl-connector-blue); border-color: var(--ucl-connector-blue);}
+        .league-music-btn:hover { background-color: var(--ldc-mid-blue); color: var(--current-secondary-color); border-color: var(--current-secondary-color);}
         .league-music-btn i { margin-right: 8px; }
 
         .season-selector-container { display: flex; align-items: center; gap: 10px; }
         .season-selector-container label { font-weight: 600; color: var(--current-text-light); font-family: 'Oswald'; }
         .season-selector-container select {
-            padding: 8px 12px; border-radius: 4px; border: 1px solid var(--ucl-border-color);
-            font-family: 'Open Sans'; font-size: 0.9rem; background-color: rgba(16, 8, 34, 0.7); color:var(--current-text-light);
+            padding: 8px 12px; border-radius: 4px; border: 1px solid var(--current-border-color);
+            font-family: 'Open Sans'; font-size: 0.9rem; background-color: rgba(15, 12, 41, 0.5); color:var(--current-text-light);
         }
-        .season-selector-container select option { background-color: var(--ucl-deep-purple); color: var(--current-text-light); }
+        .season-selector-container select option { background-color: var(--ldc-deep-blue); color: var(--current-text-light); }
 
         .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn {
             padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase;
-            color: var(--ucl-deep-purple); background-color: var(--ucl-connector-blue);
+            color: var(--ldc-deep-blue); background-color: var(--current-secondary-color);
             border: none; border-radius: 5px; cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;
         }
         .nouvelle-saison-btn:hover:not(:disabled), .sauvegarde-json-btn:hover:not(:disabled), .delete-season-btn:hover:not(:disabled) { 
             transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
         }
-        .nouvelle-saison-btn:hover:not(:disabled) { background-color: var(--ucl-light-accent); color: var(--ucl-text-primary); }
+        .nouvelle-saison-btn:hover:not(:disabled) { background-color: var(--ldc-mid-blue); color: var(--current-text-light); }
         .nouvelle-saison-btn:disabled, .sauvegarde-json-btn:disabled, .delete-season-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .sauvegarde-json-btn { background-color: var(--current-accent-gold); color: var(--ucl-deep-purple); }
+        .sauvegarde-json-btn { background-color: var(--current-accent-gold); color: var(--ldc-deep-blue); }
         .sauvegarde-json-btn:hover:not(:disabled) { background-color: #fff; color:var(--current-accent-gold); border: 1px solid var(--current-accent-gold); }
         .delete-season-btn { background-color: var(--neon-red); margin-left: 5px; color: #fff;}
         .delete-season-btn:hover:not(:disabled) { background-color: #cc2828; }
@@ -151,7 +180,6 @@
             width: 100%;
             overflow-x: auto; 
         }
-
         .bracket-column {
             display: flex;
             flex-direction: column;
@@ -164,7 +192,6 @@
         }
         .bracket-column.rounds-8-4 { min-width: 200px; }
         .bracket-column.round-semi { min-width: 200px; }
-
         .bracket-match-item {
             display: flex;
             flex-direction: column; 
@@ -173,10 +200,9 @@
             position: relative; 
             margin: 10px 0; 
         }
-
         .team-slot {
-            background-color: var(--ucl-team-bg);
-            color: var(--ucl-deep-purple); 
+            background-color: var(--ldc-team-bg);
+            color: var(--ldc-deep-blue); 
             padding: 8px 12px;
             margin: 2px 0; 
             border-radius: 4px;
@@ -189,87 +215,44 @@
             position: relative; 
         }
         .team-slot img.team-logo {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            object-fit: contain;
+            width: 20px; height: 20px;
+            margin-right: 8px; object-fit: contain;
         }
         .team-slot .team-name {
-            flex-grow: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            flex-grow: 1; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
         }
         .team-slot input[type="number"].score-input-bracket {
-            width: 30px;
-            padding: 2px;
-            text-align: center;
-            font-size: 0.8rem;
-            margin-left: 5px;
-            border: 1px solid var(--ucl-border-color);
+            width: 30px; padding: 2px;
+            text-align: center; font-size: 0.8rem;
+            margin-left: 5px; border: 1px solid var(--ldc-border-color-subtle);
             background-color: rgba(255,255,255,0.7);
-            color: var(--ucl-deep-purple);
-            border-radius: 3px;
+            color: var(--ldc-deep-blue); border-radius: 3px;
         }
         .team-slot input[type="number"].score-input-bracket::-webkit-outer-spin-button,
         .team-slot input[type="number"].score-input-bracket::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
-        .team-slot.winner { background-color: var(--ucl-team-bg-winner); color: var(--ucl-text-primary); }
+        .team-slot.winner { background-color: var(--ldc-team-bg-winner); color: var(--ldc-text-light); }
         .team-slot.loser { opacity: 0.7; }
-
-
-        .match-connectors {
-            position: absolute;
-            top: 50%;
-            left: 100%; 
-            height: 100%;
-            width: 30px; 
-            display: flex;
-            align-items: center;
-        }
-        .match-connectors.left-side {
-            left: auto;
-            right: 100%;
-        }
-
-        .connector {
-            background-color: var(--ucl-connector-blue);
-            position: absolute;
-            z-index: -1; 
-        }
-        .connector.horizontal { height: 2px; }
-        .connector.vertical { width: 2px; }
-        
         .match-label {
-            position: absolute;
-            background-color: var(--ucl-mid-purple);
-            color: var(--ucl-text-secondary);
-            font-size: 0.7rem;
-            padding: 1px 4px;
-            border-radius: 3px;
-            border: 1px solid var(--ucl-connector-blue-transparent);
-            z-index: 1;
+            position: absolute; background-color: var(--ldc-mid-blue);
+            color: var(--ldc-silver); font-size: 0.7rem;
+            padding: 1px 4px; border-radius: 3px;
+            border: 1px solid var(--ldc-border-color); z-index: 1;
         }
-
         .bracket-centerpiece-visual {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px; 
-            min-width: 100px; 
-            position: relative;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 0 20px; min-width: 100px; position: relative;
         }
         .bracket-centerpiece-visual .trophy-icon {
-            font-size: 5rem; 
-            color: var(--current-accent-gold);
+            font-size: 5rem; color: var(--current-accent-gold);
             filter: drop-shadow(0 0 15px var(--current-accent-gold));
             margin-bottom: 20px;
         }
         .final-match-placeholder { width: 220px; }
         
-
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; } 
         .team-card { 
             background-color: var(--current-card-bg); 
@@ -278,39 +261,38 @@
             border-radius: 10px; padding: 15px; text-align: center; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.06);
         }
-        .team-card:hover { transform: translateY(-5px) scale(1.03); border-color: var(--ucl-connector-blue); box-shadow: 0 8px 20px rgba(96, 165, 250, 0.2);}
+        .team-card:hover { transform: translateY(-5px) scale(1.03); border-color: var(--current-secondary-color); box-shadow: 0 8px 20px rgba(0, 174, 255, 0.2);}
         .team-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));}
-        .team-card h4 { color: var(--ucl-text-primary); font-size: 1.1rem; margin-bottom: 5px; }
+        .team-card h4 { color: var(--current-text-light); font-size: 1.1rem; margin-bottom: 5px; }
 
         footer { 
             background-color: transparent; 
-            color: var(--ucl-text-secondary); 
+            color: var(--ldc-silver); 
             padding: 40px 0 20px; 
-            border-top: 1px solid var(--ucl-border-color); 
+            border-top: 1px solid var(--ldc-border-color-subtle); 
             margin-top: 50px;
         }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
         .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--current-accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--current-accent-gold); padding-bottom: 10px; display: inline-block;}
         .footer-section ul { list-style: none; padding: 0;}
         .footer-section ul li { margin-bottom: 10px; }
-        .footer-section ul li a { color: var(--ucl-text-secondary); text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
+        .footer-section ul li a { color: var(--ldc-silver); text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
         .footer-section ul li a:hover { color: var(--current-accent-gold); padding-left: 5px; }
-        .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--ucl-border-color); font-size: 0.9rem; color: var(--ucl-text-secondary); opacity: 0.7; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--ldc-border-color-subtle); font-size: 0.9rem; color: var(--ldc-silver); opacity: 0.7; }
         
         .message-area {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background-color: var(--ucl-mid-purple); 
+            background-color: var(--ldc-mid-blue); 
             color: var(--current-text-light);
             padding: 12px 25px; border-radius: 6px; z-index: 3000; 
             opacity: 0; visibility: hidden; transition: all 0.5s ease; pointer-events: none;
             font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
             max-width: 90%; text-align: center; 
-            border: 1px solid var(--ucl-light-accent);
+            border: 1px solid var(--current-secondary-color);
         }
         .message-area.visible { opacity: 1; visibility: visible; transform: translate(-50%, -15px) ; pointer-events: auto; }
-        .message-area.error-message { background-color: rgba(var(--neon-red-rgb, 255, 49, 49), 0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
-
+        .message-area.error-message { background-color: rgba(255, 49, 49, 0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
         @media (max-width: 1200px) {
             .knockout-bracket-visual { padding: 15px 5px; }
@@ -324,17 +306,17 @@
             nav {order:1; flex-grow: 0; margin-right: auto;} 
             .hamburger {display: block; order: 2; margin-left: 15px;}
             nav.active { max-height: 500px; }
-            nav ul { flex-direction: column; padding: 10px 0; gap: 0; background-color: rgba(16, 8, 34, 0.95); }
+            nav ul { flex-direction: column; padding: 10px 0; gap: 0; background-color: rgba(15, 12, 41, 0.95); }
             nav ul li { margin-left: 0; width: 100%; }
-            nav ul li a { padding: 15px 20px; border-bottom: 1px solid var(--ucl-border-color); border-radius:0; justify-content: flex-start; }
-            nav ul li a:hover, nav ul li a.active-nav-link { background-color: rgba(96, 165, 250, 0.2); border-color:transparent; color: var(--ucl-connector-blue); transform: none; box-shadow: none;}
+            nav ul li a { padding: 15px 20px; border-bottom: 1px solid var(--ldc-border-color-subtle); border-radius:0; justify-content: flex-start; }
+            nav ul li a:hover, nav ul li a.active-nav-link { background-color: rgba(0, 174, 255, 0.2); border-color:transparent; color: var(--current-accent-gold); transform: none; box-shadow: none;}
             .teams-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } 
             .bracket-centerpiece-visual .trophy-icon { font-size: 4rem; }
         }
         @media (max-width: 768px) {
             .logo h1 { font-size: 1.5rem; }
-            .page-title-bar h1 {font-size: 2rem;}
-            .section-title { font-size: 1.6rem; }
+            .page-title-bar h1 {font-size: 2.2rem;}
+            .section-title { font-size: 1.8rem; }
             .action-buttons { flex-direction: column; align-items: stretch;}
             .season-selector-container { flex-direction: column; align-items: stretch; width: 100%;}
             .season-selector-container select { width: 100%; margin-bottom: 10px;}
@@ -357,7 +339,6 @@
     </style>
 </head>
 <body>
-    <!-- HTML du header, titre de page, boutons d'action, section équipes (identique) -->
     <header>
         <div class="container header-container">
             <a href="index.html" class="logo"> 
@@ -458,7 +439,6 @@
         };
         
         let ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
-
         let googleAccessToken = null, tokenClient = null;
         let isSavingDriveData = false; 
         let messageArea = null;
@@ -467,16 +447,14 @@
         let audioContext = null;
         let ldcAudioPlayer = null;
 
-        // --- DÉFINITIONS DES FONCTIONS ---
-
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
         
         function showMessage(msg, duration = 3000, isError = false) {
-            if (!messageArea) messageArea = document.getElementById('message-area'); // Initialisation si pas déjà fait
-            if (!messageArea) return; // Si l'élément n'existe toujours pas
+            if (!messageArea) messageArea = document.getElementById('message-area');
+            if (!messageArea) return; 
             messageArea.textContent = msg;
             messageArea.classList.add('visible');
-            if(isError) messageArea.classList.add('error-message'); else messageArea.classList.remove('error-message');
+            messageArea.classList.toggle('error-message', isError);
             clearTimeout(messageTimeoutId);
             messageTimeoutId = setTimeout(() => { messageArea.classList.remove('visible'); }, duration);
         }
@@ -490,6 +468,8 @@
 
         async function gisInitInternal() {
             console.log("Tentative d'initialisation de Google Identity Services...");
+            const driveStatus = document.getElementById('drive-status'); // Récupérer une fois
+
             if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
                 console.log("GIS prêt. Initialisation du client token.");
                 tokenClient = google.accounts.oauth2.initTokenClient({
@@ -500,7 +480,7 @@
                 });
                 updateAuthUI(false); 
                 document.getElementById('signin-button').disabled = false;
-                document.getElementById('drive-status').style.display = 'inline-flex';
+                if (driveStatus) driveStatus.style.display = 'inline-flex';
             } else {
                 console.log("GIS non encore prêt. Nouvelle tentative...");
                 gisCheckRetries++;
@@ -510,16 +490,17 @@
                     console.error("Échec du chargement de Google Identity Services après plusieurs tentatives.");
                     showMessage("Erreur: Service Google indisponible.", 5000, true);
                     updateAuthUI(false);
-                    const driveStatus = document.getElementById('drive-status');
                     if(driveStatus) {
-                        driveStatus.innerHTML = '<i class="fab fa-google-drive"></i> <span id="drive-status-text">Erreur GIS</span>';
-                        driveStatus.className = 'drive-status error'; // Correction pour utiliser la classe de statut
+                        const driveStatusText = driveStatus.querySelector('#drive-status-text');
+                        if (driveStatusText) driveStatusText.textContent = 'Erreur GIS';
+                        driveStatus.className = 'drive-status error'; 
                     }
                 }
             }
         }
 
         function checkAndInitGis() {
+            const driveStatus = document.getElementById('drive-status'); // Récupérer une fois
             if (window.google && window.google.accounts && window.google.accounts.id) {
                 gisInitInternal();
             } else {
@@ -531,11 +512,11 @@
                 script.onerror = () => {
                     console.error("Échec du chargement du script GSI.");
                     showMessage("Impossible de charger les services Google.", 5000, true);
-                     const driveStatus = document.getElementById('drive-status');
                      if(driveStatus) {
                         driveStatus.style.display = 'inline-flex';
-                        driveStatus.innerHTML = '<i class="fab fa-google-drive"></i> <span id="drive-status-text">Échec chargement GIS</span>';
-                        driveStatus.className = 'drive-status error'; // Correction
+                        const driveStatusText = driveStatus.querySelector('#drive-status-text');
+                        if (driveStatusText) driveStatusText.textContent = 'Échec chargement GIS';
+                        driveStatus.className = 'drive-status error'; 
                      }
                 };
                 document.head.appendChild(script);
@@ -570,9 +551,7 @@
         function handleAuthClick() {
             if (googleAccessToken) { 
                 if (google.accounts && google.accounts.oauth2 && google.accounts.oauth2.revoke) {
-                    google.accounts.oauth2.revoke(googleAccessToken, () => {
-                        console.log('Token révoqué.');
-                    });
+                    google.accounts.oauth2.revoke(googleAccessToken, () => { console.log('Token révoqué.'); });
                 }
                 googleAccessToken = null;
                 localStorage.removeItem('google_access_token_ldc');
@@ -606,11 +585,12 @@
                 driveStatusText.textContent = 'Déconnecté';
                 driveStatusDiv.className = 'drive-status error'; 
             }
-            // Bouton de connexion toujours activé si le client token est prêt ou si déjà connecté (pour déconnexion)
             signinButton.disabled = !tokenClient && !isLoggedIn; 
             
-            document.getElementById('nouvelle-saison-ldc-btn').disabled = !isLoggedIn;
-            document.getElementById('sauvegarde-ldc-btn').disabled = !isLoggedIn;
+            const nouvelleSaisonBtn = document.getElementById('nouvelle-saison-ldc-btn');
+            if(nouvelleSaisonBtn) nouvelleSaisonBtn.disabled = !isLoggedIn;
+            const sauvegardeBtn = document.getElementById('sauvegarde-ldc-btn');
+            if(sauvegardeBtn) sauvegardeBtn.disabled = !isLoggedIn;
             const deleteSeasonBtn = document.getElementById('delete-season-ldc-btn');
             if (deleteSeasonBtn) {
                 deleteSeasonBtn.disabled = !isLoggedIn || !(ldcDataStore.seasons && ldcDataStore.seasons.length > 1);
@@ -632,13 +612,34 @@
                 const searchResult = await responseSearch.json();
 
                 if (searchResult.files && searchResult.files.length > 0) {
-                    if(driveStatusText) driveStatusText.textContent = "Fichier trouvé.";
+                    if(driveStatusText) driveStatusText.textContent = "Fichier trouvé";
                     if(driveStatusDiv) driveStatusDiv.className = 'drive-status success'; 
                     return searchResult.files[0].id;
-                } else { /* ... (création fichier identique) ... */ }
-            } catch (error) { /* ... (gestion erreur identique) ... */ return null; }
-             // Assurer que les cas de création et d'erreur remettent bien le statut à 'success' ou 'error'
-             // (le code existant semble correct pour cela)
+                } else {
+                    if(driveStatusText) driveStatusText.textContent = "Création fichier...";
+                    const metadata = { name: filename, mimeType: mimeType };
+                    const form = new FormData();
+                    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                    form.append('file', new Blob([defaultContentStr], { type: mimeType }));
+
+                    const responseCreate = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${googleAccessToken}` },
+                        body: form
+                    });
+                    if (!responseCreate.ok) throw new Error(`Création échouée: ${responseCreate.status} ${await responseCreate.text()}`);
+                    const createdFile = await responseCreate.json();
+                    if(driveStatusText) driveStatusText.textContent = "Fichier créé";
+                    if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
+                    return createdFile.id;
+                }
+            } catch (error) {
+                console.error('Erreur Drive (findOrCreateFile):', error);
+                showMessage(`Erreur Drive: ${error.message}`, 5000, true);
+                if(driveStatusText) driveStatusText.textContent = "Erreur Fichier";
+                if(driveStatusDiv) driveStatusDiv.className = 'drive-status error';
+                return null;
+            }
         }
         
         async function readFileContent(fileId) {
@@ -653,8 +654,7 @@
                 });
                 if (!response.ok) throw new Error(`Lecture échouée: ${response.status} ${await response.text()}`);
                 const content = await response.text();
-                if(driveStatusText) driveStatusText.textContent = "Connecté"; // Ou "Fichier lu."
-                if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
+                // Ne pas changer le statut ici, loadLdcDataFromDrive le fera
                 return content;
             } catch (error) {
                 console.error('Erreur Drive (readFileContent):', error);
@@ -684,7 +684,10 @@
                 if(driveStatusText) driveStatusText.textContent = "Sauvegardé!";
                 if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
                 setTimeout(() => { 
-                    if(driveStatusText && driveStatusText.textContent === "Sauvegardé!") driveStatusText.textContent = "Connecté";
+                    if(driveStatusText && driveStatusText.textContent === "Sauvegardé!" && googleAccessToken) {
+                        driveStatusText.textContent = "Connecté";
+                        if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
+                    }
                  }, 2000);
                 return true;
             } catch (error) {
@@ -702,6 +705,7 @@
             if (!googleAccessToken) {
                 console.log("Non connecté, utilisation des données LDC initiales.");
                 ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+                updateAuthUI(false); // S'assurer que l'UI reflète la déconnexion
                 return;
             }
              const driveStatusText = document.getElementById('drive-status-text');
@@ -709,24 +713,24 @@
              if(driveStatusText) driveStatusText.textContent = `Chargement ${LDC_DATA_FILENAME}...`;
              if(driveStatusDiv) driveStatusDiv.className = 'drive-status loading';
 
-            let fileId = ldcDataStore.fileId; // Utiliser fileId existant si disponible
-            if (!fileId) { // S'il n'y a pas de fileId stocké (ex: première exécution)
+            let fileId = ldcDataStore.fileId; 
+            if (!fileId) { 
                  fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
-            } else { // Vérifier si le fichier existe toujours, sinon tenter de le recréer
+            } else {
                 try {
                     const responseSearch = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=id`, {
                          headers: { 'Authorization': `Bearer ${googleAccessToken}` }
                     });
-                    if(!responseSearch.ok){ // Si le fichier n'est pas trouvé ou erreur
-                        console.warn(`Fichier avec ID ${fileId} non trouvé ou inaccessible. Tentative de recréation.`);
+                    if(!responseSearch.ok){ 
+                        console.warn(`Fichier ID ${fileId} non trouvé. Recréation.`);
                         fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
                     }
                 } catch (e) {
-                    console.error("Erreur vérification existence fichier:", e);
+                    console.error("Erreur vérification fichier:", e);
                     fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
                 }
             }
-            ldcDataStore.fileId = fileId; // Mettre à jour le fileId dans le store
+            ldcDataStore.fileId = fileId;
 
 
             if (ldcDataStore.fileId) {
@@ -739,33 +743,37 @@
                             ldcDataStore.fileId = fileId; 
                             ldcDataStore.filename = LDC_DATA_FILENAME;
                             console.log(`Données LDC chargées depuis Drive.`);
-                             if(driveStatusText) driveStatusText.textContent = 'Connecté';
-                             if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
                         } else {
-                            console.warn(`Données LDC malformées sur Drive. Utilisation des données initiales.`);
+                            console.warn(`Données LDC malformées. Utilisation des données initiales.`);
                             ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
                             ldcDataStore.fileId = fileId; ldcDataStore.filename = LDC_DATA_FILENAME;
-                            await saveLdcDataToDrive(true); // Sauvegarder les données initiales propres
+                            await saveLdcDataToDrive(true); 
                         }
                     } catch (e) {
-                        console.error(`Erreur parsing LDC Drive:`, e); showMessage(`Données LDC Drive corrompues. Utilisation des données initiales.`, 7000, true);
+                        console.error(`Erreur parsing LDC Drive:`, e); showMessage(`Données LDC Drive corrompues.`, 7000, true);
                         ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
                         ldcDataStore.fileId = fileId; ldcDataStore.filename = LDC_DATA_FILENAME;
                         await saveLdcDataToDrive(true);
                     }
-                } else {
-                     console.log(`Fichier LDC vide sur Drive. Initialisation avec structure par défaut.`);
+                } else if (content === null && googleAccessToken) { // Erreur de lecture mais connecté
+                     // Ne rien faire, readFileContent a déjà mis à jour le statut Drive
+                } else { // Fichier vide ou non connecté et pas de contenu
+                     console.log(`Fichier LDC vide. Initialisation.`);
                      ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
                      ldcDataStore.fileId = fileId; ldcDataStore.filename = LDC_DATA_FILENAME;
-                     await saveLdcDataToDrive(true); 
+                     if(googleAccessToken) await saveLdcDataToDrive(true); 
                 }
-            } else {
-                console.warn(`Impossible trouver/créer fichier LDC sur Drive. Utilisation des données initiales.`);
+            } else { // Pas de fileId, même après tentative de création
+                console.warn(`Impossible trouver/créer fichier LDC sur Drive.`);
                 showMessage(`Fichier LDC Drive inaccessible.`, 7000, true);
                 ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
-                ldcDataStore.filename = LDC_DATA_FILENAME; // Garder le nom de fichier même si pas de fileId
-                 if(driveStatusText) driveStatusText.textContent = 'Erreur Fichier';
-                 if(driveStatusDiv) driveStatusDiv.className = 'drive-status error';
+                ldcDataStore.filename = LDC_DATA_FILENAME;
+            }
+            // Mettre à jour le statut final après toutes les opérations
+            if(googleAccessToken){
+                 if(driveStatusText) driveStatusText.textContent = 'Connecté';
+                 if(driveStatusDiv) driveStatusDiv.className = 'drive-status success';
+                 if(!ldcDataStore.fileId && driveStatusDiv) driveStatusDiv.className = 'drive-status error'; // Si toujours pas de fileId
             }
         }
         
@@ -777,24 +785,349 @@
                 if(!ldcDataStore.fileId){ showMessage(`Impossible de créer/trouver le fichier LDC sur Drive.`, 5000, true); return; }
             }
             console.log(`Sauvegarde LDC sur Drive (File ID: ${ldcDataStore.fileId}).`);
-            const success = await updateFileContent(ldcDataStore.fileId, ldcDataStore);
+            const success = await updateFileContent(ldcDataStore.fileId, ldcDataStore); // Met à jour le statut Drive
             if (success) { if(!isInitialSave) showMessage(`Données LDC sauvegardées !`, 2000); }
             else { if(!isInitialSave) showMessage(`Échec sauvegarde LDC sur Drive.`, 3000, true); }
         }
 
-        function populateLdcSeasonSelector() { /* ... (Identique) ... */ }
-        function populateLdcTeamsGridDOM(teamsData) { /* ... (Identique) ... */ }
+        function populateLdcSeasonSelector() {
+            const selector = document.getElementById(`ldc-season-selector`);
+            const deleteBtn = document.getElementById(`delete-season-ldc-btn`);
+            if (!selector) return;
+            selector.innerHTML = '';
+            if (ldcDataStore.seasons && ldcDataStore.seasons.length > 0) {
+                ldcDataStore.seasons.sort((a,b) => b.season_id - a.season_id); 
+                ldcDataStore.seasons.forEach(season => {
+                    const option = document.createElement('option'); option.value = season.season_id;
+                    option.textContent = season.nom_saison || `Saison LDC ${season.season_id}`;
+                    if (season.season_id === ldcDataStore.active_season_id) option.selected = true;
+                    selector.appendChild(option);
+                });
+                if(deleteBtn) deleteBtn.disabled = !googleAccessToken || ldcDataStore.seasons.length <= 1;
+            } else { 
+                const option = document.createElement('option'); option.textContent = "Aucune saison"; selector.appendChild(option); 
+                if(deleteBtn) deleteBtn.disabled = true; 
+            }
+        }
+
+        function populateLdcTeamsGridDOM(teamsData) {
+            const teamsGrid = document.getElementById('ldc-teams-grid'); if (!teamsGrid) return; teamsGrid.innerHTML = '';
+            if(!teamsData || Object.keys(teamsData).length === 0) {teamsGrid.innerHTML = "<p>Aucune équipe LDC définie.</p>"; return;}
+            const activeSeason = ldcDataStore.seasons.find(s => s.season_id === ldcDataStore.active_season_id);
+            const teamsInCurrentTournament = activeSeason ? activeSeason.teams_in_tournament || [] : []; 
+
+            if (teamsInCurrentTournament.length === 0 && activeSeason) {
+                 teamsGrid.innerHTML = "<p>Aucune équipe qualifiée pour cette saison. Les équipes seront affichées une fois la saison commencée.</p>";
+                 return;
+            } else if (!activeSeason && Object.keys(teamsData).length > 0) {
+                 // Afficher toutes les équipes si aucune saison n'est active (rare, mais pour robustesse)
+                 Object.keys(teamsData).forEach(teamName => { /* ... (logique d'affichage de carte) ... */ });
+            }
+
+
+            teamsInCurrentTournament.forEach(teamName => {
+                const teamData = teamsData[teamName];
+                 if(teamName === "BYE" || !teamData) return;
+                const teamCard = document.createElement('div'); teamCard.className = 'team-card';
+                teamCard.innerHTML = `<img src="${BASE_URL}${teamData.logo}" alt="${teamName}"><h4>${teamName}</h4>`;
+                teamsGrid.appendChild(teamCard);
+            });
+        }
         
-        function generateKnockoutStage(stageName, numExpectedMatches, teamsAvailable, previousStageWinners = null) { /* ... (Identique) ... */ }
+        function generateKnockoutStage(stageName, numExpectedMatches, teamsAvailable, previousStageWinners = null) {
+            const stageFixtures = [];
+            let currentTeams = previousStageWinners ? [...previousStageWinners] : [...teamsAvailable];
+            currentTeams = currentTeams.filter(team => team !== "BYE" || currentTeams.length === 1);
 
-        function createNewLdcSeason() { /* ... (Identique) ... */ }
-        function deleteSelectedLdcSeason() { /* ... (Identique) ... */ }
-        function handleLdcSeasonChange(event) { /* ... (Identique) ... */ }
+            if (currentTeams.length === 0 && numExpectedMatches > 0) {
+                for (let i = 0; i < numExpectedMatches; i++) {
+                     stageFixtures.push({ home: `À déterminer`, away: `À déterminer`, scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
+                }
+                return stageFixtures;
+            }
+            shuffleArray(currentTeams); 
+            let teamsToPair = [...currentTeams];
+            for (let i = 0; i < numExpectedMatches; i++) {
+                let team1, team2;
+                if (teamsToPair.length >= 2) { team1 = teamsToPair.pop(); team2 = teamsToPair.pop(); } 
+                else if (teamsToPair.length === 1) { team1 = teamsToPair.pop(); team2 = "BYE"; } 
+                else { team1 = "À déterminer"; team2 = "À déterminer"; }
+                stageFixtures.push({ 
+                    home: (i % 2 === 0 || team2 === "BYE" ? team1 : team2), 
+                    away: (i % 2 === 0 || team2 === "BYE" ? team2 : team1),
+                    scoreHome: null, scoreAway: null, 
+                    match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` 
+                });
+            } 
+            return stageFixtures;
+        }
 
-        function populateLdcFixturesDOM(activeSeason) { /* ... (Identique - voir version précédente pour le code du bracket visuel) ... */ }
-        function handleLdcScoreChange(event) { /* ... (Identique - voir version précédente) ... */ }
-        function checkAndAdvanceLdcStage(activeSeason) { /* ... (Identique - voir version précédente) ... */ }
-        function displayLdcWinner(activeSeason) { /* ... (Identique) ... */ }
+        function createNewLdcSeason() {
+            if (!ldcDataStore) return;
+            const newSeasonId = ldcDataStore.seasons.length > 0 ? Math.max(...ldcDataStore.seasons.map(s => s.season_id)) + 1 : 1;
+            const newSeasonName = `LDC Saison ${newSeasonId}`;
+            let qualifiedTeams = Object.keys(ldcDataStore.teams || initialLdcData.teams); 
+            if (qualifiedTeams.length < 2) { showMessage("Pas assez d'équipes pour démarrer une saison LDC.", 4000, true); return; }
+            
+            let numTeamsForTournament;
+            if (qualifiedTeams.length >= 16) numTeamsForTournament = 16;
+            else if (qualifiedTeams.length >= 8) numTeamsForTournament = 8;
+            else if (qualifiedTeams.length >= 4) numTeamsForTournament = 4;
+            else if (qualifiedTeams.length >= 2) numTeamsForTournament = 2;
+            else { showMessage("Pas assez d'équipes pour un tournoi.", 3000, true); return; }
+
+            shuffleArray(qualifiedTeams);
+            const selectedTeams = qualifiedTeams.slice(0, numTeamsForTournament);
+            
+            const newSeason = { 
+                season_id: newSeasonId, nom_saison: newSeasonName, format: "elimination_directe",
+                teams_in_tournament: [...selectedTeams], 
+                phase_elimination: { huitiemes: [], quarts: [], demies: [], finale: [] }, // Initialiser toutes les phases
+                vainqueur: null
+            };
+
+            if (numTeamsForTournament === 16) newSeason.phase_elimination.huitiemes = generateKnockoutStage("Huitièmes", 8, selectedTeams);
+            else if (numTeamsForTournament === 8) newSeason.phase_elimination.quarts = generateKnockoutStage("Quarts", 4, selectedTeams);
+            else if (numTeamsForTournament === 4) newSeason.phase_elimination.demies = generateKnockoutStage("Demies", 2, selectedTeams);
+            else if (numTeamsForTournament === 2) newSeason.phase_elimination.finale = generateKnockoutStage("Finale", 1, selectedTeams);
+
+            ldcDataStore.seasons.push(newSeason); ldcDataStore.active_season_id = newSeasonId;
+            populateLdcUI(); // Ceci appellera checkAndAdvanceLdcStage qui générera les matchs
+            showMessage(`Nouvelle saison LDC "${newSeasonName}" créée avec ${numTeamsForTournament} équipes!`, 2500);
+            if (googleAccessToken) saveLdcDataToDrive();
+        }
+
+        function deleteSelectedLdcSeason() {
+            if (!ldcDataStore || !ldcDataStore.seasons || ldcDataStore.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison LDC.", 3000, true); return; }
+            const selector = document.getElementById(`ldc-season-selector`);
+            const seasonIdToDelete = parseInt(selector.value);
+            const seasonNameToDelete = ldcDataStore.seasons.find(s=>s.season_id === seasonIdToDelete)?.nom_saison || `Saison LDC ${seasonIdToDelete}`;
+            if (confirm(`Êtes-vous sûr de vouloir supprimer la "${seasonNameToDelete}" de la LDC ? Cette action est irréversible.`)) {
+                ldcDataStore.seasons = ldcDataStore.seasons.filter(s => s.season_id !== seasonIdToDelete);
+                if (ldcDataStore.active_season_id === seasonIdToDelete) {
+                    ldcDataStore.active_season_id = ldcDataStore.seasons.length > 0 ? ldcDataStore.seasons.sort((a,b) => b.season_id - a.season_id)[0].season_id : null;
+                }
+                populateLdcUI();
+                showMessage("Saison LDC supprimée.", 2000); if (googleAccessToken) saveLdcDataToDrive();
+            }
+        }
+
+        function handleLdcSeasonChange(event) {
+            const selectedSeasonId = parseInt(event.target.value);
+            if (!ldcDataStore || isNaN(selectedSeasonId)) return;
+            ldcDataStore.active_season_id = selectedSeasonId;
+            populateLdcUI();
+            if(googleAccessToken) saveLdcDataToDrive(); 
+        }
+
+        function populateLdcFixturesDOM(activeSeason) {
+            const bracketContainer = document.getElementById('ldc-knockout-stages');
+            if (!bracketContainer || !activeSeason || !activeSeason.phase_elimination) {
+                if(bracketContainer) bracketContainer.innerHTML = '<p style="text-align:center; padding:20px;">Aucun match à afficher pour cette saison.</p>';
+                return;
+            }
+            bracketContainer.innerHTML = ''; 
+
+            const teamsInfo = ldcDataStore.teams || {};
+            const pe = activeSeason.phase_elimination;
+            let numTeamsTournament = activeSeason.teams_in_tournament.length;
+            
+            const createTeamSlotHTML = (teamName, score, stageKey, matchIdx, teamType, match) => {
+                const teamData = teamsInfo[teamName];
+                const logo = teamData ? `<img src="${BASE_URL}${teamData.logo}" alt="${teamName}" class="team-logo">` : (teamName && teamName !== "À déterminer" && teamName !== "BYE" ? '<span class="team-logo placeholder-logo">?</span>' : '');
+                const scoreVal = score !== null ? score : '';
+                let scoreInputHTML = '';
+                if (teamName && teamName !== "À déterminer" && teamName !== "BYE" && match && match.home !== "BYE" && match.away !== "BYE") { // Vérifier que match est défini
+                     scoreInputHTML = `<input type="number" class="score-input-bracket" value="${scoreVal}" min="0" data-stagekey="${stageKey}" data-matchidx="${matchIdx}" data-team="${teamType}">`;
+                }
+                
+                let winnerClass = '';
+                if(match && match.winner === teamName && teamName !== "BYE") winnerClass = 'winner'; // Vérifier que match est défini
+                else if (match && match.winner && match.winner !== teamName && teamName !== "BYE") winnerClass = 'loser';
+
+                return `<div class="team-slot ${winnerClass}" data-team-name="${teamName || ''}">
+                            ${logo}
+                            <span class="team-name">${teamName || 'À déterminer'}</span>
+                            ${scoreInputHTML}
+                        </div>`;
+            };
+
+            const createMatchItemHTML = (match, stageKey, matchIdxParam = -1) => {
+                 const matchIndex = matchIdxParam !== -1 ? matchIdxParam : (pe[stageKey] ? pe[stageKey].indexOf(match) : -1) ;
+                 if (matchIndex === -1 && matchIdxParam === -1) { // Si on n'a pas pu trouver l'index et qu'il n'a pas été passé
+                    console.warn("Impossible de déterminer l'index du match pour le label:", match, stageKey);
+                    return ''; // Ne pas créer l'élément si l'index est invalide
+                 }
+
+                const labelText = `${stageKey.substring(0,2).toUpperCase()}-${matchIndex + 1}`; 
+                let labelStyle = ''; // Les styles pour les labels seront gérés par CSS si possible, sinon ici.
+                
+                return `<div class="bracket-match-item" data-match-id="${match.match_id || `${stageKey}-${matchIndex}`}">
+                            ${createTeamSlotHTML(match.home, match.scoreHome, stageKey, matchIndex, 'home', match)}
+                            ${createTeamSlotHTML(match.away, match.scoreAway, stageKey, matchIndex, 'away', match)}
+                            ${stageKey !== 'finale' ? `<div class="match-label" style="${labelStyle}">${labelText}</div>` : ''}
+                        </div>`;
+            };
+            
+            // Logique pour déterminer quelles colonnes afficher
+            const columns = { r16L: null, qfL: null, sfL: null, final: null, sfR: null, qfR: null, r16R: null };
+
+            if (numTeamsTournament >= 16) {
+                columns.r16L = document.createElement('div'); columns.r16L.className = 'bracket-column rounds-8-4 column-r16-left';
+                columns.r16R = document.createElement('div'); columns.r16R.className = 'bracket-column rounds-8-4 column-r16-right';
+                for (let i = 0; i < 8; i++) { 
+                    if (pe.huitiemes && pe.huitiemes[i]) {
+                        if (i < 4) columns.r16L.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
+                        else columns.r16R.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
+                    }
+                }
+            }
+            if (numTeamsTournament >= 8) {
+                columns.qfL = document.createElement('div'); columns.qfL.className = 'bracket-column rounds-8-4 column-qf-left';
+                columns.qfR = document.createElement('div'); columns.qfR.className = 'bracket-column rounds-8-4 column-qf-right';
+                 for (let i = 0; i < 4; i++) { 
+                    if (pe.quarts && pe.quarts[i]) {
+                        if (i < 2) columns.qfL.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
+                        else columns.qfR.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
+                    }
+                 }
+            }
+            if (numTeamsTournament >= 4) {
+                columns.sfL = document.createElement('div'); columns.sfL.className = 'bracket-column round-semi column-sf-left';
+                columns.sfR = document.createElement('div'); columns.sfR.className = 'bracket-column round-semi column-sf-right';
+                 for (let i = 0; i < 2; i++) { 
+                    if (pe.demies && pe.demies[i]) {
+                        if (i < 1) columns.sfL.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
+                        else columns.sfR.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
+                    }
+                 }
+            }
+            if (numTeamsTournament >= 2) {
+                columns.final = document.createElement('div'); columns.final.className = 'bracket-centerpiece-visual';
+                columns.final.innerHTML = '<i class="fas fa-trophy trophy-icon"></i>';
+                if (pe.finale && pe.finale[0]) {
+                    const finalMatchDiv = document.createElement('div');
+                    finalMatchDiv.className = 'final-match-placeholder';
+                    finalMatchDiv.innerHTML = createMatchItemHTML(pe.finale[0], 'finale', 0);
+                    columns.final.appendChild(finalMatchDiv);
+                }
+            }
+
+            // Ajouter les colonnes au conteneur dans l'ordre
+            if(columns.r16L) bracketContainer.appendChild(columns.r16L);
+            if(columns.qfL) bracketContainer.appendChild(columns.qfL);
+            if(columns.sfL) bracketContainer.appendChild(columns.sfL);
+            if(columns.final) bracketContainer.appendChild(columns.final);
+            if(columns.sfR) bracketContainer.appendChild(columns.sfR);
+            if(columns.qfR) bracketContainer.appendChild(columns.qfR);
+            if(columns.r16R) bracketContainer.appendChild(columns.r16R);
+            
+            document.querySelectorAll('#ldc-knockout-stages .score-input-bracket').forEach(input => {
+                input.addEventListener('change', handleLdcScoreChange);
+            });
+        }
+
+        function handleLdcScoreChange(event) {
+            const input = event.target; const stageKey = input.dataset.stagekey; const matchIndex = parseInt(input.dataset.matchidx);
+            const teamType = input.dataset.team; let score = input.value === '' ? null : parseInt(input.value);
+            const activeSeason = ldcDataStore.seasons.find(s => s.season_id === ldcDataStore.active_season_id);
+            if (!activeSeason || !activeSeason.phase_elimination || !activeSeason.phase_elimination[stageKey] || !activeSeason.phase_elimination[stageKey][matchIndex]) return;
+            const match = activeSeason.phase_elimination[stageKey][matchIndex];
+            if (score !== null && (isNaN(score) || score < 0)) { input.value = match[teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
+            
+            if (teamType === 'home') match.scoreHome = score; else match.scoreAway = score;
+            
+            if (match.home === "BYE") match.winner = match.away; 
+            else if (match.away === "BYE") match.winner = match.home; 
+            else if (typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number') {
+                if(match.scoreHome > match.scoreAway) match.winner = match.home;
+                else if (match.scoreAway > match.scoreHome) match.winner = match.away;
+                else match.winner = null; 
+            } else match.winner = null;
+
+            checkAndAdvanceLdcStage(activeSeason); 
+            displayLdcWinner(activeSeason); 
+            if(googleAccessToken) saveLdcDataToDrive();
+        }
+
+        function checkAndAdvanceLdcStage(activeSeason) { 
+             if (!activeSeason || !activeSeason.phase_elimination) return;
+            const pe = activeSeason.phase_elimination;
+            const stagesOrder = ['huitiemes', 'quarts', 'demies', 'finale'];
+            
+            for(let i = 0; i < stagesOrder.length; i++) {
+                const stageKey = stagesOrder[i];
+                const nextKey = stagesOrder[i+1];
+                
+                // Si l'étape actuelle est vide mais devrait être générée (cas initial)
+                if((!pe[stageKey] || pe[stageKey].length === 0) && activeSeason.teams_in_tournament.length > 0) {
+                    let teamsForThisStage = [];
+                    let numMatchesForThisStage = 0;
+
+                    if (i === 0) teamsForThisStage = activeSeason.teams_in_tournament; // Pour la toute première phase
+                    else { // Pour les phases suivantes, prendre les vainqueurs de la phase précédente
+                        const prevStageKey = stagesOrder[i-1];
+                        if (pe[prevStageKey] && pe[prevStageKey].every(m => m.winner || m.home === "BYE" || m.away === "BYE")) {
+                           teamsForThisStage = pe[prevStageKey].map(m => m.winner).filter(Boolean);
+                        }
+                    }
+                    
+                    // Déterminer le nombre de matchs en fonction du nombre d'équipes et de la phase
+                    if (stageKey === 'huitiemes' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
+                    else if (stageKey === 'quarts' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
+                    else if (stageKey === 'demies' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
+                    else if (stageKey === 'finale' && teamsForThisStage.length >= 1) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2); // >=1 pour la finale
+                    
+                    if (numMatchesForThisStage > 0 && teamsForThisStage.length > 0) {
+                         console.log(`Génération des matchs pour ${stageKey}. Équipes: ${teamsForThisStage.length}, Matchs: ${numMatchesForThisStage}`);
+                         pe[stageKey] = generateKnockoutStage(stageKey.charAt(0).toUpperCase() + stageKey.slice(1), numMatchesForThisStage, [], teamsForThisStage);
+                    }
+                }
+
+                // Vérifier si tous les matchs de l'étape actuelle ont un vainqueur (après génération potentielle)
+                if(pe[stageKey] && pe[stageKey].length > 0) {
+                    const allMatchesInStageHaveWinner = pe[stageKey].every(m => {
+                        if (m.home === "BYE" && !m.winner) { m.winner = m.away; return true;}
+                        if (m.away === "BYE" && !m.winner) { m.winner = m.home; return true;}
+                        return m.winner;
+                    });
+
+                    if(allMatchesInStageHaveWinner) { 
+                        if(nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) { // Si l'étape suivante est vide, on la génère
+                            const winnersFromCurrentStage = pe[stageKey].map(m => m.winner).filter(Boolean);
+                            const numNextMatches = Math.ceil(winnersFromCurrentStage.length / 2);
+                            if (numNextMatches > 0 && winnersFromCurrentStage.length > 0) {
+                                console.log(`Génération de ${nextKey} avec ${winnersFromCurrentStage.length} vainqueurs.`);
+                                pe[nextKey] = generateKnockoutStage(
+                                    nextKey.charAt(0).toUpperCase() + nextKey.slice(1), 
+                                    numNextMatches, [], winnersFromCurrentStage
+                                );
+                            }
+                        } else if (!nextKey && stageKey === 'finale') { 
+                             activeSeason.vainqueur = pe[stageKey][0]?.winner; 
+                        }
+                    } else {
+                        break; // Arrêter si une étape n'est pas complétée
+                    }
+                } else if (i > 0 && (!pe[stagesOrder[i-1]] || !pe[stagesOrder[i-1]].every(m => m.winner))) {
+                    // Si l'étape précédente n'est pas jouée, on ne génère pas la suite.
+                    break;
+                }
+            }
+            populateLdcFixturesDOM(activeSeason); 
+        }
+        
+        function displayLdcWinner(activeSeason) {
+            const winnerSection = document.getElementById('ldc-winner-section'); 
+            const winnerDisplay = document.getElementById('ldc-winner-display');
+            if (!winnerSection || !winnerDisplay) return;
+            if (activeSeason && activeSeason.vainqueur && activeSeason.vainqueur !== "BYE") {
+                const winnerTeamData = ldcDataStore.teams[activeSeason.vainqueur];
+                const logoHtml = winnerTeamData ? `<img src="${BASE_URL}${winnerTeamData.logo}" alt="${activeSeason.vainqueur}" class="team-logo" style="width:50px; height:50px; margin-right:15px; border-radius:50%; background:rgba(255,255,255,0.1); padding:3px;">` : '';
+                winnerDisplay.innerHTML = `<i class="fas fa-trophy trophy-ldc" style="font-size: 3em; margin-right: 15px; color: var(--ldc-gold);"></i> ${logoHtml} ${activeSeason.vainqueur}`;
+                winnerSection.style.display = 'block';
+            } else winnerSection.style.display = 'none';
+        }
         
         function populateLdcUI() {
             populateLdcSeasonSelector();
@@ -813,66 +1146,57 @@
                 const winnerSection = document.getElementById('ldc-winner-section');
                 if (winnerSection) winnerSection.style.display = 'none';
             }
-            const deleteBtn = document.getElementById(`delete-season-ldc-btn`);
-            if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !ldcDataStore.seasons || ldcDataStore.seasons.length <= 1;
-            
-            const saveBtn = document.getElementById('sauvegarde-ldc-btn');
-            if(saveBtn) saveBtn.disabled = !googleAccessToken;
-            const newSeasonBtn = document.getElementById('nouvelle-saison-ldc-btn');
-            if(newSeasonBtn) newSeasonBtn.disabled = !googleAccessToken;
+            // Mettre à jour l'état des boutons liés à la connexion/saison
+            updateAuthUI(googleAccessToken !== null); 
         }
         
-        // --- INITIALISATION ET ÉCOUTEURS D'ÉVÉNEMENTS ---
         document.addEventListener('DOMContentLoaded', async () => {
             messageArea = document.getElementById('message-area');
             ldcAudioPlayer = document.getElementById('ldc-audio-player'); 
             
-            // Attachement des écouteurs d'événements ici
             document.getElementById('nouvelle-saison-ldc-btn')?.addEventListener('click', createNewLdcSeason);
             document.getElementById('sauvegarde-ldc-btn')?.addEventListener('click', () => saveLdcDataToDrive());
             document.getElementById('delete-season-ldc-btn')?.addEventListener('click', deleteSelectedLdcSeason);
             document.getElementById('ldc-season-selector')?.addEventListener('change', handleLdcSeasonChange);
             document.getElementById('signin-button')?.addEventListener('click', handleAuthClick);
 
-            const hamburger = document.querySelector('.hamburger'); 
-            const nav = document.querySelector('header nav');
-            if (hamburger && nav) {
-                hamburger.addEventListener('click', () => { 
-                    nav.classList.toggle('active'); 
-                    const icon = hamburger.querySelector('i'); 
-                    icon.classList.toggle('fa-bars'); 
-                    icon.classList.toggle('fa-times'); 
+            const hamburgerEl = document.querySelector('.hamburger'); 
+            const navEl = document.querySelector('header nav');
+            if (hamburgerEl && navEl) {
+                hamburgerEl.addEventListener('click', () => { 
+                    navEl.classList.toggle('active'); 
+                    const icon = hamburgerEl.querySelector('i'); 
+                    icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); 
                 });
                 document.addEventListener('click', (e) => { 
                     const target = e.target; 
-                    const isClickInsideNav = nav.contains(target) || hamburger.contains(target); 
-                    if (!isClickInsideNav && nav.classList.contains('active')) { 
-                        nav.classList.remove('active'); 
-                        hamburger.querySelector('i').className = 'fas fa-bars'; 
+                    if (!navEl.contains(target) && !hamburgerEl.contains(target) && navEl.classList.contains('active')) { 
+                        navEl.classList.remove('active'); 
+                        hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
                     } 
                 });
             }
 
-            const allNavLinks = document.querySelectorAll('header nav ul li a');
-            allNavLinks.forEach(link => {
+            const allNavLinksList = document.querySelectorAll('header nav ul li a');
+            allNavLinksList.forEach(link => {
                 link.addEventListener('click', () => {
-                    if (window.innerWidth <= 992 && nav && nav.classList.contains('active')) { 
-                        nav.classList.remove('active'); 
-                        if(hamburger) hamburger.querySelector('i').className = 'fas fa-bars'; 
+                    if (window.innerWidth <= 992 && navEl && navEl.classList.contains('active')) { 
+                        navEl.classList.remove('active'); 
+                        if(hamburgerEl) hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
                     }
-                    allNavLinks.forEach(l => l.classList.remove('active-nav-link'));
+                    allNavLinksList.forEach(l => l.classList.remove('active-nav-link'));
                     link.classList.add('active-nav-link');
                 });
             });
         
-            const ldcMusicBtn = document.getElementById('ldc-music-btn');
-            if (ldcMusicBtn && ldcAudioPlayer) { 
-                ldcMusicBtn.addEventListener('click', () => {
+            const ldcMusicBtnEl = document.getElementById('ldc-music-btn');
+            if (ldcMusicBtnEl && ldcAudioPlayer) { 
+                ldcMusicBtnEl.addEventListener('click', () => {
                     initAudioContext(); 
-                    const icon = ldcMusicBtn.querySelector('i');
+                    const icon = ldcMusicBtnEl.querySelector('i');
                     if (ldcAudioPlayer.paused || ldcAudioPlayer.ended) {
                         ldcAudioPlayer.play().catch(e => {
-                            console.warn("Erreur lecture auto audio LDC:", e);
+                            console.warn("Erreur lecture audio LDC:", e);
                             showMessage("Cliquez à nouveau pour jouer l'hymne.", 2000);
                         });
                         icon.classList.remove('fa-play'); icon.classList.add('fa-pause');
@@ -883,24 +1207,19 @@
                 });
             }
             
-            // Initialisation Google Drive et chargement des données
             const storedToken = localStorage.getItem('google_access_token_ldc');
-            if (storedToken) {
-                googleAccessToken = storedToken;
-                console.log("Token récupéré du localStorage.");
-            }
+            if (storedToken) googleAccessToken = storedToken;
             
             await checkAndInitGis(); 
 
             if(googleAccessToken){ 
-                updateAuthUI(true); 
-                await loadLdcDataFromDrive(); 
+                await loadLdcDataFromDrive(); // loadLdcDataFromDrive mettra à jour l'UI Auth et le statut
             } else {
                 updateAuthUI(false); 
                 ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
             }
             
-            populateLdcUI(); 
+            populateLdcUI(); // A appeler après que les données soient chargées ou initialisées
             
             const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
             document.querySelectorAll('.section').forEach(el => { 
@@ -911,7 +1230,7 @@
             const activeNavLink = document.querySelector('header nav ul li a[href="champions.html"]');
             if(activeNavLink) activeNavLink.classList.add('active-nav-link');
 
-            console.log("Page LDC initialisée. Erreurs JS principales corrigées.");
+            console.log("Page LDC initialisée et prête.");
         });
 
     </script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-P">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ligue des Champions des Peluches - Road to Glory!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -11,61 +11,84 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color-ldc: #0f0c29; /* Fond violet/bleu nuit profond */
-            --primary-color-ldc: #5352ed; /* Violet/Bleu électrique pour accents */
-            --secondary-color-ldc: #00c6ff; /* Cyan/Turquoise pour lignes et highlights */
-            --accent-gold-ldc: #ffde59; /* Or plus vif */
-            --text-color-light-ldc: #e0e0fc;
-            --text-color-dark-ldc: #333;
-            --card-bg-ldc: rgba(255, 255, 255, 0.05); /* Cartes de match translucides */
-            --border-color-ldc: rgba(var(--secondary-color-ldc-rgb, 0, 198, 255), 0.3);
-            --line-color-ldc: var(--secondary-color-ldc);
+            /* Nouvelle Palette LDC */
+            --ldc-deep-blue: #061029;
+            --ldc-mid-blue: #0b215c;
+            --ldc-light-blue: #00aeff;
+            --ldc-purple: #4f0a70;
+            --ldc-gold: #FFD700; /* Or classique LDC */
+            --ldc-silver: #C0C0C0; /* Argent pour textes secondaires */
+            --ldc-text-light: #f0f0f8; /* Texte clair sur fond LDC */
+            --ldc-card-bg: rgba(0, 20, 60, 0.3); /* Fond de carte translucide bleuté */
+            --ldc-border-color: rgba(0, 174, 255, 0.4); /* Bordure cyan translucide */
+            --ldc-border-color-subtle: rgba(0, 174, 255, 0.2); /* Bordure plus discrète */
+
+            /* Couleurs originales conservées pour d'autres sections si besoin, mais LDC utilisera les siennes */
+            --bg-color-original: #0f0c29; 
+            --primary-color-original: #5352ed; 
+            --secondary-color-original: #00c6ff; 
+            --accent-gold-original: #ffde59;
+            --text-color-light-original: #e0e0fc;
+            --text-color-dark-original: #333;
+            --card-bg-original: rgba(255, 255, 255, 0.05);
+            --border-color-original: rgba(0, 198, 255, 0.3);
+            --line-color-original: var(--secondary-color-original);
 
             --neon-green: #39FF14; 
             --neon-red: #FF3131; 
             --neon-yellow: #FFF01F;
+
+            /* Variables spécifiques LDC pour faciliter la lecture */
+            --current-bg-color: var(--ldc-deep-blue);
+            --current-primary-color: var(--ldc-mid-blue);
+            --current-secondary-color: var(--ldc-light-blue);
+            --current-accent-gold: var(--ldc-gold);
+            --current-text-light: var(--ldc-text-light);
+            --current-card-bg: var(--ldc-card-bg);
+            --current-border-color: var(--ldc-border-color);
+            --current-line-color: var(--ldc-light-blue);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Open Sans', sans-serif; line-height: 1.6; color: var(--text-color-light-ldc);
-            background: linear-gradient(135deg, var(--bg-color-ldc) 0%, #0a081a 100%);
+            font-family: 'Open Sans', sans-serif; line-height: 1.6; color: var(--current-text-light);
+            background: linear-gradient(145deg, var(--ldc-deep-blue) 0%, var(--ldc-mid-blue) 50%, var(--ldc-purple) 100%);
             overflow-x: hidden; scroll-behavior: smooth;
         }
-        .container { width: 100%; max-width: 1400px; /* Plus large pour le bracket */ margin: 0 auto; padding: 0 20px; }
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
 
         h1, h2, h3, h4, .section-title {
             font-family: 'Oswald', sans-serif; font-weight: 700;
-            color: var(--accent-gold-ldc); text-transform: uppercase; letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(var(--accent-gold-ldc-rgb,255,222,89),0.5);
+            color: var(--current-accent-gold); text-transform: uppercase; letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255,215,0,0.6); /* Ombre portée dorée plus prononcée */
         }
         
         header {
-            background-color: rgba(0,0,0,0.3); 
-            backdrop-filter: blur(5px);
-            color: var(--text-color-light-ldc);
+            background-color: rgba(6, 16, 41, 0.7); /* Fond header accordé à --ldc-deep-blue avec transparence */
+            backdrop-filter: blur(8px);
+            color: var(--current-text-light);
             padding: 10px 0; position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid var(--border-color-ldc);
+            border-bottom: 1px solid var(--current-border-color);
         }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { display: flex; align-items: center; text-decoration: none; color: var(--text-color-light-ldc); }
-        .logo img { height: 45px; margin-right: 12px; filter: drop-shadow(0 0 5px var(--accent-gold-ldc));} 
-        .logo h1 { font-size: 1.6rem; color: var(--accent-gold-ldc); letter-spacing: 1px;}
+        .logo { display: flex; align-items: center; text-decoration: none; color: var(--current-text-light); }
+        .logo img { height: 45px; margin-right: 12px; filter: drop-shadow(0 0 8px var(--current-accent-gold));} 
+        .logo h1 { font-size: 1.6rem; color: var(--current-accent-gold); letter-spacing: 1px;}
         
         .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
          #drive-status { 
             display: inline-flex; align-items: center; gap: 5px; font-size: 0.85em; 
-            color: var(--text-color-light-ldc); opacity: 0.9; 
-            border: 1px solid var(--secondary-color-ldc); padding: 4px 8px; border-radius: 4px;
+            color: var(--current-text-light); opacity: 0.9; 
+            border: 1px solid var(--current-secondary-color); padding: 4px 8px; border-radius: 4px;
             transition: color 0.3s ease, border-color 0.3s ease; white-space: nowrap;
          }
-         #drive-status i { margin-right: 5px; color: var(--secondary-color-ldc); }
+         #drive-status i { margin-right: 5px; color: var(--current-secondary-color); }
          #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); }
          #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); }
          #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); }
          #signin-button { 
-            padding: 7px 12px; font-size: 0.85em; background-color: var(--accent-gold-ldc); 
-            color: var(--bg-color-ldc); border: none; border-radius: 4px; cursor: pointer;
+            padding: 7px 12px; font-size: 0.85em; background-color: var(--current-accent-gold); 
+            color: var(--ldc-deep-blue); border: none; border-radius: 4px; cursor: pointer;
             transition: all 0.3s ease; font-weight: 600; white-space: nowrap;
          }
          #signin-button:hover:not(:disabled) { background-color: #fff; transform: translateY(-1px); }
@@ -75,7 +98,7 @@
         nav ul { display: flex; list-style: none; margin:0; padding:0; flex-wrap: wrap; justify-content: center;}
         nav ul li { margin: 0 5px; } 
         nav ul li a { 
-            color: var(--text-color-light-ldc); text-decoration: none; font-weight: 500;
+            color: var(--current-text-light); text-decoration: none; font-weight: 500;
             transition: all 0.3s ease; padding: 10px 15px; 
             display: inline-flex; align-items: center; gap: 8px;
             border-radius: 25px; border: 2px solid transparent;
@@ -83,130 +106,254 @@
         }
         nav ul li a i { font-size: 0.9em; }
         nav ul li a:hover, nav ul li a.active-nav-link {
-            color: var(--accent-gold-ldc); background-color: rgba(var(--secondary-color-ldc-rgb, 0, 198, 255), 0.15); 
-            border-color: var(--secondary-color-ldc);
-            box-shadow: 0 0 10px rgba(var(--secondary-color-ldc-rgb, 0, 198, 255), 0.5); 
+            color: var(--current-accent-gold); background-color: rgba(0, 174, 255, 0.15); /* Utilisation de ldc-light-blue pour hover */
+            border-color: var(--current-secondary-color);
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5); 
         }
-        .hamburger { display: none; font-size: 1.8rem; color: var(--text-color-light-ldc); cursor: pointer; z-index: 1001; margin-left:15px;}
+        .hamburger { display: none; font-size: 1.8rem; color: var(--current-text-light); cursor: pointer; z-index: 1001; margin-left:15px;}
 
         .page-title-bar {
-            background: linear-gradient(135deg, var(--primary-color-ldc) 0%, var(--ldc-theme-color-darker) 100%);
-            color: var(--accent-gold-ldc); padding: 30px 0; text-align: center; margin-bottom: 40px;
-            border-bottom: 6px solid var(--accent-gold-ldc); box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, var(--ldc-mid-blue) 0%, var(--ldc-purple) 100%); /* Dégradé titre LDC */
+            color: var(--current-accent-gold); padding: 30px 0; text-align: center; margin-bottom: 40px;
+            border-bottom: 6px solid var(--current-accent-gold); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         .page-title-bar h1 {
-            font-size: 3.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-            color: var(--accent-gold-ldc); letter-spacing: 2px;
+            font-size: 3.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            color: var(--current-accent-gold); letter-spacing: 2px;
         }
         .page-title-bar h1 i { margin: 0 15px; animation: subtleTrophyPulse 2s infinite ease-in-out; }
         @keyframes subtleTrophyPulse { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
 
-        .section { margin-bottom: 50px; background-color: var(--card-bg-ldc); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.2); border: 1px solid var(--border-color-ldc);}
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color-ldc); }
-        .section-title { font-size: 2.2rem; letter-spacing: 1px; color: var(--accent-gold-ldc);}
+        .section { margin-bottom: 50px; background-color: var(--current-card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.4); border: 1px solid var(--current-border-color);}
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--current-border-color-subtle); }
+        .section-title { font-size: 2.2rem; letter-spacing: 1px; color: var(--current-accent-gold);}
         
         .action-buttons { display:flex; align-items:center; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;}
         .action-buttons .league-music-btn {
-            background-color: var(--accent-gold-ldc); color: var(--bg-color-ldc); border: 1px solid var(--bg-color-ldc);
+            background-color: var(--current-accent-gold); color: var(--ldc-deep-blue); border: 1px solid var(--ldc-deep-blue);
             padding: 10px 18px; border-radius: 25px; font-family: 'Oswald', sans-serif;
             cursor: pointer; transition: all 0.3s ease; font-weight: 600;
         }
-        .action-buttons .league-music-btn:hover { background-color: var(--bg-color-ldc); color: var(--accent-gold-ldc); border-color: var(--accent-gold-ldc);}
+        .action-buttons .league-music-btn:hover { background-color: var(--ldc-deep-blue); color: var(--current-accent-gold); border-color: var(--current-accent-gold);}
         .action-buttons .league-music-btn i { margin-right: 8px; }
 
         .season-selector-container { display: flex; align-items: center; gap: 10px; }
-        .season-selector-container label { font-weight: 600; color: var(--text-color-light-ldc); font-family: 'Oswald'; }
+        .season-selector-container label { font-weight: 600; color: var(--current-text-light); font-family: 'Oswald'; }
         .season-selector-container select {
-            padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color-ldc);
-            font-family: 'Open Sans'; font-size: 0.9rem; background-color: rgba(255,255,255,0.1); color:var(--text-color-light-ldc);
+            padding: 8px 12px; border-radius: 4px; border: 1px solid var(--current-border-color);
+            font-family: 'Open Sans'; font-size: 0.9rem; background-color: rgba(0, 16, 41, 0.5); color:var(--current-text-light);
         }
-        .season-selector-container select option { background-color: var(--ldc-theme-color-darker); color: var(--text-color-light-ldc); }
+        .season-selector-container select option { background-color: var(--ldc-deep-blue); color: var(--current-text-light); }
 
         .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn {
             padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase;
-            color: var(--bg-color-ldc); background-color: var(--secondary-color-ldc);
+            color: var(--ldc-deep-blue); background-color: var(--current-secondary-color); /* Bleu clair LDC */
             border: none; border-radius: 5px; cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;
         }
         .nouvelle-saison-btn:hover:not(:disabled), .sauvegarde-json-btn:hover:not(:disabled), .delete-season-btn:hover:not(:disabled) { 
-            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
         }
-        .nouvelle-saison-btn:hover:not(:disabled) { background-color: var(--primary-color-ldc); }
+        .nouvelle-saison-btn:hover:not(:disabled) { background-color: var(--ldc-mid-blue); color: var(--current-text-light); }
         .nouvelle-saison-btn:disabled, .sauvegarde-json-btn:disabled, .delete-season-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .sauvegarde-json-btn { background-color: var(--accent-gold-ldc); color: var(--bg-color-ldc); }
-        .sauvegarde-json-btn:hover:not(:disabled) { background-color: #fff; color:var(--accent-gold-ldc); border: 1px solid var(--accent-gold-ldc); }
+        .sauvegarde-json-btn { background-color: var(--current-accent-gold); color: var(--ldc-deep-blue); }
+        .sauvegarde-json-btn:hover:not(:disabled) { background-color: #fff; color:var(--current-accent-gold); border: 1px solid var(--current-accent-gold); }
         .delete-season-btn { background-color: var(--neon-red); margin-left: 5px; color: #fff;}
         .delete-season-btn:hover:not(:disabled) { background-color: #cc2828; }
 
-        /* Knockout Bracket Styles */
+        /* Styles pour les tableaux de matchs LDC (phase à élimination directe) */
+        .knockout-stage { /* Conteneur pour chaque étape: Huitièmes, Quarts, etc. */
+            margin-bottom: 35px;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.15); /* Un fond légèrement différent pour chaque étape */
+            border-radius: 10px;
+            border: 1px solid var(--ldc-border-color-subtle);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .knockout-stage h3 { /* Titre de l'étape: Huitièmes, Quarts etc. */
+            color: var(--current-accent-gold);
+            text-align: center;
+            margin-bottom: 25px;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 1.6rem; /* Taille augmentée */
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--ldc-purple); /* Ligne de séparation violette */
+        }
+
+        .fixtures-table.ldc-fixtures {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fixtures-table.ldc-fixtures td {
+            padding: 12px 8px; 
+            border-bottom: 1px solid var(--ldc-border-color-subtle);
+        }
+        .fixtures-table.ldc-fixtures tr:last-child td {
+            border-bottom: none;
+        }
+
+        .fixture-match {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .fixture-team {
+            display: flex;
+            align-items: center;
+            flex-basis: calc(50% - 40px); /* Espace pour le nom et logo, laissant de la place pour les scores */
+            font-size: 0.95rem; /* Légèrement plus grand */
+            color: var(--current-text-light);
+        }
+        .fixture-team.home {
+            justify-content: flex-start;
+        }
+        .fixture-team.away {
+            justify-content: flex-end; 
+            text-align: right;
+        }
+        .fixture-team span { /* Nom de l'équipe */
+            margin: 0 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Pour les noms longs */
+        }
+
+        .fixture-team .team-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 50%; /* Logos ronds */
+            background-color: rgba(255, 255, 255, 0.05); /* Fond clair pour logos transparents */
+            padding: 2px;
+            border: 1px solid var(--ldc-border-color-subtle);
+            flex-shrink: 0; /* Empêche le logo de rétrécir */
+        }
+        
+        /* Ordre HTML: Domicile: Nom puis Logo ; Extérieur: Logo puis Nom */
+        .fixture-team.home .team-logo { order: 1; } 
+        .fixture-team.home span { order: 0; }
+
+        .fixture-team.away .team-logo { order: 0; } 
+        .fixture-team.away span { order: 1; }
+
+
+        .fixture-score-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-basis: 80px; /* Espace fixe pour les scores */
+            flex-shrink: 0;
+        }
+        .fixture-score-inputs input[type="number"] {
+            width: 35px; 
+            padding: 6px 4px;
+            text-align: center;
+            background-color: rgba(0,0,0, 0.4); 
+            border: 1px solid var(--ldc-border-color);
+            color: var(--current-text-light);
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            -moz-appearance: textfield; 
+        }
+        .fixture-score-inputs input[type="number"]::-webkit-outer-spin-button,
+        .fixture-score-inputs input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none; 
+          margin: 0;
+        }
+        .fixture-score-inputs .vs-separator {
+            margin: 0 6px;
+            font-weight: bold;
+            color: var(--current-accent-gold);
+            font-size: 0.9rem;
+        }
+        
+        /* Styles pour l'ancien bracket (conservés pour le moment) */
         .knockout-bracket { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px; overflow-x: auto; min-width: 1200px; }
-        .round { display: flex; flex-direction: column; justify-content: space-around; align-items: center; margin: 0 10px; min-height: 450px; /* Pour aligner verticalement */ }
-        .round-title { font-family: 'Oswald', sans-serif; color: var(--accent-gold-ldc); font-size: 1.3em; margin-bottom: 20px; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); }
+        .round { display: flex; flex-direction: column; justify-content: space-around; align-items: center; margin: 0 10px; min-height: 450px; }
+        .round-title { font-family: 'Oswald', sans-serif; color: var(--current-accent-gold); font-size: 1.3em; margin-bottom: 20px; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); }
         .match {
-            background-color: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color-ldc);
+            background-color: rgba(255, 255, 255, 0.08); border: 1px solid var(--current-border-color);
             border-radius: 8px; padding: 10px; margin-bottom: 20px; width: 200px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative;
         }
         .match-teams { display: flex; flex-direction: column; gap: 5px; }
         .match-team { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 0.9em;}
         .match-team .team-name { flex-grow: 1; text-align: left; padding-left: 5px; }
-        .match-team .team-logo { width: 24px; height: 24px; margin-right: 8px; }
+        .match-team .team-logo { width: 24px; height: 24px; margin-right: 8px; } /* Ce style peut être surchargé par le nouveau ci-dessus pour .fixture-team .team-logo */
         .match-team input[type="number"] {
             width: 35px; padding: 3px; text-align: center; margin-left: 8px;
-            background-color: rgba(255,255,255,0.1); border: 1px solid var(--border-color-ldc); color: var(--text-color-light-ldc);
+            background-color: rgba(255,255,255,0.1); border: 1px solid var(--current-border-color); color: var(--current-text-light);
             border-radius: 3px; font-family: 'Roboto Mono', monospace;
         }
-         .match-connector-h, .match-connector-v { position: absolute; background-color: var(--line-color-ldc); z-index: -1; }
+         .match-connector-h, .match-connector-v { position: absolute; background-color: var(--current-line-color); z-index: -1; }
         .match-connector-h { height: 2px; }
         .match-connector-v { width: 2px; }
-
-        /* Spécifique à la structure du bracket (exemple pour 16 équipes) */
-        .round.round-of-16 .match { margin-bottom: 40px; } /* Plus d'espace pour les 16èmes */
+        .round.round-of-16 .match { margin-bottom: 40px; } 
         .round.quarter-finals .match { margin-bottom: 80px; }
         .round.semi-finals .match { margin-bottom: 160px; }
-        .round.final .match { align-self: center; margin-top: calc(50% - 100px); /* Tentative de centrage vertical */ }
+        .round.final .match { align-self: center; margin-top: calc(50% - 100px); }
         
         .bracket-center-piece { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 40px; }
-        #ldc-trophy-img { width: 120px; height: auto; filter: drop-shadow(0 0 15px var(--accent-gold-ldc)); margin: 20px 0; }
+        #ldc-trophy-img { width: 120px; height: auto; filter: drop-shadow(0 0 15px var(--current-accent-gold)); margin: 20px 0; }
         #ldc-winner-section { 
-            background: none; border: 2px solid var(--accent-gold-ldc); box-shadow: 0 0 20px var(--accent-gold-ldc);
-            color: var(--accent-gold-ldc); padding: 20px; border-radius: 10px;
-            text-align:center; margin-top: 20px; display:none; /* Caché initialement */
+            background: none; border: 2px solid var(--current-accent-gold); box-shadow: 0 0 20px var(--current-accent-gold);
+            color: var(--current-accent-gold); padding: 20px; border-radius: 10px;
+            text-align:center; margin-top: 20px; display:none; 
         }
-        #ldc-winner-section .section-title { color: var(--accent-gold-ldc); }
+        #ldc-winner-section .section-title { color: var(--current-accent-gold); }
         #ldc-winner-display { font-size: 2rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-weight:700; margin-top: 10px; }
         #ldc-winner-display .team-logo { width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;}
 
 
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; } 
-        .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
-        .team-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .team-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 10px; }
-        .team-card h4 { font-size: 1.1rem; margin-bottom: 5px; color: var(--ldc-theme-color-darker); }
+        .team-card { 
+            background-color: var(--current-card-bg); 
+            border: 1px solid var(--current-border-color-subtle); 
+            border-radius: 10px; padding: 15px; text-align: center; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; 
+        }
+        .team-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-color: var(--current-border-color); }
+        .team-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));}
+        .team-card h4 { font-size: 1.1rem; margin-bottom: 5px; color: var(--current-text-light); }
 
-        footer { background-color: var(--ldc-theme-color-darker); color: var(--text-color-light); padding: 50px 0 30px; border-top: 5px solid var(--accent-gold); }
+        footer { 
+            background-color: var(--ldc-deep-blue); /* Fond footer accordé */
+            color: var(--ldc-silver); /* Texte footer plus doux */
+            padding: 50px 0 30px; 
+            border-top: 5px solid var(--ldc-mid-blue); /* Bordure supérieure accordée */
+        }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-        .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; display: inline-block;}
+        .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--current-accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--current-accent-gold); padding-bottom: 10px; display: inline-block;}
         .footer-section ul { list-style: none; padding: 0;}
         .footer-section ul li { margin-bottom: 10px; }
-        .footer-section ul li a { color: #bdc3c7; text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
-        .footer-section ul li a:hover { color: var(--accent-gold); padding-left: 5px; }
-        .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #5a3e8a; font-size: 0.9rem; color: #95a5a6; }
+        .footer-section ul li a { color: var(--ldc-silver); text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
+        .footer-section ul li a:hover { color: var(--current-accent-gold); padding-left: 5px; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--ldc-mid-blue); font-size: 0.9rem; color: var(--ldc-silver); opacity: 0.8; }
         
         .message-area {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background-color: rgba(44, 62, 80, 0.9); color: var(--text-color-light);
+            background-color: rgba(11, 33, 92, 0.9); /* Fond message accordé à --ldc-mid-blue */
+            color: var(--current-text-light);
             padding: 12px 25px; border-radius: 6px; z-index: 3000; 
             opacity: 0; visibility: hidden; transition: all 0.5s ease; pointer-events: none;
-            font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
             max-width: 90%; text-align: center; 
+            border: 1px solid var(--ldc-light-blue);
         }
         .message-area.visible { opacity: 1; visibility: visible; transform: translate(-50%, -15px) ; pointer-events: auto; }
-        .message-area.error-message { background-color: rgba(255, 49, 49, 0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
+        .message-area.error-message { background-color: rgba(var(--neon-red-rgb, 255, 49, 49), 0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
 
-        @media (max-width: 1200px) { /* Pour le bracket sur écrans plus petits */
+
+        @media (max-width: 1200px) { 
             .knockout-bracket { padding: 10px; min-width: 900px; }
             .round { margin: 0 5px; }
             .match { width: 180px; padding: 8px; }
@@ -219,38 +366,56 @@
             .header-actions { order: 3; width: 100%; justify-content: center; margin-top:10px; }
             nav {order:1; flex-grow: 0; margin-right: auto;} 
             .hamburger {display: block; order: 2; margin-left: 15px;}
-            nav.active { max-height: 500px; }
-            nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
+            nav.active { max-height: 500px; } /* Nav dépliée */
+            nav ul { flex-direction: column; padding: 10px 0; gap: 0; background-color: rgba(6, 16, 41, 0.95); /* Fond nav mobile */ }
             nav ul li { margin-left: 0; width: 100%; }
-            nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); border-radius:0; justify-content: flex-start; }
-            nav ul li a:hover, nav ul li a.active-nav-link { background-color: rgba(255,255,255,0.1); border-color:transparent; color: var(--accent-gold); transform: none; box-shadow: none;}
-            .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+            nav ul li a { padding: 15px 20px; border-bottom: 1px solid var(--ldc-border-color-subtle); border-radius:0; justify-content: flex-start; }
+            nav ul li a:hover, nav ul li a.active-nav-link { background-color: rgba(0, 174, 255, 0.2); border-color:transparent; color: var(--current-accent-gold); transform: none; box-shadow: none;}
+            .teams-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } /* Cartes équipes un peu plus petites */
+
+            .fixture-team { flex-basis: calc(50% - 35px); font-size: 0.9rem; }
+            .fixture-team span { margin: 0 6px;}
+            .fixture-score-inputs { flex-basis: 70px; }
+            .fixture-score-inputs input[type="number"] { width: 30px; padding: 5px 3px; font-size: 0.85rem;}
+            .fixture-score-inputs .vs-separator { margin: 0 4px; font-size: 0.85rem;}
         }
         @media (max-width: 768px) {
             .logo h1 { font-size: 1.5rem; }
             .page-title-bar h1 {font-size: 2.2rem;}
             .section-title { font-size: 1.8rem; }
-            .fixtures-table th { font-size: 0.8rem; padding: 10px 5px;}
-            .fixtures-table td { font-size: 0.75rem; padding: 8px 5px;}
+            .knockout-stage h3 { font-size: 1.4rem; } /* Titre des étapes plus petit */
+            .fixtures-table.ldc-fixtures td { padding: 10px 5px;}
+            .fixture-match { flex-wrap: wrap; justify-content: center; /* Permet le retour à la ligne si besoin */ }
+            .fixture-team { flex-basis: 100%; margin-bottom: 5px; /* Chaque équipe prend toute la largeur */ }
+            .fixture-team.home { justify-content: space-between; flex-direction: row-reverse; /* Logo à gauche, nom à droite */}
+            .fixture-team.away { justify-content: space-between; /* Logo à gauche, nom à droite */}
+            .fixture-team span { text-align: center; flex-grow:1; }
+            .fixture-score-inputs { flex-basis: 100%; margin-top: 8px; }
+
+
             .action-buttons { flex-direction: column; align-items: stretch;}
             .season-selector-container { flex-direction: column; align-items: stretch; width: 100%;}
             .season-selector-container select { width: 100%; margin-bottom: 10px;}
              .knockout-bracket { flex-direction: column; align-items: center; min-width: unset;}
              .round { margin: 20px 0; min-height: unset; flex-direction: row; flex-wrap:wrap; justify-content:center;}
              .round-title { writing-mode: horizontal-tb; transform: none; margin-bottom:10px; width:100%; text-align:center;}
-             .match { width: clamp(280px, 90%, 350px); margin: 10px;} /* Matchs plus larges et centrés */
+             .match { width: clamp(280px, 90%, 350px); margin: 10px;}
         }
         @media (max-width: 576px) {
             .logo h1 { font-size: 1.3rem; }
             nav ul li a {font-size: 0.9rem; padding: 10px 15px;} 
             .page-title-bar h1 {font-size: 1.8rem;}
+            .section { padding: 20px; }
             .section-title { font-size: 1.6rem; }
-            .btn { padding: 10px 20px; font-size: 0.9rem; }
+            .knockout-stage h3 { font-size: 1.3rem; }
             .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn { padding: 10px 15px; font-size: 0.9rem;}
-            .fixtures-table .fixture-score-inputs input { width: 30px; font-size: 0.8em; }
+            .fixture-team { font-size: 0.85rem; }
+            .fixture-team .team-logo { width: 24px; height: 24px; }
+            .fixture-score-inputs input[type="number"] { width: 30px; font-size: 0.8rem; }
+            
             .footer-container { grid-template-columns: 1fr; text-align: center; }
             .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
-            .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
+            .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--current-accent-gold); margin: 5px auto 0; }
         }
     </style>
 </head>
@@ -308,14 +473,24 @@
 
             <div class="section" id="ldc-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Phase à Élimination Directe</h2></div>
-                <div class="knockout-bracket" id="ldc-knockout-stages">
-                    <!-- Le bracket sera généré ici par JavaScript -->
+                <!-- Le contenu des matchs (knockout stages) sera généré ici par JavaScript -->
+                <div id="ldc-knockout-stages"> 
+                    <!-- Exemple de structure attendue (sera remplacée par JS) :
+                    <div class="knockout-stage">
+                        <h3>Huitièmes de Finale</h3>
+                        <table class="fixtures-table ldc-fixtures">
+                            <tbody>
+                                <tr> (match) </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    -->
                 </div>
             </div>
             
             <div class="section" id="ldc-winner-section" style="text-align: center; display:none;">
                  <h2 class="section-title">🏆 CHAMPION LDC 🏆</h2>
-                 <div id="ldc-winner-display" style="font-size: 2.5rem; color: var(--accent-gold-ldc); margin-top: 20px;">
+                 <div id="ldc-winner-display" style="font-size: 2.5rem; color: var(--current-accent-gold); margin-top: 20px;">
                  </div>
             </div>
         </div>
@@ -366,17 +541,257 @@
         let ldcAudioPlayer = null;
 
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
-        function showMessage(msg, duration = 3000, isError = false) { /* ... (identique) ... */ }
-        function initAudioContext() { /* ... (identique) ... */ }
-        async function gisInitInternal() { /* ... (identique) ... */ }
-        function checkAndInitGis() { /* ... (identique) ... */ }
-        function handleTokenError(error) { /* ... (identique) ... */ }
-        async function tokenCallback(tokenResponse) { /* ... (Adapté pour LDC) ... */ }
-        function handleAuthClick() { /* ... (identique) ... */ }
-        function updateAuthUI(isLoggedIn) { /* ... (Adapté pour LDC) ... */ }
-        async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') { /* ... (identique) ... */ }
-        async function readFileContent(fileId) { /* ... (identique) ... */ }
-        async function updateFileContent(fileId, content) { /* ... (identique) ... */ }
+        
+        function showMessage(msg, duration = 3000, isError = false) {
+            if (!messageArea) messageArea = document.getElementById('message-area');
+            if (!messageArea) return;
+            messageArea.textContent = msg;
+            messageArea.classList.add('visible');
+            if(isError) messageArea.classList.add('error-message'); else messageArea.classList.remove('error-message');
+            clearTimeout(messageTimeoutId);
+            messageTimeoutId = setTimeout(() => { messageArea.classList.remove('visible'); }, duration);
+        }
+
+        function initAudioContext() {
+            if (audioContext) return;
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) { console.warn("Web Audio API non supportée.", e); }
+        }
+
+        async function gisInitInternal() {
+            console.log("Tentative d'initialisation de Google Identity Services...");
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+                console.log("GIS prêt. Initialisation du client token.");
+                tokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: GOOGLE_CLIENT_ID,
+                    scope: GOOGLE_DRIVE_SCOPES,
+                    callback: tokenCallback,
+                    error_callback: handleTokenError
+                });
+                updateAuthUI(false); // Suppose déconnecté au début
+                document.getElementById('signin-button').disabled = false;
+                document.getElementById('drive-status').style.display = 'inline-flex';
+            } else {
+                console.log("GIS non encore prêt. Nouvelle tentative...");
+                gisCheckRetries++;
+                if (gisCheckRetries < GIS_MAX_RETRIES) {
+                    setTimeout(gisInitInternal, GIS_CHECK_INTERVAL);
+                } else {
+                    console.error("Échec du chargement de Google Identity Services après plusieurs tentatives.");
+                    showMessage("Erreur: Service Google indisponible.", 5000, true);
+                    updateAuthUI(false);
+                    document.getElementById('drive-status').innerHTML += ' (Erreur GIS)';
+                    document.getElementById('drive-status').classList.add('error');
+                }
+            }
+        }
+
+        function checkAndInitGis() {
+            if (window.google && window.google.accounts && window.google.accounts.id) {
+                gisInitInternal();
+            } else {
+                const script = document.createElement('script');
+                script.src = 'https://accounts.google.com/gsi/client';
+                script.async = true;
+                script.defer = true;
+                script.onload = gisInitInternal;
+                script.onerror = () => {
+                    console.error("Échec du chargement du script GSI.");
+                    showMessage("Impossible de charger les services Google.", 5000, true);
+                     document.getElementById('drive-status').style.display = 'inline-flex';
+                     document.getElementById('drive-status').innerHTML += ' (Échec chargement)';
+                     document.getElementById('drive-status').classList.add('error');
+                };
+                document.head.appendChild(script);
+            }
+        }
+        
+        function handleTokenError(error) {
+            console.error('Erreur de token:', error);
+            showMessage(`Erreur d'authentification Google: ${error.message || error.details || 'Erreur inconnue'}`, 5000, true);
+            googleAccessToken = null;
+            updateAuthUI(false);
+        }
+
+        async function tokenCallback(tokenResponse) {
+            if (tokenResponse && tokenResponse.access_token) {
+                console.log("Token reçu.");
+                googleAccessToken = tokenResponse.access_token;
+                localStorage.setItem('google_access_token_ldc', googleAccessToken);
+                updateAuthUI(true);
+                await loadLdcDataFromDrive();
+                populateLdcUI(); // Actualise l'UI avec les données chargées ou initiales
+                document.getElementById('nouvelle-saison-ldc-btn').disabled = false;
+                document.getElementById('sauvegarde-ldc-btn').disabled = false;
+                document.getElementById('delete-season-ldc-btn').disabled = !(ldcDataStore.seasons && ldcDataStore.seasons.length > 1);
+
+
+            } else {
+                console.error("Réponse de token invalide:", tokenResponse);
+                let errorMsg = "Erreur d'authentification Google.";
+                if (tokenResponse && tokenResponse.error) { errorMsg += ` (${tokenResponse.error})` }
+                showMessage(errorMsg, 5000, true);
+                googleAccessToken = null;
+                updateAuthUI(false);
+            }
+        }
+
+        function handleAuthClick() {
+            if (googleAccessToken) { // Déconnexion
+                google.accounts.oauth2.revoke(googleAccessToken, () => {
+                    console.log('Token révoqué.');
+                });
+                googleAccessToken = null;
+                localStorage.removeItem('google_access_token_ldc');
+                updateAuthUI(false);
+                ldcDataStore = JSON.parse(JSON.stringify(initialLdcData)); // Réinitialiser aux données par défaut
+                populateLdcUI();
+                showMessage("Déconnecté de Google Drive.", 3000);
+                document.getElementById('nouvelle-saison-ldc-btn').disabled = true;
+                document.getElementById('sauvegarde-ldc-btn').disabled = true;
+                document.getElementById('delete-season-ldc-btn').disabled = true;
+            } else { // Connexion
+                if (tokenClient) {
+                    tokenClient.requestAccessToken({ prompt: 'consent' });
+                } else {
+                    console.error("Client Token non initialisé.");
+                    showMessage("Erreur d'initialisation Google. Veuillez réessayer.", 4000, true);
+                }
+            }
+        }
+        
+        function updateAuthUI(isLoggedIn) {
+            const signinButton = document.getElementById('signin-button');
+            const driveStatusText = document.getElementById('drive-status-text');
+            const driveStatusDiv = document.getElementById('drive-status');
+
+            if (!signinButton || !driveStatusText || !driveStatusDiv) return;
+
+            if (isLoggedIn) {
+                signinButton.innerHTML = '<i class="fab fa-google-drive"></i> Déconnexion Drive';
+                driveStatusText.textContent = 'Connecté';
+                driveStatusDiv.classList.remove('error', 'loading');
+                driveStatusDiv.classList.add('success');
+                document.getElementById('nouvelle-saison-ldc-btn').disabled = false;
+                document.getElementById('sauvegarde-ldc-btn').disabled = false;
+                document.getElementById('delete-season-ldc-btn').disabled = !(ldcDataStore.seasons && ldcDataStore.seasons.length > 1);
+
+            } else {
+                signinButton.innerHTML = '<i class="fab fa-google"></i> Connexion Drive';
+                driveStatusText.textContent = 'Déconnecté';
+                driveStatusDiv.classList.remove('success', 'loading');
+                driveStatusDiv.classList.add('error'); // Ou une classe neutre
+                document.getElementById('nouvelle-saison-ldc-btn').disabled = true;
+                document.getElementById('sauvegarde-ldc-btn').disabled = true;
+                document.getElementById('delete-season-ldc-btn').disabled = true;
+            }
+            signinButton.disabled = !tokenClient; // Désactiver si le client n'est pas prêt
+        }
+
+        async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
+             if (!googleAccessToken) return null;
+             const driveStatusText = document.getElementById('drive-status-text');
+             if(driveStatusText) driveStatusText.textContent = "Recherche fichier...";
+             driveStatusText.parentElement.classList.add('loading');
+
+            try {
+                const responseSearch = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${filename}'&spaces=drive&fields=files(id,name)`, {
+                    headers: { 'Authorization': `Bearer ${googleAccessToken}` }
+                });
+                if (!responseSearch.ok) throw new Error(`Recherche échouée: ${responseSearch.status}`);
+                const searchResult = await responseSearch.json();
+
+                if (searchResult.files && searchResult.files.length > 0) {
+                    if(driveStatusText) driveStatusText.textContent = "Fichier trouvé.";
+                    driveStatusText.parentElement.classList.remove('loading');
+                    return searchResult.files[0].id;
+                } else {
+                    if(driveStatusText) driveStatusText.textContent = "Création fichier...";
+                    const metadata = { name: filename, mimeType: mimeType };
+                    const form = new FormData();
+                    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                    form.append('file', new Blob([defaultContentStr], { type: mimeType }));
+
+                    const responseCreate = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${googleAccessToken}` },
+                        body: form
+                    });
+                    if (!responseCreate.ok) throw new Error(`Création échouée: ${responseCreate.status}`);
+                    const createdFile = await responseCreate.json();
+                    if(driveStatusText) driveStatusText.textContent = "Fichier créé.";
+                    driveStatusText.parentElement.classList.remove('loading');
+                    return createdFile.id;
+                }
+            } catch (error) {
+                console.error('Erreur Drive (findOrCreateFile):', error);
+                showMessage(`Erreur Drive: ${error.message}`, 5000, true);
+                if(driveStatusText) driveStatusText.textContent = "Erreur Fichier";
+                driveStatusText.parentElement.classList.remove('loading');
+                driveStatusText.parentElement.classList.add('error');
+                return null;
+            }
+        }
+
+        async function readFileContent(fileId) {
+            if (!googleAccessToken || !fileId) return null;
+            const driveStatusText = document.getElementById('drive-status-text');
+            if(driveStatusText) driveStatusText.textContent = "Lecture fichier...";
+            driveStatusText.parentElement.classList.add('loading');
+            try {
+                const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                    headers: { 'Authorization': `Bearer ${googleAccessToken}` }
+                });
+                if (!response.ok) throw new Error(`Lecture échouée: ${response.status}`);
+                const content = await response.text();
+                if(driveStatusText) driveStatusText.textContent = "Fichier lu.";
+                driveStatusText.parentElement.classList.remove('loading');
+                return content;
+            } catch (error) {
+                console.error('Erreur Drive (readFileContent):', error);
+                showMessage(`Erreur lecture Drive: ${error.message}`, 5000, true);
+                if(driveStatusText) driveStatusText.textContent = "Erreur Lecture";
+                driveStatusText.parentElement.classList.remove('loading');
+                driveStatusText.parentElement.classList.add('error');
+                return null;
+            }
+        }
+
+        async function updateFileContent(fileId, content) {
+            if (!googleAccessToken || !fileId || isSavingDriveData) return false;
+            isSavingDriveData = true;
+            const driveStatusText = document.getElementById('drive-status-text');
+            if(driveStatusText) driveStatusText.textContent = "Sauvegarde...";
+            driveStatusText.parentElement.classList.add('loading');
+
+            try {
+                const contentToSave = (typeof content === 'string') ? content : JSON.stringify(content, null, 2);
+                const response = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' },
+                    body: contentToSave
+                });
+                if (!response.ok) throw new Error(`Sauvegarde échouée: ${response.status}`);
+                if(driveStatusText) driveStatusText.textContent = "Sauvegardé!";
+                driveStatusText.parentElement.classList.remove('loading');
+                driveStatusText.parentElement.classList.add('success');
+                setTimeout(() => { 
+                    if(driveStatusText.textContent === "Sauvegardé!") driveStatusText.textContent = "Connecté";
+                    driveStatusText.parentElement.classList.remove('success');
+                 }, 2000);
+                return true;
+            } catch (error) {
+                console.error('Erreur Drive (updateFileContent):', error);
+                showMessage(`Erreur sauvegarde Drive: ${error.message}`, 5000, true);
+                 if(driveStatusText) driveStatusText.textContent = "Erreur Sauvegarde";
+                 driveStatusText.parentElement.classList.remove('loading');
+                 driveStatusText.parentElement.classList.add('error');
+                return false;
+            } finally {
+                isSavingDriveData = false;
+            }
+        }
         
         async function loadLdcDataFromDrive() {
             if (!googleAccessToken) {
@@ -393,34 +808,47 @@
                         const parsedData = JSON.parse(content);
                         if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.seasons)) {
                             ldcDataStore = parsedData;
+                            // Assurer que fileId et filename sont toujours présents dans ldcDataStore
+                            ldcDataStore.fileId = ldcDataStore.fileId || await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
+                            ldcDataStore.filename = LDC_DATA_FILENAME;
                             console.log(`Données LDC chargées depuis Drive.`);
                         } else {
-                            console.warn(`Données LDC malformées sur Drive. Utilisation des données initiales.`);
+                            console.warn(`Données LDC malformées sur Drive. Utilisation des données initiales et tentative de sauvegarde.`);
                             ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+                            ldcDataStore.fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData)); // Réc LDC_DATA_FILENAME;
+                            ldcDataStore.filename = LDC_DATA_FILENAME;
+                             if(googleAccessToken && ldcDataStore.fileId) await saveLdcDataToDrive(true); 
                         }
                     } catch (e) {
                         console.error(`Erreur parsing LDC Drive:`, e); showMessage(`Données LDC Drive corrompues. Utilisation des données initiales.`, 7000, true);
                         ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+                        ldcDataStore.fileId = await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
+                        ldcDataStore.filename = LDC_DATA_FILENAME;
+                        if(googleAccessToken && ldcDataStore.fileId) await saveLdcDataToDrive(true);
                     }
                 } else {
                      console.log(`Fichier LDC vide sur Drive. Initialisation avec structure par défaut.`);
                      ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+                     ldcDataStore.fileId = ldcDataStore.fileId || await findOrCreateFile(LDC_DATA_FILENAME, JSON.stringify(initialLdcData));
+                     ldcDataStore.filename = LDC_DATA_FILENAME;
                      if(googleAccessToken && ldcDataStore.fileId) await saveLdcDataToDrive(true); 
                 }
             } else {
                 console.warn(`Impossible trouver/créer fichier LDC sur Drive. Utilisation des données initiales.`);
                 showMessage(`Fichier LDC Drive inaccessible.`, 7000, true);
                 ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+                // Pas de fileId, filename par défaut
+                ldcDataStore.filename = LDC_DATA_FILENAME;
             }
         }
         async function saveLdcDataToDrive(isInitialSave = false) {
             if (!googleAccessToken) { if(!isInitialSave) showMessage("Connectez-vous pour sauvegarder LDC.", 3000, true); return; }
             if (!ldcDataStore || !ldcDataStore.filename) { console.error(`Données LDC ou nom de fichier manquant.`); return; }
-            if (!ldcDataStore.fileId) {
+            if (!ldcDataStore.fileId) { // Tente de récupérer/créer le fileId si manquant
                 ldcDataStore.fileId = await findOrCreateFile(ldcDataStore.filename, JSON.stringify(ldcDataStore));
-                if(!ldcDataStore.fileId){ showMessage(`Impossible de créer le fichier LDC sur Drive.`, 5000, true); return; }
+                if(!ldcDataStore.fileId){ showMessage(`Impossible de créer/trouver le fichier LDC sur Drive.`, 5000, true); return; }
             }
-            console.log(`Sauvegarde LDC sur Drive.`);
+            console.log(`Sauvegarde LDC sur Drive (File ID: ${ldcDataStore.fileId}).`);
             const success = await updateFileContent(ldcDataStore.fileId, ldcDataStore);
             if (success) { if(!isInitialSave) showMessage(`Données LDC sauvegardées !`, 2000); }
             else { if(!isInitialSave) showMessage(`Échec sauvegarde LDC sur Drive.`, 3000, true); }
@@ -434,11 +862,16 @@
                 populateLdcFixturesDOM(activeSeason);
                 displayLdcWinner(activeSeason);
             } else {
-                document.getElementById('ldc-knockout-stages').innerHTML = '<p style="text-align:center; padding:20px; color: var(--text-color-dark);">Aucune saison LDC active. Créez une nouvelle saison pour commencer.</p>';
+                document.getElementById('ldc-knockout-stages').innerHTML = '<p style="text-align:center; padding:20px; color: var(--current-text-light);">Aucune saison LDC active. Créez une nouvelle saison pour commencer.</p>';
                 document.getElementById('ldc-winner-section').style.display = 'none';
             }
             const deleteBtn = document.getElementById(`delete-season-ldc-btn`);
             if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !ldcDataStore.seasons || ldcDataStore.seasons.length <= 1;
+            
+            const saveBtn = document.getElementById('sauvegarde-ldc-btn');
+            const newSeasonBtn = document.getElementById('nouvelle-saison-ldc-btn');
+            if(saveBtn) saveBtn.disabled = !googleAccessToken;
+            if(newSeasonBtn) newSeasonBtn.disabled = !googleAccessToken;
         }
 
         function populateLdcSeasonSelector() {
@@ -476,18 +909,36 @@
         function generateKnockoutStage(stageName, numExpectedMatches, teamsAvailable, previousStageWinners = null) {
             const stageFixtures = [];
             let currentTeams = previousStageWinners ? [...previousStageWinners] : [...teamsAvailable];
-            if (currentTeams.length < numExpectedMatches * 2 && stageName !== "Finale") {
+             // Filtrer les "BYE" potentiels des tours précédents, sauf si c'est le seul "vainqueur"
+            currentTeams = currentTeams.filter(team => team !== "BYE" || currentTeams.length === 1);
+
+            if (currentTeams.length === 0 && numExpectedMatches > 0) { // Si aucune équipe n'est dispo
                 for (let i = 0; i < numExpectedMatches; i++) {
-                    const homeTeam = currentTeams[i*2] || `À déterminer`; const awayTeam = currentTeams[i*2 + 1] || `À déterminer`;
-                    stageFixtures.push({ home: homeTeam, away: awayTeam, scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
-                } return stageFixtures;
+                     stageFixtures.push({ home: `À déterminer`, away: `À déterminer`, scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
+                }
+                return stageFixtures;
             }
+
             shuffleArray(currentTeams); 
+            
+            let teamsToPair = [...currentTeams];
             for (let i = 0; i < numExpectedMatches; i++) {
-                if (currentTeams.length >= 2) { const team1 = currentTeams.pop(); const team2 = currentTeams.pop(); stageFixtures.push({ home: (i%2 === 0 ? team1 : team2), away: (i%2 === 0 ? team2 : team1), scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` }); }
-                else if (currentTeams.length === 1 && stageName === "Finale") { stageFixtures.push({ home: currentTeams.pop(), away: "En attente...", scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` }); }
-                else if (currentTeams.length > 0) { stageFixtures.push({ home: currentTeams.pop(), away: "BYE", scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` }); }
-            } return stageFixtures;
+                let team1, team2;
+                if (teamsToPair.length >= 2) {
+                    team1 = teamsToPair.pop(); team2 = teamsToPair.pop();
+                } else if (teamsToPair.length === 1) {
+                    team1 = teamsToPair.pop(); team2 = "BYE"; // L'équipe restante obtient un BYE
+                } else { // Plus assez d'équipes pour remplir tous les matchs prévus
+                    team1 = "À déterminer"; team2 = "À déterminer";
+                }
+                stageFixtures.push({ 
+                    home: (i % 2 === 0 || team2 === "BYE" ? team1 : team2), // S'assure que BYE est toujours away si possible
+                    away: (i % 2 === 0 || team2 === "BYE" ? team2 : team1),
+                    scoreHome: null, scoreAway: null, 
+                    match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` 
+                });
+            } 
+            return stageFixtures;
         }
 
         function createNewLdcSeason() {
@@ -496,28 +947,34 @@
             const newSeasonName = `LDC Saison ${newSeasonId}`;
             let qualifiedTeams = Object.keys(ldcDataStore.teams || initialLdcData.teams); 
             if (qualifiedTeams.length < 2) { showMessage("Pas assez d'équipes pour démarrer une saison LDC.", 4000, true); return; }
-            shuffleArray(qualifiedTeams);
-            let numTeamsForTournament = 16; 
-            if (qualifiedTeams.length < 16 && qualifiedTeams.length >= 8) numTeamsForTournament = 8;
-            else if (qualifiedTeams.length < 8 && qualifiedTeams.length >= 4) numTeamsForTournament = 4;
-            else if (qualifiedTeams.length < 4 && qualifiedTeams.length >= 2) numTeamsForTournament = 2;
-            else if (qualifiedTeams.length < 2) { showMessage("Pas assez d'équipes pour un tournoi.",3000,true); return;}
             
+            // Déterminer le nombre d'équipes pour le tournoi (puissance de 2: 2, 4, 8, 16)
+            let numTeamsForTournament;
+            if (qualifiedTeams.length >= 16) numTeamsForTournament = 16;
+            else if (qualifiedTeams.length >= 8) numTeamsForTournament = 8;
+            else if (qualifiedTeams.length >= 4) numTeamsForTournament = 4;
+            else if (qualifiedTeams.length >= 2) numTeamsForTournament = 2;
+            else { showMessage("Pas assez d'équipes pour un tournoi.", 3000, true); return; }
+
+            shuffleArray(qualifiedTeams);
             const selectedTeams = qualifiedTeams.slice(0, numTeamsForTournament);
+            
             const newSeason = { 
                 season_id: newSeasonId, nom_saison: newSeasonName, format: "elimination_directe",
                 teams_in_tournament: [...selectedTeams], 
                 phase_elimination: { huitiemes: [], quarts: [], demies: [], finale: [] },
                 vainqueur: null
             };
-            if (numTeamsForTournament >= 16) newSeason.phase_elimination.huitiemes = generateKnockoutStage("Huitièmes", 8, selectedTeams);
-            else if (numTeamsForTournament >= 8) newSeason.phase_elimination.quarts = generateKnockoutStage("Quarts", 4, selectedTeams);
-            else if (numTeamsForTournament >= 4) newSeason.phase_elimination.demies = generateKnockoutStage("Demies", 2, selectedTeams);
-            else if (numTeamsForTournament >= 2) newSeason.phase_elimination.finale = generateKnockoutStage("Finale", 1, selectedTeams);
+
+            // Générer la première phase en fonction du nombre d'équipes
+            if (numTeamsForTournament === 16) newSeason.phase_elimination.huitiemes = generateKnockoutStage("Huitièmes", 8, selectedTeams);
+            else if (numTeamsForTournament === 8) newSeason.phase_elimination.quarts = generateKnockoutStage("Quarts", 4, selectedTeams);
+            else if (numTeamsForTournament === 4) newSeason.phase_elimination.demies = generateKnockoutStage("Demies", 2, selectedTeams);
+            else if (numTeamsForTournament === 2) newSeason.phase_elimination.finale = generateKnockoutStage("Finale", 1, selectedTeams);
 
             ldcDataStore.seasons.push(newSeason); ldcDataStore.active_season_id = newSeasonId;
             populateLdcSeasonSelector(); populateLdcUI();
-            showMessage(`Nouvelle saison LDC "${newSeasonName}" créée !`, 2500);
+            showMessage(`Nouvelle saison LDC "${newSeasonName}" créée avec ${numTeamsForTournament} équipes!`, 2500);
             if (googleAccessToken) saveLdcDataToDrive();
         }
 
@@ -543,29 +1000,91 @@
 
         function populateLdcFixturesDOM(activeSeason) {
             const knockoutStagesDiv = document.getElementById('ldc-knockout-stages');
-            if (!knockoutStagesDiv || !activeSeason || !activeSeason.phase_elimination) { if(knockoutStagesDiv) knockoutStagesDiv.innerHTML = '<p>Aucun match pour cette saison LDC.</p>'; return; }
+            if (!knockoutStagesDiv || !activeSeason || !activeSeason.phase_elimination) { 
+                if(knockoutStagesDiv) knockoutStagesDiv.innerHTML = '<p style="text-align:center; padding:20px; color: var(--current-text-light);">Aucun match défini pour cette saison LDC.</p>'; 
+                return; 
+            }
             knockoutStagesDiv.innerHTML = ''; 
-            const teamsInfo = ldcDataStore.teams; 
+            const teamsInfo = ldcDataStore.teams || {}; 
             const stagesConfig = [
-                { name: "Huitièmes de Finale", dataKey: 'huitiemes' }, { name: "Quarts de Finale", dataKey: 'quarts' },
-                { name: "Demi-Finales", dataKey: 'demies' }, { name: "Finale", dataKey: 'finale' }
+                { name: "Huitièmes de Finale", dataKey: 'huitiemes', numMatches: 8 }, 
+                { name: "Quarts de Finale", dataKey: 'quarts', numMatches: 4  },
+                { name: "Demi-Finales", dataKey: 'demies', numMatches: 2  }, 
+                { name: "Finale", dataKey: 'finale', numMatches: 1 }
             ];
-            stagesConfig.forEach(stageInfo => {
-                const stageData = activeSeason.phase_elimination[stageInfo.dataKey];
-                if (stageData && stageData.length > 0) {
-                    const stageDiv = document.createElement('div'); stageDiv.className = 'knockout-stage'; stageDiv.innerHTML = `<h3>${stageInfo.name}</h3>`;
-                    const table = document.createElement('table'); table.className = 'fixtures-table ldc-fixtures'; const tbody = document.createElement('tbody');
+            
+            let initialStageFound = false;
+            for(const stageInfo of stagesConfig) {
+                // On affiche une étape si elle a des matchs ou si c'est la première étape attendue pour le nombre d'équipes
+                const isExpectedFirstStage = 
+                    (activeSeason.teams_in_tournament.length <= 2 && stageInfo.dataKey === 'finale') ||
+                    (activeSeason.teams_in_tournament.length > 2 && activeSeason.teams_in_tournament.length <= 4 && stageInfo.dataKey === 'demies') ||
+                    (activeSeason.teams_in_tournament.length > 4 && activeSeason.teams_in_tournament.length <= 8 && stageInfo.dataKey === 'quarts') ||
+                    (activeSeason.teams_in_tournament.length > 8 && stageInfo.dataKey === 'huitiemes');
+
+                let stageData = activeSeason.phase_elimination[stageInfo.dataKey];
+
+                if ((stageData && stageData.length > 0) || (isExpectedFirstStage && !initialStageFound) ) {
+                    initialStageFound = true; // Marquer que la première étape pertinente a été trouvée
+
+                    // Si stageData est vide mais c'est la première étape attendue, on la génère "à la volée" pour l'affichage
+                    // Cela peut arriver si une saison est créée mais la première phase n'a pas été explicitement générée avec des matchs "À déterminer"
+                    if ((!stageData || stageData.length === 0) && isExpectedFirstStage) {
+                         console.log(`Génération à la volée pour affichage de ${stageInfo.name}`);
+                         stageData = generateKnockoutStage(stageInfo.name, stageInfo.numMatches, activeSeason.teams_in_tournament);
+                         // Note: Ne pas sauvegarder cette génération "à la volée" ici, c'est juste pour l'affichage initial.
+                         // La vraie génération se fait dans createNewLdcSeason ou checkAndAdvanceLdcStage
+                    }
+                    
+                    if (!stageData || stageData.length === 0) continue; // S'il n'y a toujours pas de données, on passe
+
+                    const stageDiv = document.createElement('div'); stageDiv.className = 'knockout-stage'; 
+                    stageDiv.innerHTML = `<h3>${stageInfo.name}</h3>`;
+                    const table = document.createElement('table'); table.className = 'fixtures-table ldc-fixtures'; 
+                    const tbody = document.createElement('tbody');
+                    
                     stageData.forEach((match, matchIdx) => {
                         const row = document.createElement('tr');
-                        const scoreHomeInputId = `ldc-${stageInfo.dataKey}-m${matchIdx}-h`; const scoreAwayInputId = `ldc-${stageInfo.dataKey}-m${matchIdx}-a`;
-                        const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
-                        row.innerHTML = `<td><div class="fixture-match"><div class="fixture-team home"><span>${match.home || 'À déterminer'}</span>${teamsInfo[match.home] ? `<img src="${BASE_URL}${teamsInfo[match.home].logo}" alt="${match.home}" class="team-logo">` : ''}</div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-stagekey="${stageInfo.dataKey}" data-matchidx="${matchIdx}" data-team="home"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-stagekey="${stageInfo.dataKey}" data-matchidx="${matchIdx}" data-team="away"></div><div class="fixture-team away">${teamsInfo[match.away] ? `<img src="${BASE_URL}${teamsInfo[match.away].logo}" alt="${match.away}" class="team-logo">` : ''}<span>${match.away || 'À déterminer'}</span></div></div></td>`;
+                        const scoreHomeInputId = `ldc-${stageInfo.dataKey}-m${matchIdx}-h`; 
+                        const scoreAwayInputId = `ldc-${stageInfo.dataKey}-m${matchIdx}-a`;
+                        const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; 
+                        const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
+
+                        const homeTeamName = match.home || 'À déterminer';
+                        const awayTeamName = match.away || 'À déterminer';
+                        
+                        const homeLogo = teamsInfo[homeTeamName] ? `<img src="${BASE_URL}${teamsInfo[homeTeamName].logo}" alt="${homeTeamName}" class="team-logo">` : (homeTeamName !== 'À déterminer' && homeTeamName !== 'BYE' ? '<span class="team-logo placeholder">?</span>' : '');
+                        const awayLogo = teamsInfo[awayTeamName] ? `<img src="${BASE_URL}${teamsInfo[awayTeamName].logo}" alt="${awayTeamName}" class="team-logo">` : (awayTeamName !== 'À déterminer' && awayTeamName !== 'BYE' ? '<span class="team-logo placeholder">?</span>' : '');
+
+                        row.innerHTML = `
+                            <td>
+                                <div class="fixture-match">
+                                    <div class="fixture-team home">
+                                        <span>${homeTeamName}</span>
+                                        ${homeLogo}
+                                    </div>
+                                    <div class="fixture-score-inputs">
+                                        <input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-stagekey="${stageInfo.dataKey}" data-matchidx="${matchIdx}" data-team="home" ${homeTeamName === 'BYE' || awayTeamName === 'BYE' ? 'disabled' : ''}>
+                                        <span class="vs-separator">-</span>
+                                        <input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-stagekey="${stageInfo.dataKey}" data-matchidx="${matchIdx}" data-team="away" ${homeTeamName === 'BYE' || awayTeamName === 'BYE' ? 'disabled' : ''}>
+                                    </div>
+                                    <div class="fixture-team away">
+                                        ${awayLogo}
+                                        <span>${awayTeamName}</span>
+                                    </div>
+                                </div>
+                            </td>`;
                         tbody.appendChild(row);
                     });
-                    table.appendChild(tbody); stageDiv.appendChild(table); knockoutStagesDiv.appendChild(stageDiv);
+                    table.appendChild(tbody); 
+                    stageDiv.appendChild(table); 
+                    knockoutStagesDiv.appendChild(stageDiv);
                 }
-            });
-             document.querySelectorAll('#ldc-knockout-stages .fixture-score-input').forEach(input => input.addEventListener('change', handleLdcScoreChange));
+            }
+            if (!initialStageFound && knockoutStagesDiv.innerHTML === '') { // Si après tout ça, rien n'est affiché
+                 knockoutStagesDiv.innerHTML = '<p style="text-align:center; padding:20px; color: var(--current-text-light);">Commencez par créer une saison et y ajouter des équipes.</p>';
+            }
+            document.querySelectorAll('#ldc-knockout-stages .fixture-score-input').forEach(input => input.addEventListener('change', handleLdcScoreChange));
         }
 
         function handleLdcScoreChange(event) {
@@ -575,52 +1094,107 @@
             if (!activeSeason || !activeSeason.phase_elimination || !activeSeason.phase_elimination[stageKey] || !activeSeason.phase_elimination[stageKey][matchIndex]) return;
             const match = activeSeason.phase_elimination[stageKey][matchIndex];
             if (score !== null && (isNaN(score) || score < 0)) { input.value = match[teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
+            
             if (teamType === 'home') match.scoreHome = score; else match.scoreAway = score;
-            if(typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number') {
+            
+            // Déterminer le vainqueur
+            if (match.home === "BYE") match.winner = match.away; // Si home est BYE, away gagne
+            else if (match.away === "BYE") match.winner = match.home; // Si away est BYE, home gagne
+            else if (typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number') {
                 if(match.scoreHome > match.scoreAway) match.winner = match.home;
                 else if (match.scoreAway > match.scoreHome) match.winner = match.away;
-                else match.winner = null; 
+                else match.winner = null; // Match nul (pas de vainqueur direct, à gérer selon règles LDC)
             } else match.winner = null;
-            checkAndAdvanceLdcStage(activeSeason); displayLdcWinner(activeSeason); 
+
+            checkAndAdvanceLdcStage(activeSeason); 
+            displayLdcWinner(activeSeason); 
+            if(googleAccessToken) saveLdcDataToDrive();
         }
 
         function checkAndAdvanceLdcStage(activeSeason) {
             if (!activeSeason || !activeSeason.phase_elimination) return;
             const pe = activeSeason.phase_elimination;
             const stagesOrder = ['huitiemes', 'quarts', 'demies', 'finale'];
-            let currentStageFullyPlayed = false; let nextStageToGenerateKey = null; let winnersFromCurrentStage = [];
+            let currentStageFullyPlayed = false; 
+            let nextStageToGenerateKey = null; 
+            let winnersFromCurrentStage = [];
+
             for(let i = 0; i < stagesOrder.length; i++) {
-                const stageKey = stagesOrder[i]; const nextKey = stagesOrder[i+1];
-                if(pe[stageKey] && pe[stageKey].length > 0) {
-                    if(pe[stageKey].every(m => m.winner)) { 
-                        currentStageFullyPlayed = true; winnersFromCurrentStage = pe[stageKey].map(m => m.winner).filter(Boolean); // Ensure only actual winners
-                        if(nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) { nextStageToGenerateKey = nextKey; break; }
-                    } else { currentStageFullyPlayed = false; break; }
-                } else if (nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) {
-                    let previousEffectiveStageKey = null; winnersFromCurrentStage = []; // Reset for this path
-                    for(let j = i-1; j >=0; j--){ if(pe[stagesOrder[j]] && pe[stagesOrder[j]].length > 0 && pe[stagesOrder[j]].every(m => m.winner)){ previousEffectiveStageKey = stagesOrder[j]; winnersFromCurrentStage = pe[previousEffectiveStageKey].map(m => m.winner).filter(Boolean); break; } }
-                    if(winnersFromCurrentStage.length > 0 || (i === 0 && activeSeason.teams_in_tournament && activeSeason.teams_in_tournament.length > 0)){ nextStageToGenerateKey = stageKey; }
-                    break;
+                const stageKey = stagesOrder[i];
+                const nextKey = stagesOrder[i+1]; // Prochaine étape potentielle
+                
+                // Si l'étape actuelle n'existe pas ou est vide, on regarde si on doit la créer
+                if(!pe[stageKey] || pe[stageKey].length === 0) {
+                    if (i === 0 && activeSeason.teams_in_tournament && activeSeason.teams_in_tournament.length > 0) { // Cas initial pour la 1ere phase
+                         let numMatchesForFirstStage;
+                         if (activeSeason.teams_in_tournament.length <= 2) { if(stageKey === 'finale') numMatchesForFirstStage = 1; else continue;}
+                         else if (activeSeason.teams_in_tournament.length <= 4) { if(stageKey === 'demies') numMatchesForFirstStage = 2;  else continue;}
+                         else if (activeSeason.teams_in_tournament.length <= 8) { if(stageKey === 'quarts') numMatchesForFirstStage = 4;  else continue;}
+                         else if (activeSeason.teams_in_tournament.length <= 16) { if(stageKey === 'huitiemes') numMatchesForFirstStage = 8;  else continue;}
+                         else continue; // Ne correspond à aucune taille de tournoi gérée pour cette étape
+
+                        pe[stageKey] = generateKnockoutStage(stageKey.charAt(0).toUpperCase() + stageKey.slice(1), numMatchesForFirstStage, activeSeason.teams_in_tournament);
+                        console.log(`Génération initiale pour ${stageKey} car vide.`);
+                         // Pas besoin de nextStageToGenerateKey ici, on vient de la créer. populateLdcUI sera appelé après.
+                        currentStageFullyPlayed = false; // Elle vient d'être créée, donc pas jouée
+                        break; 
+                    } else if (winnersFromCurrentStage.length > 0) { // Si on a des vainqueurs de l'étape d'avant
+                        nextStageToGenerateKey = stageKey;
+                    }
+                    break; // Sortir de la boucle principale si l'étape actuelle est vide et qu'on ne peut la générer
+                }
+
+                // Vérifier si tous les matchs de l'étape actuelle ont un vainqueur
+                const allMatchesInStageHaveWinner = pe[stageKey].every(m => {
+                    if (m.home === "BYE") { m.winner = m.away; return true; }
+                    if (m.away === "BYE") { m.winner = m.home; return true; }
+                    return m.winner;
+                });
+
+                if(allMatchesInStageHaveWinner) { 
+                    currentStageFullyPlayed = true; 
+                    winnersFromCurrentStage = pe[stageKey].map(m => m.winner).filter(Boolean); 
+                    if(nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) { // Si l'étape suivante n'a pas encore de matchs
+                        nextStageToGenerateKey = nextKey; 
+                        break; 
+                    } else if (!nextKey && stageKey === 'finale') { // C'est la finale et elle est jouée
+                         activeSeason.vainqueur = winnersFromCurrentStage[0]; // Le vainqueur du tournoi
+                         console.log("Vainqueur du tournoi:", activeSeason.vainqueur);
+                    }
+                } else { 
+                    currentStageFullyPlayed = false; 
+                    winnersFromCurrentStage = []; // Pas tous les matchs joués, on ne peut pas déterminer les vainqueurs pour l'étape suivante
+                    break; 
                 }
             }
-            if (nextStageToGenerateKey) {
-                const numNextMatches = nextStageToGenerateKey === 'finale' ? 1 : (nextStageToGenerateKey === 'demies' ? 2 : (nextStageToGenerateKey === 'quarts' ? 4 : 8));
-                const teamsForNextStage = winnersFromCurrentStage.length > 0 ? winnersFromCurrentStage : activeSeason.teams_in_tournament || [];
-                
-                if (teamsForNextStage.length >= numNextMatches * 2 || (nextStageToGenerateKey === 'finale' && teamsForNextStage.length >=1) || (teamsForNextStage.length > 0 && numNextMatches * 2 > teamsForNextStage.length && teamsForNextStage.length % 2 === 0 )) { // Allow generation if not enough for all matches but enough for some
-                     pe[nextStageToGenerateKey] = generateKnockoutStage(nextStageToGenerateKey.charAt(0).toUpperCase() + nextStageToGenerateKey.slice(1), Math.floor(teamsForNextStage.length/2) , [], teamsForNextStage); // Use Math.floor for numNextMatches
-                     populateLdcFixturesDOM(activeSeason);
-                } else console.log(`Pas assez d'équipes/vainqueurs pour générer ${nextStageToGenerateKey}. Requis: ${numNextMatches*2}, Dispo: ${teamsForNextStage.length}`);
-            } else if (pe.finale && pe.finale.length > 0 && pe.finale[0].winner) activeSeason.vainqueur = pe.finale[0].winner;
+            
+            if (nextStageToGenerateKey && winnersFromCurrentStage.length > 0) {
+                const numNextMatchesMap = { 'quarts': 4, 'demies': 2, 'finale': 1 };
+                const numNextMatches = numNextMatchesMap[nextStageToGenerateKey] || 0;
+
+                if (numNextMatches > 0 && (winnersFromCurrentStage.length >= numNextMatches || winnersFromCurrentStage.length >=1 )) { // S'il y a assez de vainqueurs pour au moins un match de la phase suivante, ou si c'est la finale avec au moins 1 qualifié
+                    console.log(`Génération de ${nextStageToGenerateKey} avec ${winnersFromCurrentStage.length} vainqueurs.`);
+                    pe[nextStageToGenerateKey] = generateKnockoutStage(
+                        nextStageToGenerateKey.charAt(0).toUpperCase() + nextStageToGenerateKey.slice(1), 
+                        Math.ceil(winnersFromCurrentStage.length / 2), // Nombre de matchs basé sur les vainqueurs dispo
+                        [], // Pas de nouvelles équipes, on utilise les vainqueurs
+                        winnersFromCurrentStage
+                    );
+                } else {
+                    console.log(`Pas assez de vainqueurs (${winnersFromCurrentStage.length}) pour générer ${nextStageToGenerateKey} qui nécessite au moins ${numNextMatches*2} équipes (ou 1 pour la finale).`);
+                }
+            }
+            // Toujours repeupler l'UI pour refléter les changements, même si aucune nouvelle phase n'est générée (ex: scores mis à jour)
+            populateLdcFixturesDOM(activeSeason); 
         }
         
         function displayLdcWinner(activeSeason) {
             const winnerSection = document.getElementById('ldc-winner-section'); const winnerDisplay = document.getElementById('ldc-winner-display');
             if (!winnerSection || !winnerDisplay) return;
-            if (activeSeason && activeSeason.vainqueur) {
+            if (activeSeason && activeSeason.vainqueur && activeSeason.vainqueur !== "BYE") {
                 const winnerTeamData = ldcDataStore.teams[activeSeason.vainqueur];
-                const logoHtml = winnerTeamData ? `<img src="${BASE_URL}${winnerTeamData.logo}" alt="${activeSeason.vainqueur}" class="team-logo" style="width:50px; height:50px; margin-right:15px;">` : '';
-                winnerDisplay.innerHTML = `<i class="fas fa-trophy trophy-ldc" style="font-size: 3em; margin-right: 15px;"></i> ${logoHtml} ${activeSeason.vainqueur}`;
+                const logoHtml = winnerTeamData ? `<img src="${BASE_URL}${winnerTeamData.logo}" alt="${activeSeason.vainqueur}" class="team-logo" style="width:50px; height:50px; margin-right:15px; border-radius:50%; background:rgba(255,255,255,0.1); padding:3px;">` : '';
+                winnerDisplay.innerHTML = `<i class="fas fa-trophy trophy-ldc" style="font-size: 3em; margin-right: 15px; color: var(--ldc-gold);"></i> ${logoHtml} ${activeSeason.vainqueur}`;
                 winnerSection.style.display = 'block';
             } else winnerSection.style.display = 'none';
         }
@@ -629,23 +1203,6 @@
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
         function observeActiveTabSections() { document.querySelectorAll('.section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el) });}
         
-        function initializeCarousel(carousel) {
-            if (carousel.carouselInstance) return;
-            const inner = carousel.querySelector('.carousel-inner'); const items = carousel.querySelectorAll('.carousel-item');
-            const dots = carousel.querySelectorAll('.carousel-dot'); const prevBtn = carousel.querySelector('.carousel-prev'); const nextBtn = carousel.querySelector('.carousel-next');
-            if (!inner || items.length === 0 || !prevBtn || !nextBtn) return; 
-            if (items.length <= 1) { if (dots && dots.length > 0) dots.forEach(d => d.style.display = 'none'); prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; return; }
-            let currentSlide = 0; const slideCount = items.length; let interval = null;
-            function updateCarousel() { items.forEach((item, idx) => item.classList.toggle('active', idx === currentSlide)); if (dots.length > 0) dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
-            function startAutoSlide() { stopAutoSlide(); if (slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
-            function stopAutoSlide() { if (interval) clearInterval(interval); interval = null; }
-            function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
-            if (dots.length > 0) dots.forEach((dot, index) => dot.addEventListener('click', () => { currentSlide = index; updateCarousel(); resetAutoSlide(); }));
-            prevBtn.addEventListener('click', () => { currentSlide = (currentSlide - 1 + slideCount) % slideCount; updateCarousel(); resetAutoSlide(); });
-            nextBtn.addEventListener('click', () => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); resetAutoSlide(); });
-            carousel.addEventListener('mouseenter', stopAutoSlide); carousel.addEventListener('mouseleave', startAutoSlide);
-            carousel.carouselInstance = { startAutoSlide, stopAutoSlide }; updateCarousel(); startAutoSlide();
-        }
         const hamburger = document.querySelector('.hamburger'); const nav = document.querySelector('header nav');
         if (hamburger && nav) {
             hamburger.addEventListener('click', () => { nav.classList.toggle('active'); const icon = hamburger.querySelector('i'); icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); });
@@ -653,7 +1210,7 @@
         }
         allNavLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 768 && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; }
+                if (window.innerWidth <= 992 && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; }
                 allNavLinks.forEach(l => l.classList.remove('active-nav-link'));
                 link.classList.add('active-nav-link');
             });
@@ -667,7 +1224,10 @@
                 if (!ldcAudioPlayer) {console.error("Element audio LDC non trouvé"); return;}
                 const icon = ldcMusicBtn.querySelector('i');
                 if (ldcAudioPlayer.paused || ldcAudioPlayer.ended) {
-                    ldcAudioPlayer.play().catch(e => console.warn("Erreur lecture audio LDC:", e));
+                    ldcAudioPlayer.play().catch(e => {
+                        console.warn("Erreur lecture auto audio LDC (interaction requise?):", e);
+                        showMessage("Cliquez à nouveau pour jouer l'hymne.", 2000);
+                    });
                     icon.classList.remove('fa-play'); icon.classList.add('fa-pause');
                 } else {
                     ldcAudioPlayer.pause();
@@ -680,10 +1240,31 @@
         document.getElementById('sauvegarde-ldc-btn')?.addEventListener('click', () => saveLdcDataToDrive());
         document.getElementById('delete-season-ldc-btn')?.addEventListener('click', deleteSelectedLdcSeason);
         document.getElementById('ldc-season-selector')?.addEventListener('change', handleLdcSeasonChange);
-        
-        document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('signin-button')?.addEventListener('click', handleAuthClick);
+
+        document.addEventListener('DOMContentLoaded', async () => {
             messageArea = document.getElementById('message-area');
             ldcAudioPlayer = document.getElementById('ldc-audio-player'); 
+            
+            // Tenter de récupérer un token existant (si la page est rechargée)
+            const storedToken = localStorage.getItem('google_access_token_ldc');
+            if (storedToken) {
+                googleAccessToken = storedToken;
+                 // Idéalement, vérifier la validité du token ici avant de juste supposer qu'il est bon
+                console.log("Token récupéré du localStorage.");
+            }
+            
+            await checkAndInitGis(); // Initialise GIS et met à jour l'UI si token Client est prêt
+                                     // updateAuthUI sera appelé dans gisInitInternal ou tokenCallback
+
+            if(googleAccessToken){ // Si on a un token (du localStorage par exemple)
+                updateAuthUI(true); // Mettre à jour l'UI pour refléter l'état connecté
+                await loadLdcDataFromDrive(); // Charger les données
+            } else {
+                updateAuthUI(false); // S'assurer que l'UI est en mode déconnecté
+                 // Utiliser les données initiales si non connecté
+                ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
+            }
             
             populateLdcUI(); 
             observeActiveTabSections();
@@ -691,8 +1272,7 @@
             const activeNavLink = document.querySelector('header nav ul li a[href="champions.html"]');
             if(activeNavLink) activeNavLink.classList.add('active-nav-link');
 
-            checkAndInitGis(); updateAuthUI(false);
-            console.log("Page Ligue des Champions Initialisée (v2).");
+            console.log("Page Ligue des Champions Initialisée (v3 - Style LDC).");
         });
     </script>
 </body>

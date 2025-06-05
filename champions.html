@@ -189,8 +189,10 @@
             gap: 10px; 
             position: relative; 
         }
-        .bracket-column.rounds-8-4 { min-width: 200px; }
-        .bracket-column.round-semi { min-width: 200px; }
+        .bracket-column.column-r16 { min-width: 200px; } /* Huitièmes */
+        .bracket-column.column-qf  { min-width: 200px; } /* Quarts */
+        .bracket-column.column-sf  { min-width: 200px; } /* Demies */
+
         .bracket-match-item {
             display: flex;
             flex-direction: column; 
@@ -240,7 +242,7 @@
         }
         .team-slot.winner { 
             background-color: var(--ldc-team-bg-winner); 
-            color: var(--ldc-deep-blue); /* Ou var(--ldc-text-light) si meilleur contraste */
+            color: var(--ldc-deep-blue); 
             font-weight: bold;
             box-shadow: 0 0 8px var(--ldc-light-blue);
         }
@@ -248,7 +250,6 @@
         .match-label {
             position: absolute; 
             top: 50%; transform: translateY(-50%);
-            left: calc(100% + 5px); /* Position à droite du match */
             background-color: var(--ldc-mid-blue);
             color: var(--ldc-silver); font-size: 0.7rem;
             padding: 1px 4px; border-radius: 3px;
@@ -256,11 +257,18 @@
             z-index: 1;
             white-space: nowrap;
         }
-         /* Pour les colonnes de droite, mettre le label à gauche */
-        .column-r16-right .match-label, .column-qf-right .match-label, .column-sf-right .match-label {
-            left: auto;
+        /* Positionnement des labels */
+        .bracket-column.column-r16-left .match-label,
+        .bracket-column.column-qf-left .match-label,
+        .bracket-column.column-sf-left .match-label {
+            left: calc(100% + 5px);
+        }
+        .bracket-column.column-r16-right .match-label,
+        .bracket-column.column-qf-right .match-label,
+        .bracket-column.column-sf-right .match-label {
             right: calc(100% + 5px);
         }
+
 
         .bracket-centerpiece-visual {
             display: flex; flex-direction: column;
@@ -272,7 +280,7 @@
             filter: drop-shadow(0 0 15px var(--current-accent-gold));
             margin-bottom: 20px;
         }
-        .final-match-placeholder { width: 220px; } /* S'assurer qu'il y a assez de place pour le match final */
+        .final-match-placeholder { width: 220px; } 
         
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; } 
         .team-card { 
@@ -317,7 +325,7 @@
 
         @media (max-width: 1200px) {
             .knockout-bracket-visual { padding: 15px 5px; }
-            .bracket-column.rounds-8-4, .bracket-column.round-semi { min-width: 160px; }
+            .bracket-column.column-r16, .bracket-column.column-qf, .bracket-column.column-sf { min-width: 160px; }
             .team-slot { font-size: 0.8rem; padding: 6px 8px; }
             .team-slot img.team-logo, .team-slot span.placeholder-logo { width: 18px; height: 18px; margin-right: 6px; }
         }
@@ -342,29 +350,29 @@
             .action-buttons { flex-direction: column; align-items: stretch;}
             .season-selector-container { flex-direction: column; align-items: stretch; width: 100%;}
             .season-selector-container select { width: 100%; margin-bottom: 10px;}
-            /* For smaller screens, stack bracket columns if necessary */
             .knockout-bracket-visual {
                 flex-direction: column;
                 align-items: center;
-                min-height: unset; /* Remove fixed min-height */
+                min-height: unset; 
             }
             .bracket-column { 
-                width: 100%; /* Full width for stacked columns */
-                max-width: 400px; /* Limit width of individual columns */
-                min-width: unset; /* Reset min-width for stacking */
-                margin-bottom: 20px; /* Space between stacked columns */
+                width: 100%; 
+                max-width: 400px; 
+                min-width: unset; 
+                margin-bottom: 20px; 
                 padding: 0;
             }
-            .bracket-column.rounds-8-4, .bracket-column.round-semi { min-width: unset; }
-            .match-label {
-                 /* position: static; transform: none;  Could also put label inside match item */
-                 font-size: 0.75rem; padding: 2px 5px; margin-top: 5px;
-                 display: inline-block; /* Or block if centered */
-            }
-             /* Adjust label positioning for stacked view if needed */
+             .bracket-column.column-r16, .bracket-column.column-qf, .bracket-column.column-sf { min-width: unset; }
             .match-label,
-            .column-r16-right .match-label, .column-qf-right .match-label, .column-sf-right .match-label {
+            .bracket-column.column-r16-left .match-label,
+            .bracket-column.column-qf-left .match-label,
+            .bracket-column.column-sf-left .match-label,
+            .bracket-column.column-r16-right .match-label,
+            .bracket-column.column-qf-right .match-label,
+            .bracket-column.column-sf-right .match-label {
                 position: relative; transform: none; left: auto; right: auto; margin-top: 5px;
+                display: inline-block; 
+                font-size: 0.75rem; padding: 2px 5px;
             }
         }
          @media (max-width: 576px) {
@@ -877,29 +885,33 @@
             });
         }
         
-        function generateKnockoutStage(stageName, numExpectedMatches, teamsAvailable, previousStageWinners = null) {
+        function generateKnockoutStage(stageLabel, numExpectedMatches, teamsAvailable, previousStageWinners = null) {
             const stageFixtures = [];
             let currentTeams = previousStageWinners ? [...previousStageWinners] : [...teamsAvailable];
-            currentTeams = currentTeams.filter(team => team !== "BYE" || currentTeams.length === 1);
-
+            currentTeams = currentTeams.filter(team => team !== "BYE" || currentTeams.length === 1); // Ne filtre pas les BYE si c'est le seul "gagnant"
+            
             if (currentTeams.length === 0 && numExpectedMatches > 0) {
+                 console.log(`Génération de ${numExpectedMatches} matchs vides pour ${stageLabel} car aucune équipe dispo.`);
                 for (let i = 0; i < numExpectedMatches; i++) {
-                     stageFixtures.push({ home: `À déterminer`, away: `À déterminer`, scoreHome: null, scoreAway: null, match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
+                     stageFixtures.push({ home: `À déterminer`, away: `À déterminer`, scoreHome: null, scoreAway: null, match_id: `${stageLabel.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` });
                 }
                 return stageFixtures;
             }
+            
             shuffleArray(currentTeams); 
             let teamsToPair = [...currentTeams];
+
             for (let i = 0; i < numExpectedMatches; i++) {
                 let team1, team2;
                 if (teamsToPair.length >= 2) { team1 = teamsToPair.pop(); team2 = teamsToPair.pop(); } 
                 else if (teamsToPair.length === 1) { team1 = teamsToPair.pop(); team2 = "BYE"; } 
                 else { team1 = "À déterminer"; team2 = "À déterminer"; }
+                
                 stageFixtures.push({ 
                     home: (i % 2 === 0 || team2 === "BYE" ? team1 : team2), 
                     away: (i % 2 === 0 || team2 === "BYE" ? team2 : team1),
                     scoreHome: null, scoreAway: null, 
-                    match_id: `${stageName.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` 
+                    match_id: `${stageLabel.toLowerCase().replace(/\s+/g, '-').replace(/[èéêë]/g,'e')}-${i}` 
                 });
             } 
             return stageFixtures;
@@ -913,11 +925,18 @@
             if (qualifiedTeams.length < 2) { showMessage("Pas assez d'équipes pour démarrer une saison LDC.", 4000, true); return; }
             
             let numTeamsForTournament;
-            if (qualifiedTeams.length >= 16) numTeamsForTournament = 16;
-            else if (qualifiedTeams.length >= 8) numTeamsForTournament = 8;
-            else if (qualifiedTeams.length >= 4) numTeamsForTournament = 4;
-            else if (qualifiedTeams.length >= 2) numTeamsForTournament = 2;
-            else { showMessage("Pas assez d'équipes pour un tournoi.", 3000, true); return; }
+            let initialStageKey = ''; 
+            let numInitialMatches = 0;
+
+            if (qualifiedTeams.length >= 16) {
+                numTeamsForTournament = 16; initialStageKey = 'huitiemes'; numInitialMatches = 8;
+            } else if (qualifiedTeams.length >= 8) {
+                numTeamsForTournament = 8; initialStageKey = 'quarts'; numInitialMatches = 4;
+            } else if (qualifiedTeams.length >= 4) {
+                numTeamsForTournament = 4; initialStageKey = 'demies'; numInitialMatches = 2;
+            } else if (qualifiedTeams.length >= 2) {
+                numTeamsForTournament = 2; initialStageKey = 'finale'; numInitialMatches = 1;
+            } else { showMessage("Pas assez d'équipes pour un tournoi.", 3000, true); return; }
 
             shuffleArray(qualifiedTeams);
             const selectedTeams = qualifiedTeams.slice(0, numTeamsForTournament);
@@ -926,11 +945,20 @@
                 season_id: newSeasonId, nom_saison: newSeasonName, format: "elimination_directe",
                 teams_in_tournament: [...selectedTeams], 
                 phase_elimination: { huitiemes: [], quarts: [], demies: [], finale: [] },
-                vainqueur: null
+                vainqueur: null,
+                starting_stage: initialStageKey // Important pour l'affichage et la logique
             };
+
+            if (initialStageKey && numInitialMatches > 0) {
+                newSeason.phase_elimination[initialStageKey] = generateKnockoutStage(
+                    initialStageKey.charAt(0).toUpperCase() + initialStageKey.slice(1), // Pour match_id
+                    numInitialMatches, selectedTeams
+                );
+            }
+
             ldcDataStore.seasons.push(newSeason); ldcDataStore.active_season_id = newSeasonId;
             populateLdcUI();
-            showMessage(`Nouvelle saison LDC "${newSeasonName}" créée avec ${numTeamsForTournament} équipes!`, 2500);
+            showMessage(`Nouvelle saison LDC "${newSeasonName}" créée (${numTeamsForTournament} équipes, début en ${initialStageKey})!`, 3500);
             if (googleAccessToken) saveLdcDataToDrive();
         }
 
@@ -957,7 +985,6 @@
             if(googleAccessToken) saveLdcDataToDrive(); 
         }
 
-        // ---------- CORRECTION APPLIQUÉE ICI -----------
         function populateLdcFixturesDOM(activeSeason) {
             const bracketContainer = document.getElementById('ldc-knockout-stages');
             if (!bracketContainer || !activeSeason || !activeSeason.phase_elimination) {
@@ -968,6 +995,9 @@
 
             const teamsInfo = ldcDataStore.teams || {};
             const pe = activeSeason.phase_elimination;
+            const startingStage = activeSeason.starting_stage || 'huitiemes'; // Phase de départ du tournoi
+            const stageOrderForDisplay = ['huitiemes', 'quarts', 'demies', 'finale'];
+            const stageLabels = { huitiemes: 'HU', quarts: 'QU', demies: 'DE', finale: 'FI' };
 
             const createTeamSlotHTML = (teamName, score, stageKey, matchIdx, teamType, match) => {
                 const teamData = teamsInfo[teamName];
@@ -978,12 +1008,11 @@
                      scoreInputHTML = `<input type="number" class="score-input-bracket" value="${scoreVal}" min="0" data-stagekey="${stageKey}" data-matchidx="${matchIdx}" data-team="${teamType}">`;
                 }
                 
-                let winnerClass = '';
-                if(match && typeof match === 'object' && match.winner === teamName && teamName !== "BYE") winnerClass = 'winner';
-                else if (match && typeof match === 'object' && match.winner && match.winner !== teamName && teamName !== "BYE" && teamName !== "À déterminer") winnerClass = 'loser';
+                let slotClass = '';
+                if(match && typeof match === 'object' && match.winner === teamName && teamName !== "BYE") slotClass = 'winner';
+                else if (match && typeof match === 'object' && match.winner && match.winner !== teamName && teamName !== "BYE" && teamName !== "À déterminer") slotClass = 'loser';
 
-
-                return `<div class="team-slot ${winnerClass}" data-team-name="${teamName || ''}">
+                return `<div class="team-slot ${slotClass}" data-team-name="${teamName || ''}">
                             ${logo}
                             <span class="team-name">${teamName || 'À déterminer'}</span>
                             ${scoreInputHTML}
@@ -996,8 +1025,8 @@
                     console.warn("Index de match invalide pour createMatchItemHTML:", match, stageKey, matchIdxParam);
                     return ''; 
                  }
-
-                const labelText = `${stageKey.substring(0,2).toUpperCase()}-${matchIndex + 1}`; 
+                // Utiliser le stageLabel défini pour le bracket, ex: HU, QU
+                const labelText = `${stageLabels[stageKey] || stageKey.substring(0,2).toUpperCase()}-${matchIndex + 1}`; 
                 
                 return `<div class="bracket-match-item" data-match-id="${match.match_id || `${stageKey}-${matchIndex}`}">
                             ${createTeamSlotHTML(match.home, match.scoreHome, stageKey, matchIndex, 'home', match)}
@@ -1006,48 +1035,31 @@
                         </div>`;
             };
             
-            const columns = { r16L: null, qfL: null, sfL: null, final: null, sfR: null, qfR: null, r16R: null };
+            const columns = {};
+            const stageToColumnClass = { huitiemes: 'column-r16', quarts: 'column-qf', demies: 'column-sf' };
+            const startingStageIndex = stageOrderForDisplay.indexOf(startingStage);
 
-            // Afficher les Huitièmes si des matchs existent pour cette phase
-            if (pe.huitiemes && pe.huitiemes.length > 0) {
-                columns.r16L = document.createElement('div'); columns.r16L.className = 'bracket-column rounds-8-4 column-r16-left';
-                columns.r16R = document.createElement('div'); columns.r16R.className = 'bracket-column rounds-8-4 column-r16-right';
-                const midPoint = Math.ceil(pe.huitiemes.length / 2);
-                for (let i = 0; i < pe.huitiemes.length; i++) { 
-                    if (pe.huitiemes[i]) {
-                        if (i < midPoint) columns.r16L.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
-                        else columns.r16R.innerHTML += createMatchItemHTML(pe.huitiemes[i], 'huitiemes', i);
+            // Créer les colonnes pour chaque phase pertinente
+            stageOrderForDisplay.forEach((stageKey, index) => {
+                if (index < stageOrderForDisplay.length -1 ) { // Pas de colonne L/R pour la finale
+                    if (index >= startingStageIndex && pe[stageKey] && pe[stageKey].length > 0) {
+                         columns[`${stageKey}L`] = document.createElement('div'); 
+                         columns[`${stageKey}L`].className = `bracket-column ${stageToColumnClass[stageKey]}-left ${stageToColumnClass[stageKey]}`;
+                         columns[`${stageKey}R`] = document.createElement('div'); 
+                         columns[`${stageKey}R`].className = `bracket-column ${stageToColumnClass[stageKey]}-right ${stageToColumnClass[stageKey]}`;
+
+                        const midPoint = Math.ceil(pe[stageKey].length / 2);
+                        for (let i = 0; i < pe[stageKey].length; i++) {
+                            if (pe[stageKey][i]) {
+                                if (i < midPoint) columns[`${stageKey}L`].innerHTML += createMatchItemHTML(pe[stageKey][i], stageKey, i);
+                                else columns[`${stageKey}R`].innerHTML += createMatchItemHTML(pe[stageKey][i], stageKey, i);
+                            }
+                        }
                     }
                 }
-            }
+            });
             
-            // Afficher les Quarts si des matchs existent
-            if (pe.quarts && pe.quarts.length > 0) {
-                columns.qfL = document.createElement('div'); columns.qfL.className = 'bracket-column rounds-8-4 column-qf-left';
-                columns.qfR = document.createElement('div'); columns.qfR.className = 'bracket-column rounds-8-4 column-qf-right';
-                 const midPoint = Math.ceil(pe.quarts.length / 2);
-                 for (let i = 0; i < pe.quarts.length; i++) { 
-                    if (pe.quarts[i]) {
-                        if (i < midPoint) columns.qfL.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
-                        else columns.qfR.innerHTML += createMatchItemHTML(pe.quarts[i], 'quarts', i);
-                    }
-                 }
-            }
-
-            // Afficher les Demies si des matchs existent
-            if (pe.demies && pe.demies.length > 0) {
-                columns.sfL = document.createElement('div'); columns.sfL.className = 'bracket-column round-semi column-sf-left';
-                columns.sfR = document.createElement('div'); columns.sfR.className = 'bracket-column round-semi column-sf-right';
-                 const midPoint = Math.ceil(pe.demies.length / 2);
-                 for (let i = 0; i < pe.demies.length; i++) { 
-                    if (pe.demies[i]) {
-                        if (i < midPoint) columns.sfL.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
-                        else columns.sfR.innerHTML += createMatchItemHTML(pe.demies[i], 'demies', i);
-                    }
-                 }
-            }
-
-            // Afficher la Finale si un match existe
+            // Colonne Finale
             if (pe.finale && pe.finale.length > 0) {
                 columns.final = document.createElement('div'); columns.final.className = 'bracket-centerpiece-visual';
                 columns.final.innerHTML = '<i class="fas fa-trophy trophy-icon"></i>';
@@ -1059,19 +1071,22 @@
                 }
             }
 
-            if(columns.r16L && columns.r16L.innerHTML.trim() !== '') bracketContainer.appendChild(columns.r16L);
-            if(columns.qfL && columns.qfL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.qfL);
-            if(columns.sfL && columns.sfL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.sfL);
+
+            // Ordre d'affichage des colonnes
+            if(columns.huitiemesL && columns.huitiemesL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.huitiemesL);
+            if(columns.quartsL && columns.quartsL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.quartsL);
+            if(columns.demiesL && columns.demiesL.innerHTML.trim() !== '') bracketContainer.appendChild(columns.demiesL);
+            
             if(columns.final) bracketContainer.appendChild(columns.final); 
-            if(columns.sfR && columns.sfR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.sfR);
-            if(columns.qfR && columns.qfR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.qfR);
-            if(columns.r16R && columns.r16R.innerHTML.trim() !== '') bracketContainer.appendChild(columns.r16R);
+            
+            if(columns.demiesR && columns.demiesR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.demiesR);
+            if(columns.quartsR && columns.quartsR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.quartsR);
+            if(columns.huitiemesR && columns.huitiemesR.innerHTML.trim() !== '') bracketContainer.appendChild(columns.huitiemesR);
             
             document.querySelectorAll('#ldc-knockout-stages .score-input-bracket').forEach(input => {
                 input.addEventListener('change', handleLdcScoreChange);
             });
         }
-        // ---------- FIN DE LA CORRECTION -----------
 
 
         function handleLdcScoreChange(event) {
@@ -1098,41 +1113,55 @@
         }
 
         function checkAndAdvanceLdcStage(activeSeason) { 
-             if (!activeSeason || !activeSeason.phase_elimination) return;
+            if (!activeSeason || !activeSeason.phase_elimination) return;
             const pe = activeSeason.phase_elimination;
             const stagesOrder = ['huitiemes', 'quarts', 'demies', 'finale'];
+            const startingStage = activeSeason.starting_stage || 'huitiemes';
             
             for(let i = 0; i < stagesOrder.length; i++) {
                 const stageKey = stagesOrder[i];
                 const nextKey = stagesOrder[i+1];
+
+                // Ne pas générer de matchs pour les stades AVANT le stade de départ effectif
+                if (stagesOrder.indexOf(stageKey) < stagesOrder.indexOf(startingStage)) {
+                    continue; 
+                }
                 
-                if((!pe[stageKey] || pe[stageKey].length === 0) && activeSeason.teams_in_tournament && activeSeason.teams_in_tournament.length > 0) {
+                // Si le stade actuel est vide et que c'est le stade de départ ou un stade ultérieur
+                // et qu'il y a des équipes pour le tournoi OU des gagnants de la phase précédente
+                if((!pe[stageKey] || pe[stageKey].length === 0)) {
                     let teamsForThisStage = [];
                     let numMatchesForThisStage = 0;
 
-                    if (i === 0) teamsForThisStage = activeSeason.teams_in_tournament;
-                    else { 
+                    if (stageKey === startingStage) { // Premier stade du tournoi
+                        teamsForThisStage = activeSeason.teams_in_tournament;
+                    } else { // Stades suivants
                         const prevStageKey = stagesOrder[i-1];
                         if (pe[prevStageKey] && pe[prevStageKey].every(m => m.winner || m.home === "BYE" || m.away === "BYE")) {
-                           teamsForThisStage = pe[prevStageKey].map(m => m.winner).filter(Boolean);
+                           teamsForThisStage = pe[prevStageKey].map(m => m.winner).filter(w => w && w !== "BYE");
                         } else { 
-                            break; 
+                            break; // La phase précédente n'est pas finie
                         }
                     }
                     
+                    // Déterminer le nombre de matchs pour ce stade
                     if (stageKey === 'huitiemes' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
                     else if (stageKey === 'quarts' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
                     else if (stageKey === 'demies' && teamsForThisStage.length >= 2) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2);
-                    else if (stageKey === 'finale' && teamsForThisStage.length >= 1) numMatchesForThisStage = Math.ceil(teamsForThisStage.length / 2); 
+                    else if (stageKey === 'finale' && teamsForThisStage.length >= 1) numMatchesForThisStage = 1; // La finale a toujours 1 match
                     
                     if (numMatchesForThisStage > 0 && teamsForThisStage.length > 0) {
                          console.log(`Génération des matchs pour ${stageKey}. Équipes: ${teamsForThisStage.length}, Matchs: ${numMatchesForThisStage}`);
-                         pe[stageKey] = generateKnockoutStage(stageKey.charAt(0).toUpperCase() + stageKey.slice(1), numMatchesForThisStage, [], teamsForThisStage);
-                    } else if (teamsForThisStage.length === 0 && i > 0) { 
+                         pe[stageKey] = generateKnockoutStage(
+                            stageKey.charAt(0).toUpperCase() + stageKey.slice(1), 
+                            numMatchesForThisStage, [], teamsForThisStage);
+                    } else if (teamsForThisStage.length === 0 && stageKey !== startingStage) { // Pas de vainqueurs et ce n'est pas le début
+                        console.log(`Aucune équipe pour générer ${stageKey}.`);
                         break; 
                     }
                 }
 
+                // Logique d'avancement si le stade actuel est rempli et a des gagnants
                 if(pe[stageKey] && pe[stageKey].length > 0) {
                     const allMatchesInStageHaveWinner = pe[stageKey].every(m => {
                         if (m.home === "BYE" && !m.winner) { m.winner = m.away; return true;}
@@ -1142,7 +1171,7 @@
 
                     if(allMatchesInStageHaveWinner) { 
                         if(nextKey && (!pe[nextKey] || pe[nextKey].length === 0)) { 
-                            const winnersFromCurrentStage = pe[stageKey].map(m => m.winner).filter(Boolean);
+                            const winnersFromCurrentStage = pe[stageKey].map(m => m.winner).filter(w => w && w !== "BYE");
                             const numNextMatches = Math.ceil(winnersFromCurrentStage.length / 2);
                             if (numNextMatches > 0 && winnersFromCurrentStage.length > 0) {
                                 console.log(`Génération de ${nextKey} avec ${winnersFromCurrentStage.length} vainqueurs.`);
@@ -1150,12 +1179,19 @@
                                     nextKey.charAt(0).toUpperCase() + nextKey.slice(1), 
                                     numNextMatches, [], winnersFromCurrentStage
                                 );
+                            } else if (winnersFromCurrentStage.length === 1 && nextKey === 'finale') { // Cas spécial: 1 seul gagnant pour la finale
+                                console.log(`Génération de ${nextKey} avec 1 vainqueur (et un "BYE" implicite).`);
+                                pe[nextKey] = generateKnockoutStage(
+                                    nextKey.charAt(0).toUpperCase() + nextKey.slice(1), 
+                                    1, [], winnersFromCurrentStage // generateKnockoutStage gère le "BYE" si un seul participant
+                                );
                             }
                         } else if (!nextKey && stageKey === 'finale') { 
                              activeSeason.vainqueur = pe[stageKey][0]?.winner; 
                         }
-                    } else { break; }
-                } else if (i > 0 && (!pe[stagesOrder[i-1]] || !pe[stagesOrder[i-1]].every(m => m.winner))) {
+                    } else { break; } // Le stade n'est pas encore fini
+                } else if (stageKey !== startingStage && (!pe[stagesOrder[stagesOrder.indexOf(stageKey)-1]] || !pe[stagesOrder[stagesOrder.indexOf(stageKey)-1]].every(m => m.winner))) {
+                    // Le stade précédent (s'il existe et n'est pas le stade de départ) n'est pas fini
                     break;
                 }
             }
@@ -1183,7 +1219,14 @@
                 ['huitiemes', 'quarts', 'demies', 'finale'].forEach(phase => {
                     if (!activeSeason.phase_elimination[phase]) activeSeason.phase_elimination[phase] = [];
                 });
-                checkAndAdvanceLdcStage(activeSeason); // Cela appellera populateLdcFixturesDOM
+                 if (!activeSeason.starting_stage) { // Rétrocompatibilité pour anciennes saisons
+                    if (activeSeason.phase_elimination.huitiemes && activeSeason.phase_elimination.huitiemes.length > 0) activeSeason.starting_stage = 'huitiemes';
+                    else if (activeSeason.phase_elimination.quarts && activeSeason.phase_elimination.quarts.length > 0) activeSeason.starting_stage = 'quarts';
+                    else if (activeSeason.phase_elimination.demies && activeSeason.phase_elimination.demies.length > 0) activeSeason.starting_stage = 'demies';
+                    else if (activeSeason.phase_elimination.finale && activeSeason.phase_elimination.finale.length > 0) activeSeason.starting_stage = 'finale';
+                    else activeSeason.starting_stage = 'huitiemes'; // Défaut
+                }
+                checkAndAdvanceLdcStage(activeSeason); 
                 displayLdcWinner(activeSeason);
             } else {
                 const bracketContainer = document.getElementById('ldc-knockout-stages');
@@ -1223,8 +1266,7 @@
 
             const allNavLinksList = document.querySelectorAll('header nav ul li a');
             allNavLinksList.forEach(link => {
-                link.addEventListener('click', (e) => { // Ajout du paramètre e
-                    // e.preventDefault(); // Décommenter si la navigation cause des problèmes de rechargement
+                link.addEventListener('click', (e) => { 
                     if (window.innerWidth <= 992 && navEl && navEl.classList.contains('active')) { 
                         navEl.classList.remove('active'); 
                         if(hamburgerEl) hamburgerEl.querySelector('i').className = 'fas fa-bars'; 
@@ -1232,20 +1274,22 @@
                     allNavLinksList.forEach(l => l.classList.remove('active-nav-link'));
                     link.classList.add('active-nav-link');
 
-                    // Si c'est un lien interne à la page (ex: #actualites), on peut gérer le scroll
                     const href = link.getAttribute('href');
                     if (href && href.startsWith('index.html#')) {
-                        // Rediriger vers index.html puis scroller
+                        e.preventDefault(); // Important pour éviter le rechargement si on est déjà sur index.html
                         const targetId = href.split('#')[1];
-                        window.location.href = `index.html#${targetId}`;
+                         if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+                             const targetElement = document.getElementById(targetId);
+                             if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
+                         } else {
+                            window.location.href = `index.html#${targetId}`;
+                         }
                     } else if (href && href.startsWith('#')) {
+                         e.preventDefault();
                          const targetId = href.substring(1);
                          const targetElement = document.getElementById(targetId);
-                         if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: 'smooth' });
-                         }
+                         if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
                     }
-                    // Pour les liens vers d'autres pages, le comportement par défaut (chargement de page) suffit.
                 });
             });
         

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Technique – Extension EFS et Industrialisation Ansible</title>
+    <style>
+        /* ── ASCIIDOCTOR FAITHFUL THEME ─────────────────── */
+        :root {
+            --red:       #ba3925;
+            --red-dark:  #7a2518;
+            --text:      #333333;
+            --border:    #dddddd;
+            --pre-bg:    #f7f7f8;
+            --link:      #2156a5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+            font-size: 16.5px;
+            color: var(--text);
+            background: #fff;
+            line-height: 1.68;
+            padding-bottom: 50px;
+        }
+
+        /* ── PAGE WRAPPER ── */
+        #header, #content, #footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ── HEADER ── */
+        #header {
+            padding-top: 36px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+        #header h1 {
+            font-size: 2.2em;
+            font-weight: 400;
+            color: var(--red);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        #header .details {
+            font-size: 0.88em;
+            color: #888;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        /* ── SECTIONS ── */
+        h2 {
+            font-size: 1.6875em;
+            font-weight: 400;
+            color: var(--red);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 52px;
+            margin-bottom: 20px;
+            line-height: 1.25;
+        }
+        h3 {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: var(--red-dark);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p { margin-bottom: 16px; text-align: justify; }
+
+        code {
+            font-family: "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+            font-size: 0.88em;
+            background: var(--pre-bg);
+            border: 1px solid #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        /* ── ADMONITION BLOCKS ── */
+        .admonitionblock { margin: 25px 0; border-radius: 3px; }
+        .admonitionblock table { width: 100%; border-collapse: collapse; }
+        .admonitionblock td.icon { width: 90px; vertical-align: top; padding: 15px; text-align: center; }
+        .admonitionblock td.icon .title {
+            font-family: "Open Sans", sans-serif;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .admonitionblock td.content { vertical-align: top; padding: 15px; border-left: 1px solid rgba(0,0,0,0.1); }
+
+        .admonitionblock.note { background: #f3f9ff; border-left: 5px solid #19407c; }
+        .admonitionblock.note td.icon .title { color: #19407c; }
+        .admonitionblock.tip { background: #f1faf5; border-left: 5px solid #4d7a97; }
+        .admonitionblock.tip td.icon .title { color: #4d7a97; }
+        .admonitionblock.warning { background: #fffbf0; border-left: 5px solid #bf6900; }
+        .admonitionblock.warning td.icon .title { color: #bf6900; }
+
+        /* ── IMAGE BLOCK ── */
+        .imageblock { margin: 35px 0; text-align: center; page-break-inside: avoid; }
+        .imageblock img {
+            max-width: 100%;
+            border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .imageblock .title { font-style: italic; font-size: 0.9em; color: #777; margin-top: 12px; }
+
+        /* ── LISTING BLOCK ── */
+        .listingblock { margin: 25px 0; }
+        .listingblock pre {
+            background: #222;
+            color: #efefef;
+            padding: 20px;
+            border-radius: 4px;
+            font-family: "Droid Sans Mono", monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        #footer {
+            margin-top: 60px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            font-size: 0.85em;
+            color: #999;
+            text-align: center;
+        }
+
+        #btn-pdf {
+            position: fixed; top: 20px; right: 20px;
+            background: #333; color: #fff; border: none;
+            padding: 10px 20px; border-radius: 4px;
+            cursor: pointer; font-weight: bold; z-index: 1000;
+        }
+
+        @media print {
+            #btn-pdf { display: none; }
+            h2 { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<button id="btn-pdf" onclick="window.print()">Exporter en PDF</button>
+
+<div id="header">
+    <h1>Rapport : Stockage Partagé EFS & Industrialisation Ansible</h1>
+    <div class="details">
+        <span>Infrastructure Cloud AWS</span>
+        <span>Gestion de configuration centralisée</span>
+    </div>
+</div>
+
+<div id="content">
+
+    <div id="preamble">
+        <div class="admonitionblock note">
+            <table><tr>
+                <td class="icon"><div class="title">Objectif</div></td>
+                <td class="content">
+                    L'objectif de cette mission est de mettre en place une solution de stockage de fichiers distribuée 
+                    utilisant le service <strong>Amazon EFS</strong>. Ce stockage doit être monté de manière 
+                    automatisée sur un parc de serveurs Ubuntu via <strong>Ansible</strong>, permettant ainsi 
+                    le partage de données en temps réel entre différentes zones de disponibilité.
+                </td>
+            </tr></table>
+        </div>
+    </div>
+
+    <h2>1. Préparation de la sécurité périmétrique</h2>
+    <div class="sectionbody">
+        <p>Avant le déploiement du service de stockage, il est nécessaire de définir les règles de flux réseau. 
+        Le service Amazon EFS s'appuie sur le protocole <strong>NFSv4.1</strong>, utilisant le port standard <code>2049</code>.</p>
+        
+        <p>Un groupe de sécurité nommé <code>Securite-EFS</code> est créé au sein du VPC <code>ais_vpc</code>. 
+        Pour garantir une sécurité optimale, la règle entrante n'autorise le port 2049 que si la source appartient 
+        au groupe de sécurité des instances applicatives. Cette méthode 
+        évite l'exposition du stockage à l'ensemble du réseau</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="crea-groupe-secu.png"></div>
+            <div class="title">Fig 1. Isolation du trafic NFS via un Security Group dédié.</div>
+        </div>
+    </div>
+
+    <h2>2. Initialisation du service Amazon EFS</h2>
+    <div class="sectionbody">
+        <div class="admonitionblock tip">
+            <table><tr>
+                <td class="icon"><div class="title">Concept</div></td>
+                <td class="content">
+                    <strong>Elastic File System</strong> 
+                    est un stockage de fichiers "multi-attach". Il permet à des instances de lire 
+                    et d'écrire simultanément sur le même volume.
+                </td>
+            </tr></table>
+        </div>
+
+        <p>Le processus se poursuit par la création du système de fichiers dans la console AWS.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="efs.png"></div>
+            <div class="title">Fig 2. Sélection du service Amazon EFS dans la console de gestion.</div>
+        </div>
+
+        <p>Le système de fichiers est nommé <code>ais-stockage</code>. Les paramètres de performance sont réglés sur 
+        le mode "Élastique" afin de permettre une mise à l'échelle automatique du débit en fonction de la charge.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="creer-system-fichiers.png"></div>
+            <div class="title">Fig 3. Configuration des capacités et du chiffrement des données.</div>
+        </div>
+    </div>
+
+    <h2>3. Configuration du réseau et Cibles de Montage</h2>
+    <div class="sectionbody">
+        <p>Pour rendre le volume accessible, il convient de déployer des <strong>Cibles de montage</strong> (Mount Targets) 
+        dans les sous-réseaux où résident les instances EC2. Dans le cadre de ce projet, les cibles sont placées 
+        dans les réseaux privés des deux zones de disponibilité.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="acces-reseau.png"></div>
+            <div class="title">Fig 4. Assignation des cibles de montage aux sous-réseaux privés.</div>
+        </div>
+
+        <div class="admonitionblock warning">
+            <table><tr>
+                <td class="icon"><div class="title">Action Critique</div></td>
+                <td class="content">
+                    Par défaut, AWS assigne le groupe de sécurité <code>default</code>. Il est impératif de le remplacer 
+                    par le groupe <code>Securite-EFS</code> créé à l'étape 1 pour autoriser les connexions.
+                </td>
+            </tr></table>
+        </div>
+
+        <div class="imageblock">
+            <div class="content"><img src="final-acces-reseau.png"></div>
+            <div class="title">Fig 5. État final de la connectivité réseau du stockage partagé.</div>
+        </div>
+    </div>
+
+    <h2>4. Automatisation du déploiement avec Ansible</h2>
+    <div class="sectionbody">
+        <p>Une fois l'infrastructure AWS prête, l'industrialisation du montage sur les serveurs est réalisée 
+        via <strong>Ansible</strong>. Cette approche garantit une configuration identique sur l'ensemble du parc.</p>
+
+        <h3>Écriture du Playbook</h3>
+        <p>Le fichier <code>playbook-efs.yml</code> est conçu pour installer les dépendances nécessaires 
+        (paquet <code>nfs-common</code>) et créer le répertoire local <code>/mnt/efs</code> qui servira de point d'entrée.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="official-yaml.png"></div>
+            <div class="title">Fig 6. Script YAML définissant les tâches d'installation et de préparation.</div>
+        </div>
+
+        <h3>Exécution de la configuration</h3>
+        <p>Le playbook est lancé depuis le <strong>Control Node</strong>. Ansible se connecte simultanément 
+        aux machines <code>web1</code> (Zone A) et <code>web2</code> (Zone B) pour appliquer la configuration.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="lancement.png"></div>
+            <div class="title">Fig 7. Compte-rendu de l'exécution Ansible validant la préparation des hôtes.</div>
+        </div>
+    </div>
+
+    <h2>5. Validation du stockage distribué</h2>
+    <div class="sectionbody">
+        <div class="admonitionblock tip">
+            <table><tr>
+                <td class="icon"><div class="title">Test</div></td>
+                <td class="content">
+                    La validation repose sur un test de "lecture croisée" : un fichier écrit sur une machine 
+                    doit être immédiatement disponible sur toutes les autres.
+                </td>
+            </tr></table>
+        </div>
+
+        <h3>Étape 1 : Écriture sur l'instance Node 1 (AZ-a)</h3>
+        <p>Il est procédé à la création d'un fichier nommé <code>test1.txt</code> au sein du point de montage 
+        configuré. Ce fichier est stocké sur l'infrastructure EFS distante et non sur le disque local de l'instance.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="crea-txt.png"></div>
+            <div class="title">Fig 8. Génération d'une donnée de test sur le premier serveur.</div>
+        </div>
+
+        <h3>Étape 2 : Lecture sur l'instance Node 2 (AZ-b)</h3>
+        <p>En accédant au second serveur, le contenu du répertoire 
+        <code>/mnt/efs</code> est listé. L'apparition immédiate du fichier <code>test1.txt</code> confirme 
+        le bon fonctionnement de la réplication et de la synchronisation du service Amazon EFS.</p>
+
+        <div class="imageblock">
+            <div class="content"><img src="test2.png"></div>
+            <div class="title">Fig 9. Preuve de succès : lecture de la donnée partagée entre les zones A et B.</div>
+        </div>
+    </div>
+
+</div><!-- /content -->
+
+<div id="footer">
+    <div>Rapport d'Architecture Cloud — Mars 2026</div>
+    <div>VPC : <strong>ais_vpc</strong> · Amazon Web Services</div>
+</div>
+
+</body>
+</html>

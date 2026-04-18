@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championnat Peluches Élite V2 - Musique par Clic</title>
+    <title>Championnat Peluches Élite V3 - Montées/Descentes/CDF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script async defer src="https://accounts.google.com/gsi/client"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,332 +11,193 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f0f2f5;
-            --primary-color: #1a237e; 
-            --secondary-color: #007bff; 
-            --accent-gold: #ffc107; 
-            --accent-silver: #c0c0c0; 
-            --accent-ldc: #663399; 
-            --text-color-light: #ffffff;
-            --text-color-dark: #212529;
-            --card-bg: #ffffff;
-            --border-color: #dee2e6;
-
-            --nav-l1-color: var(--secondary-color);
-            --nav-l2-color: #28a745; 
-            --nav-palmares-color: #4a0e62;
-            --nav-billetterie-color: #fd7e14; 
-
-             --neon-green: #39FF14; 
-             --neon-red: #FF3131; 
-             --neon-yellow: #FFF01F;
+            --bg-color: #f0f2f5; --primary-color: #1a237e; --secondary-color: #007bff; --accent-gold: #ffc107; --accent-silver: #c0c0c0; --accent-ldc: #663399; --text-color-light: #ffffff; --text-color-dark: #212529; --card-bg: #ffffff; --border-color: #dee2e6;
+            --nav-l1-color: var(--secondary-color); --nav-l2-color: #28a745; --nav-palmares-color: #4a0e62; --nav-l3-color: #008080; --nav-cdf-color: #0044cc; --nav-barrage-color: #ff4500;
+            --neon-green: #39FF14; --neon-red: #FF3131; --neon-yellow: #FFF01F;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Open Sans', sans-serif; line-height: 1.7; color: var(--text-color-dark);
-            background-color: var(--bg-color); overflow-x: hidden; scroll-behavior: smooth;
-        }
+        body { font-family: 'Open Sans', sans-serif; line-height: 1.7; color: var(--text-color-dark); background-color: var(--bg-color); overflow-x: hidden; scroll-behavior: smooth; }
         .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px; }
-
-        h1, h2, h3, h4, .section-title {
-            font-family: 'Oswald', sans-serif; font-weight: 700;
-            color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px;
-        }
+        h1, h2, h3, h4, .section-title { font-family: 'Oswald', sans-serif; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; }
         .carousel-caption h2 { color: var(--text-color-light); }
-
-        header {
-            background-color: var(--primary-color); color: var(--text-color-light);
-            padding: 10px 0; 
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-        }
+        header { background-color: var(--primary-color); color: var(--text-color-light); padding: 10px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; text-decoration: none; color: var(--text-color-light); }
-        .logo img { height: 45px; margin-right: 12px; } 
-        .logo h1 { font-size: 1.6rem; color: var(--accent-gold); letter-spacing: 1px;}
-        
+        .logo img { height: 45px; margin-right: 12px; }
+        .logo h1 { font-size: 1.6rem; color: var(--accent-gold); letter-spacing: 1px; }
         .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
-         #drive-status { 
-            display: inline-flex; align-items: center; gap: 5px; font-size: 0.85em; 
-            color: var(--text-color-light); opacity: 0.8; 
-            border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 4px;
-            transition: color 0.3s ease, border-color 0.3s ease; white-space: nowrap;
-         }
-         #drive-status i { margin-right: 5px; }
-         #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); }
-         #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); }
-         #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); }
-         #signin-button { 
-            padding: 7px 12px; font-size: 0.85em; background-color: var(--accent-gold); 
-            color: var(--primary-color); border: none; border-radius: 4px; cursor: pointer;
-            transition: all 0.3s ease; font-weight: 600; white-space: nowrap;
-         }
-         #signin-button:hover:not(:disabled) { background-color: #e6ac00; transform: translateY(-1px); }
-         #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        nav { flex-grow: 1; display: flex; justify-content: center; } 
+        #drive-status { display: inline-flex; align-items: center; gap: 5px; font-size: 0.85em; color: var(--text-color-light); opacity: 0.8; border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 4px; transition: color 0.3s ease, border-color 0.3s ease; white-space: nowrap; }
+        #drive-status i { margin-right: 5px; }
+        #drive-status.loading { color: var(--neon-yellow); border-color: var(--neon-yellow); }
+        #drive-status.success { color: var(--neon-green); border-color: var(--neon-green); }
+        #drive-status.error { color: var(--neon-red); border-color: var(--neon-red); }
+        #signin-button { padding: 7px 12px; font-size: 0.85em; background-color: var(--accent-gold); color: var(--primary-color); border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; white-space: nowrap; }
+        #signin-button:hover:not(:disabled) { background-color: #e6ac00; transform: translateY(-1px); }
+        #signin-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        nav { flex-grow: 1; display: flex; justify-content: center; }
         nav ul { display: flex; list-style: none; margin:0; padding:0; flex-wrap: wrap; justify-content: center;}
-        nav ul li { margin: 0 5px; } 
-        nav ul li a { 
-            color: var(--text-color-light); text-decoration: none; font-weight: 500;
-            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; padding: 10px 15px; 
-            display: inline-flex; align-items: center; gap: 8px;
-            border-radius: 25px; border: 2px solid transparent;
-            font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size:0.9rem; letter-spacing: 0.5px;
-        }
+        nav ul li { margin: 0 3px; }
+        nav ul li a { color: var(--text-color-light); text-decoration: none; font-weight: 500; transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; padding: 8px 10px; display: inline-flex; align-items: center; gap: 6px; border-radius: 25px; border: 2px solid transparent; font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size:0.8rem; letter-spacing: 0.5px; }
         nav ul li a i { font-size: 0.9em; }
-
-        nav ul li a.active-nav-link:not([data-tab-link]) {
-            color: var(--accent-gold);
-            background-color: rgba(255, 193, 7, 0.1); 
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); 
-        }
-        nav ul li a[data-tab-link].active-nav-link, 
-        nav ul li a[data-tab-link].tab-active {
-            color: var(--text-color-light) !important; 
-            font-weight: 700;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transform: translateY(-2px);
-        }
+        nav ul li a.active-nav-link:not([data-tab-link]) { color: var(--accent-gold); background-color: rgba(255, 193, 7, 0.1); border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); }
+        nav ul li a[data-tab-link].active-nav-link, nav ul li a[data-tab-link].tab-active { color: var(--text-color-light) !important; font-weight: 700; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
         nav ul li a[data-tab-link="ligue1"].tab-active { background-color: var(--nav-l1-color); border-color: var(--nav-l1-color); }
         nav ul li a[data-tab-link="ligue2"].tab-active { background-color: var(--nav-l2-color); border-color: var(--nav-l2-color); }
+        nav ul li a[data-tab-link="ligue3"].tab-active { background-color: var(--nav-l3-color); border-color: var(--nav-l3-color); }
         nav ul li a[data-tab-link="palmares"].tab-active { background-color: var(--nav-palmares-color); border-color: var(--nav-palmares-color); color: var(--accent-gold) !important; }
-        nav ul li a[data-tab-link="billetterie"].tab-active { background-color: var(--nav-billetterie-color); border-color: var(--nav-billetterie-color); }
-        
-        nav ul li a:hover:not(.active-nav-link):not(.tab-active) {  color: var(--accent-gold); background-color: rgba(255,255,255,0.05); }
-         nav ul li a[data-tab-link]:hover:not(.tab-active) { border-color: var(--accent-gold); }
-
-
+        nav ul li a[data-tab-link="cdf"].tab-active { background-color: var(--nav-cdf-color); border-color: var(--nav-cdf-color); }
+        nav ul li a[data-tab-link="barrages"].tab-active { background-color: var(--nav-barrage-color); border-color: var(--nav-barrage-color); }
+        nav ul li a:hover:not(.active-nav-link):not(.tab-active) { color: var(--accent-gold); background-color: rgba(255,255,255,0.05); }
+        nav ul li a[data-tab-link]:hover:not(.tab-active) { border-color: var(--accent-gold); }
         .hamburger { display: none; font-size: 1.8rem; color: var(--text-color-light); cursor: pointer; z-index: 1001; margin-left:15px;}
-
         .tab-content { display: none; padding: 40px 0; animation: fadeIn 0.6s ease-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .carousel { position: relative; height: 500px; overflow: hidden; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+        .carousel { position: relative; height: 400px; overflow: hidden; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .carousel-inner { position: relative; width: 100%; height: 100%; }
-        .carousel-item { 
-             position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; 
-             transition: opacity 0.8s ease-in-out; 
-             display: flex; align-items: center; justify-content: center; text-align: center;
-        }
-        .carousel-item img { 
-            width: 100%; height: 100%; object-fit: cover;
-            position: absolute; top:0; left:0; z-index: 1; 
-        }
+        .carousel-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; z-index: 1; }
         .carousel-item.active { opacity: 1; z-index: 2; }
         .carousel-caption { position: relative; z-index: 3; color: #fff; padding: 20px; background-color: rgba(0,0,0,0.6); border-radius: 8px; }
-        .carousel-caption h2 { font-size: 3.2rem; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
-
-        .carousel-controls { 
-            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 4;
-            display: flex; gap: 10px;
-        }
-        .carousel-dot {
-            width: 12px; height: 12px; background-color: rgba(255,255,255,0.5); border-radius: 50%;
-            cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+        .carousel-caption h2 { font-size: 2.8rem; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .carousel-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 4; display: flex; gap: 10px; }
+        .carousel-dot { width: 12px; height: 12px; background-color: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; }
         .carousel-dot.active { background-color: var(--accent-gold); transform: scale(1.2); }
-        .carousel-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.5rem; 
-            color: rgba(255,255,255,0.9);
-            cursor: pointer; z-index: 4; padding: 12px 15px; 
-            transition: all 0.3s ease; background-color: rgba(0,0,0,0.4); border-radius: 50%;
-        }
+        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: rgba(255,255,255,0.9); cursor: pointer; z-index: 4; padding: 12px 15px; transition: all 0.3s ease; background-color: rgba(0,0,0,0.4); border-radius: 50%; }
         .carousel-arrow:hover { color: var(--accent-gold); background-color: rgba(0,0,0,0.6); transform: translateY(-50%) scale(1.1); }
         .carousel-prev { left: 20px; } .carousel-next { right: 20px; }
-
-
-        .btn {
-            display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light);
-            text-decoration: none; border-radius: 50px; font-weight: 700; font-family: 'Oswald', sans-serif;
-            text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+        .btn { display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-color-light); text-decoration: none; border-radius: 50px; font-weight: 700; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; border: none; }
         .btn:hover:not(:disabled) { transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .section { margin-bottom: 50px; background-color: var(--card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); transition: opacity 0.6s ease, transform 0.6s ease; opacity: 0; transform: translateY(25px); }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
         .section-title { font-size: 2.2rem; letter-spacing: 1px; }
         .section-link { color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px; font-family: 'Open Sans', sans-serif; text-transform: none;}
         .section-link:hover { color: var(--primary-color); }
-
         .table-container { overflow-x: auto; }
-        .standings-table, .fixtures-table, .palmares-table {
-            width: 100%; border-collapse: collapse; margin-top: 20px;
-            font-size: 0.9rem; min-width: 600px;
-        }
-        .standings-table th, .fixtures-table th, .palmares-table th {
-            background-color: #f8f9fa; color: var(--primary-color); font-weight: 700;
-            padding: 12px 10px; text-align: center; border-bottom: 2px solid var(--border-color);
-            white-space: nowrap;
-        }
+        .standings-table, .fixtures-table, .palmares-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; min-width: 600px; }
+        .standings-table th, .fixtures-table th, .palmares-table th { background-color: #f8f9fa; color: var(--primary-color); font-weight: 700; padding: 12px 10px; text-align: center; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
         .l1-content .standings-table th, .l1-content .fixtures-table th { background-color: var(--nav-l1-color); color: var(--text-color-light); }
         .l2-content .standings-table th, .l2-content .fixtures-table th { background-color: var(--nav-l2-color); color: var(--text-color-light); }
-        
-        .palmares-content .section { background: linear-gradient(145deg, var(--palmares-bg-dark) 0%, #1f242b 100%); box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3); }
+        .l3-content .standings-table th, .l3-content .fixtures-table th { background-color: var(--nav-l3-color); color: var(--text-color-light); }
+        .cdf-content .section { background: linear-gradient(145deg, #001a33 0%, #003366 100%); box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3); }
+        .cdf-content .section-title { color: #4da6ff; text-shadow: 0 0 10px rgba(77,166,255,0.7); }
+        .cdf-content .standings-table th, .cdf-content .fixtures-table th { background-color: var(--nav-cdf-color); color: var(--text-color-light); border-bottom: 2px solid #4da6ff; }
+        .cdf-content table { border: 1px solid #004080; border-radius: 8px; overflow: hidden; }
+        .cdf-content table td { color: #cce0ff; border-color: #003060; }
+        .palmares-content .section { background: linear-gradient(145deg, #0a1428 0%, #1f242b 100%); box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3); }
         .palmares-content .section-title { color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.7); }
-        .palmares-content .palmares-table { background-color: rgba(10,20,40,0.4); border: 1px solid var(--palmares-border); border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 25px rgba(0,0,0,0.6);}
-        .palmares-content .palmares-table th { 
-            background-color: rgba(0,0,0,0.5); 
-            color: var(--accent-gold); font-size: 1.25rem; letter-spacing: 1.8px;
-            border-bottom: 3px solid var(--accent-gold); padding: 18px 12px;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
-        }
-        .palmares-content .palmares-table td { border-color: var(--palmares-border); color: var(--palmares-text-light); padding: 15px 10px; vertical-align: middle; }
-        .palmares-content .palmares-table .team-info { font-size: 1.2rem; color: var(--text-color-light);font-family: 'Oswald', sans-serif;}
+        .palmares-content .palmares-table { background-color: rgba(10,20,40,0.4); border: 1px solid #2c3e50; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 25px rgba(0,0,0,0.6);}
+        .palmares-content .palmares-table th { background-color: rgba(0,0,0,0.5); color: var(--accent-gold); font-size: 1.1rem; letter-spacing: 1.8px; border-bottom: 3px solid var(--accent-gold); padding: 18px 12px; text-shadow: 1px 1px 4px rgba(0,0,0,0.9); }
+        .palmares-content .palmares-table td { border-color: #2c3e50; color: #bdc3c7; padding: 15px 10px; vertical-align: middle; }
+        .palmares-content .palmares-table .team-info { font-size: 1.1rem; color: var(--text-color-light); font-family: 'Oswald', sans-serif; }
         .palmares-content .palmares-table .team-info img { width: 36px; height: 36px; margin-right: 15px; }
-        .palmares-content .palmares-table .team-info span { margin-left: 15px; }
-        .palmares-content .palmares-table tbody tr:hover { background-color: rgba(var(--accent-gold-rgb, 255, 193, 7), 0.1); }
-
-
-        .standings-table td, .fixtures-table td, .palmares-table td {
-             vertical-align: middle;
-            border-bottom: 1px solid var(--border-color); white-space: nowrap;
-        }
-         .palmares-content .palmares-table td { border-color: var(--palmares-border); text-align: center; } 
-         .palmares-content .palmares-table td.team-info { text-align: left; } 
-
-
-        .standings-table tbody tr:hover, .fixtures-table tbody tr:hover, .palmares-table tbody tr:hover { background-color: #f1f3f5; }
-        .palmares-content .palmares-table tbody tr:hover { background-color: rgba(var(--accent-gold-rgb, 255, 193, 7), 0.1); }
-
+        .standings-table td, .fixtures-table td, .palmares-table td { vertical-align: middle; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        .standings-table tbody tr:hover, .fixtures-table tbody tr:hover { background-color: #f1f3f5; }
         .team-info { display: flex; align-items: center; text-align: left; font-weight: 600; white-space: normal; }
-        .team-logo { width: 32px; height: 32px; margin-right: 12px; object-fit: contain; flex-shrink: 0; } 
-
+        .team-logo { width: 32px; height: 32px; margin-right: 12px; object-fit: contain; flex-shrink: 0; }
         .fixtures-table .fixture-match { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 5px 0; }
         .fixtures-table .fixture-team { display: flex; align-items: center; flex: 1; }
         .fixtures-table .fixture-team.home { justify-content: flex-end; text-align: right; }
         .fixtures-table .fixture-team.away { justify-content: flex-start; text-align: left; }
         .fixtures-table .fixture-team span { margin: 0 5px; }
         .fixtures-table .fixture-score-inputs { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .fixtures-table .fixture-score-inputs input {
-            width: 40px; text-align: center; background-color: var(--card-bg); color: var(--text-color-dark);
-            border: 1px solid var(--border-color); border-radius: 4px; margin: 0 3px; padding: 6px 4px;
-            font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.9em;
-        }
-         .fixtures-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3); } 
+        .fixtures-table .fixture-score-inputs input { width: 40px; text-align: center; background-color: var(--card-bg); color: var(--text-color-dark); border: 1px solid var(--border-color); border-radius: 4px; margin: 0 3px; padding: 6px 4px; font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.9em; }
+        .fixtures-table .fixture-score-inputs input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3); }
         .fixtures-table .vs-separator { margin: 0 5px; color: var(--text-color-dark); font-weight: 700; }
-
-        .palmares-table .trophy-cell { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap;} 
-        .palmares-table .trophy-icon { 
-            font-size: 2.2em; 
-            transition: transform 0.2s ease-out, text-shadow 0.3s ease; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 0 15px currentColor, 0 0 25px currentColor; 
-            line-height: 1; 
-        }
-        .palmares-table .trophy-icon:hover { transform: scale(1.4) rotate(7deg); text-shadow: 0 4px 8px rgba(0,0,0,0.7), 0 0 20px currentColor, 0 0 35px currentColor; }
-        .trophy-l1 { color: var(--accent-gold); }
-        .trophy-l2 { color: var(--accent-silver); text-shadow: 0 0 6px rgba(0,0,0,0.3), 0 0 12px var(--accent-silver); }
-        .trophy-ldc { color: var(--accent-ldc); text-shadow: 0 0 8px rgba(0,0,0,0.4), 0 0 15px var(--accent-ldc), 0 0 22px var(--accent-ldc); } 
-        .palmares-table .action-cell { text-align:center; padding-left: 15px; vertical-align: middle; }
-        .palmares-table .action-cell button {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
-            width: 32px; height:32px; line-height:30px; text-align:center;
-            border-radius: 50%; cursor: pointer; font-size: 1em; margin: 2px 4px;
-            color: var(--palmares-text-light); transition: all 0.2s ease; opacity: 0.8;
-        }
-        .palmares-table .action-cell button:hover { opacity: 1; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.3); }
-        .palmares-table .action-cell button.remove-trophy { color: #ffcdd2; border-color: #ef9a9a;}
-        .palmares-table .action-cell button.remove-trophy:hover { background-color: rgba(255,138,128,0.3); color:var(--neon-red); }
-        .palmares-table .action-cell button.add-trophy { color: #c8e6c9; border-color: #a5d6a7;}
-        .palmares-table .action-cell button.add-trophy:hover { background-color: rgba(165,214,167,0.3); color: var(--neon-green); }
-
-
+        .palmares-table .trophy-cell { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap; }
+        .palmares-table .trophy-icon { font-size: 2.2em; transition: transform 0.2s ease-out, text-shadow 0.3s ease; text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 0 15px currentColor; line-height: 1; }
+        .palmares-table .trophy-icon:hover { transform: scale(1.4) rotate(7deg); }
+        .trophy-l1 { color: var(--accent-gold); } .trophy-l2 { color: var(--accent-silver); } .trophy-ldc { color: var(--accent-ldc); }
+        .palmares-table .action-cell { text-align:center; padding-left: 15px; vertical-align: middle; display: inline-flex; }
+        .palmares-table .action-cell button { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); width: 28px; height:28px; line-height:26px; text-align:center; border-radius: 50%; cursor: pointer; font-size: 0.9em; margin: 2px; color: #bdc3c7; transition: all 0.2s ease; opacity: 0.8; }
+        .palmares-table .action-cell button:hover { opacity: 1; transform: scale(1.15); }
+        .palmares-table .action-cell button.remove-trophy { color: #ffcdd2; border-color: #ef9a9a;} .palmares-table .action-cell button.remove-trophy:hover { background-color: rgba(255,138,128,0.3); color:var(--neon-red); }
+        .palmares-table .action-cell button.add-trophy { color: #c8e6c9; border-color: #a5d6a7;} .palmares-table .action-cell button.add-trophy:hover { background-color: rgba(165,214,167,0.3); color: var(--neon-green); }
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .team-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; }
         .team-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .team-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px; }
         .team-card h4 { font-size: 1.3rem; margin-bottom: 8px; }
-
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .news-card { background-color: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.06); transition: all 0.3s ease; display: flex; flex-direction: column; }
-        .news-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .news-image { width: 100%; height: 190px; object-fit: cover; }
-        .news-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .news-date { font-size: 0.8rem; color: #6c757d; margin-bottom: 8px; }
-        .news-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--primary-color); line-height: 1.35; }
-        .news-excerpt { font-size: 0.9rem; color: #555; margin-bottom: 15px; flex-grow: 1; }
-        .news-content .section-link { align-self: flex-start; color: var(--secondary-color); font-family: 'Open Sans', sans-serif; text-transform: none;}
-
-        .billetterie-content .content-placeholder { text-align: center; padding: 50px 20px; background-color: #fff3e0; border: 1px dashed var(--billetterie-color); border-radius: 10px;}
-        .billetterie-content .content-placeholder i { font-size: 3rem; margin-bottom: 20px; color: var(--billetterie-color); }
-        .billetterie-content .btn { background-color: var(--billetterie-color); }
-
         footer { background-color: var(--primary-color); color: var(--text-color-light); padding: 50px 0 30px; border-top: 5px solid var(--accent-gold); }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
         .footer-section h3 { font-size: 1.2rem; margin-bottom: 20px; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--accent-gold); padding-bottom: 10px; display: inline-block;}
-        .footer-section ul { list-style: none; padding: 0;}
-        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section ul { list-style: none; padding: 0;} .footer-section ul li { margin-bottom: 10px; }
         .footer-section ul li a { color: #bdc3c7; text-decoration: none; transition: color 0.3s ease, padding-left 0.3s ease; display: block; }
         .footer-section ul li a:hover { color: var(--accent-gold); padding-left: 5px; }
         .copyright { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #2c3e50; font-size: 0.9rem; color: #95a5a6; }
-
         .action-buttons { display:flex; align-items:center; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
-        .action-buttons .league-music-btn {
-            background-color: var(--primary-color); color: var(--accent-gold); border: 1px solid var(--accent-gold);
-            padding: 8px 15px; border-radius: 20px; font-family: 'Oswald', sans-serif;
-            cursor: pointer; transition: all 0.3s ease;
-        }
+        .action-buttons .league-music-btn { background-color: var(--primary-color); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 8px 15px; border-radius: 20px; font-family: 'Oswald', sans-serif; cursor: pointer; transition: all 0.3s ease; }
         .action-buttons .league-music-btn:hover { background-color: var(--accent-gold); color: var(--primary-color); }
         .action-buttons .league-music-btn i { margin-right: 8px; }
-
         .season-selector-container { display: flex; align-items: center; gap: 10px; }
         .season-selector-container label { font-weight: 600; color: var(--primary-color); font-family: 'Oswald'; }
-        .season-selector-container select {
-            padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color);
-            font-family: 'Open Sans'; font-size: 0.9rem; background-color: white;
-        }
-        .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn {
-            padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase;
-            color: var(--text-color-light); background-color: var(--secondary-color);
-            border: none; border-radius: 5px; cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease;
-        }
-        .nouvelle-saison-btn:hover:not(:disabled), .sauvegarde-json-btn:hover:not(:disabled), .delete-season-btn:hover:not(:disabled) { 
-            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-        }
+        .season-selector-container select { padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color); font-family: 'Open Sans'; font-size: 0.9rem; background-color: white; }
+        .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn { padding: 10px 20px; font-size: 1rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; color: var(--text-color-light); background-color: var(--secondary-color); border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .nouvelle-saison-btn:hover:not(:disabled), .sauvegarde-json-btn:hover:not(:disabled), .delete-season-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .nouvelle-saison-btn:hover:not(:disabled) { background-color: var(--primary-color); }
         .nouvelle-saison-btn:disabled, .sauvegarde-json-btn:disabled, .delete-season-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .sauvegarde-json-btn { background-color: var(--accent-gold); color: var(--primary-color); }
-        .sauvegarde-json-btn:hover:not(:disabled) { background-color: #e6ac00; }
-        .delete-season-btn { background-color: var(--neon-red); margin-left: 5px;}
-        .delete-season-btn:hover:not(:disabled) { background-color: #cc2828; }
-        
-        .message-area {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background-color: rgba(44, 62, 80, 0.9); color: var(--text-color-light);
-            padding: 12px 25px; border-radius: 6px; z-index: 3000; 
-            opacity: 0; visibility: hidden; transition: all 0.5s ease; pointer-events: none;
-            font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-            max-width: 90%; text-align: center; 
-        }
+        .sauvegarde-json-btn { background-color: var(--accent-gold); color: var(--primary-color); } .sauvegarde-json-btn:hover:not(:disabled) { background-color: #e6ac00; }
+        .delete-season-btn { background-color: var(--neon-red); margin-left: 5px;} .delete-season-btn:hover:not(:disabled) { background-color: #cc2828; }
+        .fin-saison-btn { background-color: #8e44ad; } .fin-saison-btn:hover:not(:disabled) { background-color: #732d91; }
+        .message-area { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background-color: rgba(44, 62, 80, 0.95); color: var(--text-color-light); padding: 12px 25px; border-radius: 6px; z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.5s ease; pointer-events: none; font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px); max-width: 90%; text-align: center; }
         .message-area.visible { opacity: 1; visibility: visible; transform: translate(-50%, -15px) ; pointer-events: auto; }
-        .message-area.error-message { background-color: rgba(255, 49, 49, 0.8); border: 1px solid var(--neon-red); text-shadow: 0 0 3px black;}
+        .message-area.error-message { background-color: rgba(255, 49, 49, 0.9); border: 1px solid var(--neon-red); }
 
-        @media (max-width: 1100px) { 
-             nav ul li { margin-left: 8px; } 
-             nav ul li a { padding: 8px 8px; font-size: 0.75rem;}
-        }
+        /* MODALS & SPECIFIC UI */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 5000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; animation: fadeIn 0.3s ease; }
+        .modal-box h2 { margin-bottom: 20px; color: var(--primary-color); border-bottom: 2px solid var(--accent-gold); padding-bottom: 10px; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-family: 'Open Sans'; }
+        .logo-preview { max-width: 80px; max-height: 80px; margin-top: 10px; display: none; }
+
+        /* ROULETTE */
+        .roulette-container { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; }
+        .roulette-wheel { width: 300px; height: 300px; border-radius: 50%; border: 5px solid var(--primary-color); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+        .roulette-pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--neon-red); z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); }
+        .roulette-segment { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; clip-path: polygon(50% 50%, 100% 0%, 100% 100%); transform-origin: 0% 50%; }
+        .roulette-segment img { width: 40px; height: 40px; object-fit: contain; position: absolute; top: 15px; left: 55%; transform: rotate(0deg); }
+        .roulette-winner-display { font-family: 'Oswald'; font-size: 2rem; color: var(--primary-color); text-align: center; min-height: 50px; }
+
+        /* BARRAGE */
+        .barrage-card { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--nav-barrage-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .barrage-teams { display: flex; align-items: center; gap: 15px; font-weight: 700; font-family: 'Oswald'; font-size: 1.2rem; }
+        .barrage-teams img { width: 50px; height: 50px; object-fit: contain; }
+        .barrage-scores { display: flex; gap: 10px; align-items: center; }
+        .barrage-scores input { width: 40px; text-align: center; font-family: 'Roboto Mono'; font-weight: bold; font-size: 1.1rem; border: 2px solid var(--border-color); border-radius: 5px; padding: 5px; }
+        .barrage-aggregate { text-align: center; font-weight: bold; color: var(--nav-barrage-color); font-size: 1.2rem; margin-top: 10px; padding: 10px; background: #fff3e0; border-radius: 8px; }
+
+        /* CDF BRACKET */
+        .cdf-round { margin-bottom: 30px; }
+        .cdf-round h3 { color: #4da6ff; margin-bottom: 15px; font-size: 1.5rem; border-bottom: 1px solid #003366; padding-bottom: 5px; display: inline-block; }
+        .cdf-match-card { background: rgba(255,255,255,0.05); border: 1px solid #004080; border-radius: 8px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .cdf-team { display: flex; align-items: center; gap: 10px; color: #cce0ff; font-weight: 600; flex: 1; }
+        .cdf-team.away { flex-direction: row-reverse; text-align: right; }
+        .cdf-team img { width: 40px; height: 40px; object-fit: contain; }
+        .cdf-score-input { width: 35px; text-align: center; background: #001a33; color: #4da6ff; border: 1px solid #004080; border-radius: 4px; padding: 5px; font-weight: bold; margin: 0 10px; }
+        .cdf-bye { color: var(--neon-yellow); font-style: italic; padding: 10px; text-align: center; background: rgba(255,255,0,0.1); border-radius: 8px; margin-bottom: 15px; }
+
+        @media (max-width: 1100px) { nav ul li { margin-left: 5px; } nav ul li a { padding: 6px 6px; font-size: 0.7rem; } }
         @media (max-width: 992px) {
             .header-container { flex-wrap: wrap; }
             .header-actions { order: 3; width: 100%; justify-content: center; margin-top:10px; }
-            nav {order:1; flex-grow: 0; margin-right: auto;} 
+            nav {order:1; flex-grow: 0; margin-right: auto; }
             .hamburger {display: block; order: 2; margin-left: 15px;}
-            nav.active { max-height: 500px; }
+            nav.active { max-height: 600px; }
             nav ul { flex-direction: column; padding: 10px 0; gap: 0; }
             nav ul li { margin-left: 0; width: 100%; }
-            nav ul li a { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); border-radius:0; justify-content: flex-start; }
+            nav ul li a { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); border-radius:0; justify-content: flex-start; }
             nav ul li a:hover, nav ul li a.active-nav-link, nav ul li a.tab-active { background-color: rgba(255,255,255,0.1); border-color:transparent; color: var(--accent-gold); transform: none; box-shadow: none;}
             nav ul li a[data-tab-link="ligue1"].tab-active { background-color: var(--nav-l1-color) !important; color:var(--text-color-light) !important;}
             nav ul li a[data-tab-link="ligue2"].tab-active { background-color: var(--nav-l2-color) !important; color:var(--text-color-light) !important;}
+            nav ul li a[data-tab-link="ligue3"].tab-active { background-color: var(--nav-l3-color) !important; color:var(--text-color-light) !important;}
             nav ul li a[data-tab-link="palmares"].tab-active { background-color: var(--nav-palmares-color) !important; color:var(--accent-gold) !important;}
-            nav ul li a[data-tab-link="billetterie"].tab-active { background-color: var(--nav-billetterie-color) !important; color:var(--text-color-light) !important;}
-
+            nav ul li a[data-tab-link="cdf"].tab-active { background-color: var(--nav-cdf-color) !important; color:var(--text-color-light) !important;}
+            nav ul li a[data-tab-link="barrages"].tab-active { background-color: var(--nav-barrage-color) !important; color:var(--text-color-light) !important;}
             .teams-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
         }
         @media (max-width: 768px) {
@@ -345,30 +206,18 @@
             .section-title { font-size: 1.8rem; }
             .standings-table th, .fixtures-table th, .palmares-table th { font-size: 0.8rem; padding: 10px 5px;}
             .standings-table td, .fixtures-table td, .palmares-table td { font-size: 0.75rem; padding: 8px 5px;}
-            .fixtures-table .fixture-match { white-space: normal; }
             .action-buttons { flex-direction: column; align-items: stretch;}
             .season-selector-container { flex-direction: column; align-items: stretch; width: 100%;}
             .season-selector-container select { width: 100%; margin-bottom: 10px;}
-            .palmares-table .trophy-cell { flex-wrap: wrap; justify-content: center; } 
-        }
-        @media (max-width: 576px) {
-            .logo h1 { font-size: 1.3rem; }
-            nav ul li a {font-size: 0.9rem; padding: 10px 15px;} 
-            .carousel { height: 280px; } .carousel-caption h2 { font-size: 1.8rem; }
-            .section-title { font-size: 1.6rem; }
-            .btn { padding: 10px 20px; font-size: 0.9rem; }
-            .nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn { padding: 10px 15px; font-size: 0.9rem;}
-            .fixtures-table .fixture-score-inputs input { width: 30px; font-size: 0.8em; }
-            .footer-container { grid-template-columns: 1fr; text-align: center; }
-            .footer-section h3 { display: block; border-bottom: none; padding-bottom: 5px; margin-bottom: 10px; }
-            .footer-section h3::after { content:""; display:block; width:50px; height:1px; background:var(--accent-gold); margin: 5px auto 0; }
+            .barrage-card { flex-direction: column; text-align: center; } .barrage-teams { flex-direction: column; }
+            .roulette-wheel { width: 250px; height: 250px; }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container header-container">
-            <a href="#" data-tab-link="ligue1" class="logo nav-link"> 
+            <a href="#" data-tab-link="ligue1" class="logo nav-link">
                 <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png" alt="Logo Championnat Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
@@ -376,55 +225,36 @@
                 <ul>
                     <li><a href="#" class="nav-link active-nav-link" data-tab-link="ligue1"><i class="fas fa-futbol"></i> L1</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="ligue2"><i class="fas fa-shield-alt"></i> L2</a></li>
+                    <li><a href="#" class="nav-link" data-tab-link="ligue3"><i class="fas fa-warehouse"></i> L3</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="palmares"><i class="fas fa-medal"></i> Palmarès</a></li>
-                    <li><a href="champions.html" class="nav-link"><i class="fas fa-trophy"></i> LDC</a></li> 
-                    <li><a href="#" class="nav-link" data-tab-link="billetterie"><i class="fas fa-ticket-alt"></i> Billetterie</a></li>
-                    <li><a href="#actualites-section-container" class="nav-link"><i class="fas fa-newspaper"></i> Actualités</a></li>
+                    <li><a href="champions.html" class="nav-link"><i class="fas fa-trophy"></i> LDC</a></li>
+                    <li><a href="#" class="nav-link" data-tab-link="cdf"><i class="fas fa-tint"></i> CDF</a></li>
+                    <li><a href="#" class="nav-link" data-tab-link="barrages"><i class="fas fa-exchange-alt"></i> Barrages</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                 <div id="drive-status" style="display: none;"> 
-                    <i class="fab fa-google-drive"></i> <span id="drive-status-text">Déconnecté</span>
-                 </div>
+                <div id="drive-status" style="display: none;"><i class="fab fa-google-drive"></i> <span id="drive-status-text">Déconnecté</span></div>
                 <button id="signin-button" disabled><i class="fab fa-google"></i> Drive</button>
             </div>
             <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </header>
 
+    <!-- L1 CONTENT -->
     <div class="tab-content active" id="ligue1-content">
         <div class="container l1-content">
-             <div class="section action-buttons">
-                <button class="league-music-btn" data-league-audio="l1" aria-label="Jouer/Mettre en pause l'hymne de la Ligue 1">
-                    <i class="fas fa-play"></i> Hymne L1
-                </button>
-            </div>
-            <div class="carousel" id="accueil-section-l1">
-                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png" alt="Ambiance stade L1">
-                         <div class="carousel-caption"><h2>UNE AMBIANCE INCROYABLE EN TRIBUNES !</h2><p>Rejoignez des milliers de supporters en feutrine passionnés.</p><a href="#l1-standings-section" class="btn">Classement L1</a></div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" alt="Célébration de but en L1">
-                        <div class="carousel-caption"><h2>BUTS ET ÉMOTIONS GARANTIS !</h2><p>Chaque match est une explosion de joie (et de rembourrage).</p><a href="#actualites-section-container" class="btn">Actualités L1</a></div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/vafc.png" alt="Action de jeu Valenciennes FC"> 
-                        <div class="carousel-caption"><h2>VALENCIENNES FC : LES GUERRIERS DU NORD !</h2><p>Suivez les exploits des héros locaux en Ligue 1.</p><a href="#l1-teams-section" class="btn">Découvrir les Équipes</a></div>
-                    </div>
-                </div>
-                <div class="carousel-controls"><div class="carousel-dot active" data-slide="0"></div><div class="carousel-dot" data-slide="1"></div><div class="carousel-dot" data-slide="2"></div></div>
-                <div class="carousel-arrow carousel-prev"><i class="fas fa-chevron-left"></i></div><div class="carousel-arrow carousel-next"><i class="fas fa-chevron-right"></i></div>
+            <div class="section action-buttons">
+                <button class="league-music-btn" data-league-audio="l1" aria-label="Hymne L1"><i class="fas fa-play"></i> Hymne L1</button>
             </div>
             <div class="section action-buttons">
-                 <div class="season-selector-container">
-                     <label for="l1-season-selector">Saison :</label>
-                     <select id="l1-season-selector" data-league="l1"></select>
-                     <button class="delete-season-btn" id="delete-season-l1-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
-                 </div>
-                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison L1</button>
-                 <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn" disabled><i class="fas fa-save"></i> Sauvegarder L1</button>
+                <div class="season-selector-container">
+                    <label for="l1-season-selector">Saison :</label>
+                    <select id="l1-season-selector" data-league="l1"></select>
+                    <button class="delete-season-btn" id="delete-season-l1-btn" title="Supprimer saison" disabled><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison</button>
+                <button class="fin-saison-btn nouvelle-saison-btn" id="fin-saison-l1-btn" disabled><i class="fas fa-flag-checkered"></i> Fin de Saison L1/L2</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn" disabled><i class="fas fa-save"></i> Sauvegarder</button>
             </div>
             <div class="section" id="l1-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Calendrier & Scores L1</h2></div>
@@ -435,42 +265,31 @@
                 <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="l1-standings-body"></tbody></table></div>
             </div>
             <div class="section" id="l1-teams-section">
-                <div class="section-header"><h2 class="section-title">Équipes L1</h2></div>
+                <div class="section-header">
+                    <h2 class="section-title">Équipes L1</h2>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn" style="padding:8px 15px;font-size:0.8rem;background:var(--nav-l1-color);" onclick="openReplaceModal('l1')"><i class="fas fa-exchange-alt"></i> Remplacer</button>
+                    </div>
+                </div>
                 <div class="section-content"><div class="teams-grid" id="l1-teams-grid"></div></div>
             </div>
         </div>
     </div>
 
+    <!-- L2 CONTENT -->
     <div class="tab-content l2-content" id="ligue2-content">
-         <div class="container">
-             <div class="section action-buttons">
-                <button class="league-music-btn" data-league-audio="l2" aria-label="Jouer/Mettre en pause l'hymne de la Ligue 2">
-                    <i class="fas fa-play"></i> Hymne L2
-                </button>
-            </div>
-            <div class="carousel" id="accueil-section-l2">
-                 <div class="carousel-inner">
-                    <div class="carousel-item active"><img src="https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png" alt="Ambiance L2">
-                         <div class="carousel-caption"><h2>LIGUE 2 DES OURS : LA FORGE DES CHAMPIONS !</h2><p>Ici naissent les futures légendes du football rembourré.</p><a href="#l2-fixtures-section" class="btn">Calendrier L2</a></div>
-                    </div>
-                     <div class="carousel-item"><img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png" alt="Equipes L2">
-                         <div class="carousel-caption"><h2>L'ESPRIT D'ÉQUIPE AVANT TOUT !</h2><p>Solidarité et combativité : les valeurs de la L2.</p><a href="#l2-teams-section" class="btn">Nos Clubs L2</a></div>
-                    </div>
-                     <div class="carousel-item"><img src="https://ironworkout.github.io/paul.wallon.bts.sio/rabbit-goalkeeper.png" alt="Gardien Lapin en action">
-                         <div class="carousel-caption"><h2>DES ARRÊTS SPECTACULAIRES !</h2><p>Nos gardiens ont des réflexes à faire pâlir un chat !</p><a href="#" class="btn">Stats des Gardiens</a></div>
-                    </div>
-                </div>
-                <div class="carousel-controls"><div class="carousel-dot active" data-slide="0"></div><div class="carousel-dot" data-slide="1"></div><div class="carousel-dot" data-slide="2"></div></div>
-                <div class="carousel-arrow carousel-prev"><i class="fas fa-chevron-left"></i></div><div class="carousel-arrow carousel-next"><i class="fas fa-chevron-right"></i></div>
+        <div class="container">
+            <div class="section action-buttons">
+                <button class="league-music-btn" data-league-audio="l2" aria-label="Hymne L2"><i class="fas fa-play"></i> Hymne L2</button>
             </div>
             <div class="section action-buttons">
                 <div class="season-selector-container">
-                     <label for="l2-season-selector">Saison :</label>
-                     <select id="l2-season-selector" data-league="l2"></select>
-                     <button class="delete-season-btn" id="delete-season-l2-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
-                 </div>
-                <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison L2</button>
-                <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn" disabled><i class="fas fa-save"></i> Sauvegarder L2</button>
+                    <label for="l2-season-selector">Saison :</label>
+                    <select id="l2-season-selector" data-league="l2"></select>
+                    <button class="delete-season-btn" id="delete-season-l2-btn" title="Supprimer saison" disabled><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn" disabled><i class="fas fa-save"></i> Sauvegarder</button>
             </div>
             <div class="section" id="l2-fixtures-section">
                 <div class="section-header"><h2 class="section-title">Calendrier & Scores L2</h2></div>
@@ -481,12 +300,63 @@
                 <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="l2-standings-body"></tbody></table></div>
             </div>
             <div class="section" id="l2-teams-section">
-                <div class="section-header"><h2 class="section-title">Équipes L2</h2></div>
+                <div class="section-header">
+                    <h2 class="section-title">Équipes L2</h2>
+                    <button class="btn" style="padding:8px 15px;font-size:0.8rem;background:var(--nav-l2-color);" onclick="openReplaceModal('l2')"><i class="fas fa-exchange-alt"></i> Remplacer</button>
+                </div>
                 <div class="section-content"><div class="teams-grid" id="l2-teams-grid"></div></div>
             </div>
         </div>
     </div>
 
+    <!-- L3 CONTENT -->
+    <div class="tab-content l3-content" id="ligue3-content">
+        <div class="container">
+            <div class="section action-buttons">
+                <div class="season-selector-container">
+                    <label for="l3-season-selector">Saison :</label>
+                    <select id="l3-season-selector" data-league="l3"></select>
+                    <button class="delete-season-btn" id="delete-season-l3-btn" title="Supprimer saison" disabled><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <button class="nouvelle-saison-btn" id="nouvelle-saison-l3-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison L3</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l3-btn" disabled><i class="fas fa-save"></i> Sauvegarder L3</button>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title" style="color:var(--nav-l3-color)">Roulette de Montée L3 -> L2</h2>
+                    <button class="btn" style="background:var(--nav-l3-color)" id="spin-roulette-btn" disabled><i class="fas fa-sync-alt"></i> Lancer la Roulette</button>
+                </div>
+                <div class="section-content roulette-container">
+                    <div style="position:relative;">
+                        <div class="roulette-pointer"></div>
+                        <div class="roulette-wheel" id="roulette-wheel"></div>
+                    </div>
+                    <div class="roulette-winner-display" id="roulette-winner-display">Lancez la roulette pour déterminer le promu !</div>
+                    <button class="btn" style="background:var(--nav-l2-color); display:none;" id="validate-roulette-btn"><i class="fas fa-arrow-up"></i> Valider la montée en L2</button>
+                </div>
+            </div>
+            <div class="section" id="l3-fixtures-section">
+                <div class="section-header"><h2 class="section-title">Calendrier & Scores L3</h2></div>
+                <div class="section-content table-container"><table class="fixtures-table"><thead><tr><th>Journée</th><th>Match 1</th><th>Match 2</th><th>Match 3</th></tr></thead><tbody id="l3-fixtures-body"></tbody></table></div>
+            </div>
+            <div class="section" id="l3-standings-section">
+                <div class="section-header"><h2 class="section-title">Classement L3</h2></div>
+                <div class="section-content table-container"><table class="standings-table"><thead><tr><th>Pos</th><th>Équipe</th><th>Pts</th><th>J</th><th>BP</th><th>BC</th><th>Diff</th></tr></thead><tbody id="l3-standings-body"></tbody></table></div>
+            </div>
+            <div class="section" id="l3-teams-section">
+                <div class="section-header">
+                    <h2 class="section-title">Équipes L3</h2>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn" style="padding:8px 15px;font-size:0.8rem;background:var(--nav-l3-color);" onclick="openReplaceModal('l3')"><i class="fas fa-exchange-alt"></i> Remplacer</button>
+                        <button class="btn" style="padding:8px 15px;font-size:0.8rem;background:#8e44ad;" onclick="openCreateTeamModal()"><i class="fas fa-plus"></i> Créer Équipe</button>
+                    </div>
+                </div>
+                <div class="section-content"><div class="teams-grid" id="l3-teams-grid"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PALMARES CONTENT -->
     <div class="tab-content palmares-content" id="palmares-content">
         <div class="container">
             <div class="section">
@@ -496,14 +366,7 @@
                 </div>
                 <div class="section-content table-container">
                     <table class="palmares-table">
-                        <thead>
-                            <tr>
-                                <th>Club</th>
-                                <th>Ligue 1 <i class="fas fa-trophy trophy-l1"></i></th>
-                                <th>Ligue 2 <i class="fas fa-medal trophy-l2"></i></th> 
-                                <th>LDC <i class="fas fa-shield-alt trophy-ldc"></i></th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Club</th><th>Ligue 1 <i class="fas fa-trophy trophy-l1"></i></th><th>Ligue 2 <i class="fas fa-medal trophy-l2"></i></th><th>LDC <i class="fas fa-shield-alt trophy-ldc"></i></th></tr></thead>
                         <tbody id="palmares-table-body"></tbody>
                     </table>
                 </div>
@@ -511,39 +374,33 @@
         </div>
     </div>
 
-    <div class="tab-content billetterie-content" id="billetterie-content">
-         <div class="container">
-            <div class="section">
-                <div class="section-header"><h2 class="section-title">Billetterie Officielle</h2></div>
-                <div class="section-content">
-                    <div class="content-placeholder">
-                         <i class="fas fa-ticket-alt"></i>
-                         <h2>Réservez Vos Places !</h2>
-                         <p>Vivez l'émotion du Championnat des Peluches en direct depuis les tribunes !</p>
-                         <a href="#" class="btn">Acheter des Billets (Prochainement)</a>
-                    </div>
+    <!-- CDF CONTENT -->
+    <div class="tab-content cdf-content" id="cdf-content">
+        <div class="container">
+            <div class="section action-buttons">
+                <button class="btn" style="background:var(--nav-cdf-color)" id="new-cdf-btn" disabled><i class="fas fa-magic"></i> Nouveau Tirage CDF</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-cdf-btn" disabled><i class="fas fa-save"></i> Sauvegarder CDF</button>
+            </div>
+            <div class="section" id="cdf-bracket-section">
+                <div class="section-header"><h2 class="section-title">Coupe de France Peluches</h2></div>
+                <div class="section-content" id="cdf-bracket-container">
+                    <p style="text-align:center;color:#4da6ff;">Cliquez sur "Nouveau Tirage CDF" pour lancer la compétition avec les clubs de L1 et L2.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container" id="actualites-section-container">
-        <div class="section" id="actualites-section">
-            <div class="section-header"><h2 class="section-title">Dernières Actualités</h2></div>
-            <div class="section-content">
-                <div class="news-grid" id="shared-news-grid">
-                    <div class="news-card">
-                        <img src="https://raw.githubusercontent.com/ironworkout/paul.wallon.bts.sio/main/envahissement.jpg" class="news-image" alt="Envahissement de terrain">
-                        <div class="news-content"><div class="news-date">15 Juin 2025</div><h3 class="news-title">SCÈNES DE LIESSE APRÈS LA MONTÉE !</h3><p class="news-excerpt">Les supporters ont célébré avec ferveur la promotion de leur équipe.</p><a href="#" class="section-link">Lire la suite <i class="fas fa-arrow-right"></i></a></div>
-                    </div>
-                     <div class="news-card">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png" class="news-image" alt="Célébration but">
-                        <div class="news-content"><div class="news-date">12 Juin 2025</div><h3 class="news-title">BUT DÉCISIF À LA DERNIÈRE MINUTE !</h3><p class="news-excerpt">Un final à couper le souffle ! Revivez ce but.</p><a href="#" class="section-link">Voir le Replay <i class="fas fa-play-circle"></i></a></div>
-                    </div>
-                     <div class="news-card">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/valenciennes-supporters.png" class="news-image" alt="Supporters">
-                        <div class="news-content"><div class="news-date">10 Juin 2025</div><h3 class="news-title">LES SUPPORTERS, CŒUR DU CLUB</h3><p class="news-excerpt">Enquête sur la passion des fans.</p><a href="#" class="section-link">Découvrir les Fans <i class="fas fa-users"></i></a></div>
-                    </div>
+    <!-- BARRAGES CONTENT -->
+    <div class="tab-content" id="barrages-content">
+        <div class="container">
+            <div class="section action-buttons">
+                <button class="btn" style="background:var(--nav-barrage-color)" id="init-barrage-btn" disabled><i class="fas fa-sync"></i> Initialiser Barrage (Saison Active)</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-barrage-btn" disabled><i class="fas fa-save"></i> Sauvegarder Barrage</button>
+            </div>
+            <div class="section" id="barrage-match-section">
+                <div class="section-header"><h2 class="section-title" style="color:var(--nav-barrage-color)">Barrage : 5e L1 vs 2e L2</h2></div>
+                <div class="section-content" id="barrage-container">
+                    <p style="text-align:center;color:#666;">Initialisez le barrage pour charger les équipes qualifiées de la saison active.</p>
                 </div>
             </div>
         </div>
@@ -551,719 +408,785 @@
 
     <footer>
         <div class="container footer-container">
-            <div class="footer-section"><h3>À Propos</h3><ul><li><a href="#">Qui sommes-nous</a></li><li><a href="#">Histoire</a></li><li><a href="#">Partenaires</a></li><li><a href="#">Mentions Légales</a></li></ul></div>
-            <div class="footer-section"><h3>Compétitions</h3><ul><li><a href="#" data-tab-link-footer="ligue1">Ligue 1</a></li><li><a href="#" data-tab-link-footer="ligue2">Ligue 2</a></li><li><a href="champions.html">Ligue des Champions</a></li><li><a href="#">Coupe Nationale</a></li></ul></div>
-            <div class="footer-section"><h3>Services</h3><ul><li><a href="#" data-tab-link-footer="billetterie">Billetterie</a></li><li><a href="#">Boutique</a></li><li><a href="#">Presse</a></li><li><a href="#">Rejoindre</a></li></ul></div>
-            <div class="footer-section"><h3>Contact</h3><ul><li><a href="mailto:contact@peluche-elite.com">Email</a></li><li><a href="#">FAQ</a></li><li><a href="#">Devenir Partenaire</a></li></ul></div>
+            <div class="footer-section"><h3>À Propos</h3><ul><li><a href="#">Qui sommes-nous</a></li><li><a href="#">Histoire</a></li></ul></div>
+            <div class="footer-section"><h3>Compétitions</h3><ul>
+                <li><a href="#" data-tab-link-footer="ligue1">Ligue 1</a></li><li><a href="#" data-tab-link-footer="ligue2">Ligue 2</a></li>
+                <li><a href="#" data-tab-link-footer="ligue3">Ligue 3</a></li><li><a href="champions.html">LDC</a></li>
+                <li><a href="#" data-tab-link-footer="cdf">CDF</a></li><li><a href="#" data-tab-link-footer="barrages">Barrages</a></li>
+            </ul></div>
+            <div class="footer-section"><h3>Contact</h3><ul><li><a href="mailto:contact@peluche-elite.com">Email</a></li></ul></div>
         </div>
-        <div class="copyright">© 2025 Championnat Peluche Élite. Tous droits réservés.</div>
+        <div class="copyright">© 2025 Championnat Peluche Élite V3. Tous droits réservés.</div>
     </footer>
 
     <div id="message-area" class="message-area" role="status" aria-live="polite"></div>
 
+    <!-- MODALS -->
+    <div class="modal-overlay" id="modal-replace-team">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('modal-replace-team')"><i class="fas fa-times"></i></button>
+            <h2>Remplacer un Club</h2>
+            <p>Le club sortant ira dans la base de clubs libres.</p>
+            <div class="form-group">
+                <label>Club à remplacer (dans la ligue) :</label>
+                <select id="replace-out-select"></select>
+            </div>
+            <div class="form-group">
+                <label>Club à intégrer (depuis la base libre) :</label>
+                <select id="replace-in-select"></select>
+            </div>
+            <button class="btn" style="background:var(--primary-color);width:100%;" onclick="validateReplaceTeam()">Valider le Remplacement</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-create-team">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('modal-create-team')"><i class="fas fa-times"></i></button>
+            <h2>Créer une Nouvelle Équipe</h2>
+            <p>Elle sera ajoutée en Ligue 3.</p>
+            <div class="form-group">
+                <label>Nom du Club :</label>
+                <input type="text" id="create-team-name" placeholder="Ex: FC Nouveau">
+            </div>
+            <div class="form-group">
+                <label>Logo du Club :</label>
+                <input type="file" id="create-team-logo" accept="image/*">
+                <img src="" alt="Aperçu" class="logo-preview" id="create-team-preview">
+            </div>
+            <button class="btn" style="background:#8e44ad;width:100%;" onclick="validateCreateTeam()">Créer et ajouter en L3</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-fin-saison">
+        <div class="modal-box" style="text-align:center;">
+            <h2 id="fin-saison-title" style="border:none;">Fin de Saison</h2>
+            <div id="fin-saison-content"></div>
+            <button class="btn" style="background:var(--primary-color);margin-top:20px;display:none;" id="fin-saison-close-btn" onclick="closeModal('modal-fin-saison')">Fermer</button>
+        </div>
+    </div>
+
     <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
     <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
-    <!-- L'audio LDC sera sur champions.html -->
-
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
         const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file';
-        const LEAGUE_FILENAMES = { 
-            'l1': 'peluches_l1_data.json',
-            'l2': 'peluches_l2_data.json'
-        };
+        const LEAGUE_FILENAMES = { 'l1': 'peluches_l1_data.json', 'l2': 'peluches_l2_data.json', 'l3': 'peluches_l3_data.json' };
         const PALMARES_FILENAME = 'peluches_palmares_global.json';
+        const CDF_FILENAME = 'peluches_cdf_data.json';
+        const BARRAGE_FILENAME = 'peluches_barrage_data.json';
+        const DB_FILENAME = 'peluches_club_database.json';
         const BASE_URL = "https://ironworkout.github.io/paul.wallon.bts.sio/";
-        const GIS_CHECK_INTERVAL = 100; 
-        const GIS_MAX_RETRIES = 50; 
+        const GIS_CHECK_INTERVAL = 100; const GIS_MAX_RETRIES = 50;
 
         const initialLeagueData = {
-            'l1': {
-                teams: {
-                    "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." }, "Toulours FC": { "logo": "tfc.png", "description": "La Fierté des Pingouins." },
-                    "Peluche FC": { "logo": "pfc.png", "description": "Les Titans de la Capitale." }, "PSG Peluches": { "logo": "psg.png", "description": "L'Élégance Parisienne." },
-                    "Olympique Ours": { "logo": "oo.png", "description": "La Griffe Lyonnaise." }, "AS Carrotes": { "logo": "ascl.png", "description": "Les Flèches Vertes." }
-                },
-                seasons: [], active_season_id: null, fileId: null, filename: LEAGUE_FILENAMES.l1,
-                teamsGridId: 'l1-teams-grid', fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body'
-            },
-            'l2': {
-                teams: {
-                    "AS Saint-Ettours": { "logo": "asset.png", "description": "Ferveur Légendaire." }, "Patapouf FC": { "logo": "patapouf.png", "description": "Puissance Éléphantesque." },
-                    "Tours FC": { "logo": "tours.png", "description": "Les Rois du Château." }, "USL Abeille": { "logo": "usla.png", "description": "Le Dard Offensif." },
-                    "Clermandala 63": { "logo": "clermandala.png", "description": "Magie Auvergnate." }, "FC Poussins": { "logo": "fcp.png", "description": "L'Avenir en Marche." }
-                },
-                seasons: [], active_season_id: null, fileId: null, filename: LEAGUE_FILENAMES.l2,
-                teamsGridId: 'l2-teams-grid', fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body'
-            }
+            'l1': { teams: { "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." }, "Toulours FC": { "logo": "tfc.png", "description": "La Fierté des Pingouins." }, "Peluche FC": { "logo": "pfc.png", "description": "Les Titans de la Capitale." }, "PSG Peluches": { "logo": "psg.png", "description": "L'Élégance Parisienne." }, "Olympique Ours": { "logo": "oo.png", "description": "La Griffe Lyonnaise." }, "AS Carrotes": { "logo": "ascl.png", "description": "Les Flèches Vertes." } }, seasons: [], active_season_id: null, fileId: null, filename: LEAGUE_FILENAMES.l1, teamsGridId: 'l1-teams-grid', fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body' },
+            'l2': { teams: { "AS Saint-Ettours": { "logo": "asset.png", "description": "Ferveur Légendaire." }, "Patapouf FC": { "logo": "patapouf.png", "description": "Puissance Éléphantesque." }, "Tours FC": { "logo": "tours.png", "description": "Les Rois du Château." }, "USL Abeille": { "logo": "usla.png", "description": "Le Dard Offensif." }, "Clermandala 63": { "logo": "clermandala.png", "description": "Magie Auvergnate." }, "FC Poussins": { "logo": "fcp.png", "description": "L'Avenir en Marche." } }, seasons: [], active_season_id: null, fileId: null, filename: LEAGUE_FILENAMES.l2, teamsGridId: 'l2-teams-grid', fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body' },
+            'l3': { teams: { "FC Binet": { "logo": "default_logo.png", "description": "Les Demoiselles de la Balle." }, "AS Chiffon": { "logo": "default_logo.png", "description": "Les Rapide Semés." }, "Olympique Pouet": { "logo": "default_logo.png", "description": "On fait pas de bruit." }, "US Doudou": { "logo": "default_logo.png", "description": "Les Doux Rêveurs." }, "Girondins Nounours": { "logo": "default_logo.png", "description": "Les Ours de Gironde." }, "RC Lapinou": { "logo": "default_logo.png", "description": "Sauts Perilleux." } }, seasons: [], active_season_id: null, fileId: null, filename: LEAGUE_FILENAMES.l3, teamsGridId: 'l3-teams-grid', fixtureBodyId: 'l3-fixtures-body', standingsBodyId: 'l3-standings-body' }
         };
-        
+
         let leagueDataStore = JSON.parse(JSON.stringify(initialLeagueData));
-        let palmaresData = {}; 
-        let palmaresFileId = null;
+        let palmaresData = {}; let palmaresFileId = null;
+        let cdfData = { rounds: [] }; let cdfFileId = null;
+        let barrageData = { l1Team: null, l2Team: null, scoreL1Home: null, scoreL2Away: null, scoreL2Home: null, scoreL1Away: null, winner: null }; let barrageFileId = null;
+        let clubDatabase = {}; let dbFileId = null;
+        let currentReplaceLeague = 'l3';
+        let rouletteSelectedTeam = null;
+        let rouletteSpinning = false;
 
-        let googleAccessToken = null, tokenClient = null;
-        let isSavingDriveData = false; 
-        let messageArea = null;
-        let messageTimeoutId = null;
-        let gisCheckRetries = 0;
-        let audioContext = null;
-        let currentPlayingAudio = null; 
-        let audioElements = {};
-        
-        function initAudioContext() {
-            if (audioContext && audioContext.state === 'running') return; 
-            if (!audioContext) { try { window.AudioContext = window.AudioContext || window.webkitAudioContext; if (window.AudioContext) audioContext = new AudioContext(); else return; } catch (e) { return; } }
-            if (audioContext.state === 'suspended') {
-                audioContext.resume().catch(e => console.warn("Reprise AudioContext échouée:", e));
-            }
+        let googleAccessToken = null, tokenClient = null, isSavingDriveData = false;
+        let messageArea = null, messageTimeoutId = null, gisCheckRetries = 0;
+        let audioContext = null, currentPlayingAudio = null, audioElements = {};
+
+        // UTILITY FUNCTIONS
+        function initAudioContext() { if (audioContext && audioContext.state === 'running') return; if (!audioContext) { try { window.AudioContext = window.AudioContext || window.webkitAudioContext; if (window.AudioContext) audioContext = new AudioContext(); } catch (e) {} } if (audioContext?.state === 'suspended') audioContext.resume().catch(e => {}); }
+        function showMessage(msg, duration = 3000, isError = false) { if (!messageArea) messageArea = document.getElementById('message-area'); if (!messageArea) return; messageArea.textContent = msg; messageArea.classList.add('visible'); messageArea.classList.toggle('error-message', isError); if (messageTimeoutId) clearTimeout(messageTimeoutId); messageTimeoutId = setTimeout(() => messageArea.classList.remove('visible'), duration); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+        function getImgSrc(logo) { return logo?.startsWith('data:') ? logo : `${BASE_URL}${logo}`; }
+        function compressImageToBase64(file, maxWidth = 150, maxHeight = 150) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width, height = img.height;
+                        if (width > height) { if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; } } else { if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; } }
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
         }
 
-        function showMessage(msg, duration = 3000, isError = false) {
-            if (!messageArea) { messageArea = document.getElementById('message-area'); if (!messageArea) return; }
-            messageArea.textContent = msg; messageArea.classList.add('visible'); messageArea.classList.toggle('error-message', isError);
-            if (messageTimeoutId) clearTimeout(messageTimeoutId); 
-            messageTimeoutId = setTimeout(() => { messageArea.classList.remove('visible'); }, duration);
-        }
-
+        // GOOGLE DRIVE AUTH & API
         async function gisInitInternal() {
-            if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+            if (typeof google !== 'undefined' && google.accounts?.oauth2) {
                 try {
                     tokenClient = google.accounts.oauth2.initTokenClient({ client_id: GOOGLE_CLIENT_ID, scope: GOOGLE_DRIVE_SCOPES, callback: tokenCallback, error_callback: handleTokenError });
                     if (tokenClient) tokenClient.requestAccessToken({ prompt: '' });
-                    const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = false;
-                } catch (error) { console.error("Erreur GIS initTokenClient:", error); showMessage("Erreur initialisation Google.", 5000, true); updateAuthUI(false); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
-            } else { console.warn("API Google (GIS) non chargée."); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
-        }
-        function checkAndInitGis() {
-            if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2 && typeof google.accounts.oauth2.initTokenClient === 'function') gisInitInternal();
-            else if (gisCheckRetries < GIS_MAX_RETRIES) { gisCheckRetries++; setTimeout(checkAndInitGis, GIS_CHECK_INTERVAL); }
-            else { console.error("Échec détection API Google."); showMessage("Erreur critique: API Google non disponible.", 10000, true); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
-        }
-        function handleTokenError(error) {
-            let userMessage = `Erreur Auth Google: ${error.type || error.error || 'Inconnue'}`;
-            if (error.type === 'popup_closed_by_user' || error.error === 'popup_closed_by_user') userMessage = "Fenêtre de connexion Google fermée.";
-            else if (error.type === 'popup_failed_to_open') userMessage = "Impossible d'ouvrir la fenêtre de connexion.";
-            else if (error.type === 'USER_CANCELLED' || error.error === 'access_denied') userMessage = "Accès Drive refusé.";
-            const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
-            if (driveStatusElement) { driveStatusElement.className = 'error'; driveStatusElement.style.display = 'inline-flex'; }
-            showMessage(userMessage, 7000, true); if (driveStatusTextElement) driveStatusTextElement.textContent = 'Erreur Auth'; updateAuthUI(false);
-        }
-        async function tokenCallback(tokenResponse) {
-            const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
-            if (driveStatusElement) driveStatusElement.className = '';
-            if (tokenResponse.error) { if (tokenResponse.error !== "popup_failed_to_open" && tokenResponse.error !== "popup_closed_by_user") handleTokenError(tokenResponse); else updateAuthUI(false); return; }
-            if (tokenResponse && tokenResponse.access_token) {
-                googleAccessToken = tokenResponse.access_token; showMessage("Connecté ! Chargement des données...", 2500);
-                if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
-                if(driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
-                try {
-                     await loadAllLeagueDataFromDrive();
-                     await loadPalmaresFromDrive();
-                     showMessage("Données des ligues et palmarès chargées.", 3000);
-                     if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'error'); driveStatusElement.classList.add('success'); }
-                     if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connecté';
-                } catch (error) {
-                    console.error("Erreur majeure chargement Drive:", error); showMessage("Erreur majeure chargement données Drive.", 6000, true);
-                    if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'success'); driveStatusElement.classList.add('error'); }
-                    if(driveStatusTextElement) driveStatusTextElement.textContent = 'Erreur Données';
-                } finally { updateAuthUI(true); populateAllLeaguesUI(); populatePalmaresTable(); }
-            } else handleTokenError({ error: "Réponse de token invalide" });
-        }
-        function handleAuthClick() {
-            initAudioContext(); 
-            if (!tokenClient) { showMessage("Services Google non prêts.", 3000); checkAndInitGis(); return; }
-            const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
-            if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
-            if(driveStatusTextElement) driveStatusTextElement.textContent = 'Connexion...';
-            tokenClient.requestAccessToken({ prompt: 'consent' });
-        }
-         function updateAuthUI(isLoggedIn) {
-            const signInButton = document.getElementById('signin-button');
-            const driveStatusElement = document.getElementById('drive-status');
-            const driveStatusTextElement = document.getElementById('drive-status-text');
-            const nouvelleSaisonButtons = document.querySelectorAll('.nouvelle-saison-btn');
-            const sauvegardeButtons = document.querySelectorAll('.sauvegarde-json-btn');
-            const deleteSeasonButtons = document.querySelectorAll('.delete-season-btn');
-            const savePalmaresBtn = document.getElementById('sauvegarde-palmares-btn');
-
-            if (signInButton) signInButton.style.display = isLoggedIn ? 'none' : 'inline-flex';
-            if (driveStatusElement && driveStatusTextElement) {
-                driveStatusElement.style.display = isLoggedIn ? 'inline-flex' : 'none';
-                 if (isLoggedIn) {
-                    const currentClasses = driveStatusElement.className;
-                    if (currentClasses.includes('loading')) driveStatusTextElement.textContent = 'Chargement...';
-                    else if (currentClasses.includes('error')) driveStatusTextElement.textContent = 'Erreur Drive';
-                    else { driveStatusElement.classList.add('success'); driveStatusTextElement.textContent = 'Connecté'; }
-                } else driveStatusTextElement.textContent = 'Déconnecté';
+                    document.getElementById('signin-button').disabled = false;
+                } catch (error) { console.error("GIS init err:", error); updateAuthUI(false); }
             }
-            nouvelleSaisonButtons.forEach(btn => btn.disabled = !isLoggedIn); 
-            sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
-            deleteSeasonButtons.forEach(btn => {
-                const leagueId = btn.id.split('-')[2]; 
-                const league = leagueDataStore[leagueId];
-                btn.disabled = !isLoggedIn || !league || !league.seasons || league.seasons.length <= 1;
-            });
-            if(savePalmaresBtn) savePalmaresBtn.disabled = !isLoggedIn;
         }
-        async function findOrCreateFile(filename, defaultContentStr = "{}", mimeType = 'application/json') {
-            if (!googleAccessToken) { console.warn("findOrCreateFile appelé sans token Google."); return null; }
+        function checkAndInitGis() { if (typeof google !== 'undefined' && google.accounts?.oauth2?.initTokenClient) gisInitInternal(); else if (gisCheckRetries < GIS_MAX_RETRIES) { gisCheckRetries++; setTimeout(checkAndInitGis, GIS_CHECK_INTERVAL); } else updateAuthUI(false); }
+        function handleTokenError(error) { let msg = error.type === 'popup_closed_by_user' ? "Fenêtre fermée." : "Erreur Auth"; showMessage(msg, 5000, true); updateAuthUI(false); }
+        async function tokenCallback(tokenResponse) {
+            if (tokenResponse?.error) { handleTokenError(tokenResponse); return; }
+            if (tokenResponse?.access_token) {
+                googleAccessToken = tokenResponse.access_token; showMessage("Connecté ! Chargement...", 2500);
+                document.getElementById('drive-status').className = 'loading'; document.getElementById('drive-status').style.display = 'inline-flex'; document.getElementById('drive-status-text').textContent = 'Chargement...';
+                try {
+                    await loadClubDatabase();
+                    await loadAllLeagueDataFromDrive();
+                    await loadPalmaresFromDrive();
+                    await loadCDFFromDrive();
+                    await loadBarrageFromDrive();
+                    showMessage("Données chargées.", 3000);
+                    document.getElementById('drive-status').className = 'success'; document.getElementById('drive-status-text').textContent = 'Connecté';
+                } catch (e) { console.error(e); showMessage("Erreur chargement.", 6000, true); document.getElementById('drive-status').className = 'error'; document.getElementById('drive-status-text').textContent = 'Erreur'; }
+                finally { updateAuthUI(true); populateAllUI(); }
+            }
+        }
+        function handleAuthClick() { initAudioContext(); if (!tokenClient) return; tokenClient.requestAccessToken({ prompt: 'consent' }); }
+        function updateAuthUI(isLoggedIn) {
+            document.getElementById('signin-button').style.display = isLoggedIn ? 'none' : 'inline-flex';
+            document.getElementById('drive-status').style.display = isLoggedIn ? 'inline-flex' : 'none';
+            if (isLoggedIn && !document.getElementById('drive-status').classList.contains('loading')) document.getElementById('drive-status').className = 'success';
+            document.querySelectorAll('.nouvelle-saison-btn, .sauvegarde-json-btn, .delete-season-btn, .fin-saison-btn, #spin-roulette-btn, #new-cdf-btn, #init-barrage-btn').forEach(b => b.disabled = !isLoggedIn);
+            document.querySelectorAll('.delete-season-btn').forEach(btn => { const l = btn.id.split('-')[2]; btn.disabled = !isLoggedIn || !leagueDataStore[l]?.seasons || leagueDataStore[l].seasons.length <= 1; });
+        }
+
+        async function findOrCreateFile(filename, defaultContentStr = "{}") {
+            if (!googleAccessToken) return null;
             const searchUrl = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(filename)}'+and+trashed=false&spaces=drive&fields=files(id,name)`;
             try {
-                const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
-                const searchData = await searchRes.json();
-                if (searchData.files && searchData.files.length > 0) { console.log(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
-                console.log(`Fichier Drive '${filename}' non trouvé. Création avec contenu par défaut...`);
-                const createUrl = `https://www.googleapis.com/drive/v3/files`; const metadata = { name: filename, mimeType: mimeType };
-                const createRes = await fetch(createUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
-                if (!createRes.ok) { console.error(`Erreur ${createRes.status} lors de la création du fichier ${filename}.`); return null; }
-                const createData = await createRes.json(); const newFileId = createData.id; console.log(`Fichier Drive '${filename}' créé avec ID: ${newFileId}.`);
-                const writeSuccess = await updateFileContent(newFileId, defaultContentStr);
-                return writeSuccess ? newFileId : null;
-            } catch (error) { console.error(`Exception dans findOrCreateFile pour ${filename}:`, error); showMessage(`Erreur Drive gestion fichier ${filename}.`, 5000, true); return null; }
+                const res = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
+                if (!res.ok) return null;
+                const data = await res.json();
+                if (data.files?.length > 0) return data.files[0].id;
+                const createRes = await fetch(`https://www.googleapis.com/drive/v3/files`, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ name: filename, mimeType: 'application/json' }) });
+                if (!createRes.ok) return null;
+                const newFile = await createRes.json();
+                await updateFileContent(newFile.id, defaultContentStr);
+                return newFile.id;
+            } catch (e) { return null; }
         }
         async function readFileContent(fileId) {
-            if (!googleAccessToken || !fileId) { console.warn("readFileContent appelé sans token ou fileId."); return null;}
-            const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
+            if (!googleAccessToken || !fileId) return null;
             try {
-                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!response.ok) { if (response.status === 404) { console.log(`Fichier ID ${fileId} non trouvé (erreur 404).`); return "";} if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
-                console.log(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
-            } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
+                const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
+                if (!res.ok) return null;
+                return await res.text();
+            } catch (e) { return null; }
         }
         async function updateFileContent(fileId, content) {
-            if (!googleAccessToken || !fileId) { console.warn("updateFileContent appelé sans token ou fileId."); return false; }
-            if (isSavingDriveData) { console.warn("Sauvegarde Drive en cours, requête ignorée."); return false; }
-            isSavingDriveData = true; const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
-            if (driveStatusElement && driveStatusTextElement) { driveStatusTextElement.textContent = 'Synchro...'; driveStatusElement.className = 'loading'; }
-            const url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`;
-            const isJson = typeof content === 'object'; const contentToSend = isJson ? JSON.stringify(content, null, 2) : content;
-            const contentType = isJson ? 'application/json; charset=UTF-8' : 'text/plain; charset=UTF-8'; let success = false;
+            if (!googleAccessToken || !fileId || isSavingDriveData) return false;
+            isSavingDriveData = true; document.getElementById('drive-status-text').textContent = 'Synchro...'; document.getElementById('drive-status').className = 'loading';
             try {
-                const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
-                if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
-                else { console.log(`Écriture réussie ID ${fileId}.`); success = true; }
-            } catch (error) { console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error); showMessage(`Erreur sauvegarde Drive.`, 5000, true); if (driveStatusElement && driveStatusTextElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; } }
-            finally { isSavingDriveData = false; if (driveStatusElement && driveStatusTextElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success';} updateAuthUI(!!googleAccessToken); }
-            return success;
+                const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(content, null, 2) });
+                if (!res.ok) throw new Error();
+                return true;
+            } catch (e) { showMessage("Erreur sauvegarde Drive.", 5000, true); return false; }
+            finally { isSavingDriveData = false; document.getElementById('drive-status-text').textContent = 'Connecté'; document.getElementById('drive-status').className = 'success'; }
         }
-        
-        function getDefaultLeagueData(leagueId) { return JSON.parse(JSON.stringify(initialLeagueData[leagueId])); }
+
+        // DATA LOADERS
+        async function loadClubDatabase() {
+            dbFileId = await findOrCreateFile(DB_FILENAME, JSON.stringify({}));
+            if (dbFileId) { const c = await readFileContent(dbFileId); if (c) clubDatabase = JSON.parse(c); else initClubDatabaseDefaults(); }
+        }
+        function initClubDatabaseDefaults() { 
+            // Move nothing initially, DB is empty 
+            saveClubDatabase(); 
+        }
+        async function saveClubDatabase() { if(dbFileId) await updateFileContent(dbFileId, clubDatabase); }
 
         async function loadAllLeagueDataFromDrive() {
-            let overallSuccess = true;
             for (const leagueId in leagueDataStore) {
                 const ref = leagueDataStore[leagueId];
-                console.log(`Chargement ${leagueId.toUpperCase()} depuis Drive (${ref.filename})...`);
-                ref.fileId = await findOrCreateFile(ref.filename, JSON.stringify(initialLeagueData[leagueId])); 
+                ref.fileId = await findOrCreateFile(ref.filename, JSON.stringify(initialLeagueData[leagueId]));
                 if (ref.fileId) {
-                    const content = await readFileContent(ref.fileId);
-                    if (content && content.trim() !== "") {
-                        try {
-                            const parsedData = JSON.parse(content);
-                            if (parsedData && typeof parsedData.teams === 'object' && Array.isArray(parsedData.seasons)) {
-                                leagueDataStore[leagueId] = parsedData; 
-                                console.log(`Données ${leagueId.toUpperCase()} chargées depuis Drive.`);
-                            } else {
-                                console.warn(`Données ${leagueId.toUpperCase()} malformées sur Drive. Utilisation des données initiales en mémoire.`);
-                                leagueDataStore[leagueId] = getDefaultLeagueData(leagueId); 
-                                overallSuccess = false;
-                            }
-                        } catch (e) {
-                            console.error(`Erreur parsing ${leagueId.toUpperCase()} Drive:`, e); showMessage(`Données ${leagueId.toUpperCase()} Drive corrompues. Utilisation des données initiales.`, 7000, true);
-                            leagueDataStore[leagueId] = getDefaultLeagueData(leagueId);
-                            overallSuccess = false;
-                        }
-                    } else {
-                         console.log(`Fichier ${ref.filename} vide sur Drive. Initialisation avec structure par défaut locale.`);
-                         leagueDataStore[leagueId] = getDefaultLeagueData(leagueId);
-                         if(googleAccessToken && ref.fileId) await saveLeagueDataToDrive(leagueId, true); 
-                         overallSuccess = false; 
-                    }
-                } else {
-                    console.warn(`Impossible trouver/créer le fichier ${ref.filename} sur Drive. Utilisation des données initiales en mémoire.`);
-                    showMessage(`Fichier ${ref.filename} Drive inaccessible.`, 7000, true);
-                    leagueDataStore[leagueId] = getDefaultLeagueData(leagueId);
-                    overallSuccess = false;
+                    const c = await readFileContent(ref.fileId);
+                    if (c && c.trim() !== "") { try { leagueDataStore[leagueId] = JSON.parse(c); } catch(e) { leagueDataStore[leagueId] = JSON.parse(JSON.stringify(initialLeagueData[leagueId])); } }
                 }
             }
-            programsLoaded = overallSuccess; 
-            if (overallSuccess) console.log("Toutes les données des ligues chargées/initialisées avec succès depuis Drive.");
-            else console.warn("Certaines données de ligue ont utilisé des valeurs par défaut ou initiales.");
         }
+        async function loadPalmaresFromDrive() { palmaresFileId = await findOrCreateFile(PALMARES_FILENAME, "{}"); if (palmaresFileId) { const c = await readFileContent(palmaresFileId); if (c) palmaresData = JSON.parse(c); } }
+        async function loadCDFFromDrive() { cdfFileId = await findOrCreateFile(CDF_FILENAME, JSON.stringify({rounds:[]})); if (cdfFileId) { const c = await readFileContent(cdfFileId); if (c) cdfData = JSON.parse(c); } }
+        async function loadBarrageFromDrive() { barrageFileId = await findOrCreateFile(BARRAGE_FILENAME, JSON.stringify({})); if (barrageFileId) { const c = await readFileContent(barrageFileId); if (c) barrageData = JSON.parse(c); } }
 
-        async function loadPalmaresFromDrive() {
-            if (!googleAccessToken) { console.log("Non connecté, palmarès non chargé de Drive."); return; }
-            console.log(`Chargement du palmarès depuis Drive (${PALMARES_FILENAME})...`);
-            palmaresFileId = await findOrCreateFile(PALMARES_FILENAME, JSON.stringify({}));
-            if (palmaresFileId) {
-                const content = await readFileContent(palmaresFileId);
-                if (content && content.trim() !== "") {
-                    try {
-                        palmaresData = JSON.parse(content);
-                        console.log("Palmarès chargé depuis Drive.");
-                    } catch (e) {
-                        console.error("Erreur parsing palmarès Drive:", e);
-                        showMessage("Fichier de palmarès Drive corrompu. Initialisation à zéro.", 5000, true);
-                        palmaresData = {};
-                    }
-                } else {
-                    console.log(`Fichier palmarès '${PALMARES_FILENAME}' vide ou non trouvé sur Drive. Initialisation à zéro.`);
-                    palmaresData = {};
-                    if (googleAccessToken && palmaresFileId) await updateFileContent(palmaresFileId, palmaresData);
-                }
-            } else {
-                console.warn(`Impossible de trouver ou créer le fichier palmarès '${PALMARES_FILENAME}' sur Drive.`);
-                showMessage(`Fichier palmarès Drive inaccessible.`, 5000, true);
-                palmaresData = {};
-            }
-        }
-        
-        async function savePalmaresToDrive() {
-            if (!googleAccessToken) { showMessage("Connectez-vous pour sauvegarder le palmarès.", 3000, true); return; }
-            if (!palmaresFileId) {
-                palmaresFileId = await findOrCreateFile(PALMARES_FILENAME, JSON.stringify(palmaresData));
-                if (!palmaresFileId) { showMessage("Impossible de créer le fichier palmarès sur Drive.", 5000, true); return; }
-            }
-            console.log("Sauvegarde du palmarès sur Drive...", palmaresData);
-            const success = await updateFileContent(palmaresFileId, palmaresData);
-            if (success) showMessage("Palmarès sauvegardé !", 2000);
-            else showMessage("Échec de la sauvegarde du palmarès sur Drive.", 3000, true);
-        }
+        async function saveLeagueDataToDrive(leagueId) { const l = leagueDataStore[leagueId]; if (!l?.fileId) l.fileId = await findOrCreateFile(l.filename, JSON.stringify(l)); if(l.fileId) await updateFileContent(l.fileId, l); showMessage(`${leagueId.toUpperCase()} sauvegardé !`); }
+        async function savePalmaresToDrive() { if(!palmaresFileId) palmaresFileId = await findOrCreateFile(PALMARES_FILENAME, "{}"); if(palmaresFileId) await updateFileContent(palmaresFileId, palmaresData); showMessage("Palmarès sauvegardé !"); }
+        async function saveCDFToDrive() { if(!cdfFileId) cdfFileId = await findOrCreateFile(CDF_FILENAME, "{}"); if(cdfFileId) await updateFileContent(cdfFileId, cdfData); showMessage("CDF sauvegardé !"); }
+        async function saveBarrageToDrive() { if(!barrageFileId) barrageFileId = await findOrCreateFile(BARRAGE_FILENAME, "{}"); if(barrageFileId) await updateFileContent(barrageFileId, barrageData); showMessage("Barrage sauvegardé !"); }
 
-        async function saveLeagueDataToDrive(leagueId, isInitialSave = false) {
-            const leagueData = leagueDataStore[leagueId];
-            if (!googleAccessToken) { if(!isInitialSave) showMessage("Connectez-vous pour sauvegarder.", 3000, true); return; }
-            if (!leagueData || !leagueData.filename) { console.error(`Données de ligue ou nom de fichier manquant pour ${leagueId}`); return; }
-            if (!leagueData.fileId) {
-                console.warn(`FileId manquant pour ${leagueId}. Tentative de findOrCreateFile...`);
-                leagueData.fileId = await findOrCreateFile(leagueData.filename, JSON.stringify(leagueData));
-                if(!leagueData.fileId){ showMessage(`Impossible de créer le fichier pour ${leagueId.toUpperCase()} sur Drive. Sauvegarde annulée.`, 5000, true); return; }
-            }
-            const activeSeason = leagueData.seasons.find(s => s.season_id === leagueData.active_season_id);
-            if (activeSeason) activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
-            console.log(`Sauvegarde ${leagueId.toUpperCase()} sur Drive.`); 
-            const success = await updateFileContent(leagueData.fileId, leagueData);
-            if (success) { if(!isInitialSave) showMessage(`Données ${leagueId.toUpperCase()} sauvegardées !`, 2000); }
-            else { if(!isInitialSave) showMessage(`Échec sauvegarde ${leagueId.toUpperCase()} sur Drive.`, 3000, true); }
-        }
-
-        function populateSeasonSelector(leagueId) {
-            const selector = document.getElementById(`${leagueId}-season-selector`);
-            const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
-            if (!selector || !leagueDataStore[leagueId]) return;
-            selector.innerHTML = '';
-            const league = leagueDataStore[leagueId];
-            if (league.seasons && league.seasons.length > 0) {
-                league.seasons.sort((a,b) => b.season_id - a.season_id); 
-                league.seasons.forEach(season => {
-                    const option = document.createElement('option'); option.value = season.season_id;
-                    option.textContent = season.nom_saison || `Saison ${season.season_id}`;
-                    if (season.season_id === league.active_season_id) option.selected = true;
-                    selector.appendChild(option);
-                });
-                if(deleteBtn) deleteBtn.disabled = !googleAccessToken || league.seasons.length <= 1;
-            } else { const option = document.createElement('option'); option.textContent = "Aucune saison"; selector.appendChild(option); if(deleteBtn) deleteBtn.disabled = true; }
-        }
-        function handleSeasonChange(event) {
-            const leagueId = event.target.dataset.league; const selectedSeasonId = parseInt(event.target.value);
-            if (!leagueDataStore[leagueId] || isNaN(selectedSeasonId)) return;
-            leagueDataStore[leagueId].active_season_id = selectedSeasonId; populateSingleLeagueUI(leagueId);
-            if(googleAccessToken) saveLeagueDataToDrive(leagueId); 
-        }
-        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
+        // LEAGUE LOGIC (Shared)
         function generateBergerFixtures(teamNamesInput) {
-            let teams = [...teamNamesInput]; if (teams.length === 0) return [];
-            const isOdd = teams.length % 2 !== 0; if (isOdd) teams.push("BYE");
-            const numTeams = teams.length; const numRounds = numTeams - 1; const matchesPerRound = numTeams / 2; const rounds = [];
-            for (let r = 0; r < numRounds; r++) {
-                const currentRoundMatches = [];
-                for (let i = 0; i < matchesPerRound; i++) {
-                    const home = teams[i]; const away = teams[numTeams - 1 - i];
-                    if (home !== "BYE" && away !== "BYE") { if (r % 2 === 0 || i > 0) currentRoundMatches.push({ home, away, scoreHome: null, scoreAway: null }); else currentRoundMatches.push({ home: away, away: home, scoreHome: null, scoreAway: null }); }
-                } rounds.push(currentRoundMatches); const last = teams.pop(); teams.splice(1, 0, last);
-            } return rounds;
+            let teams = [...teamNamesInput]; if (teams.length === 0) return []; const isOdd = teams.length % 2 !== 0; if (isOdd) teams.push("BYE");
+            const numTeams = teams.length, numRounds = numTeams - 1, matchesPerRound = numTeams / 2, rounds = [];
+            for (let r = 0; r < numRounds; r++) { const currentRoundMatches = []; for (let i = 0; i < matchesPerRound; i++) { const home = teams[i], away = teams[numTeams - 1 - i]; if (home !== "BYE" && away !== "BYE") { if (r % 2 === 0 || i > 0) currentRoundMatches.push({ home, away, scoreHome: null, scoreAway: null }); else currentRoundMatches.push({ home: away, away: home, scoreHome: null, scoreAway: null }); } } rounds.push(currentRoundMatches); const last = teams.pop(); teams.splice(1, 0, last); } return rounds;
         }
         function generateFullSeasonFixtures(teamNames) { if (teamNames.length < 2) return []; const firstHalf = generateBergerFixtures(teamNames); const secondHalf = firstHalf.map(round => round.map(match => ({ home: match.away, away: match.home, scoreHome: null, scoreAway: null }))); return [...firstHalf, ...secondHalf]; }
-        
         function calculateStandings(teamsInfo, fixturesData) {
-            const standings = {}; 
-            if (!teamsInfo || typeof teamsInfo !== 'object') { console.error("teamsInfo est invalide pour calculateStandings"); return standings; }
-            Object.keys(teamsInfo).forEach(name => { standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 }; });
-            (fixturesData || []).forEach(round => { (round || []).forEach(match => {
-                if (match && typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number' && standings[match.home] && standings[match.away]) { 
-                    const home = standings[match.home]; const away = standings[match.away];
-                    home.matchs++; away.matchs++; home.bp += match.scoreHome; home.bc += match.scoreAway; away.bp += match.scoreAway; away.bc += match.scoreHome;
-                    if (match.scoreHome > match.scoreAway) home.points += 3; else if (match.scoreAway > match.scoreHome) away.points += 3; else { home.points += 1; away.points += 1; }
-                } }); });
-            Object.values(standings).forEach(team => team.diff = team.bp - team.bc);
-            return standings;
+            const standings = {}; Object.keys(teamsInfo).forEach(name => { if(name!=="BYE") standings[name] = { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 }; });
+            (fixturesData || []).forEach(round => { (round || []).forEach(match => { if (match && typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number' && standings[match.home] && standings[match.away]) { const h = standings[match.home], a = standings[match.away]; h.matchs++; a.matchs++; h.bp += match.scoreHome; h.bc += match.scoreAway; a.bp += match.scoreAway; a.bc += match.scoreHome; if (match.scoreHome > match.scoreAway) h.points += 3; else if (match.scoreAway > match.scoreHome) a.points += 3; else { h.points += 1; a.points += 1; } } }); });
+            Object.values(standings).forEach(t => t.diff = t.bp - t.bc); return standings;
         }
-        function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
-            const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
-            const matchesPerDay = (teamsInfo && Math.floor(Object.keys(teamsInfo).length / 2) ) || 3; 
-            (fixturesData || []).forEach((round, index) => {
-                const row = document.createElement('tr'); let roundHtml = `<td>J.${index + 1}</td>`;
-                (round || []).forEach((match, matchIdx) => {
-                    if (!match || !teamsInfo[match.home] || !teamsInfo[match.away]) { roundHtml += '<td>-</td>'; return; }
-                    const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`; const scoreAwayInputId = `${leagueId}-r${index}-m${matchIdx}-a`;
-                    const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
-                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${match.home}</span><img src="${BASE_URL}${teamsInfo[match.home].logo}" alt="${match.home}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${BASE_URL}${teamsInfo[match.away].logo}" alt="${match.away}" class="team-logo"><span>${match.away}</span></div></div></td>`;
+        function getSortedStandings(standings) { return Object.entries(standings).filter(([n])=>n!=="BYE").sort(([, a], [, b]) => b.points - a.points || b.diff - a.diff || b.bp - a.bp); }
+
+        // UI POPULATORS
+        function populateSeasonSelector(leagueId) {
+            const sel = document.getElementById(`${leagueId}-season-selector`); const del = document.getElementById(`delete-season-${leagueId}-btn`);
+            sel.innerHTML = ''; const league = leagueDataStore[leagueId];
+            if (league.seasons?.length > 0) { league.seasons.forEach(s => { const o = document.createElement('option'); o.value = s.season_id; o.textContent = s.nom_saison; if (s.season_id === league.active_season_id) o.selected = true; sel.appendChild(o); }); if(del) del.disabled = !googleAccessToken || league.seasons.length <= 1; }
+            else { sel.innerHTML = '<option>Aucune saison</option>'; if(del) del.disabled = true; }
+        }
+        function populateFixturesDOM(id, fixtures, teams, leagueId) {
+            const body = document.getElementById(id); if (!body) return; body.innerHTML = '';
+            const mpd = Math.floor(Object.keys(teams).length / 2) || 3;
+            (fixtures || []).forEach((round, i) => {
+                const row = document.createElement('tr'); let h = `<td>J.${i+1}</td>`;
+                (round || []).forEach((m, mi) => {
+                    if (!m || !teams[m.home] || !teams[m.away]) { h += '<td>-</td>'; return; }
+                    h += `<td><div class="fixture-match"><div class="fixture-team home"><span>${m.home}</span><img src="${getImgSrc(teams[m.home].logo)}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" value="${m.scoreHome !== null ? m.scoreHome : ''}" min="0" data-round="${i}" data-matchidx="${mi}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" value="${m.scoreAway !== null ? m.scoreAway : ''}" min="0" data-round="${i}" data-matchidx="${mi}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${getImgSrc(teams[m.away].logo)}" class="team-logo"><span>${m.away}</span></div></div></td>`;
                 });
-                for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
-                row.innerHTML = roundHtml; fixturesBody.appendChild(row);
+                for(let i=(round||[]).length; i<mpd; i++) h += '<td>-</td>';
+                row.innerHTML = h; body.appendChild(row);
             });
-            document.querySelectorAll(`#${fixturesBodyId} .fixture-score-input`).forEach(input => input.addEventListener('change', handleScoreChange));
+            body.querySelectorAll('.fixture-score-input').forEach(inp => inp.addEventListener('change', handleScoreChange));
         }
-        function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos) {
-            const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
-            if(!calculatedStandings || Object.keys(calculatedStandings).length === 0) { standingsBody.innerHTML = '<tr><td colspan="7">Aucune donnée de classement.</td></tr>'; return; }
-            const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
-            sortedTeams.forEach(([teamName, teamData], index) => {
-                 if(teamName === "BYE") return; 
+        function populateStandingsDOM(id, standings, teams) {
+            const body = document.getElementById(id); if (!body) return; body.innerHTML = '';
+            const sorted = getSortedStandings(standings);
+            sorted.forEach(([name, data], idx) => {
                 const row = document.createElement('tr');
-                const logoFilename = teamsForLogos[teamName]?.logo;
-                const logoSrc = logoFilename ? `${BASE_URL}${logoFilename}` : `${BASE_URL}default_logo.png`; 
-                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
-                standingsBody.appendChild(row);
+                row.innerHTML = `<td>${idx+1}</td><td class="team-info"><img src="${getImgSrc(teams[name]?.logo)}" class="team-logo"><span>${name}</span></td><td>${data.points}</td><td>${data.matchs}</td><td>${data.bp}</td><td>${data.bc}</td><td>${data.diff >= 0 ? '+' : ''}${data.diff}</td>`;
+                body.appendChild(row);
             });
         }
-        function populateTeamsGridDOM(teamsGridId, teamsData) {
-            const teamsGrid = document.getElementById(teamsGridId); if (!teamsGrid) return; teamsGrid.innerHTML = '';
-            if(!teamsData) return;
-            Object.entries(teamsData).forEach(([teamName, teamData]) => {
-                 if(teamName === "BYE") return;
-                const teamCard = document.createElement('div'); teamCard.className = 'team-card';
-                teamCard.innerHTML = `<img src="${BASE_URL}${teamData.logo}" alt="${teamName}"><h4>${teamName}</h4>${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
-                teamsGrid.appendChild(teamCard);
-            });
+        function populateTeamsGridDOM(id, teams) {
+            const grid = document.getElementById(id); if (!grid) return; grid.innerHTML = '';
+            Object.entries(teams).forEach(([name, data]) => { if(name==="BYE") return; grid.innerHTML += `<div class="team-card"><img src="${getImgSrc(data.logo)}"><h4>${name}</h4><p>${data.description||''}</p></div>`; });
         }
-        function handleScoreChange(event) {
-            const input = event.target; const roundIndex = parseInt(input.dataset.round); const matchIndex = parseInt(input.dataset.matchidx);
-            const teamType = input.dataset.team; const leagueId = input.dataset.league; let score = input.value === '' ? null : parseInt(input.value);
-            let league = leagueDataStore[leagueId]; if (!league) return;
-            const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
-            if (!activeSeason || !activeSeason.fixtures || !activeSeason.fixtures[roundIndex] || !activeSeason.fixtures[roundIndex][matchIndex]) return;
-            if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
-            if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
-            activeSeason.standings = calculateStandings(league.teams, activeSeason.fixtures);
-            if (document.getElementById(initialLeagueData[leagueId].standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams);
-        }
-        
-        function createNewSeason(leagueId) {
-            const league = leagueDataStore[leagueId]; if (!league) return;
-            const newSeasonId = league.seasons.length > 0 ? Math.max(...league.seasons.map(s => s.season_id)) + 1 : 1;
-            const newSeasonName = `Saison ${newSeasonId}`;
-            let teamNames = Object.keys(league.teams); shuffleArray(teamNames);
-            let newFixtures = generateFullSeasonFixtures(teamNames);
-            
-            league.seasons.push({ season_id: newSeasonId, nom_saison: newSeasonName, fixtures: newFixtures, standings: calculateStandings(league.teams, newFixtures) });
-            league.active_season_id = newSeasonId;
-            
-            populateSeasonSelector(leagueId); populateSingleLeagueUI(leagueId);
-            showMessage(`Nouvelle saison "${newSeasonName}" créée pour ${leagueId.toUpperCase()}!`, 2500);
-            if (googleAccessToken) saveLeagueDataToDrive(leagueId);
-        }
-        
-        function deleteSelectedSeason(leagueId) {
-            const league = leagueDataStore[leagueId];
-            if (!league || !league.seasons || league.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison.", 3000, true); return; }
-            const selector = document.getElementById(`${leagueId}-season-selector`);
-            const seasonIdToDelete = parseInt(selector.value);
-            const seasonNameToDelete = league.seasons.find(s=>s.season_id === seasonIdToDelete)?.nom_saison || `Saison ${seasonIdToDelete}`;
-            if (confirm(`Êtes-vous sûr de vouloir supprimer la "${seasonNameToDelete}" ? Cette action est irréversible.`)) {
-                league.seasons = league.seasons.filter(s => s.season_id !== seasonIdToDelete);
-                if (league.active_season_id === seasonIdToDelete) league.active_season_id = league.seasons.length > 0 ? league.seasons[league.seasons.length - 1].season_id : null;
-                populateSeasonSelector(leagueId); populateSingleLeagueUI(leagueId);
-                showMessage("Saison supprimée.", 2000); if (googleAccessToken) saveLeagueDataToDrive(leagueId);
-            }
+
+        function handleScoreChange(e) {
+            const inp = e.target; const r = parseInt(inp.dataset.round), m = parseInt(inp.dataset.matchidx), t = inp.dataset.team, l = inp.dataset.league;
+            let score = inp.value === '' ? null : parseInt(inp.value); if (score !== null && isNaN(score)) return;
+            const season = leagueDataStore[l].seasons.find(s => s.season_id === leagueDataStore[l].active_season_id);
+            if (!season?.fixtures?.[r]?.[m]) return;
+            season.fixtures[r][m][t === 'home' ? 'scoreHome' : 'scoreAway'] = score;
+            season.standings = calculateStandings(leagueDataStore[l].teams, season.fixtures);
+            populateStandingsDOM(initialLeagueData[l].standingsBodyId, season.standings, leagueDataStore[l].teams);
         }
 
         function populateSingleLeagueUI(leagueId) {
-            const league = leagueDataStore[leagueId]; if (!league) { console.error(`Données manquantes pour la ligue ${leagueId}`); return; }
-            const refIds = initialLeagueData[leagueId]; 
-            const activeSeason = league.seasons.find(s => s.season_id === league.active_season_id);
-            const fixturesBody = document.getElementById(refIds.fixtureBodyId);
-            const standingsBody = document.getElementById(refIds.standingsBodyId);
-
-            if (activeSeason) {
-                if(fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
-                if(standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
-            } else { 
-                const colsFixtures = fixturesBody?.closest('table')?.querySelector('thead tr th')?.length || 4;
-                const colsStandings = standingsBody?.closest('table')?.querySelector('thead tr th')?.length || 7;
-                if (fixturesBody) fixturesBody.innerHTML = `<tr><td colspan="${colsFixtures}">Sélectionnez ou créez une saison.</td></tr>`;
-                if (standingsBody) standingsBody.innerHTML = `<tr><td colspan="${colsStandings}">Sélectionnez ou créez une saison.</td></tr>`;
-            }
-            populateTeamsGridDOM(refIds.teamsGridId, league.teams);
-            populateSeasonSelector(leagueId); 
-            observeActiveTabSections();
-            const deleteBtn = document.getElementById(`delete-season-${leagueId}-btn`);
-            if(deleteBtn) deleteBtn.disabled = !googleAccessToken || !league.seasons || league.seasons.length <= 1;
+            const league = leagueDataStore[leagueId]; if (!league) return;
+            const ref = initialLeagueData[leagueId]; const season = league.seasons.find(s => s.season_id === league.active_season_id);
+            if (season) { populateFixturesDOM(ref.fixtureBodyId, season.fixtures, league.teams, leagueId); populateStandingsDOM(ref.standingsBodyId, season.standings, league.teams); }
+            else { document.getElementById(ref.fixtureBodyId).innerHTML = `<tr><td colspan="4">Aucune saison.</td></tr>`; document.getElementById(ref.standingsBodyId).innerHTML = `<tr><td colspan="7">Aucune saison.</td></tr>`; }
+            populateTeamsGridDOM(ref.teamsGridId, league.teams); populateSeasonSelector(leagueId);
         }
-        function populateAllLeaguesUI() { for (const leagueId in leagueDataStore) { if(leagueId !== 'ldc') populateSingleLeagueUI(leagueId); } }
 
-        function populatePalmaresTable() {
-            const tableBody = document.getElementById('palmares-table-body');
-            if (!tableBody) return;
-            tableBody.innerHTML = '';
-            const allTeamsInStore = { ...leagueDataStore.l1.teams, ...leagueDataStore.l2.teams };
+        // SEASON MANAGEMENT
+        function createNewSeason(leagueId) {
+            const league = leagueDataStore[leagueId]; const newId = league.seasons.length > 0 ? Math.max(...league.seasons.map(s => s.season_id)) + 1 : 1;
+            let names = Object.keys(league.teams); shuffleArray(names);
+            let fix = generateFullSeasonFixtures(names);
+            league.seasons.push({ season_id: newId, nom_saison: `Saison ${newId}`, fixtures: fix, standings: calculateStandings(league.teams, fix) }); league.active_season_id = newId;
+            populateSingleLeagueUI(leagueId); if(googleAccessToken) saveLeagueDataToDrive(leagueId);
+        }
+        function deleteSelectedSeason(leagueId) {
+            const league = leagueDataStore[leagueId]; if (!league?.seasons || league.seasons.length <= 1) return;
+            if (!confirm("Supprimer cette saison ?")) return;
+            const idToDelete = parseInt(document.getElementById(`${leagueId}-season-selector`).value);
+            league.seasons = league.seasons.filter(s => s.season_id !== idToDelete);
+            if (league.active_season_id === idToDelete) league.active_season_id = league.seasons[league.seasons.length-1]?.season_id || null;
+            populateSingleLeagueUI(leagueId); if(googleAccessToken) saveLeagueDataToDrive(leagueId);
+        }
 
-            Object.keys(allTeamsInStore).sort().forEach(teamName => {
-                if (teamName === "BYE") return;
-                const teamGlobalPalmares = palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
-                const row = document.createElement('tr');
+        // FIN DE SAISON & PROMOTION/RELEGATION
+        function triggerEndOfSeason() {
+            const l1 = leagueDataStore.l1, l2 = leagueDataStore.l2;
+            const s1 = l1.seasons.find(s => s.season_id === l1.active_season_id);
+            const s2 = l2.seasons.find(s => s.season_id === l2.active_season_id);
+            if (!s1 || !s2) { showMessage("Créez une saison en L1 et L2 d'abord.", 3000, true); return; }
+
+            let allPlayed = true;
+            [s1, s2].forEach(s => s.fixtures.forEach(r => r.forEach(m => { if(m.scoreHome===null || m.scoreAway===null) allPlayed = false; })));
+            if (!allPlayed) { showMessage("Tous les matchs ne sont pas joués !", 4000, true); return; }
+            if (!confirm("Êtes-vous sûr ? Cela va déclencher les montées/descentes automatiques.")) return;
+
+            const sortedL1 = getSortedStandings(s1.standings);
+            const sortedL2 = getSortedStandings(s2.standings);
+            const l1Down1 = sortedL1[5][0]; // 6e
+            const l1Down2 = sortedL1[4][0]; // 5e
+            const l2Up1 = sortedL2[0][0];   // 1er
+            const l2Up2 = sortedL2[1][0];   // 2e
+
+            document.getElementById('fin-saison-title').innerHTML = "Traitement de la Fin de Saison";
+            let html = `<div style="text-align:left; line-height:2;">`;
+            html += `<h3 style="color:var(--accent-gold)">Champion L1 : ${sortedL1[0][0]}</h3>`;
+            html += `<p>🔴 <b>Relégation directe L1</b> : ${l1Down1} descend en L2.</p>`;
+            html += `<p>🟠 <b>Barrage L1</b> : ${l1Down2} doit affronter le 2e de L2.</p>`;
+            html += `<p>🟢 <b>Montée directe L2</b> : ${l2Up1} monte en L1.</p>`;
+            html += `<p>🔵 <b>Barrage L2</b> : ${l2Up2} doit affronter le 5e de L1.</p>`;
+            html += `</div><br><hr style="margin:20px 0"><h3>Exécution en cours...</h3>`;
+
+            document.getElementById('fin-saison-content').innerHTML = html;
+            document.getElementById('fin-saison-close-btn').style.display = 'none';
+            document.getElementById('modal-fin-saison').classList.add('active');
+
+            setTimeout(() => {
+                // Swap Direct
+                swapTeams('l1', l1Down1, 'l2', l2Up1);
                 
-                let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('');
-                let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
-                let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('');
+                // Prepare Barrage Data
+                barrageData = { l1Team: l1Down2, l2Team: l2Up2, scoreL1Home: null, scoreL2Away: null, scoreL2Home: null, scoreL1Away: null, winner: null };
+                saveBarrageToDrive();
 
+                document.getElementById('fin-saison-content').innerHTML += `<p style="color:var(--neon-green);font-weight:bold;margin-top:20px;">✅ Échanges directs effectués. Le barrage est prêt dans l'onglet 'Barrages'.</p>`;
+                document.getElementById('fin-saison-close-btn').style.display = 'inline-block';
+                populateAllUI();
+                if(googleAccessToken) { saveLeagueDataToDrive('l1'); saveLeagueDataToDrive('l2'); }
+            }, 2500);
+        }
+
+        function swapTeams(league1Id, team1Name, league2Id, team2Name) {
+            if (!leagueDataStore[league1Id].teams[team1Name] || !leagueDataStore[league2Id].teams[team2Name]) return;
+            const temp1 = leagueDataStore[league1Id].teams[team1Name];
+            const temp2 = leagueDataStore[league2Id].teams[team2Name];
+            delete leagueDataStore[league1Id].teams[team1Name];
+            delete leagueDataStore[league2Id].teams[team2Name];
+            leagueDataStore[league1Id].teams[team2Name] = temp2;
+            leagueDataStore[league2Id].teams[team1Name] = temp1;
+        }
+
+        // TEAM MANAGEMENT & DATABASE
+        function getAvailablePool(excludeLeague) {
+            const activeTeams = new Set([...Object.keys(leagueDataStore.l1.teams), ...Object.keys(leagueDataStore.l2.teams), ...Object.keys(leagueDataStore.l3.teams)]);
+            const pool = {};
+            Object.keys(clubDatabase).forEach(name => { if (!activeTeams.has(name)) pool[name] = clubDatabase[name]; });
+            return pool;
+        }
+
+        function openReplaceModal(leagueId) {
+            if(!googleAccessToken) { showMessage("Connectez-vous.", 3000, true); return; }
+            currentReplaceLeague = leagueId;
+            const selOut = document.getElementById('replace-out-select');
+            const selIn = document.getElementById('replace-in-select');
+            selOut.innerHTML = ''; selIn.innerHTML = '';
+            
+            Object.keys(leagueDataStore[leagueId].teams).forEach(name => { selOut.innerHTML += `<option value="${name}">${name}</option>`; });
+            
+            const pool = getAvailablePool(leagueId);
+            if (Object.keys(pool).length === 0) selIn.innerHTML = '<option>Aucun club libre disponible</option>';
+            else Object.keys(pool).forEach(name => { selIn.innerHTML += `<option value="${name}">${name}</option>`; });
+            
+            document.getElementById('modal-replace-team').classList.add('active');
+        }
+
+        function validateReplaceTeam() {
+            const outName = document.getElementById('replace-out-select').value;
+            const inName = document.getElementById('replace-in-select').value;
+            if (!inName || !outName || inName === "Aucun club libre disponible") return;
+
+            const league = leagueDataStore[currentReplaceLeague];
+            // Move Out to DB
+            clubDatabase[outName] = league.teams[outName];
+            // Move In from DB
+            league.teams[inName] = clubDatabase[inName];
+            delete clubDatabase[inName];
+
+            saveClubDatabase(); saveLeagueDataToDrive(currentReplaceLeague);
+            closeModal('modal-replace-team'); populateAllUI();
+            showMessage(`${outName} échangé avec ${inName}.`);
+        }
+
+        function openCreateTeamModal() { document.getElementById('create-team-name').value=''; document.getElementById('create-team-logo').value=''; document.getElementById('create-team-preview').style.display='none'; document.getElementById('modal-create-team').classList.add('active'); }
+        
+        document.getElementById('create-team-logo')?.addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) { document.getElementById('create-team-preview').src = e.target.result; document.getElementById('create-team-preview').style.display = 'block'; };
+            reader.readAsDataURL(file);
+        });
+
+        async function validateCreateTeam() {
+            const name = document.getElementById('create-team-name').value.trim();
+            if (!name) { showMessage("Entrez un nom.", 3000, true); return; }
+            
+            let logo = "default_logo.png";
+            const fileInput = document.getElementById('create-team-logo');
+            if (fileInput.files.length > 0) { logo = await compressImageToBase64(fileInput.files[0]); }
+
+            const newTeam = { logo, description: "Nouvelle équipe" };
+            leagueDataStore.l3.teams[name] = newTeam; // Add to L3
+            
+            saveLeagueDataToDrive('l3');
+            closeModal('modal-create-team');
+            populateAllUI();
+            showMessage(`${name} créé en L3 !`);
+        }
+
+        // L3 ROULETTE
+        function buildRoulette() {
+            const wheel = document.getElementById('roulette-wheel'); wheel.innerHTML = ''; wheel.style.transform = 'rotate(0deg)';
+            rouletteSelectedTeam = null; document.getElementById('roulette-winner-display').innerHTML = "Lancez la roulette !"; document.getElementById('validate-roulette-btn').style.display = 'none';
+            const teams = Object.entries(leagueDataStore.l3.teams); const n = teams.length; const angle = 360 / n;
+            const colors = ['#f44336','#e91e63','#9c27b0','#673ab7','#3f51b5','#2196f3','#03a9f4','#00bcd4','#009688','#4caf50','#8bc34a','#cddc39','#ffeb3b','#ffc107','#ff9800','#ff5722'];
+            
+            teams.forEach(([name, data], i) => {
+                const seg = document.createElement('div'); seg.className = 'roulette-segment';
+                seg.style.background = colors[i % colors.length]; seg.style.transform = `rotate(${i * angle}deg)`;
+                seg.innerHTML = `<img src="${getImgSrc(data.logo)}" alt="${name}" style="transform: rotate(${i * angle + angle/2}deg) translateY(-60px);">`;
+                seg.dataset.teamName = name;
+                wheel.appendChild(seg);
+            });
+        }
+
+        function spinRoulette() {
+            if(rouletteSpinning || Object.keys(leagueDataStore.l3.teams).length === 0) return;
+            rouletteSpinning = true; rouletteSelectedTeam = null; document.getElementById('validate-roulette-btn').style.display = 'none';
+            const wheel = document.getElementById('roulette-wheel');
+            const n = Object.keys(leagueDataStore.l3.teams).length;
+            const segAngle = 360 / n;
+            // Random between 5 and 10 full rotations + random stop
+            const extraDeg = Math.floor(Math.random() * 360);
+            const totalDeg = 3600 + extraDeg;
+            
+            wheel.style.transform = `rotate(${totalDeg}deg)`;
+            
+            setTimeout(() => {
+                rouletteSpinning = false;
+                // Pointer is at top (0 deg). Find which segment is at top.
+                const normalizedDeg = totalDeg % 360;
+                // The top position corresponds to 360 - normalizedDeg in our coordinate system (0 is right, clockwise)
+                // Actually pointer is at 270deg in standard math, but with CSS rotate clockwise, top is -90deg or 270deg.
+                // Let's simplify: Segment i starts at i*segAngle. Which index contains 360 - normalizedDeg?
+                const targetAngle = (360 - normalizedDeg + 360) % 360;
+                const index = Math.floor(targetAngle / segAngle);
+                const teams = Object.keys(leagueDataStore.l3.teams);
+                rouletteSelectedTeam = teams[index];
+                document.getElementById('roulette-winner-display').innerHTML = `<img src="${getImgSrc(leagueDataStore.l3.teams[rouletteSelectedTeam].logo)}" style="width:50px;vertical-align:middle;"><br> ${rouletteSelectedTeam} monte en L2 !`;
+                document.getElementById('validate-roulette-btn').style.display = 'inline-block';
+            }, 4200);
+        }
+
+        async function validateRoulettePromotion() {
+            if (!rouletteSelectedTeam) return;
+            if (!confirm(`${rouletteSelectedTeam} va monter en L2. Un club de L2 descendra en L3.`)) return;
+            
+            // Demote last of L2
+            const l2 = leagueDataStore.l2;
+            const s2 = l2.seasons.find(s => s.season_id === l2.active_season_id);
+            let l2LastTeam = Object.keys(l2.teams)[Object.keys(l2.teams).length - 1]; // Fallback
+            if (s2) { const sorted = getSortedStandings(s2.standings); if(sorted.length > 0) l2LastTeam = sorted[sorted.length - 1][0]; }
+
+            const l3 = leagueDataStore.l3;
+            // Swap
+            const tempL2 = l2.teams[l2LastTeam];
+            const tempL3 = l3.teams[rouletteSelectedTeam];
+            
+            delete l2.teams[l2LastTeam]; delete l3.teams[rouletteSelectedTeam];
+            l2.teams[rouletteSelectedTeam] = tempL3;
+            l3.teams[l2LastTeam] = tempL2;
+
+            await saveLeagueDataToDrive('l2'); await saveLeagueDataToDrive('l3');
+            buildRoulette(); populateAllUI();
+            showMessage(`${rouletteSelectedTeam} en L2, ${l2LastTeam} en L3 !`);
+        }
+
+        // CDF (COUPE DE FRANCE)
+        function initCDFTournament() {
+            const allTeams = { ...leagueDataStore.l1.teams, ...leagueDataStore.l2.teams };
+            const teamNames = shuffleArray(Object.keys(allTeams));
+            
+            // To make 16 teams, we add 4 "Byes" or we just handle 12 properly. 12 teams -> R1: 4 byes, 8 play. R2: 8 teams play. R3: 4 play. R4: Final.
+            let byes = []; let players = [];
+            // Top 4 seeds get byes (randomly chosen from the shuffled array to simulate draw)
+            byes = teamNames.splice(0, 4); 
+            players = teamNames;
+
+            let rounds = [];
+            let round1 = { name: "Tour de Repêchage", matches: [] };
+            for(let i=0; i<players.length; i+=2) {
+                round1.matches.push({ home: players[i], away: players[i+1], scoreHome: null, scoreAway: null });
+            }
+            rounds.push(round1);
+
+            let round2 = { name: "Huitièmes de Finale", matches: [] };
+            // We don't know winners yet, so we place placeholders for R2, mixing byes and "Winner R1"
+            let r2Teams = [...byes]; for(let i=0; i<round1.matches.length; i++) r2Teams.push(`WIN_R1_M${i}`);
+            for(let i=0; i<r2Teams.length; i+=2) {
+                round2.matches.push({ home: r2Teams[i], away: r2Teams[i+1], scoreHome: null, scoreAway: null });
+            }
+            rounds.push(round2);
+            
+            let round3 = { name: "Quarts de Finale", matches: [] };
+            for(let i=0; i<round2.matches.length; i++) round3.matches.push({ home: `WIN_R2_M${i}`, away: i%2===0 ? `WIN_R2_M${i+1}` : `WIN_R2_M${i-1}`, scoreHome: null, scoreAway: null });
+            // Fix quarts logic properly: M0 vs M1, M2 vs M3, M4 vs M5, M6 vs M7
+            round3.matches = [];
+            for(let i=0; i<round2.matches.length; i+=2) {
+                round3.matches.push({ home: `WIN_R2_M${i}`, away: `WIN_R2_M${i+1}`, scoreHome: null, scoreAway: null });
+            }
+            rounds.push(round3);
+
+            rounds.push({ name: "Demi-Finales", matches: [{ home: `WIN_R3_M0`, away: `WIN_R3_M1`, scoreHome: null, scoreAway: null }, { home: `WIN_R3_M2`, away: `WIN_R3_M3`, scoreHome: null, scoreAway: null }] });
+            rounds.push({ name: "Finale", matches: [{ home: `WIN_R4_M0`, away: `WIN_R4_M1`, scoreHome: null, scoreAway: null }] });
+
+            cdfData = { rounds, allTeams };
+            renderCDF(); saveCDFToDrive();
+        }
+
+        function resolveCDFName(name) {
+            if (name.startsWith("WIN_")) {
+                const parts = name.split('_'); const rIdx = parseInt(parts[1].substring(1)) + 1; // WIN_R1_M0 -> R1 is index 0
+                const mIdx = parseInt(parts[2].substring(1));
+                const match = cdfData.rounds[rIdx - 1]?.matches[mIdx];
+                if (!match) return "???";
+                if (match.scoreHome === null || match.scoreAway === null) return "En attente";
+                return match.scoreHome > match.scoreAway ? match.home : match.away;
+            }
+            return name;
+        }
+
+        function renderCDF() {
+            const container = document.getElementById('cdf-bracket-container');
+            if (!cdfData.rounds || cdfData.rounds.length === 0) { container.innerHTML = '<p style="text-align:center">Aucun tournoi.</p>'; return; }
+            
+            let html = '';
+            cdfData.rounds.forEach((round, rIdx) => {
+                html += `<div class="cdf-round"><h3>${round.name}</h3>`;
+                round.matches.forEach((match, mIdx) => {
+                    const homeName = resolveCDFName(match.home);
+                    const awayName = resolveCDFName(match.away);
+                    const isBye = match.home.startsWith("WIN_") && homeName === "???" || match.away.startsWith("WIN_") && awayName === "???";
+                    const isWaiting = homeName === "En attente" || awayName === "En attente";
+                    const isRealMatch = !homeName.startsWith("WIN_") && !awayName.startsWith("WIN_") && !isWaiting;
+                    
+                    if (isWaiting) { html += `<div class="cdf-bye"><i class="fas fa-lock"></i> En attente du tour précédent</div>`; return; }
+
+                    html += `<div class="cdf-match-card">
+                        <div class="cdf-team home"><img src="${getImgSrc(cdfData.allTeams[homeName]?.logo)}"><span>${homeName}</span></div>
+                        <div style="display:flex;align-items:center;">
+                            <input type="number" class="cdf-score-input" value="${match.scoreHome !== null ? match.scoreHome : ''}" min="0" data-r="${rIdx}" data-m="${mIdx}" data-t="home" ${!isRealMatch ? 'disabled' : ''}>
+                            <span style="color:#4da6ff;font-weight:bold;">-</span>
+                            <input type="number" class="cdf-score-input" value="${match.scoreAway !== null ? match.scoreAway : ''}" min="0" data-r="${rIdx}" data-m="${mIdx}" data-t="away" ${!isRealMatch ? 'disabled' : ''}>
+                        </div>
+                        <div class="cdf-team away"><span>${awayName}</span><img src="${getImgSrc(cdfData.allTeams[awayName]?.logo)}"></div>
+                    </div>`;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+
+            container.querySelectorAll('.cdf-score-input:not([disabled])').forEach(inp => {
+                inp.addEventListener('change', (e) => {
+                    const r = parseInt(e.target.dataset.r), m = parseInt(e.target.dataset.m), t = e.target.dataset.t;
+                    let val = e.target.value === '' ? null : parseInt(e.target.value);
+                    cdfData.rounds[r].matches[m][t === 'home' ? 'scoreHome' : 'scoreAway'] = val;
+                    renderCDF(); // Re-render to resolve next rounds
+                });
+            });
+        }
+
+        // BARRAGES
+        function initBarrageUI() {
+            const l1 = leagueDataStore.l1, l2 = leagueDataStore.l2;
+            const s1 = l1.seasons.find(s => s.season_id === l1.active_season_id);
+            const s2 = l2.seasons.find(s => s.season_id === l2.active_season_id);
+            
+            if(!s1 || !s2) { showMessage("Aucune saison active.", 3000, true); return; }
+            
+            const sortedL1 = getSortedStandings(s1.standings);
+            const sortedL2 = getSortedStandings(s2.standings);
+            if(sortedL1.length < 5 || sortedL2.length < 2) return;
+
+            barrageData.l1Team = sortedL1[4][0]; // 5e
+            barrageData.l2Team = sortedL2[1][0]; // 2e
+            barrageData.scoreL1Home = null; barrageData.scoreL2Away = null; barrageData.scoreL2Home = null; barrageData.scoreL1Away = null; barrageData.winner = null;
+            
+            renderBarrage(); saveBarrageToDrive();
+        }
+
+        function renderBarrage() {
+            const container = document.getElementById('barrage-container');
+            if (!barrageData.l1Team || !barrageData.l2Team) { container.innerHTML = '<p>Barrage non initialisé.</p>'; return; }
+            
+            const t1 = leagueDataStore.l1.teams[barrageData.l1Team] || leagueDataStore.l2.teams[barrageData.l1Team] || {logo:'default_logo.png'};
+            const t2 = leagueDataStore.l2.teams[barrageData.l2Team] || leagueDataStore.l1.teams[barrageData.l2Team] || {logo:'default_logo.png'};
+
+            let aggH = barrageData.scoreL1Home !== null && barrageData.scoreL2Away !== null ? barrageData.scoreL1Home + barrageData.scoreL2Away : '?';
+            let aggA = barrageData.scoreL2Home !== null && barrageData.scoreL1Away !== null ? barrageData.scoreL2Home + barrageData.scoreL1Away : '?';
+            
+            let aggString = `Score Agg : ${barrageData.l1Team} ${aggH} - ${aggA} ${barrageData.l2Team}`;
+            if (aggH !== '?' && aggA !== '?') {
+                if (aggH > aggA) barrageData.winner = barrageData.l1Team;
+                else if (aggA > aggH) barrageData.winner = barrageData.l2Team;
+                else {
+                    // Away goals rule
+                    const l1AwayGoals = barrageData.scoreL1Away || 0;
+                    const l2AwayGoals = barrageData.scoreL2Away || 0;
+                    if (l2AwayGoals > l1AwayGoals) barrageData.winner = barrageData.l2Team;
+                    else if (l1AwayGoals > l2AwayGoals) barrageData.winner = barrageData.l1Team;
+                    else aggString += " <br><span style='color:red'>(Égalité parfaite : départage manuel requis)</span>";
+                }
+                if(barrageData.winner) aggString += `<br><span style="color:var(--neon-green); font-size:1.3rem">🟢 Vainqueur : ${barrageData.winner} (Monte en L1)</span><br><button class="btn" style="background:var(--neon-green);color:#000;margin-top:10px;padding:10px 20px" onclick="applyBarrageResult()">Appliquer le résultat</button>`;
+            }
+
+            container.innerHTML = `
+                <div class="barrage-card">
+                    <div class="barrage-teams"><img src="${getImgSrc(t1.logo)}"> <span>${barrageData.l1Team} (5e L1)</span></div>
+                    <div class="barrage-scores">
+                        <span>Aller:</span>
+                        <input type="number" id="barrage-l1-home" value="${barrageData.scoreL1Home !== null ? barrageData.scoreL1Home : ''}" min="0">
+                        <span>-</span>
+                        <input type="number" id="barrage-l2-away" value="${barrageData.scoreL2Away !== null ? barrageData.scoreL2Away : ''}" min="0">
+                    </div>
+                </div>
+                <div class="barrage-card">
+                    <div class="barrage-teams"><img src="${getImgSrc(t2.logo)}"> <span>${barrageData.l2Team} (2e L2)</span></div>
+                    <div class="barrage-scores">
+                        <span>Retour:</span>
+                        <input type="number" id="barrage-l2-home" value="${barrageData.scoreL2Home !== null ? barrageData.scoreL2Home : ''}" min="0">
+                        <span>-</span>
+                        <input type="number" id="barrage-l1-away" value="${barrageData.scoreL1Away !== null ? barrageData.scoreL1Away : ''}" min="0">
+                    </div>
+                </div>
+                <div class="barrage-aggregate">${aggString}</div>
+            `;
+            
+            container.querySelectorAll('input[type="number"]').forEach(inp => {
+                inp.addEventListener('change', (e) => {
+                    let val = e.target.value === '' ? null : parseInt(e.target.value);
+                    switch(e.target.id) {
+                        case 'barrage-l1-home': barrageData.scoreL1Home = val; break;
+                        case 'barrage-l2-away': barrageData.scoreL2Away = val; break;
+                        case 'barrage-l2-home': barrageData.scoreL2Home = val; break;
+                        case 'barrage-l1-away': barrageData.scoreL1Away = val; break;
+                    }
+                    renderBarrage();
+                });
+            });
+        }
+
+        async function applyBarrageResult() {
+            if (!barrageData.winner || barrageData.winner.includes("parfaite")) { showMessage("Pas de vainqueur déterminé.", 3000, true); return; }
+            if (!confirm(`Appliquer la montée de ${barrageData.winner} ?`)) return;
+            
+            const loser = barrageData.winner === barrageData.l1Team ? barrageData.l2Team : barrageData.l1Team;
+            // Winner to L1, Loser to L2
+            const l1 = leagueDataStore.l1, l2 = leagueDataStore.l2;
+            const winData = l1.teams[barrageData.winner] || l2.teams[barrageData.winner];
+            const loseData = l1.teams[loser] || l2.teams[loser];
+            
+            // Clean both
+            delete l1.teams[barrageData.l1Team]; delete l2.teams[barrageData.l2Team];
+            // Insert
+            l1.teams[barrageData.winner] = winData;
+            l2.teams[loser] = loseData;
+
+            await saveLeagueDataToDrive('l1'); await saveLeagueDataToDrive('l2');
+            populateAllUI();
+            showMessage(`Barrage appliqué ! ${barrageData.winner} en L1.`);
+            document.getElementById('barrage-container').innerHTML = `<p style="text-align:center;color:var(--neon-green);font-size:1.5rem">Barrage terminé et appliqué !</p>`;
+        }
+
+        // PALMARES
+        function populatePalmaresTable() {
+            const tbody = document.getElementById('palmares-table-body'); if (!tbody) return; tbody.innerHTML = '';
+            const allTeams = { ...leagueDataStore.l1.teams, ...leagueDataStore.l2.teams, ...leagueDataStore.l3.teams };
+            Object.keys(allTeams).sort().forEach(name => {
+                if(name==="BYE") return;
+                const p = palmaresData[name] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
+                const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="team-info"><img src="${BASE_URL}${allTeamsInStore[teamName].logo}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
-                    <td class="trophy-cell">
-                        ${l1TrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" data-team="${teamName}" data-trophy="Ligue 1" title="Ajouter titre L1"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" data-team="${teamName}" data-trophy="Ligue 1" title="Retirer titre L1"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
-                    <td class="trophy-cell">
-                        ${l2TrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" data-team="${teamName}" data-trophy="Ligue 2" title="Ajouter titre L2"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" data-team="${teamName}" data-trophy="Ligue 2" title="Retirer titre L2"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
-                    <td class="trophy-cell">
-                        ${ldcTrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" data-team="${teamName}" data-trophy="LDC" title="Ajouter LDC"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" data-team="${teamName}" data-trophy="LDC" title="Retirer LDC"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
+                    <td class="team-info"><img src="${getImgSrc(allTeams[name].logo)}" class="team-logo"><span>${name}</span></td>
+                    <td class="trophy-cell">${Array(p["Ligue 1"]||0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('')||'-'} <div class="action-cell"><button class="add-trophy" data-team="${name}" data-trophy="Ligue 1"><i class="fas fa-plus"></i></button><button class="remove-trophy" data-team="${name}" data-trophy="Ligue 1"><i class="fas fa-minus"></i></button></div></td>
+                    <td class="trophy-cell">${Array(p["Ligue 2"]||0).fill('<i class="fas fa-medal trophy-l2"></i>').join('')||'-'} <div class="action-cell"><button class="add-trophy" data-team="${name}" data-trophy="Ligue 2"><i class="fas fa-plus"></i></button><button class="remove-trophy" data-team="${name}" data-trophy="Ligue 2"><i class="fas fa-minus"></i></button></div></td>
+                    <td class="trophy-cell">${Array(p["LDC"]||0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('')||'-'} <div class="action-cell"><button class="add-trophy" data-team="${name}" data-trophy="LDC"><i class="fas fa-plus"></i></button><button class="remove-trophy" data-team="${name}" data-trophy="LDC"><i class="fas fa-minus"></i></button></div></td>
                 `;
-                tableBody.appendChild(row);
+                tbody.appendChild(row);
             });
-
-            document.querySelectorAll('.palmares-table .add-trophy').forEach(btn => btn.addEventListener('click', handlePalmaresChange));
-            document.querySelectorAll('.palmares-table .remove-trophy').forEach(btn => btn.addEventListener('click', handlePalmaresChange));
+            tbody.querySelectorAll('.add-trophy, .remove-trophy').forEach(btn => btn.addEventListener('click', (e) => {
+                const n = e.target.closest('button').dataset.team, t = e.target.closest('button').dataset.trophy, isAdd = e.target.closest('button').classList.contains('add-trophy');
+                if (!palmaresData[n]) palmaresData[n] = { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
+                palmaresData[n][t] = Math.max(0, (palmaresData[n][t]||0) + (isAdd ? 1 : -1));
+                populatePalmaresTable();
+            }));
         }
 
-        function handlePalmaresChange(event) {
-            if (!googleAccessToken) { showMessage("Connectez-vous pour modifier le palmarès.", 3000, true); return; }
-            const teamName = event.target.closest('button').dataset.team; 
-            const trophyType = event.target.closest('button').dataset.trophy;
-            const isAdding = event.target.closest('button').classList.contains('add-trophy');
-
-            if (!palmaresData[teamName]) palmaresData[teamName] = { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
-            if (palmaresData[teamName][trophyType] === undefined) palmaresData[teamName][trophyType] = 0;
-
-            if (isAdding) palmaresData[teamName][trophyType]++;
-            else palmaresData[teamName][trophyType] = Math.max(0, palmaresData[teamName][trophyType] - 1);
-            
-            populatePalmaresTable(); 
-        }
-
-        const allNavLinks = document.querySelectorAll('header nav ul li a');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 }); 
+        // GLOBAL UI & NAVIGATION
+        function populateAllUI() { for (const id in leagueDataStore) populateSingleLeagueUI(id); populatePalmaresTable(); renderCDF(); renderBarrage(); buildRoulette(); observeActiveTabSections(); }
         
-        function observeActiveTabSections() {
-            document.querySelectorAll('.section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el) });
-            const activeTabNode = document.querySelector('.tab-content.active');
-            if (activeTabNode) { activeTabNode.querySelectorAll('.section').forEach(section => { const rect = section.getBoundingClientRect(); if (rect.top < window.innerHeight && rect.bottom > 0 && section.style.opacity !== '1') { section.style.opacity = '1'; section.style.transform = 'translateY(0)'; observer.unobserve(section); } }); }
-        }
-        
-        function playLeagueMusic(leagueId) {
-            initAudioContext(); 
-            Object.values(audioElements).forEach(audio => {
-                if (audio && currentPlayingAudio === audio && !audio.paused) return; 
-                if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; }
-            });
-
-            let audioToPlay = null;
-            if (leagueId === 'ligue1' && audioElements.l1) audioToPlay = audioElements.l1;
-            else if (leagueId === 'ligue2' && audioElements.l2) audioToPlay = audioElements.l2;
-            
-            if (audioToPlay) {
-                currentPlayingAudio = audioToPlay;
-                currentPlayingAudio.play().catch(e => console.warn("Erreur lecture audio:", leagueId, e));
-            } else { currentPlayingAudio = null; }
-        }
-        function stopAllLeagueMusic() {
-            Object.values(audioElements).forEach(audio => { if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; } });
-            currentPlayingAudio = null;
-        }
+        const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 });
+        function observeActiveTabSections() { document.querySelectorAll('.tab-content.active .section').forEach(el => { if (el.style.opacity !== '1') { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; } observer.observe(el); }); }
 
         function setActiveTab(tabId) {
-            allNavLinks.forEach(l => {
-                l.classList.remove('active-nav-link', 'tab-active');
-                if (l.dataset.tabLink === tabId) { 
-                    l.classList.add('active-nav-link', 'tab-active');
-                }
-            });
-            
-            const logoLinkIsActive = tabId === 'ligue1'; 
-            const logoLink = document.querySelector('.logo.nav-link');
-            if (logoLink) {
-                 logoLink.classList.toggle('active-nav-link', logoLinkIsActive);
-                 logoLink.classList.toggle('tab-active', logoLinkIsActive && logoLink.dataset.tabLink === 'ligue1'); 
-            }
-
-
-            tabContents.forEach(c => c.classList.remove('active'));
-            const targetContent = document.getElementById(`${tabId}-content`);
-            if (targetContent) {
-                targetContent.classList.add('active');
-                // Ne plus jouer la musique automatiquement ici, elle sera gérée par les boutons dédiés
-            } else {
-                stopAllLeagueMusic(); 
-                if (tabId === 'accueil-section-l1' || tabId === 'ligue1') { 
-                     document.getElementById('ligue1-content')?.classList.add('active');
-                     document.querySelector('header nav ul li a[data-tab-link="ligue1"]')?.classList.add('active-nav-link', 'tab-active');
-                }
-            }
-             observeActiveTabSections();
-             document.querySelectorAll('.carousel').forEach(carousel => {
-                 const ci = carousel.carouselInstance;
-                 if (ci) carousel.closest('.tab-content.active') ? ci.startAutoSlide() : ci.stopAutoSlide();
-             });
+            document.querySelectorAll('header nav ul li a').forEach(l => { l.classList.remove('active-nav-link', 'tab-active'); if (l.dataset.tabLink === tabId) l.classList.add('active-nav-link', 'tab-active'); });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById(`${tabId}-content`); if(target) target.classList.add('active');
+            observeActiveTabSections();
         }
-        
-        allNavLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const isTabLink = link.hasAttribute('data-tab-link');
-                const href = link.getAttribute('href');
 
-                initAudioContext(); // Assurer que le contexte est prêt à chaque interaction pertinente
-
-                if (isTabLink && (href === "#" || href.startsWith("#") && document.getElementById(href.substring(1))?.classList.contains('tab-content'))) {
-                    e.preventDefault();
-                    const tabId = link.dataset.tabLink;
-                    setActiveTab(tabId); // Gère l'affichage de l'onglet
-                    // La musique n'est plus jouée automatiquement ici
-                } else if (href && href.startsWith("#") && href !== "#") { 
-                     allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
-                     link.classList.add('active-nav-link');
-                     tabContents.forEach(c => c.classList.remove('active')); 
-                     stopAllLeagueMusic();
-                     const targetSectionId = href.substring(1);
-                     const targetSection = document.getElementById(targetSectionId);
-                     if (targetSection) {
-                        const parentTabContent = targetSection.closest('.tab-content');
-                        if (parentTabContent && !parentTabContent.classList.contains('active')) {
-                            const parentTabId = parentTabContent.id.replace('-content', '');
-                            setActiveTab(parentTabId); 
-                        }
-                        setTimeout(() => targetSection.scrollIntoView({behavior: 'smooth'}), 50); 
-                     }
-                } else if (href && !href.startsWith("#") && !isTabLink) { 
-                     allNavLinks.forEach(l => l.classList.remove('active-nav-link', 'tab-active'));
-                     link.classList.add('active-nav-link'); 
-                     stopAllLeagueMusic();
-                }
-                
-                if (window.innerWidth <= 768 && nav.classList.contains('active')) { 
-                    nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; 
-                }
-            });
-        });
-
-        document.querySelectorAll('.league-music-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                initAudioContext();
-                const league = button.dataset.leagueAudio;
-                const audioToPlay = audioElements[league];
-                const icon = button.querySelector('i');
-
-                if (audioToPlay) {
-                    if (audioToPlay.paused || audioToPlay.ended) {
-                        stopAllLeagueMusic(); // Arrêter les autres avant de jouer celle-ci
-                        audioToPlay.play().catch(e => console.warn("Erreur lecture audio:", league, e));
-                        currentPlayingAudio = audioToPlay;
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-pause');
-                        // Mettre à jour les autres boutons musique
-                        document.querySelectorAll('.league-music-btn').forEach(btn => {
-                            if (btn !== button) {
-                                btn.querySelector('i').classList.remove('fa-pause');
-                                btn.querySelector('i').classList.add('fa-play');
-                            }
-                        });
-                    } else {
-                        audioToPlay.pause();
-                        currentPlayingAudio = null;
-                        icon.classList.remove('fa-pause');
-                        icon.classList.add('fa-play');
-                    }
-                }
-            });
-        });
-
-
-        function initializeCarousel(carousel) {
-             if (carousel.carouselInstance) return;
-            const inner = carousel.querySelector('.carousel-inner'); const items = carousel.querySelectorAll('.carousel-item');
-            const dots = carousel.querySelectorAll('.carousel-dot'); const prevBtn = carousel.querySelector('.carousel-prev'); const nextBtn = carousel.querySelector('.carousel-next');
-            if (!inner || items.length === 0 || !prevBtn || !nextBtn) return; 
-            if (items.length <= 1) { if (dots && dots.length > 0) dots.forEach(d => d.style.display = 'none'); prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; return; }
-            let currentSlide = 0; const slideCount = items.length; let interval = null;
-            function updateCarousel() { items.forEach((item, idx) => item.classList.toggle('active', idx === currentSlide)); if (dots.length > 0) dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));}
-            function startAutoSlide() { stopAutoSlide(); if (carousel.closest('.tab-content.active') && slideCount > 1) interval = setInterval(() => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); }, 5000); }
-            function stopAutoSlide() { if (interval) clearInterval(interval); interval = null; }
-            function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
-            if (dots.length > 0) dots.forEach((dot, index) => dot.addEventListener('click', () => { currentSlide = index; updateCarousel(); resetAutoSlide(); }));
-            prevBtn.addEventListener('click', () => { currentSlide = (currentSlide - 1 + slideCount) % slideCount; updateCarousel(); resetAutoSlide(); });
-            nextBtn.addEventListener('click', () => { currentSlide = (currentSlide + 1) % slideCount; updateCarousel(); resetAutoSlide(); });
-            carousel.addEventListener('mouseenter', stopAutoSlide); carousel.addEventListener('mouseleave', startAutoSlide);
-            carousel.carouselInstance = { startAutoSlide, stopAutoSlide }; updateCarousel(); startAutoSlide();
-        }
-        const hamburger = document.querySelector('.hamburger'); const nav = document.querySelector('header nav');
-        hamburger.addEventListener('click', () => { nav.classList.toggle('active'); const icon = hamburger.querySelector('i'); icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); });
-        document.addEventListener('click', (e) => { const target = e.target; const isClickInsideNav = nav.contains(target) || hamburger.contains(target); if (!isClickInsideNav && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
-        
-        document.querySelectorAll('.nouvelle-saison-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2];
-            btn.addEventListener('click', () => createNewSeason(leagueId));
-        });
-        document.querySelectorAll('.sauvegarde-json-btn:not(#sauvegarde-palmares-btn)').forEach(btn => {
-            const leagueId = btn.id.split('-')[1];
-            btn.addEventListener('click', () => saveLeagueDataToDrive(leagueId));
-        });
-         document.querySelectorAll('.delete-season-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2]; 
-            btn.addEventListener('click', () => deleteSelectedSeason(leagueId));
-        });
-        document.querySelectorAll('.season-selector-container select').forEach(selector => {
-            selector.addEventListener('change', handleSeasonChange);
-        });
-        const savePalmaresButton = document.getElementById('sauvegarde-palmares-btn');
-        if(savePalmaresButton) savePalmaresButton.addEventListener('click', savePalmaresToDrive);
-        
-        document.querySelectorAll('a[data-tab-link-footer]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const tabId = link.dataset.tabLinkFooter;
-                const targetNavEquivalent = document.querySelector(`header nav a[data-tab-link="${tabId}"]`);
-                if(targetNavEquivalent) {
-                    targetNavEquivalent.click(); 
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                }
-            });
-        });
-
+        // EVENT LISTENERS SETUP
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
             audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2') };
 
-            populateAllLeaguesUI(); populatePalmaresTable();
-            document.querySelectorAll('.carousel').forEach(initializeCarousel);
+            populateAllUI(); setActiveTab('ligue1'); checkAndInitGis(); updateAuthUI(false);
+
+            // Nav
+            document.querySelectorAll('header nav ul li a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.hasAttribute('data-tab-link')) { e.preventDefault(); setActiveTab(link.dataset.tabLink); initAudioContext(); }
+                    else if (link.getAttribute('href') && !link.getAttribute('href').startsWith('#")) { stopAllLeagueMusic(); }
+                    if (window.innerWidth <= 768 && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; }
+                });
+            });
+            // Footer Nav
+            document.querySelectorAll('a[data-tab-link-footer]').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); setActiveTab(link.dataset.tabLinkFooter); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+
+            // Hamburger
+            const hamburger = document.querySelector('.hamburger'), nav = document.querySelector('header nav');
+            hamburger.addEventListener('click', () => { nav.classList.toggle('active'); const icon = hamburger.querySelector('i'); icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); });
+            document.addEventListener('click', (e) => { if (!nav.contains(e.target) && !hamburger.contains(e.target) && nav.classList.contains('active')) { nav.classList.remove('active'); hamburger.querySelector('i').className = 'fas fa-bars'; } });
+
+            // Music Buttons
+            document.querySelectorAll('.league-music-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    initAudioContext(); const league = button.dataset.leagueAudio; const audio = audioElements[league]; const icon = button.querySelector('i');
+                    if (audio) {
+                        if (audio.paused) { stopAllLeagueMusic(); audio.play(); currentPlayingAudio = audio; icon.className = 'fas fa-pause'; document.querySelectorAll('.league-music-btn').forEach(b => { if(b!==button) b.querySelector('i').className = 'fas fa-play'; }); }
+                        else { audio.pause(); currentPlayingAudio = null; icon.className = 'fas fa-play'; }
+                    }
+                });
+            });
+            function stopAllLeagueMusic() { Object.values(audioElements).forEach(a => { if(a && !a.paused) { a.pause(); a.currentTime=0; } }); currentPlayingAudio = null; document.querySelectorAll('.league-music-btn i').forEach(i => i.className = 'fas fa-play'); }
+
+            // League Buttons
+            document.querySelectorAll('.nouvelle-saison-btn:not(.fin-saison-btn)').forEach(btn => { btn.addEventListener('click', () => createNewSeason(btn.id.split('-')[2])); });
+            document.querySelectorAll('.delete-season-btn').forEach(btn => { btn.addEventListener('click', () => deleteSelectedSeason(btn.id.split('-')[2])); });
+            document.querySelectorAll('.season-selector-container select').forEach(sel => sel.addEventListener('change', (e) => { const l = e.target.dataset.league; leagueDataStore[l].active_season_id = parseInt(e.target.value); populateSingleLeagueUI(l); if(googleAccessToken) saveLeagueDataToDrive(l); }));
+            document.querySelectorAll('.sauvegarde-json-btn:not(#sauvegarde-palmares-btn):not(#sauvegarde-cdf-btn):not(#sauvegarde-barrage-btn)').forEach(btn => { btn.addEventListener('click', () => saveLeagueDataToDrive(btn.id.split('-')[1])); });
             
-            setActiveTab('ligue1');
-            checkAndInitGis(); updateAuthUI(false);
-            console.log("Championnat Peluches Élite V2 Initialisé (Audio par Clic).");
+            document.getElementById('sauvegarde-palmares-btn')?.addEventListener('click', savePalmaresToDrive);
+            document.getElementById('sauvegarde-cdf-btn')?.addEventListener('click', saveCDFToDrive);
+            document.getElementById('sauvegarde-barrage-btn')?.addEventListener('click', saveBarrageToDrive);
+
+            document.getElementById('fin-saison-l1-btn')?.addEventListener('click', triggerEndOfSeason);
+            document.getElementById('spin-roulette-btn')?.addEventListener('click', spinRoulette);
+            document.getElementById('validate-roulette-btn')?.addEventListener('click', validateRoulettePromotion);
+            document.getElementById('new-cdf-btn')?.addEventListener('click', initCDFTournament);
+            document.getElementById('init-barrage-btn')?.addEventListener('click', initBarrageUI);
+            document.getElementById('signin-button')?.addEventListener('click', handleAuthClick);
         });
     </script>
 </body>

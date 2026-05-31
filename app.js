@@ -111,7 +111,56 @@ function initModal() {
   });
 }
 
-// ── FETCH GOOGLE NEWS FEED VIA FREE RELIABLE CORS PROXY ────
+// ── CORS PROXY SYSTEM WITH FALLBACK ────────────────────────
+const PROXIES = [
+  {
+    name: 'codetabs',
+    buildUrl: (targetUrl) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
+    parseResponse: async (res) => {
+      const text = await res.text();
+      return text;
+    }
+  },
+  {
+    name: 'allorigins',
+    buildUrl: (targetUrl) => `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+    parseResponse: async (res) => {
+      const text = await res.text();
+      return text;
+    }
+  },
+  {
+    name: 'allorigins-json',
+    buildUrl: (targetUrl) => `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+    parseResponse: async (res) => {
+      const json = await res.json();
+      if (!json || !json.contents) throw new Error('Invalid allorigins JSON');
+      return json.contents;
+    }
+  }
+];
+
+async function fetchWithProxyFallback(targetUrl) {
+  let lastError;
+  for (const proxy of PROXIES) {
+    try {
+      const proxyUrl = proxy.buildUrl(targetUrl);
+      console.log(`[Ghost-Monitor] Trying proxy: ${proxy.name}`);
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const content = await proxy.parseResponse(res);
+      if (!content || content.length < 100) throw new Error('Empty response');
+      console.log(`[Ghost-Monitor] ✅ Success via ${proxy.name}`);
+      return content;
+    } catch (err) {
+      console.warn(`[Ghost-Monitor] ❌ Proxy ${proxy.name} failed:`, err.message);
+      lastError = err;
+    }
+  }
+  throw new Error(`All proxies failed. Last error: ${lastError?.message}`);
+}
+
+// ── FETCH GOOGLE NEWS FEED ─────────────────────────────────
 async function loadGoogleNews(query, isSilent = false) {
   const feedContainer = document.getElementById('news-feed');
   const highlightLabel = document.getElementById('current-query');
@@ -135,20 +184,19 @@ async function loadGoogleNews(query, isSilent = false) {
   const encodedQuery = encodeURIComponent(fullSearchQuery);
   const googleNewsRss = `https://news.google.com/rss/search?q=${encodedQuery}&hl=fr&gl=FR&ceid=FR:fr`;
   
-  // Using api.allorigins.win which is completely free, open source, has no rate limits and supports XML
-  const queryUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(googleNewsRss)}`;
-  
   try {
-    const res = await fetch(queryUrl, { signal: AbortSignal.timeout(12000) });
-    const responseData = await res.json();
-    
-    if (!responseData || !responseData.contents) {
-      throw new Error('AllOrigins response invalid');
-    }
+    const xmlString = await fetchWithProxyFallback(googleNewsRss);
     
     // Parse the returned XML string directly in browser using DOMParser
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(responseData.contents, "text/xml");
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    
+    // Check for XML parse errors
+    const parseError = xmlDoc.querySelector('parsererror');
+    if (parseError) {
+      throw new Error('XML parse error: ' + parseError.textContent.substring(0, 100));
+    }
+    
     const items = xmlDoc.querySelectorAll("item");
     
     if (!items || items.length === 0) {
@@ -202,7 +250,8 @@ async function loadGoogleNews(query, isSilent = false) {
       feedContainer.innerHTML = `
         <div class="loading-placeholder" style="border-color: #fecaca; background: #fff8f8;">
           <p style="color: #ef4444; font-weight:600;">⚠️ Impossible de charger les actualités.</p>
-          <button onclick="retrySearch()" class="nav-link active" style="margin-top:10px; border:none; background:none; cursor:pointer;">Réessayer</button>
+          <p style="color: #888; font-size:13px; margin-top:6px;">${err.message}</p>
+          <button onclick="retrySearch()" class="nav-link active" style="margin-top:10px; border:none; background:none; cursor:pointer;">🔄 Réessayer</button>
         </div>
       `;
     }

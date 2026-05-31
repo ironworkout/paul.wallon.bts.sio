@@ -111,64 +111,116 @@ function initModal() {
   });
 }
 
-// ── CORS PROXY SYSTEM WITH FALLBACK ────────────────────────
-const PROXIES = [
-  {
-    name: 'codetabs',
-    buildUrl: (targetUrl) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
-    parseResponse: async (res) => {
-      const text = await res.text();
-      return text;
-    }
-  },
-  {
-    name: 'allorigins',
-    buildUrl: (targetUrl) => `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-    parseResponse: async (res) => {
-      const text = await res.text();
-      return text;
-    }
-  },
-  {
-    name: 'allorigins-json',
-    buildUrl: (targetUrl) => `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
-    parseResponse: async (res) => {
-      const json = await res.json();
-      if (!json || !json.contents) throw new Error('Invalid allorigins JSON');
-      return json.contents;
-    }
-  }
-];
+// ── NEWS FETCHING ENGINE ───────────────────────────────────
+// Strategy 1: rss2json.com (dedicated RSS→JSON API, native CORS support)
+// Strategy 2: codetabs CORS proxy + DOMParser XML fallback
 
-async function fetchWithProxyFallback(targetUrl) {
-  let lastError;
-  for (const proxy of PROXIES) {
-    try {
-      const proxyUrl = proxy.buildUrl(targetUrl);
-      console.log(`[Ghost-Monitor] Trying proxy: ${proxy.name}`);
-      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const content = await proxy.parseResponse(res);
-      if (!content || content.length < 100) throw new Error('Empty response');
-      console.log(`[Ghost-Monitor] ✅ Success via ${proxy.name}`);
-      return content;
-    } catch (err) {
-      console.warn(`[Ghost-Monitor] ❌ Proxy ${proxy.name} failed:`, err.message);
-      lastError = err;
-    }
+async function fetchViaRss2Json(rssUrl) {
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+  console.log('[Ghost-Monitor] Trying rss2json.com...');
+  const res = await fetch(apiUrl, { signal: AbortSignal.timeout(15000) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.status !== 'ok' || !data.items || data.items.length === 0) {
+    throw new Error('rss2json: no items');
   }
-  throw new Error(`All proxies failed. Last error: ${lastError?.message}`);
+  console.log(`[Ghost-Monitor] ✅ rss2json returned ${data.items.length} articles`);
+  return data.items.map((item, index) => {
+    let title = item.title || 'Sans titre';
+    let link = item.link || '#';
+    let pubDate = item.pubDate || '';
+    let description = item.description || '';
+
+    let formattedDate = 'Récemment';
+    if (pubDate) {
+      const d = new Date(pubDate);
+      formattedDate = d.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    let sourceName = 'Google News';
+    const parts = title.split(' - ');
+    if (parts.length > 1) {
+      sourceName = parts.pop().trim();
+      title = parts.join(' - ');
+    }
+
+    return {
+      id: `news-${index}`,
+      title,
+      description: cleanText(description || 'Lire la couverture complète.'),
+      link,
+      date: formattedDate,
+      source: sourceName
+    };
+  });
 }
 
-// ── FETCH GOOGLE NEWS FEED ─────────────────────────────────
+async function fetchViaXmlProxy(rssUrl) {
+  const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`;
+  console.log('[Ghost-Monitor] Fallback: trying codetabs proxy...');
+  const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const xmlText = await res.text();
+  if (!xmlText || xmlText.length < 100) throw new Error('Empty XML');
+
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+  const parseError = xmlDoc.querySelector('parsererror');
+  if (parseError) throw new Error('XML parse error');
+
+  const items = xmlDoc.querySelectorAll('item');
+  if (!items || items.length === 0) throw new Error('No items in RSS');
+
+  console.log(`[Ghost-Monitor] ✅ codetabs proxy returned ${items.length} articles`);
+  return Array.from(items).slice(0, 12).map((item, index) => {
+    let title = item.querySelector('title')?.textContent || 'Sans titre';
+    let link = item.querySelector('link')?.textContent || '#';
+    let pubDate = item.querySelector('pubDate')?.textContent || '';
+    let description = item.querySelector('description')?.textContent || '';
+
+    let formattedDate = 'Récemment';
+    if (pubDate) {
+      const d = new Date(pubDate);
+      formattedDate = d.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    let sourceName = 'Google News';
+    const parts = title.split(' - ');
+    if (parts.length > 1) {
+      sourceName = parts.pop().trim();
+      title = parts.join(' - ');
+    }
+
+    return {
+      id: `news-${index}`,
+      title,
+      description: cleanText(description || 'Lire la couverture complète.'),
+      link,
+      date: formattedDate,
+      source: sourceName
+    };
+  });
+}
+
+// ── MAIN FETCH FUNCTION ────────────────────────────────────
 async function loadGoogleNews(query, isSilent = false) {
   const feedContainer = document.getElementById('news-feed');
   const highlightLabel = document.getElementById('current-query');
-  
+
   if (highlightLabel) {
     highlightLabel.textContent = `"${query}"`;
   }
-  
+
   // Show skeleton loader
   if (!isSilent && feedContainer) {
     feedContainer.innerHTML = `
@@ -179,71 +231,25 @@ async function loadGoogleNews(query, isSilent = false) {
       </div>
     `;
   }
-  
+
   const fullSearchQuery = query + CONFIG.DEFAULT_CYBER_FILTER;
   const encodedQuery = encodeURIComponent(fullSearchQuery);
   const googleNewsRss = `https://news.google.com/rss/search?q=${encodedQuery}&hl=fr&gl=FR&ceid=FR:fr`;
-  
+
   try {
-    const xmlString = await fetchWithProxyFallback(googleNewsRss);
-    
-    // Parse the returned XML string directly in browser using DOMParser
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    
-    // Check for XML parse errors
-    const parseError = xmlDoc.querySelector('parsererror');
-    if (parseError) {
-      throw new Error('XML parse error: ' + parseError.textContent.substring(0, 100));
+    // Try rss2json first (most reliable, native CORS)
+    let articles;
+    try {
+      articles = await fetchViaRss2Json(googleNewsRss);
+    } catch (e1) {
+      console.warn('[Ghost-Monitor] rss2json failed:', e1.message);
+      // Fallback to XML proxy
+      articles = await fetchViaXmlProxy(googleNewsRss);
     }
-    
-    const items = xmlDoc.querySelectorAll("item");
-    
-    if (!items || items.length === 0) {
-      throw new Error('No items found in RSS feed');
-    }
-    
-    STATE.articles = Array.from(items).slice(0, 12).map((item, index) => {
-      const titleElem = item.querySelector('title');
-      const linkElem = item.querySelector('link');
-      const dateElem = item.querySelector('pubDate');
-      const descElem = item.querySelector('description');
-      
-      let title = titleElem ? titleElem.textContent : 'Sans titre';
-      let link = linkElem ? linkElem.textContent : '#';
-      let pubDate = dateElem ? dateElem.textContent : '';
-      let description = descElem ? descElem.textContent : '';
-      
-      let formattedDate = 'Récemment';
-      if (pubDate) {
-        const d = new Date(pubDate);
-        formattedDate = d.toLocaleDateString('fr-FR', {
-          day: 'numeric',
-          month: 'short',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      }
-      
-      let sourceName = 'Google News';
-      const parts = title.split(' - ');
-      if (parts.length > 1) {
-        sourceName = parts.pop();
-        title = parts.join(' - ');
-      }
-      
-      return {
-        id: `news-${index}`,
-        title: title,
-        description: cleanText(description || 'Lire la couverture complète.'),
-        link: link,
-        date: formattedDate,
-        source: sourceName
-      };
-    });
-    
+
+    STATE.articles = articles.slice(0, 12);
     renderArticles();
-    
+
   } catch (err) {
     console.error('Error fetching news:', err);
     if (feedContainer) {

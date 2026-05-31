@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost-Monitor by Frandroid-Style | Tech &amp; Cyber-Veille</title>
+<meta name="description" content="Tableau de bord de veille cybersécurité inspiré du design moderne et épuré de Frandroid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="fr-wrapper">
+  <!-- ═══ HEADER (Frandroid-Style) ══════════════════════════════ -->
+  <header class="fr-header">
+    <div class="fr-header-container">
+      <div class="fr-logo-area" onclick="window.location.reload()">
+        <span class="fr-logo-badge">PAUL</span>
+        <span class="fr-logo-text">cyber<span class="dot">.</span></span>
+      </div>
+      
+      <!-- Barre de navigation -->
+      <nav class="fr-nav">
+        <a href="#" class="nav-link active" data-category="all">Accueil</a>
+        <a href="#" class="nav-link" data-category="faille">Failles ⚡</a>
+        <a href="#" class="nav-link" data-category="ransomware">Ransomwares ☠️</a>
+        <a href="#" class="nav-link" data-category="anssi">ANSSI 🇫🇷</a>
+      </nav>
+
+      <!-- Barre de recherche intégrée -->
+      <div class="fr-search-bar">
+        <input type="text" id="news-query" placeholder="Rechercher une faille, un produit..." value="cybersécurité">
+        <button id="btn-search">Rechercher</button>
+      </div>
+
+      <!-- Quick alert portal access -->
+      <div class="fr-alert-access" id="btn-quick-alerts">
+        <span class="alert-pulse-icon">🚨</span>
+        <span class="alert-access-label">Alertes Critiques</span>
+        <span class="alert-access-count" id="badge-critical-count">3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ BANDEAU D'ALERTE D'URGENCE (Frandroid Hot Alert) ══════ -->
+  <div class="fr-hot-banner" id="hot-banner" onclick="window.open('https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbgn04985en_us', '_blank')">
+    <div class="hot-badge">URGENT</div>
+    <div class="hot-content">
+      <strong>Alerte Critique :</strong> HPE OneView — Exécution de code à distance sans authentification (CVE-2025-37164). Correctif v11.0 requis immédiatement.
+    </div>
+    <div class="hot-action">Voir l'alerte →</div>
+  </div>
+
+  <!-- ═══ SECTION "À LA UNE" (Grille Majeure Frandroid) ═════════ -->
+  <section class="fr-hero-section">
+    <h2 class="section-title-line"><span>À la une de la sécurité</span></h2>
+    
+    <div class="fr-hero-grid">
+      <!-- Article principal à gauche -->
+      <article class="hero-main-card" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-004/', '_blank')">
+        <div class="card-bg-gradient" style="background: linear-gradient(180deg, rgba(15, 23, 42, 0) 40%, rgba(15, 23, 42, 0.95) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80') center/cover;"></div>
+        <div class="card-content-overlay">
+          <span class="tag-category tag-category--critical">ALERTE CRITIQUE</span>
+          <h3 class="hero-title">F5 BIG-IP APM : Exploitation active d'une faille critique d'exécution de code à distance</h3>
+          <p class="hero-summary">Une vulnérabilité majeure (CVE-2025-53521) permet à un attaquant non authentifié d'exécuter du code arbitraire à distance. L'éditeur confirme une exploitation active en conditions réelles.</p>
+          <div class="card-meta">
+            <span class="meta-author">CERT-FR</span>
+            <span class="meta-date">31 mars 2026</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Articles secondaires empilés à droite -->
+      <div class="hero-side-stack">
+        <!-- Secondaire 1 -->
+        <article class="hero-side-card" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-001/', '_blank')">
+          <div class="side-card-image" style="background: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=300&q=80') center/cover;"></div>
+          <div class="side-card-info">
+            <span class="tag-category tag-category--high">URGENT</span>
+            <h4 class="side-title">Ivanti EPMM : Publication de scripts IOC pour détecter l'exploitation de deux failles</h4>
+            <div class="card-meta">
+              <span class="meta-author">Ivanti</span>
+              <span class="meta-date">12 fév. 2026</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondaire 2 -->
+        <article class="hero-side-card" onclick="window.open('https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-023/', '_blank')">
+          <div class="side-card-image" style="background: url('https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=300&q=80') center/cover;"></div>
+          <div class="side-card-info">
+            <span class="tag-category tag-category--medium">ALERTE</span>
+            <h4 class="side-title">Applications PostgreSQL : Des codes d'attaque SQL publics font rage en conditions réelles</h4>
+            <div class="card-meta">
+              <span class="meta-author">PostgreSQL</span>
+              <span class="meta-date">24 mai 2026</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondaire 3 -->
+        <article class="hero-side-card" onclick="window.open('https://www.ssi.gouv.fr/', '_blank')">
+          <div class="side-card-image" style="background: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=300&q=80') center/cover;"></div>
+          <div class="side-card-info">
+            <span class="tag-category tag-category--info">GUIDE ANSSI</span>
+            <h4 class="side-title">ANSSI-PA-114 : Nouveau guide pour la sécurisation du poste de travail multi-environnements</h4>
+            <div class="card-meta">
+              <span class="meta-author">ANSSI</span>
+              <span class="meta-date">Janvier 2026</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTENU PRINCIPAL (Grille Frandroid type Magazine) ══════ -->
+  <div class="fr-main-layout">
+    
+    <!-- Liste principale des articles de veille (Google News) -->
+    <main class="fr-feed-column">
+      <div class="feed-header-title">
+        <h3 class="section-title-line"><span>Flux d'actualités en direct</span></h3>
+        <div class="refresh-indicator" id="refresh-indicator">
+          <span class="indicator-dot"></span>
+          <span>Mis à jour en arrière-plan</span>
+        </div>
+      </div>
+
+      <div class="fr-articles-list" id="news-feed">
+        <!-- Injecté dynamiquement par app.js -->
+        <div class="loading-placeholder">
+          <div class="pulse-bar"></div>
+          <div class="pulse-bar" style="width: 75%"></div>
+          <div class="pulse-bar" style="width: 90%"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar d'accès rapide aux alertes critiques -->
+    <aside class="fr-sidebar" id="sidebar-alerts">
+      <div class="sidebar-header">
+        <h3>🚨 Centre d'alertes</h3>
+      </div>
+      
+      <div class="sidebar-stats">
+        <div class="stat-box">
+          <span class="stat-number" style="color: #ff3b30">2</span>
+          <span class="stat-label">Critiques</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number" style="color: #ff9500">4</span>
+          <span class="stat-label">Hautes</span>
+        </div>
+      </div>
+
+      <!-- Quick access alerts -->
+      <div class="sidebar-alerts-list">
+        <div class="sidebar-alert-item critical" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-004/', '_blank')">
+          <div class="alert-header">
+            <span class="severity-dot"></span>
+            <span class="alert-source">CERT-FR</span>
+            <span class="alert-time">31 mars</span>
+          </div>
+          <h4 class="alert-title">F5 BIG-IP APM — Exécution de code à distance (CVSS 9.8)</h4>
+        </div>
+
+        <div class="sidebar-alert-item critical" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-001/', '_blank')">
+          <div class="alert-header">
+            <span class="severity-dot"></span>
+            <span class="alert-source">Ivanti</span>
+            <span class="alert-time">30 jan.</span>
+          </div>
+          <h4 class="alert-title">Ivanti EPMM — Deux failles d'exécution de code (non authentifié)</h4>
+        </div>
+
+        <div class="sidebar-alert-item high" onclick="window.open('https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-023/', '_blank')">
+          <div class="alert-header">
+            <span class="severity-dot"></span>
+            <span class="alert-source">PostgreSQL</span>
+            <span class="alert-time">24 mai</span>
+          </div>
+          <h4 class="alert-title">Injection SQL sur applications PostgreSQL en conditions réelles</h4>
+        </div>
+
+        <div class="sidebar-alert-item high" onclick="window.open('https://www.cert.ssi.gouv.fr/actualite/CERTFR-2026-ACT-023/', '_blank')">
+          <div class="alert-header">
+            <span class="severity-dot"></span>
+            <span class="alert-source">SonicWall</span>
+            <span class="alert-time">21 mai</span>
+          </div>
+          <h4 class="alert-title">SonicWall GEN6 — Contournement d'authentification LDAP</h4>
+        </div>
+      </div>
+
+      <!-- ANSSI Regulatory reminder widget -->
+      <div class="sidebar-info-card">
+        <div class="info-card-header">🚨 Directive NIS2</div>
+        <p>Les incidents de sécurité critiques doivent être signalés sous <strong>24 heures</strong> à l'ANSSI.</p>
+        <a href="https://cert.ssi.gouv.fr/contact" target="_blank" class="info-link">Signaler un incident →</a>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ═══ PIED DE PAGE ════════════════════════════════════════════ -->
+  <footer class="fr-footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <span class="logo-badge">GHOST</span>
+        <span class="logo-text">cyber<span class="dot">.</span></span>
+      </div>
+      <p class="footer-info">Conçu et développé avec passion par <strong>Paul</strong> 🫧 · Inspiré de Frandroid</p>
+      <p class="footer-copyright">© 2026 Tech Secure Solutions. Tous droits réservés.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal / Quick access alerts list overlay -->
+<div class="quick-alerts-modal" id="quick-alerts-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>⚠️ Alertes de Sécurité Critiques</h3>
+      <button class="btn-close-modal" id="btn-close-modal">×</button>
+    </div>
+    <div class="modal-body">
+      <!-- Main quick alerts will be loaded here -->
+      <div class="modal-alert-item critical" onclick="window.open('https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbgn04985en_us', '_blank')">
+        <div class="badge-row">
+          <span class="modal-badge-critical">CRITIQUE</span>
+          <span class="modal-date">7 janvier 2026</span>
+        </div>
+        <h4>HPE OneView — Exécution de code à distance sans authentification (CVE-2025-37164)</h4>
+        <p>Exploitation active recensée par la CISA dans son catalogue KEV. Version v11.0 obligatoire.</p>
+      </div>
+
+      <div class="modal-alert-item critical" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-004/', '_blank')">
+        <div class="badge-row">
+          <span class="modal-badge-critical">CRITIQUE</span>
+          <span class="modal-date">31 mars 2026</span>
+        </div>
+        <h4>F5 BIG-IP APM — Exécution de code arbitraire à distance sans authentification (CVE-2025-53521)</h4>
+        <p>Vulnérabilité d'une sévérité de 9.8 avec exploitation confirmée par l'éditeur.</p>
+      </div>
+
+      <div class="modal-alert-item critical" onclick="window.open('https://www.cert.ssi.gouv.fr/alerte/CERTFR-2026-ALE-001/', '_blank')">
+        <div class="badge-row">
+          <span class="modal-badge-critical">CRITIQUE</span>
+          <span class="modal-date">30 janvier 2026</span>
+        </div>
+        <h4>Ivanti EPMM — Deux failles d'exécution de code (CVE-2026-1281 / CVE-2026-1340)</h4>
+        <p>Scripts de détection d'indicateurs de compromission (IOC) disponibles pour analyse.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

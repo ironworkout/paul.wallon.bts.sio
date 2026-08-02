@@ -1075,85 +1075,94 @@
             color: var(--accent-gold);
         }
 
-        /* Roulette Styles */
-        .roulette-container {
+        /* ==================== ROULETTE L3 ==================== */
+        .roulette-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
-            margin: 30px 0;
+            gap: 24px;
+            padding: 30px 0;
         }
 
-        .roulette-wheel {
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
+        .roulette-canvas-container {
             position: relative;
-            background: conic-gradient(from 0deg, var(--nav-l3-color) 0deg, #ff6b6b 45deg, var(--nav-l3-color) 90deg, #ff6b6b 135deg, var(--nav-l3-color) 180deg, #ff6b6b 225deg, var(--nav-l3-color) 270deg, #ff6b6b 315deg);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.3);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            width: 420px;
+            height: 420px;
         }
 
-        .roulette-wheel.spinning {
-            animation: none;
+        #roulette-canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(0,200,150,0.3), 0 0 80px rgba(0,0,0,0.5);
+            display: block;
         }
 
-        .roulette-pointer {
+        .roulette-pointer-arrow {
             position: absolute;
-            top: -20px;
+            top: -18px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid var(--accent-gold);
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 36px solid var(--accent-gold);
             z-index: 10;
-            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
         }
 
-        .roulette-clubs {
+        .roulette-center-hub {
             position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .roulette-club {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-origin: center;
-        }
-
-        .roulette-club img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: white;
-            padding: 3px;
+            background: radial-gradient(circle, #fff 0%, #ccc 100%);
+            box-shadow: 0 0 15px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
+            z-index: 5;
         }
 
-        .roulette-club span {
-            font-size: 0.65rem;
-            color: white;
-            text-shadow: 1px 1px 2px black;
-            font-weight: bold;
-            margin-top: 2px;
-            max-width: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .roulette-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .roulette-result {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-family: 'Oswald', sans-serif;
             font-weight: bold;
             color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-            min-height: 40px;
+            text-shadow: 0 0 12px var(--neon-green);
+            min-height: 44px;
+            text-align: center;
+            padding: 8px 20px;
+            border-radius: 10px;
+            background: rgba(0,200,150,0.08);
+            border: 1px solid rgba(0,200,150,0.2);
+        }
+
+        .roulette-result.winner {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            text-shadow: 0 0 15px var(--accent-gold);
+            animation: pulseWinner 0.6s ease-in-out 3;
+        }
+
+        @keyframes pulseWinner {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        /* Modal Ajouter Club L3 */
+        #add-club-l3-modal .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
         /* CDF Draw Styles */
@@ -2150,37 +2159,64 @@
                     <i class="fas fa-play"></i> Hymne L3
                 </button>
             </div>
+
+            <!-- Section Roulette -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Ligue 3 - Promotion</h2>
-                    <button class="btn btn-success" id="lancer-roulette-btn" disabled><i class="fas fa-dice"></i> Tirage
-                        Montée L3→L2</button>
+                    <h2 class="section-title"><i class="fas fa-dharmachakra" style="color:var(--nav-l3-color);"></i> Ligue 3 – Tirage Montée</h2>
+                    <button class="btn btn-success" id="lancer-roulette-btn"><i class="fas fa-redo-alt"></i> Réinitialiser Roulette</button>
                 </div>
-                <div class="roulette-container">
-                    <div class="roulette-wheel" id="roulette-wheel">
-                        <div class="roulette-pointer"></div>
-                        <div class="roulette-clubs" id="roulette-clubs"></div>
+                <div class="roulette-wrapper">
+                    <div class="roulette-canvas-container">
+                        <div class="roulette-pointer-arrow"></div>
+                        <canvas id="roulette-canvas" width="420" height="420"></canvas>
+                        <div class="roulette-center-hub"></div>
                     </div>
-                    <button class="btn btn-warning" id="spin-roulette-btn" disabled><i class="fas fa-sync-alt"></i>
-                        Lancer la Roulette</button>
-                    <div class="roulette-result" id="roulette-result"> Cliquez sur "Lancer" pour le tirage</div>
+                    <div class="roulette-controls">
+                        <button class="btn btn-warning" id="spin-roulette-btn"><i class="fas fa-sync-alt"></i> Lancer la Roulette</button>
+                    </div>
+                    <div class="roulette-result" id="roulette-result">Ajoutez des clubs et cliquez sur « Lancer »</div>
                 </div>
             </div>
+
+            <!-- Actions L3 -->
             <div class="section action-buttons">
-                <button class="sauvegarde-json-btn" id="sauvegarde-l3-btn" disabled><i class="fas fa-save"></i>
-                    Sauvegarder L3</button>
-                <button class="btn btn-warning swap-club-btn" id="swap-club-l3-btn" onclick="openSwapClubModal('l3')"><i
-                        class="fas fa-random"></i> Avant-Saison : Changer/Interchanger Club</button>
-                <button class="btn btn-warning" id="add-club-l3-btn" disabled><i class="fas fa-plus"></i> Ajouter Club
-                    L3</button>
+                <button class="sauvegarde-json-btn" id="sauvegarde-l3-btn" disabled><i class="fas fa-save"></i> Sauvegarder L3</button>
+                <button class="btn btn-warning swap-club-btn" id="swap-club-l3-btn" onclick="openSwapClubModal('l3')"><i class="fas fa-random"></i> Avant-Saison : Changer/Interchanger Club</button>
+                <button class="btn" id="add-club-l3-btn" style="background:var(--nav-l3-color);color:#fff;"><i class="fas fa-plus"></i> Ajouter Club L3</button>
             </div>
+
+            <!-- Grille des équipes L3 -->
             <div class="section" id="l3-teams-section">
                 <div class="section-header">
-                    <h2 class="section-title">Équipes L3</h2>
+                    <h2 class="section-title">Équipes L3 - Promotion</h2>
                 </div>
                 <div class="section-content">
                     <div class="teams-grid" id="l3-teams-grid"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajouter Club L3 -->
+    <div class="modal-overlay" id="add-club-l3-modal">
+        <div class="modal-content" style="max-width:480px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-plus-circle" style="color:var(--nav-l3-color);"></i> Ajouter un Club en L3</h3>
+                <button class="modal-close" id="close-add-club-l3-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">Nom du club *</label>
+                <input type="text" class="form-control" id="new-l3-club-name" placeholder="Ex: FC Plushies..."/>
+                <label class="form-label">Logo (depuis la base GitHub)</label>
+                <select class="form-control" id="new-l3-club-logo"></select>
+                <img id="new-l3-logo-preview" src="" alt="Aperçu" style="display:none;max-height:80px;margin-top:8px;border-radius:8px;"/>
+                <label class="form-label">Description (optionnelle)</label>
+                <input type="text" class="form-control" id="new-l3-club-desc" placeholder="Description du club..."/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="cancel-add-l3-btn" style="background:#555;color:#fff;">Annuler</button>
+                <button class="btn btn-success" id="confirm-add-l3-btn" disabled><i class="fas fa-plus"></i> Ajouter</button>
             </div>
         </div>
     </div>
@@ -2742,12 +2778,8 @@
 
             // Nouveaux boutons
             // (removed dead code: forEach on single element)
-            const rouletteBtn = document.getElementById('lancer-roulette-btn');
-            if (rouletteBtn) rouletteBtn.disabled = !isLoggedIn;
-            const spinRouletteBtn = document.getElementById('spin-roulette-btn');
-            if (spinRouletteBtn) spinRouletteBtn.disabled = !isLoggedIn;
-            const addClubL3Btn = document.getElementById('add-club-l3-btn');
-            if (addClubL3Btn) addClubL3Btn.disabled = !isLoggedIn;
+            // Roulette et ajout club L3 sont accessibles sans login
+            // (La montée vers L2 nécessitera le login au moment de la confirmation)
             const tirageCdfBtn = document.getElementById('tirage-cdf-btn');
             if (tirageCdfBtn) tirageCdfBtn.disabled = !isLoggedIn;
             const resetCdfBtn = document.getElementById('reset-cdf-btn');
@@ -3320,93 +3352,247 @@
             });
         });
 
-        // ==================== ROULETTE L3 ====================
-        function initRoulette() {
-            const container = document.getElementById('roulette-clubs');
-            const wheel = document.getElementById('roulette-wheel');
-            if (!container || !wheel) return;
+        // ==================== ROULETTE L3 (CANVAS) ====================
+        let rouletteCurrentRotation = 0;
+        let rouletteIsSpinning = false;
 
-            const clubs = leagueDataStore.l3.clubs;
-            if (!clubs || Object.keys(clubs).length < 2) {
-                container.innerHTML = '<p style="text-align:center; padding:50px;">Ajoutez au moins 2 clubs en L3 pour le tirage.</p>';
+        const ROULETTE_COLORS = [
+            '#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6',
+            '#1abc9c','#e67e22','#34495e','#e91e63','#00bcd4',
+            '#8bc34a','#ff5722','#673ab7','#009688','#ff9800'
+        ];
+
+        function drawRouletteCanvas() {
+            const canvas = document.getElementById('roulette-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+            const cx = W / 2;
+            const cy = H / 2;
+            const radius = W / 2 - 4;
+
+            ctx.clearRect(0, 0, W, H);
+
+            if (!rouletteClubs || rouletteClubs.length === 0) {
+                ctx.fillStyle = '#1a1a2e';
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#aaa';
+                ctx.font = 'bold 16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Aucun club en L3', cx, cy - 10);
+                ctx.fillText('Ajoutez des clubs pour jouer', cx, cy + 15);
                 return;
             }
 
-            rouletteClubs = Object.keys(clubs);
-            container.innerHTML = '';
-            const angleStep = 360 / rouletteClubs.length;
+            const n = rouletteClubs.length;
+            const sliceAngle = (2 * Math.PI) / n;
+            const clubs = leagueDataStore.l3.clubs;
 
-            rouletteClubs.forEach((clubName, index) => {
-                const clubEl = document.createElement('div');
-                clubEl.className = 'roulette-club';
-                const angle = index * angleStep;
-                const radius = 160;
-                const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
-                const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
-                clubEl.style.transform = `translate(${x}px, ${y}px)`;
-                clubEl.innerHTML = `<img src="${BASE_URL}${clubs[clubName].logo}" alt="${clubName}"><span>${clubName}</span>`;
-                clubEl.dataset.club = clubName;
-                container.appendChild(clubEl);
-            });
+            // Save context then rotate all drawing
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate((rouletteCurrentRotation * Math.PI) / 180);
 
-            wheel.style.transform = 'rotate(0deg)';
-            document.getElementById('roulette-result').textContent = 'Cliquez sur "Lancer" pour le tirage';
+            for (let i = 0; i < n; i++) {
+                const startAngle = i * sliceAngle - Math.PI / 2;
+                const endAngle = startAngle + sliceAngle;
+
+                // Segment
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = ROULETTE_COLORS[i % ROULETTE_COLORS.length];
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Label
+                ctx.save();
+                const midAngle = startAngle + sliceAngle / 2;
+                ctx.rotate(midAngle);
+                const textRadius = radius * 0.65;
+                ctx.fillStyle = '#fff';
+                ctx.font = `bold ${n > 10 ? 10 : 13}px Inter`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                // Wrap long names
+                const name = rouletteClubs[i];
+                const shortName = name.length > 12 ? name.slice(0, 11) + '…' : name;
+                ctx.fillText(shortName, textRadius, 0);
+
+                // Logo image if available
+                const logoSrc = clubs[name]?.logo;
+                if (logoSrc) {
+                    const img = new Image();
+                    img.onload = () => {
+                        // Re-draw after image loads — mark for repaint
+                        if (!rouletteIsSpinning) drawRouletteCanvas();
+                    };
+                    const src = (logoSrc.startsWith('data:') || logoSrc.startsWith('http')) ? logoSrc : `${BASE_URL}${logoSrc}`;
+                    if (rouletteImageCache[src]) {
+                        const cachedImg = rouletteImageCache[src];
+                        ctx.drawImage(cachedImg, textRadius + 12, -12, 22, 22);
+                    } else {
+                        img.src = src;
+                        img.onload = () => { rouletteImageCache[src] = img; drawRouletteCanvas(); };
+                    }
+                }
+                ctx.restore();
+            }
+
+            // Outer ring
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        let rouletteImageCache = {};
+
+        function initRoulette() {
+            const clubs = leagueDataStore.l3.clubs;
+            rouletteClubs = Object.keys(clubs || {});
+            rouletteCurrentRotation = 0;
             rouletteWinner = null;
+            rouletteIsSpinning = false;
+            rouletteImageCache = {};
+
+            const resultEl = document.getElementById('roulette-result');
+            if (resultEl) {
+                resultEl.className = 'roulette-result';
+                resultEl.textContent = rouletteClubs.length < 2
+                    ? 'Ajoutez au moins 2 clubs en L3 pour le tirage !'
+                    : 'Cliquez sur « Lancer » pour démarrer le tirage';
+            }
+            drawRouletteCanvas();
         }
 
         document.getElementById('spin-roulette-btn')?.addEventListener('click', () => {
+            if (rouletteIsSpinning) return;
             if (rouletteClubs.length < 2) {
                 showMessage("Il faut au moins 2 clubs en L3 !", 3000, true);
                 return;
             }
-            const wheel = document.getElementById('roulette-wheel');
             const resultEl = document.getElementById('roulette-result');
+            if (resultEl) { resultEl.className = 'roulette-result'; resultEl.textContent = '⏳ Tirage en cours...'; }
 
-            // Calculer la rotation finale
-            const extraSpins = 5 + Math.random() * 3; // 5-8 tours
-            const randomAngle = Math.random() * 360;
-            const totalRotation = extraSpins * 360 + randomAngle;
+            rouletteIsSpinning = true;
+            const spinDuration = 4500;
+            const extraSpins = 6 + Math.random() * 4;
+            const randomStopAngle = Math.random() * 360;
+            const totalDelta = extraSpins * 360 + randomStopAngle;
+            const targetRotation = rouletteCurrentRotation + totalDelta;
 
-            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            const startTime = performance.now();
+            const startRot = rouletteCurrentRotation;
 
-            // Déterminer le gagnant (le club sous le pointeur)
-            setTimeout(() => {
-                const pointerAngle = 0; // Le pointeur est en haut
-                const finalAngle = totalRotation % 360;
-                const winnerIndex = Math.floor(((360 - finalAngle + pointerAngle) % 360) / (360 / rouletteClubs.length)) % rouletteClubs.length;
-                rouletteWinner = rouletteClubs[winnerIndex];
+            function easeOut(t) {
+                return 1 - Math.pow(1 - t, 4);
+            }
 
-                resultEl.innerHTML = `<i class="fas fa-trophy" style="color: var(--accent-gold);"></i> Le club montant est : <strong>${rouletteWinner}</strong> !`;
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / spinDuration, 1);
+                rouletteCurrentRotation = startRot + totalDelta * easeOut(progress);
+                drawRouletteCanvas();
 
-                // Confirmer la montée vers L2
-                if (confirm(`Confirmer la montée de ${rouletteWinner} en Ligue 2 ?`)) {
-                    const clubData = leagueDataStore.l3.clubs[rouletteWinner];
-                    if (clubData) {
-                        leagueDataStore.l2.teams[rouletteWinner] = clubData;
-                        delete leagueDataStore.l3.clubs[rouletteWinner];
-                        saveDataToDrive('l2');
-                        saveDataToDrive('l3');
-                        populateAllLeaguesUI();
-                        showMessage(`${rouletteWinner} monte en L2 ! 🎉`, 3000);
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    rouletteCurrentRotation = targetRotation % 360;
+                    rouletteIsSpinning = false;
+                    drawRouletteCanvas();
+
+                    // Calculer le gagnant : le pointeur est en haut (270° dans le repère standard = -90°)
+                    // La roue tourne de `rouletteCurrentRotation` degrés
+                    // Le segment sous le pointeur est celui dont la position angulaire après rotation == 270°
+                    const n = rouletteClubs.length;
+                    const sliceDeg = 360 / n;
+                    // Chaque segment i commence à (i * sliceDeg - 90) deg AVANT rotation
+                    // Après rotation de R deg, il est à (i * sliceDeg - 90 + R) deg
+                    // On cherche i tel que le milieu du segment (i * sliceDeg + sliceDeg/2 - 90 + R) % 360 soit le plus proche de 270
+                    // Equivalent : pointer est à -R deg sur la roue non-tournée = (360 - R%360) % 360
+                    const pointerOnWheel = (360 - (rouletteCurrentRotation % 360) + 270) % 360;
+                    // Le segment qui contient cet angle (les segments commencent à -90 = 270 deg)
+                    // Segment i couvre [(i*sliceDeg + 270) % 360, ((i+1)*sliceDeg + 270) % 360]
+                    // Normaliser: angle dans [0,360) relatif au début (270 deg)
+                    const normalizedAngle = (pointerOnWheel - 270 + 360) % 360;
+                    const winnerIndex = Math.floor(normalizedAngle / sliceDeg) % n;
+                    rouletteWinner = rouletteClubs[winnerIndex];
+
+                    if (resultEl) {
+                        resultEl.className = 'roulette-result winner';
+                        resultEl.innerHTML = `<i class="fas fa-trophy"></i> Le club montant est : <strong>${rouletteWinner}</strong> !`;
                     }
+
+                    // Proposer la montée vers L2 (uniquement si connecté)
+                    setTimeout(() => {
+                        if (googleAccessToken && confirm(`Confirmer la montée de ${rouletteWinner} en Ligue 2 ?`)) {
+                            const clubData = leagueDataStore.l3.clubs[rouletteWinner];
+                            if (clubData) {
+                                leagueDataStore.l2.teams[rouletteWinner] = clubData;
+                                delete leagueDataStore.l3.clubs[rouletteWinner];
+                                saveDataToDrive('l2');
+                                saveDataToDrive('l3');
+                                populateAllLeaguesUI();
+                                initRoulette();
+                                showMessage(`🎉 ${rouletteWinner} monte en L2 !`, 3500);
+                            }
+                        } else if (!googleAccessToken) {
+                            showMessage(`🏆 ${rouletteWinner} est le club tiré ! (Connexion requise pour valider la montée)`, 4000);
+                        }
+                    }, 300);
                 }
-            }, 4200);
+            }
+
+            requestAnimationFrame(animate);
         });
 
         document.getElementById('lancer-roulette-btn')?.addEventListener('click', () => {
             initRoulette();
-            showMessage("Roulette initialisée ! Cliquez sur Lancer.", 2000);
+            showMessage("Roulette réinitialisée !", 1500);
         });
 
+        // Modal Ajouter Club L3
         document.getElementById('add-club-l3-btn')?.addEventListener('click', () => {
-            const name = prompt("Nom du nouveau club L3:");
-            if (!name || name.trim() === '') return;
-            const logo = prompt("Nom du fichier logo (ex: monclub.png):", "default_logo.png");
-            leagueDataStore.l3.clubs[name.trim()] = {
-                logo: logo || 'default_logo.png',
-                description: ''
-            };
+            populateGithubLogoSelect('new-l3-club-logo', 'new-l3-logo-preview');
+            const nameInput = document.getElementById('new-l3-club-name');
+            const descInput = document.getElementById('new-l3-club-desc');
+            const confirmBtn = document.getElementById('confirm-add-l3-btn');
+            if (nameInput) nameInput.value = '';
+            if (descInput) descInput.value = '';
+            if (confirmBtn) confirmBtn.disabled = true;
+            document.getElementById('add-club-l3-modal')?.classList.add('active');
+        });
+
+        document.getElementById('new-l3-club-name')?.addEventListener('input', function() {
+            const btn = document.getElementById('confirm-add-l3-btn');
+            if (btn) btn.disabled = this.value.trim() === '';
+        });
+
+        document.getElementById('close-add-club-l3-modal')?.addEventListener('click', () => {
+            document.getElementById('add-club-l3-modal')?.classList.remove('active');
+        });
+        document.getElementById('cancel-add-l3-btn')?.addEventListener('click', () => {
+            document.getElementById('add-club-l3-modal')?.classList.remove('active');
+        });
+
+        document.getElementById('confirm-add-l3-btn')?.addEventListener('click', () => {
+            const name = document.getElementById('new-l3-club-name')?.value.trim();
+            if (!name) return;
+            const logoSelect = document.getElementById('new-l3-club-logo');
+            const logo = (logoSelect && logoSelect.value) ? logoSelect.value : 'default_logo.png';
+            const desc = document.getElementById('new-l3-club-desc')?.value.trim() || '';
+            leagueDataStore.l3.clubs[name] = { logo, description: desc };
+            document.getElementById('add-club-l3-modal')?.classList.remove('active');
             initRoulette();
             populateTeamsGridDOM('l3-teams-grid', leagueDataStore.l3.clubs);
             if (googleAccessToken) saveDataToDrive('l3');

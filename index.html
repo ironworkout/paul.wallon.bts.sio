@@ -1972,6 +1972,8 @@
                 </div>
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l1-btn" disabled><i
                         class="fas fa-plus-circle"></i> Nouvelle Saison</button>
+                <button class="btn btn-warning swap-club-btn" id="swap-club-l1-btn" onclick="openSwapClubModal('l1')"><i
+                        class="fas fa-random"></i> Avant-Saison : Changer/Interchanger Club</button>
                 <button class="cloture-saison-btn" id="cloture-saison-l1-btn" disabled><i
                         class="fas fa-flag-checkered"></i> Clôturer Saison</button>
                 <button class="sauvegarde-json-btn" id="sauvegarde-l1-btn" disabled><i class="fas fa-save"></i>
@@ -2082,6 +2084,8 @@
                 </div>
                 <button class="nouvelle-saison-btn" id="nouvelle-saison-l2-btn" disabled><i
                         class="fas fa-plus-circle"></i> Nouvelle Saison</button>
+                <button class="btn btn-warning swap-club-btn" id="swap-club-l2-btn" onclick="openSwapClubModal('l2')"><i
+                        class="fas fa-random"></i> Avant-Saison : Changer/Interchanger Club</button>
                 <button class="cloture-saison-btn" id="cloture-saison-l2-btn" disabled><i
                         class="fas fa-flag-checkered"></i> Clôturer Saison</button>
                 <button class="sauvegarde-json-btn" id="sauvegarde-l2-btn" disabled><i class="fas fa-save"></i>
@@ -2165,6 +2169,8 @@
             <div class="section action-buttons">
                 <button class="sauvegarde-json-btn" id="sauvegarde-l3-btn" disabled><i class="fas fa-save"></i>
                     Sauvegarder L3</button>
+                <button class="btn btn-warning swap-club-btn" id="swap-club-l3-btn" onclick="openSwapClubModal('l3')"><i
+                        class="fas fa-random"></i> Avant-Saison : Changer/Interchanger Club</button>
                 <button class="btn btn-warning" id="add-club-l3-btn" disabled><i class="fas fa-plus"></i> Ajouter Club
                     L3</button>
             </div>
@@ -2331,9 +2337,17 @@
                         <input type="text" id="new-club-name" placeholder="Entrez le nom du club">
                     </div>
                     <div class="form-group">
-                        <label>Logo du Club :</label>
+                        <label><i class="fab fa-github"></i> Choisir un logo existant dans la BDD GitHub :</label>
+                        <select id="new-club-github-logo" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-upload"></i> Ou téléverser une nouvelle image de logo :</label>
                         <input type="file" id="new-club-logo" accept="image/*">
-                        <img id="logo-preview" class="logo-preview" src="" alt="Aperçu du logo">
+                        <div style="margin-top: 10px; display:flex; align-items:center; gap:15px;">
+                            <img id="logo-preview" class="logo-preview" src="" alt="Aperçu du logo" style="display:none; width:70px; height:70px; object-fit:contain; border-radius:8px; border:1px solid var(--primary-color); background:#fff; padding:3px;">
+                            <span id="github-deposit-note" style="font-size:0.85rem; color:#28a745; display:none;"><i class="fas fa-info-circle"></i> Nouveau logo sélectionné (déposé dans le projet GitHub).</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Description (optionnel) :</label>
@@ -2412,6 +2426,73 @@
         </div>
     </div>
 
+    <!-- MODAL CHANGER / INTERCHANGER CLUB (AVANT-SAISON) -->
+    <div class="modal-overlay" id="swap-club-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="swap-modal-title"><i class="fas fa-random"></i> Avant-Saison : Changer / Interchanger un Club</h2>
+                <button class="modal-close" id="close-swap-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="swap-league-select"><i class="fas fa-trophy"></i> Ligue :</label>
+                    <select id="swap-league-select" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;" onchange="onSwapLeagueChange()">
+                        <option value="l1">Ligue 1</option>
+                        <option value="l2">Ligue 2</option>
+                        <option value="l3">Ligue 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="swap-target-club"><i class="fas fa-shield-alt"></i> Club à modifier/interchanger :</label>
+                    <select id="swap-target-club" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;" onchange="onSwapTargetClubChange()">
+                    </select>
+                </div>
+                
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label><i class="fas fa-cogs"></i> Action à effectuer :</label>
+                    <div style="display:flex; gap:15px; margin-top:5px;">
+                        <label><input type="radio" name="swap-action-mode" value="edit" checked onchange="toggleSwapMode()"> Modifier Nom & Logo</label>
+                        <label><input type="radio" name="swap-action-mode" value="swap" onchange="toggleSwapMode()"> Permuter avec un autre club</label>
+                    </div>
+                </div>
+
+                <!-- SECTION MODIFIER NOM & LOGO -->
+                <div id="swap-mode-edit-section">
+                    <div class="form-group">
+                        <label for="swap-club-new-name">Nouveau nom du club :</label>
+                        <input type="text" id="swap-club-new-name" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;" placeholder="Nom du club">
+                    </div>
+                    <div class="form-group">
+                        <label for="swap-club-logo-catalog"><i class="fab fa-github"></i> Choisir un logo dans la BDD GitHub :</label>
+                        <select id="swap-club-logo-catalog" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px;">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="swap-club-file-logo"><i class="fas fa-upload"></i> Ou téléverser un nouveau logo (fichier) :</label>
+                        <input type="file" id="swap-club-file-logo" accept="image/*" style="width:100%; margin-bottom:10px;">
+                    </div>
+                    <div style="text-align:center; margin-top:10px;">
+                        <label>Aperçu du logo sélectionné :</label><br>
+                        <img id="swap-logo-preview" src="" alt="Aperçu Logo" style="width:80px; height:80px; object-fit:contain; border:2px solid var(--primary-color); border-radius:10px; background:#fff; padding:5px; margin-top:5px;">
+                    </div>
+                </div>
+
+                <!-- SECTION SWAP / PERMUTER -->
+                <div id="swap-mode-swap-section" style="display:none;">
+                    <div class="form-group">
+                        <label for="swap-other-club">Permuter avec le club (Base des clubs ou autres ligues) :</label>
+                        <select id="swap-other-club" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="cancel-swap-btn" style="background-color: #6c757d;">Annuler</button>
+                <button class="btn btn-warning" id="confirm-swap-btn" onclick="executeSwapOrChangeClub()"><i class="fas fa-check"></i> Valider les changements</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL IMPORT LOGO -->
     <div class="modal-overlay" id="logo-modal">
         <div class="modal-content">
@@ -2428,10 +2509,18 @@
                     <option value="l3">Ligue 3</option>
                 </select>
                 <div class="form-group">
-                    <label>Choisir un nouveau logo :</label>
+                    <label><i class="fab fa-github"></i> Choisir dans la BDD des logos GitHub :</label>
+                    <select id="modal-github-logo-select" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-upload"></i> Ou téléverser une nouvelle image de logo :</label>
                     <input type="file" id="modal-logo-input" accept="image/*">
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <label>Aperçu du logo :</label><br>
                     <img id="modal-logo-preview" class="logo-preview" src="" alt="Aperçu"
-                        style="display: none; width: 100px; height: 100px; margin-top: 10px;">
+                        style="display: none; width: 100px; height: 100px; object-fit: contain; margin-top: 10px; border: 2px solid var(--primary-color); border-radius: 10px; background: #fff; padding: 5px;">
                 </div>
             </div>
             <div class="modal-footer">
@@ -2453,6 +2542,61 @@
         const BASE_URL = "https://ironworkout.github.io/paul.wallon.bts.sio/";
         const GIS_CHECK_INTERVAL = 100;
         const GIS_MAX_RETRIES = 50;
+
+        const GITHUB_LOGOS_CATALOG = [
+            { filename: 'vafc.png', name: 'Valenciennes FC (vafc.png)' },
+            { filename: 'tfc.png', name: 'Toulours FC (tfc.png)' },
+            { filename: 'pfc.png', name: 'Peluche FC (pfc.png)' },
+            { filename: 'psg.png', name: 'PSG Peluches (psg.png)' },
+            { filename: 'oo.png', name: 'Olympique Ours (oo.png)' },
+            { filename: 'ascl.png', name: 'AS Carrotes (ascl.png)' },
+            { filename: 'asset.png', name: 'AS Saint-Ettours (asset.png)' },
+            { filename: 'patapouf.png', name: 'Patapouf FC (patapouf.png)' },
+            { filename: 'tours.png', name: 'Tours FC (tours.png)' },
+            { filename: 'usla.png', name: 'USL Abeille (usla.png)' },
+            { filename: 'clermandala.png', name: 'Clermandala 63 (clermandala.png)' },
+            { filename: 'fcp.png', name: 'FC Poussins (fcp.png)' },
+            { filename: 'pu.png', name: 'Peluches United (pu.png)' },
+            { filename: 'fcd.png', name: 'FC Doudou (fcd.png)' },
+            { filename: 'ofc.png', name: 'Oursons FC (ofc.png)' },
+            { filename: 'nsc.png', name: 'Nounours SC (nsc.png)' },
+            { filename: 'rabbit-goalkeeper.png', name: 'Lapin Gardien (rabbit-goalkeeper.png)' },
+            { filename: 'teddy-crowd.png', name: 'Supporters Ours (teddy-crowd.png)' },
+            { filename: 'teddy-shooting.png', name: 'Tir Ours (teddy-shooting.png)' },
+            { filename: 'tifo-peluches.png', name: 'Tifo Peluches (tifo-peluches.png)' },
+            { filename: 'peluches-celebration.png', name: 'Célébration (peluches-celebration.png)' },
+            { filename: 'peluches-bras-dessus-bras-dessous.png', name: 'Bras Dessus (peluches-bras-dessus-bras-dessous.png)' },
+            { filename: 'valenciennes-supporters.png', name: 'Supporters VAFC (valenciennes-supporters.png)' },
+            { filename: 'l2.png', name: 'Logo Ligue 2 (l2.png)' },
+            { filename: 'OIP.png', name: 'OIP (OIP.png)' },
+            { filename: 'default_logo.png', name: 'Logo par défaut (default_logo.png)' }
+        ];
+
+        function populateGithubLogoSelect(selectId, previewId) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Choisir un logo de la BDD GitHub --</option>';
+            GITHUB_LOGOS_CATALOG.forEach(logo => {
+                const option = document.createElement('option');
+                option.value = logo.filename;
+                option.textContent = logo.name;
+                select.appendChild(option);
+            });
+            if (previewId) {
+                select.removeEventListener('change', select._logoPreviewHandler);
+                select._logoPreviewHandler = () => {
+                    const val = select.value;
+                    const preview = document.getElementById(previewId);
+                    if (preview) {
+                        if (val) {
+                            preview.src = val.startsWith('data:') ? val : `${BASE_URL}${val}`;
+                            preview.style.display = 'block';
+                        }
+                    }
+                };
+                select.addEventListener('change', select._logoPreviewHandler);
+            }
+        }
 
         const initialLeagueData = {
             'l1': {
@@ -3788,15 +3932,204 @@
             showMessage(`${clubName} supprimé.`, 2000);
         };
 
-        // Gestion nouveau club
+        // ==================== CHANGER / INTERCHANGER CLUB (AVANT-SAISON) ====================
+        function openSwapClubModal(leagueId = 'l1') {
+            const modal = document.getElementById('swap-club-modal');
+            if (!modal) return;
+            document.getElementById('swap-league-select').value = leagueId;
+            populateGithubLogoSelect('swap-club-logo-catalog', 'swap-logo-preview');
+            onSwapLeagueChange();
+            modal.classList.add('active');
+        }
+        window.openSwapClubModal = openSwapClubModal;
+
+        function onSwapLeagueChange() {
+            const leagueId = document.getElementById('swap-league-select')?.value || 'l1';
+            const targetSelect = document.getElementById('swap-target-club');
+            if (!targetSelect) return;
+            targetSelect.innerHTML = '';
+
+            let teams = {};
+            if (leagueId === 'l3') {
+                teams = leagueDataStore.l3?.clubs || {};
+            } else {
+                teams = leagueDataStore[leagueId]?.teams || {};
+            }
+
+            Object.keys(teams).forEach(teamName => {
+                if (teamName === "BYE") return;
+                const opt = document.createElement('option');
+                opt.value = teamName;
+                opt.textContent = teamName;
+                targetSelect.appendChild(opt);
+            });
+
+            onSwapTargetClubChange();
+        }
+        window.onSwapLeagueChange = onSwapLeagueChange;
+
+        function onSwapTargetClubChange() {
+            const leagueId = document.getElementById('swap-league-select')?.value || 'l1';
+            const clubName = document.getElementById('swap-target-club')?.value;
+            if (!clubName) return;
+
+            let clubData = null;
+            if (leagueId === 'l3') clubData = leagueDataStore.l3?.clubs?.[clubName];
+            else clubData = leagueDataStore[leagueId]?.teams?.[clubName];
+
+            if (clubData) {
+                document.getElementById('swap-club-new-name').value = clubName;
+                const logoCatalogSelect = document.getElementById('swap-club-logo-catalog');
+                if (logoCatalogSelect) logoCatalogSelect.value = clubData.logo || '';
+                const preview = document.getElementById('swap-logo-preview');
+                if (preview) {
+                    const logo = clubData.logo || 'default_logo.png';
+                    preview.src = logo.startsWith('data:') ? logo : `${BASE_URL}${logo}`;
+                    preview.style.display = 'block';
+                }
+            }
+            populateSwapOtherClubsSelect();
+        }
+        window.onSwapTargetClubChange = onSwapTargetClubChange;
+
+        function toggleSwapMode() {
+            const mode = document.querySelector('input[name="swap-action-mode"]:checked')?.value;
+            const editSec = document.getElementById('swap-mode-edit-section');
+            const swapSec = document.getElementById('swap-mode-swap-section');
+            if (mode === 'swap') {
+                if (editSec) editSec.style.display = 'none';
+                if (swapSec) swapSec.style.display = 'block';
+            } else {
+                if (editSec) editSec.style.display = 'block';
+                if (swapSec) swapSec.style.display = 'none';
+            }
+        }
+        window.toggleSwapMode = toggleSwapMode;
+
+        function populateSwapOtherClubsSelect() {
+            const otherSelect = document.getElementById('swap-other-club');
+            if (!otherSelect) return;
+            otherSelect.innerHTML = '';
+
+            const currentLeagueId = document.getElementById('swap-league-select')?.value || 'l1';
+            const currentClub = document.getElementById('swap-target-club')?.value;
+
+            const allClubsList = [];
+            ['l1', 'l2', 'l3'].forEach(lid => {
+                const dict = lid === 'l3' ? leagueDataStore.l3?.clubs : leagueDataStore[lid]?.teams;
+                Object.keys(dict || {}).forEach(name => {
+                    if (name === 'BYE') return;
+                    if (lid === currentLeagueId && name === currentClub) return;
+                    allClubsList.push({ name, league: lid.toUpperCase(), data: dict[name] });
+                });
+            });
+
+            Object.keys(baseClubsData.clubs || {}).forEach(name => {
+                if (name === currentClub && currentLeagueId === 'base') return;
+                allClubsList.push({ name, league: 'BASE', data: baseClubsData.clubs[name] });
+            });
+
+            allClubsList.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = `${item.league}:${item.name}`;
+                opt.textContent = `[${item.league}] ${item.name}`;
+                otherSelect.appendChild(opt);
+            });
+        }
+
+        function executeSwapOrChangeClub() {
+            const leagueId = document.getElementById('swap-league-select')?.value;
+            const oldClubName = document.getElementById('swap-target-club')?.value;
+            const mode = document.querySelector('input[name="swap-action-mode"]:checked')?.value;
+
+            if (!oldClubName) {
+                showMessage("Veuillez sélectionner un club.", 3000, true);
+                return;
+            }
+
+            const leagueStore = leagueId === 'l3' ? leagueDataStore.l3.clubs : leagueDataStore[leagueId].teams;
+            if (!leagueStore || !leagueStore[oldClubName]) return;
+
+            if (mode === 'edit') {
+                const newName = document.getElementById('swap-club-new-name').value.trim();
+                const catalogLogo = document.getElementById('swap-club-logo-catalog').value;
+                const preview = document.getElementById('swap-logo-preview');
+
+                if (!newName) {
+                    showMessage("Le nom du club ne peut pas être vide.", 3000, true);
+                    return;
+                }
+
+                let logoToUse = catalogLogo || leagueStore[oldClubName].logo || 'default_logo.png';
+                if (preview && preview.src && preview.src.startsWith('data:')) {
+                    logoToUse = preview.src;
+                }
+
+                const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
+                delete leagueStore[oldClubName];
+                leagueStore[newName] = clubObj;
+
+                showMessage(`Avant-Saison : ${oldClubName} mis à jour (${newName}) !`, 3000);
+            } else if (mode === 'swap') {
+                const otherVal = document.getElementById('swap-other-club').value;
+                if (!otherVal) return;
+                const [otherLeague, otherClubName] = otherVal.split(':');
+
+                let otherStore = null;
+                if (otherLeague === 'BASE') otherStore = baseClubsData.clubs;
+                else if (otherLeague === 'L3') otherStore = leagueDataStore.l3.clubs;
+                else otherStore = leagueDataStore[otherLeague.toLowerCase()].teams;
+
+                if (!otherStore || !otherStore[otherClubName]) return;
+
+                const currentData = leagueStore[oldClubName];
+                const otherData = otherStore[otherClubName];
+
+                delete leagueStore[oldClubName];
+                delete otherStore[otherClubName];
+
+                leagueStore[otherClubName] = otherData;
+                otherStore[oldClubName] = currentData;
+
+                showMessage(`Interchange effectué entre ${oldClubName} et ${otherClubName} !`, 3000);
+            }
+
+            if (googleAccessToken) saveDataToDrive(leagueId);
+            saveBaseClubsToDrive();
+            populateAllLeaguesUI();
+            populateBaseClubs();
+            populatePalmaresTable();
+            document.getElementById('swap-club-modal')?.classList.remove('active');
+        }
+        window.executeSwapOrChangeClub = executeSwapOrChangeClub;
+
+        // Gestion nouveau club dans la Base
         document.getElementById('new-club-logo')?.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function (evt) {
                 const preview = document.getElementById('logo-preview');
-                preview.src = evt.target.result;
-                preview.style.display = 'block';
+                const note = document.getElementById('github-deposit-note');
+                if (preview) {
+                    preview.src = evt.target.result;
+                    preview.style.display = 'block';
+                }
+                if (note) note.style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('swap-club-file-logo')?.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                const preview = document.getElementById('swap-logo-preview');
+                if (preview) {
+                    preview.src = evt.target.result;
+                    preview.style.display = 'block';
+                }
             };
             reader.readAsDataURL(file);
         });
@@ -3804,8 +4137,10 @@
         document.getElementById('submit-new-club-btn')?.addEventListener('click', () => {
             const name = document.getElementById('new-club-name')?.value.trim();
             const desc = document.getElementById('new-club-desc')?.value.trim();
+            const githubLogoSelect = document.getElementById('new-club-github-logo');
             const logoInput = document.getElementById('new-club-logo');
             const logoPreview = document.getElementById('logo-preview');
+            const note = document.getElementById('github-deposit-note');
 
             if (!name) {
                 showMessage("Veuillez entrer un nom de club.", 3000, true);
@@ -3813,27 +4148,30 @@
             }
 
             let logoData = 'default_logo.png';
-            if (logoPreview.src && logoPreview.src !== window.location.href) {
-                logoData = logoPreview.src; // base64
+            if (githubLogoSelect && githubLogoSelect.value) {
+                logoData = githubLogoSelect.value;
+            } else if (logoPreview && logoPreview.src && logoPreview.src !== window.location.href && logoPreview.style.display !== 'none') {
+                logoData = logoPreview.src;
             }
 
             baseClubsData.clubs[name] = { logo: logoData, description: desc || '' };
 
             document.getElementById('new-club-name').value = '';
             document.getElementById('new-club-desc').value = '';
-            logoInput.value = '';
-            logoPreview.style.display = 'none';
-            logoPreview.src = '';
+            if (githubLogoSelect) githubLogoSelect.value = '';
+            if (logoInput) logoInput.value = '';
+            if (logoPreview) { logoPreview.style.display = 'none'; logoPreview.src = ''; }
+            if (note) note.style.display = 'none';
 
             saveBaseClubsToDrive();
             populateBaseClubs();
-            showMessage(`${name} ajouté à la base!`, 2000);
+            showMessage(`${name} ajouté à la base !`, 2000);
         });
 
         // Activer le bouton quand un nom est entré
         document.getElementById('new-club-name')?.addEventListener('input', function () {
             const btn = document.getElementById('submit-new-club-btn');
-            if (btn) btn.disabled = !googleAccessToken || this.value.trim() === '';
+            if (btn) btn.disabled = this.value.trim() === '';
         });
 
         // ==================== UTILITAIRES ====================
@@ -4124,6 +4462,14 @@
             updateAuthUI(false);
             initRoulette();
 
+            // Initialiser les dropdowns de logos GitHub
+            populateGithubLogoSelect('new-club-github-logo', 'logo-preview');
+            populateGithubLogoSelect('modal-github-logo-select', 'modal-logo-preview');
+
+            // Listeners pour swap-club-modal
+            document.getElementById('close-swap-modal')?.addEventListener('click', () => document.getElementById('swap-club-modal')?.classList.remove('active'));
+            document.getElementById('cancel-swap-btn')?.addEventListener('click', () => document.getElementById('swap-club-modal')?.classList.remove('active'));
+
             // ==================== LOGO MODAL ====================
             const logoModal = document.getElementById('logo-modal');
             const closeLogoModalBtn = document.getElementById('close-logo-modal');
@@ -4136,6 +4482,7 @@
                 logoChangeTarget = { league: leagueId, club: clubName };
                 document.getElementById('logo-modal-title').innerHTML = `<i class="fas fa-image"></i> Logo: ${clubName}`;
                 document.getElementById('logo-target-league').value = leagueId;
+                populateGithubLogoSelect('modal-github-logo-select', 'modal-logo-preview');
                 if (modalLogoInput) modalLogoInput.value = '';
                 if (modalLogoPreview) { modalLogoPreview.style.display = 'none'; modalLogoPreview.src = ''; }
                 if (logoModal) logoModal.classList.add('active');
@@ -4158,9 +4505,10 @@
             if (confirmLogoBtn) confirmLogoBtn.addEventListener('click', () => {
                 const { league, club } = logoChangeTarget;
                 if (!club || !league) return;
-                let newLogoData = modalLogoPreview?.src;
+                const modalSelect = document.getElementById('modal-github-logo-select');
+                let newLogoData = (modalSelect && modalSelect.value) ? modalSelect.value : modalLogoPreview?.src;
                 if (!newLogoData || newLogoData === window.location.href) {
-                    showMessage("Veuillez sélectionner une image.", 3000, true);
+                    showMessage("Veuillez sélectionner un logo ou une image.", 3000, true);
                     return;
                 }
                 const actualLeague = document.getElementById('logo-target-league')?.value || league;

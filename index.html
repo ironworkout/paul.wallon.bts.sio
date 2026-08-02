@@ -1912,7 +1912,7 @@
                     </li>
                     <li><a href="#" class="nav-link" data-tab-link="palmares"><i class="fas fa-medal"></i> Palmarès</a>
                     </li>
-                    <li><a href="#" class="nav-link" data-tab-link="base"><i class="fas fa-warehouse"></i> Base</a></li>
+
                 </ul>
             </nav>
             <div class="header-actions">
@@ -2356,45 +2356,7 @@
         </div>
     </div>
 
-    <!-- BASE CLUBS -->
-    <div class="tab-content base-content" id="base-content">
-        <div class="container">
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-warehouse"></i> Base des Clubs</h2>
-                    <button class="sauvegarde-json-btn" id="sauvegarde-base-btn" disabled><i class="fas fa-save"></i>
-                        Sauvegarder</button>
-                </div>
 
-                <div class="add-club-form">
-                    <h3><i class="fas fa-plus-circle"></i> Ajouter un Nouveau Club</h3>
-                    <div class="form-group">
-                        <label>Nom du Club :</label>
-                        <input type="text" id="new-club-name" placeholder="Entrez le nom du club">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fab fa-github"></i> Choisir un logo dans la BDD des logos GitHub du projet :</label>
-                        <select id="new-club-github-logo" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                        </select>
-                        <div style="margin-top: 10px; display:flex; align-items:center; gap:15px;">
-                            <img id="logo-preview" class="logo-preview" src="" alt="Aperçu du logo" style="display:none; width:70px; height:70px; object-fit:contain; border-radius:8px; border:1px solid var(--primary-color); background:#fff; padding:3px;">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description (optionnel) :</label>
-                        <input type="text" id="new-club-desc" placeholder="Brève description du club">
-                    </div>
-                    <button class="btn btn-success" id="submit-new-club-btn" disabled><i class="fas fa-plus"></i>
-                        Ajouter à la Base</button>
-                </div>
-
-                <div class="section-header">
-                    <h3>Clubs disponibles dans la Base</h3>
-                </div>
-                <div class="base-clubs-grid" id="base-clubs-grid"></div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -2422,7 +2384,7 @@
             <div class="footer-section">
                 <h3>Services</h3>
                 <ul>
-                    <li><a href="#" data-tab-link-footer="base">Base Clubs</a></li>
+
                     <li><a href="#" data-tab-link-footer="barrages">Barrages</a></li>
                     <li><a href="#">Presse</a></li>
                 </ul>
@@ -4328,6 +4290,7 @@
                 otherStore[oldClubName] = currentData;
 
                 // Appliquer l'interchange dans les matchs et classements de la saison choisie
+                // --- Ligue source (sélectionnée) ---
                 if (league && league.seasons) {
                     league.seasons.forEach(s => {
                         const isMatchSeason = (seasonChoice === 'all') ||
@@ -4354,7 +4317,40 @@
                     });
                 }
 
-                showMessage(`Interchange effectué entre ${oldClubName} et ${otherClubName} !`, 3000);
+                // --- Ligue destination (l'autre ligue) : renommer ses références ---
+                // Si l'autre ligue a des saisons (L1 ou L2), on met à jour ses fixtures/standings
+                // pour que l'ancien club de l'autre ligue (otherClubName) soit remplacé par oldClubName
+                const otherLeagueLc = otherLeague.toLowerCase();
+                const otherLeagueObj = (otherLeagueLc !== 'base' && otherLeagueLc !== 'l3')
+                    ? leagueDataStore[otherLeagueLc]
+                    : null;
+                if (otherLeagueObj && otherLeagueObj.seasons) {
+                    otherLeagueObj.seasons.forEach(s => {
+                        // On applique à toutes les saisons de l'autre ligue (cohérence cross-ligue)
+                        if (s.fixtures) {
+                            s.fixtures.forEach(round => {
+                                (round || []).forEach(match => {
+                                    // L'autre ligue avait otherClubName, il devient oldClubName
+                                    if (match.home === otherClubName) match.home = oldClubName;
+                                    else if (match.home === oldClubName) match.home = otherClubName;
+                                    if (match.away === otherClubName) match.away = oldClubName;
+                                    else if (match.away === oldClubName) match.away = otherClubName;
+                                });
+                            });
+                        }
+                        if (s.standings) {
+                            // Renommer otherClubName → oldClubName dans les standings de l'autre ligue
+                            if (s.standings[otherClubName] !== undefined) {
+                                s.standings[oldClubName] = s.standings[otherClubName];
+                                delete s.standings[otherClubName];
+                            }
+                        }
+                    });
+                    // Sauvegarder aussi l'autre ligue
+                    if (googleAccessToken) saveDataToDrive(otherLeagueLc);
+                }
+
+                showMessage(`Interchange effectué : ${oldClubName} ↔ ${otherClubName} !`, 3000);
             }
 
             if (googleAccessToken) saveDataToDrive(leagueId);

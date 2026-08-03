@@ -820,6 +820,11 @@
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.4), 0 0 15px var(--accent-ldc), 0 0 22px var(--accent-ldc);
         }
 
+        .trophy-cdf {
+            color: #ff9f43;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.4), 0 0 15px #ff9f43, 0 0 22px #ff9f43;
+        }
+
         .palmares-table .action-cell {
             text-align: center;
             padding-left: 15px;
@@ -2259,7 +2264,13 @@
                         style="color: var(--nav-ldc-color); text-shadow: 0 0 10px rgba(102,51,153,0.3);">
                         <i class="fas fa-trophy"></i> Ligue des Champions des Peluches
                     </h2>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <div class="season-selector-container">
+                            <label for="ldc-season-selector">Saison :</label>
+                            <select id="ldc-season-selector" data-comp="ldc"></select>
+                            <button class="delete-season-btn" id="delete-season-ldc-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <button class="nouvelle-saison-btn" id="nouvelle-saison-ldc-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison</button>
                         <button class="btn btn-success" id="tirage-ldc-btn" disabled><i class="fas fa-random"></i>
                             Nouveau Tirage LDC</button>
                         <button class="btn" id="reset-ldc-btn" disabled style="background: var(--neon-red);"><i
@@ -2288,7 +2299,13 @@
                         style="color: var(--nav-cdf-color); text-shadow: 0 0 10px rgba(23,162,184,0.3);">
                         <i class="fas fa-khanda"></i> Coupe de France des Peluches
                     </h2>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <div class="season-selector-container">
+                            <label for="cdf-season-selector">Saison :</label>
+                            <select id="cdf-season-selector" data-comp="cdf"></select>
+                            <button class="delete-season-btn" id="delete-season-cdf-btn" title="Supprimer la saison sélectionnée" disabled><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <button class="nouvelle-saison-btn" id="nouvelle-saison-cdf-btn" disabled><i class="fas fa-plus-circle"></i> Nouvelle Saison</button>
                         <button class="btn btn-info" id="tirage-cdf-btn" disabled
                             style="background-color: var(--nav-cdf-color);">
                             <i class="fas fa-random"></i> Nouveau Tirage CDF</button>
@@ -2375,6 +2392,7 @@
                                 <th>Ligue 1 <i class="fas fa-trophy trophy-l1"></i></th>
                                 <th>Ligue 2 <i class="fas fa-medal trophy-l2"></i></th>
                                 <th>LDC <i class="fas fa-shield-alt trophy-ldc"></i></th>
+                                <th>CDF <i class="fas fa-trophy trophy-cdf"></i></th>
                             </tr>
                         </thead>
                         <tbody id="palmares-table-body"></tbody>
@@ -2659,8 +2677,8 @@
 
         // Nouvelles données
         let baseClubsData = { clubs: {}, fileId: null, filename: 'peluches_base_clubs.json' };
-        let cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: null, filename: 'peluches_cdf_data.json' };
-        let ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: null, filename: 'peluches_ldc_data.json' };
+        let cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_cdf_data.json' };
+        let ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_ldc_data.json' };
         let barragesData = { ldc: { team1: null, team2: null, goals1: { home: null, away: null }, goals2: { home: null, away: null }, winner: null }, fileId: null, filename: 'peluches_barrages_data.json' };
 
         let googleAccessToken = null, tokenClient = null;
@@ -2761,9 +2779,14 @@
             clotureButtons.forEach(btn => btn.disabled = !isLoggedIn);
             sauvegardeButtons.forEach(btn => btn.disabled = !isLoggedIn);
             deleteSeasonButtons.forEach(btn => {
-                const leagueId = btn.id.split('-')[2];
-                const league = leagueDataStore[leagueId];
-                btn.disabled = !isLoggedIn || !league || !league.seasons || league.seasons.length <= 1;
+                const target = btn.id.split('-')[2];
+                if (target === 'ldc' || target === 'cdf') {
+                    const comp = target === 'ldc' ? ldcData : cdfData;
+                    btn.disabled = !isLoggedIn || !comp.seasons || comp.seasons.length <= 1;
+                } else {
+                    const league = leagueDataStore[target];
+                    btn.disabled = !isLoggedIn || !league || !league.seasons || league.seasons.length <= 1;
+                }
             });
 
             // Nouveaux boutons
@@ -2776,6 +2799,8 @@
             if (resetCdfBtn) resetCdfBtn.disabled = !isLoggedIn;
             const tirageLdcBtn = document.getElementById('tirage-ldc-btn');
             if (tirageLdcBtn) tirageLdcBtn.disabled = !isLoggedIn;
+            const resetLdcBtn = document.getElementById('reset-ldc-btn');
+            if (resetLdcBtn) resetLdcBtn.disabled = !isLoggedIn;
             const submitNewClubBtn = document.getElementById('submit-new-club-btn');
             if (submitNewClubBtn) submitNewClubBtn.disabled = !isLoggedIn;
         }
@@ -2879,26 +2904,28 @@
             }
 
             // Charger CDF
-            cdfData.fileId = await findOrCreateFile(cdfData.filename, JSON.stringify({ participants: [], currentRound: 0, rounds: {}, champion: null }));
+            cdfData.fileId = await findOrCreateFile(cdfData.filename, JSON.stringify({ seasons: [], active_season_id: null }));
             if (cdfData.fileId) {
                 const content = await readFileContent(cdfData.fileId);
                 if (content) {
                     try {
                         const parsed = JSON.parse(content);
-                        cdfData = { ...cdfData, ...parsed, fileId: cdfData.fileId, filename: 'peluches_cdf_data.json' };
-                    } catch (e) { cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: cdfData.fileId, filename: 'peluches_cdf_data.json' }; }
+                        cdfData = migrateCompData(parsed, cdfData, 'peluches_cdf_data.json');
+                        loadCompSeason('cdf', cdfData.active_season_id);
+                    } catch (e) { cdfData = resetCompData('cdf', cdfData.fileId); }
                 }
             }
 
             // Charger LDC
-            ldcData.fileId = await findOrCreateFile(ldcData.filename, JSON.stringify({ participants: [], currentRound: 0, rounds: {}, champion: null }));
+            ldcData.fileId = await findOrCreateFile(ldcData.filename, JSON.stringify({ seasons: [], active_season_id: null }));
             if (ldcData.fileId) {
                 const content = await readFileContent(ldcData.fileId);
                 if (content) {
                     try {
                         const parsed = JSON.parse(content);
-                        ldcData = { ...ldcData, ...parsed, fileId: ldcData.fileId, filename: 'peluches_ldc_data.json' };
-                    } catch (e) { ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: ldcData.fileId, filename: 'peluches_ldc_data.json' }; }
+                        ldcData = migrateCompData(parsed, ldcData, 'peluches_ldc_data.json');
+                        loadCompSeason('ldc', ldcData.active_season_id);
+                    } catch (e) { ldcData = resetCompData('ldc', ldcData.fileId); }
                 }
             }
 
@@ -2950,6 +2977,7 @@
 
         async function saveCDFToDrive() {
             if (!googleAccessToken) return;
+            syncActiveCompSeason('cdf');
             if (!cdfData.fileId) {
                 cdfData.fileId = await findOrCreateFile(cdfData.filename, JSON.stringify(cdfData));
             }
@@ -2961,6 +2989,7 @@
 
         async function saveLDCToDrive() {
             if (!googleAccessToken) return;
+            syncActiveCompSeason('ldc');
             if (!ldcData.fileId) {
                 ldcData.fileId = await findOrCreateFile(ldcData.filename, JSON.stringify(ldcData));
             }
@@ -3307,7 +3336,7 @@
                 // Ajouter automatiquement le trophée L1 au champion
                 const champion = standings[0];
                 if (champion) {
-                    if (!palmaresData[champion]) palmaresData[champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0 };
+                    if (!palmaresData[champion]) palmaresData[champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                     palmaresData[champion]['Ligue 1']++;
                     savePalmaresToDrive();
                     populatePalmaresTable();
@@ -3335,7 +3364,7 @@
                 // Ajouter automatiquement le trophée L2 au champion
                 const championL2 = standings[0];
                 if (championL2) {
-                    if (!palmaresData[championL2]) palmaresData[championL2] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0 };
+                    if (!palmaresData[championL2]) palmaresData[championL2] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                     palmaresData[championL2]['Ligue 2']++;
                     savePalmaresToDrive();
                     populatePalmaresTable();
@@ -3617,8 +3646,176 @@
             showMessage(`${clubName} supprimé de la L3.`, 2000);
         };
 
+        // ==================== SAISONS LDC / CDF (comme les ligues) ====================
+        function getCompData(compId) { return compId === 'ldc' ? ldcData : cdfData; }
+
+        function getActiveCompSeason(compId) {
+            const data = getCompData(compId);
+            return (data.seasons || []).find(s => s.season_id === data.active_season_id) || null;
+        }
+
+        // Synchronise l'état de travail (participants/rounds/champion) vers la saison active archivée
+        function syncActiveCompSeason(compId) {
+            const data = getCompData(compId);
+            const season = getActiveCompSeason(compId);
+            if (!season) return;
+            season.participants = data.participants;
+            season.currentRound = data.currentRound;
+            season.rounds = data.rounds;
+            season.champion = data.champion;
+            season._trophyAwarded = data._trophyAwarded || false;
+        }
+
+        // Charge une saison archivée dans l'état de travail
+        function loadCompSeason(compId, seasonId) {
+            const data = getCompData(compId);
+            const season = (data.seasons || []).find(s => s.season_id === seasonId);
+            if (!season) return;
+            data.active_season_id = seasonId;
+            data.participants = season.participants || [];
+            data.currentRound = season.currentRound || 0;
+            data.rounds = season.rounds || {};
+            data.champion = season.champion || null;
+            data._trophyAwarded = season._trophyAwarded || false;
+            if (compId === 'ldc') { ldcDrawnClubs = []; ldcCurrentMatch = []; }
+        }
+
+        function populateCompSeasonSelector(compId) {
+            const data = getCompData(compId);
+            const selector = document.getElementById(`${compId}-season-selector`);
+            const deleteBtn = document.getElementById(`delete-season-${compId}-btn`);
+            if (!selector) return;
+            selector.innerHTML = '';
+            const seasons = data.seasons || [];
+            if (seasons.length > 0) {
+                [...seasons].sort((a, b) => b.season_id - a.season_id).forEach(season => {
+                    const option = document.createElement('option');
+                    option.value = season.season_id;
+                    option.textContent = season.nom_saison || `Saison ${season.season_id}`;
+                    if (season.season_id === data.active_season_id) option.selected = true;
+                    selector.appendChild(option);
+                });
+                if (deleteBtn) deleteBtn.disabled = !googleAccessToken || seasons.length <= 1;
+            } else {
+                const option = document.createElement('option'); option.textContent = "Aucune saison";
+                selector.appendChild(option);
+                if (deleteBtn) deleteBtn.disabled = true;
+            }
+        }
+
+        function handleCompSeasonChange(event) {
+            const compId = event.target.dataset.comp;
+            const selectedSeasonId = parseInt(event.target.value);
+            const data = getCompData(compId);
+            if (!data || isNaN(selectedSeasonId)) return;
+            syncActiveCompSeason(compId); // archive la saison en cours
+            data.active_season_id = selectedSeasonId;
+            loadCompSeason(compId, selectedSeasonId);
+            if (compId === 'ldc') populateLDC(); else populateCDF();
+            populateCompSeasonSelector(compId);
+            if (googleAccessToken) saveCompToDrive(compId);
+        }
+
+        async function saveCompToDrive(compId) {
+            // saveLDCToDrive / saveCDFToDrive synchronisent déjà la saison active
+            if (compId === 'ldc') await saveLDCToDrive(); else await saveCDFToDrive();
+        }
+
+        function createNewCompSeason(compId) {
+            const data = getCompData(compId);
+            if (!data) return;
+            const seasons = Array.isArray(data.seasons) ? data.seasons : [];
+            // Si aucune saison archivée mais qu'un tirage est déjà en cours, on l'archive en Saison 1
+            if (seasons.length === 0 && (data.rounds && Object.keys(data.rounds).length > 0)) {
+                seasons.push({ season_id: 1, nom_saison: 'Saison 1', participants: data.participants || [], currentRound: data.currentRound || 0, rounds: data.rounds || {}, champion: data.champion || null, _trophyAwarded: data._trophyAwarded || false });
+            } else if (seasons.length > 0) {
+                syncActiveCompSeason(compId);
+            }
+            const newSeasonId = seasons.length > 0 ? Math.max(...seasons.map(s => s.season_id)) + 1 : 1;
+            const newSeasonName = `Saison ${newSeasonId}`;
+            seasons.push({ season_id: newSeasonId, nom_saison: newSeasonName, participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false });
+            data.seasons = seasons;
+            data.active_season_id = newSeasonId;
+            // Réinitialise l'état de travail pour la nouvelle saison
+            data.participants = []; data.currentRound = 0; data.rounds = {}; data.champion = null; data._trophyAwarded = false;
+            if (compId === 'ldc') { ldcDrawnClubs = []; ldcCurrentMatch = []; }
+            resetCompUI(compId);
+            populateCompSeasonSelector(compId);
+            if (compId === 'ldc') populateLDC(); else populateCDF();
+            showMessage(`Nouvelle saison "${newSeasonName}" créée pour ${compId.toUpperCase()} !`, 2500);
+            if (googleAccessToken) saveCompToDrive(compId);
+        }
+
+        function deleteCompSeason(compId) {
+            const data = getCompData(compId);
+            if (!data || !data.seasons || data.seasons.length <= 1) { showMessage("Impossible de supprimer la dernière saison.", 3000, true); return; }
+            const selector = document.getElementById(`${compId}-season-selector`);
+            const seasonIdToDelete = parseInt(selector.value);
+            const seasonNameToDelete = data.seasons.find(s => s.season_id === seasonIdToDelete)?.nom_saison || `Saison ${seasonIdToDelete}`;
+            if (confirm(`Êtes-vous sûr de vouloir supprimer la "${seasonNameToDelete}" ?`)) {
+                data.seasons = data.seasons.filter(s => s.season_id !== seasonIdToDelete);
+                if (data.active_season_id === seasonIdToDelete) {
+                    data.active_season_id = data.seasons[data.seasons.length - 1].season_id;
+                    loadCompSeason(compId, data.active_season_id);
+                    if (compId === 'ldc') populateLDC(); else populateCDF();
+                }
+                populateCompSeasonSelector(compId);
+                showMessage("Saison supprimée.", 2000);
+                if (googleAccessToken) saveCompToDrive(compId);
+            }
+        }
+
+        function resetCompUI(compId) {
+            const isLdc = compId === 'ldc';
+            const drawSection = document.getElementById(isLdc ? 'ldc-draw-section' : 'cdf-draw-section');
+            if (drawSection) drawSection.style.display = 'none';
+            const drawResults = document.getElementById(isLdc ? 'ldc-draw-results' : 'cdf-draw-results');
+            if (drawResults) drawResults.innerHTML = '';
+            const balls = document.getElementById(isLdc ? 'ldc-balls-container' : 'cdf-balls-container');
+            if (balls) balls.innerHTML = '';
+            const bracket = document.getElementById(isLdc ? 'ldc-bracket-container' : 'cdf-bracket-container');
+            if (bracket) bracket.innerHTML = '';
+            const celebration = document.getElementById(isLdc ? 'ldc-champion-celebration' : 'cdf-champion-celebration');
+            if (celebration) { celebration.style.display = 'none'; celebration.innerHTML = ''; }
+            const tirageBtn = document.getElementById(isLdc ? 'tirage-ldc-btn' : 'tirage-cdf-btn');
+            if (tirageBtn) tirageBtn.style.display = 'inline-block';
+        }
+
+        function migrateCompData(parsed, fallback, filename) {
+            // Nouveau format avec seasons[] (même vide)
+            if (Array.isArray(parsed.seasons)) {
+                const activeId = parsed.active_season_id || (parsed.seasons.length > 0 ? parsed.seasons[parsed.seasons.length - 1].season_id : null);
+                return { ...fallback, seasons: parsed.seasons, active_season_id: activeId, filename };
+            }
+            // Ancien format plat (participants/rounds/champion) → devient Saison 1
+            const legacySeason = {
+                season_id: 1, nom_saison: 'Saison 1',
+                participants: parsed.participants || [], currentRound: parsed.currentRound || 0,
+                rounds: parsed.rounds || {}, champion: parsed.champion || null,
+                _trophyAwarded: parsed._trophyAwarded || false
+            };
+            return { ...fallback, seasons: [legacySeason], active_season_id: 1, participants: legacySeason.participants, currentRound: legacySeason.currentRound, rounds: legacySeason.rounds, champion: legacySeason.champion, _trophyAwarded: legacySeason._trophyAwarded, filename };
+        }
+
+        function resetCompData(compId, fileId) {
+            const isLdc = compId === 'ldc';
+            return { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId, filename: isLdc ? 'peluches_ldc_data.json' : 'peluches_cdf_data.json' };
+        }
+
+        // Garantit qu'une saison active existe (crée la Saison 1 si besoin) et la charge dans l'état de travail
+        function ensureCompActiveSeason(compId) {
+            const data = getCompData(compId);
+            if (!Array.isArray(data.seasons) || data.seasons.length === 0) {
+                data.seasons = [{ season_id: 1, nom_saison: 'Saison 1', participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false }];
+                data.active_season_id = 1;
+            } else if (!data.seasons.some(s => s.season_id === data.active_season_id)) {
+                data.active_season_id = data.seasons[data.seasons.length - 1].season_id;
+            }
+            loadCompSeason(compId, data.active_season_id);
+        }
+
         // ==================== CDF ====================
-        // 16 équipes : 8èmes (8 matchs) -> Quarts (4) -> Demies (2) -> Finale (1)
+        // 12 équipes réelles (L1+L2, sans BYE) : 8èmes (6 matchs) -> Quarts (3) -> Demies triangulaires (3) -> Finale (1)
         const CDF_ROUND_NAMES = ['8èmes', 'Quarts', 'Demies', 'Finale'];
         const CDF_FINAL_ROUND = CDF_ROUND_NAMES.length - 1;
 
@@ -3628,23 +3825,27 @@
 
             if (!drawSection) return;
 
+            // S'assurer qu'une saison active existe avant de tirer
+            ensureCompActiveSeason('cdf');
+
             // Réinitialiser l'état (si un tirage précédent était en cours)
             document.getElementById('tirage-cdf-btn').style.display = 'none';
             document.getElementById('cdf-bracket-container').innerHTML = '';
             const celebrationDiv = document.getElementById('cdf-champion-celebration');
             if (celebrationDiv) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
 
-            // La CDF ne concerne que les clubs de L1 et L2 (pas de L3)
+            // La CDF ne concerne que les clubs de L1 et L2 (pas de L3) : 12 clubs réels, sans fictifs
             const l1Teams = Object.keys(leagueDataStore.l1.teams || {});
             const l2Teams = Object.keys(leagueDataStore.l2.teams || {});
 
-            cdfData.participants = [...l1Teams.slice(0, 8), ...l2Teams.slice(0, 8)];
+            cdfData.participants = [...l1Teams, ...l2Teams].slice(0, 12);
             cdfData.currentRound = 0;
             cdfData.rounds = {};
             cdfData.champion = null;
+            cdfData._trophyAwarded = false;
 
-            if (l1Teams.length + l2Teams.length > 16) {
-                showMessage(`${l1Teams.length + l2Teams.length} clubs trouvés en L1 + L2, seuls 16 participent à la CDF.`, 3500);
+            if (l1Teams.length + l2Teams.length > 12) {
+                showMessage(`${l1Teams.length + l2Teams.length} clubs trouvés en L1 + L2, seuls 12 participent à la CDF.`, 3500);
             }
 
             if (cdfData.participants.length < 2) {
@@ -3653,15 +3854,15 @@
                 return;
             }
 
-            // Compléter avec des BYE jusqu'à 16 équipes si besoin
-            if (cdfData.participants.length < 16) {
+            // Compléter avec des BYE jusqu'à 12 équipes si besoin (cas où L1+L2 < 12 clubs)
+            if (cdfData.participants.length < 12) {
                 let byeCounter = 1;
-                while (cdfData.participants.length < 16) {
+                while (cdfData.participants.length < 12) {
                     cdfData.participants.push(`BYE ${byeCounter++}`);
                 }
             }
 
-            // TIRAGE AU SORT 100% AUTOMATIQUE : mélange puis appariement direct 2 à 2
+            // TIRAGE AU SORT 100% AUTOMATIQUE : mélange puis appariement direct 2 à 2 (6 matchs de 8èmes)
             const shuffled = [...cdfData.participants].sort(() => Math.random() - 0.5);
             cdfData.rounds[0] = [];
 
@@ -3693,6 +3894,7 @@
             resultsDiv.innerHTML = drawHtml;
             drawSection.style.display = 'flex';
 
+            populateCompSeasonSelector('cdf');
             saveCDFToDrive();
             renderCDFBracket();
         }
@@ -3742,6 +3944,14 @@
             if (cdfData.rounds[finalRoundIdx] && cdfData.rounds[finalRoundIdx][0] && cdfData.rounds[finalRoundIdx][0].winner) {
                 cdfData.champion = cdfData.rounds[finalRoundIdx][0].winner;
                 html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;">🏆 Champion CDF : ${cdfData.champion}</span></div>`;
+                // Auto-ajouter le trophée CDF au palmarès (une seule fois par saison)
+                if (!palmaresData[cdfData.champion]) palmaresData[cdfData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+                if (!cdfData._trophyAwarded) {
+                    palmaresData[cdfData.champion]['CDF']++;
+                    cdfData._trophyAwarded = true;
+                    savePalmaresToDrive();
+                    populatePalmaresTable();
+                }
                 const celebrationDiv = document.getElementById('cdf-champion-celebration');
                 if (celebrationDiv) {
                     celebrationDiv.style.display = 'block';
@@ -3764,27 +3974,29 @@
             const match = cdfData.rounds[round][matchIdx];
             match.winner = winner;
 
-            // Le vainqueur se qualifie pour le tour suivant, sauf après la finale
-            if (round < CDF_FINAL_ROUND) {
-                const nextRound = round + 1;
+            if (round === 0) {
+                // 8èmes (6 matchs) -> Quarts (3 matchs) : appariement standard 2 par 2
+                const nextRound = 1;
                 const nextMatchIdx = Math.floor(matchIdx / 2);
                 const isFirstOfPair = matchIdx % 2 === 0;
 
                 if (!cdfData.rounds[nextRound]) cdfData.rounds[nextRound] = [];
-
                 if (!cdfData.rounds[nextRound][nextMatchIdx]) {
                     cdfData.rounds[nextRound][nextMatchIdx] = { team1: null, team2: null, score1: null, score2: null };
                 }
-
-                if (isFirstOfPair) {
-                    cdfData.rounds[nextRound][nextMatchIdx].team1 = winner;
-                } else {
-                    cdfData.rounds[nextRound][nextMatchIdx].team2 = winner;
-                }
+                if (isFirstOfPair) cdfData.rounds[nextRound][nextMatchIdx].team1 = winner;
+                else cdfData.rounds[nextRound][nextMatchIdx].team2 = winner;
 
                 // Si le match du tour suivant est désormais complet avec un BYE, le résoudre en cascade
                 resolveCDFByeMatch(nextRound, nextMatchIdx);
+            } else if (round === 1) {
+                // Quarts (3 matchs) -> Demies triangulaires : attendre les 3 vainqueurs
+                buildCDFDemies();
+            } else if (round === 2) {
+                // Demies triangulaires : les 3 matchs joués -> classement par buts pour la finale
+                resolveCDFDemies();
             }
+            // Finale (round 3) : champion déterminé dans renderCDFBracket
 
             renderCDFBracket();
         }
@@ -3798,6 +4010,41 @@
             // Si les deux équipes sont des BYE, l'une d'elles passe (cas extrême)
             const realTeam = isByeTeam(match.team1) ? match.team2 : match.team1;
             advanceCDFWinner(round, matchIdx, realTeam);
+        }
+
+        // Demies triangulaires : les 3 vainqueurs des quarts se rencontrent tous (A-B, A-C, B-C)
+        function buildCDFDemies() {
+            const quarters = cdfData.rounds[1];
+            if (!quarters || quarters.length < 3) return;
+            const winners = quarters.slice(0, 3).map(q => q && q.winner);
+            if (!winners.every(w => w)) return; // pas encore les 3 vainqueurs
+            if (cdfData.rounds[2] && cdfData.rounds[2].length === 3) return; // déjà construit
+
+            const [A, B, C] = winners;
+            cdfData.rounds[2] = [
+                { team1: A, team2: B, score1: null, score2: null },
+                { team1: A, team2: C, score1: null, score2: null },
+                { team1: B, team2: C, score1: null, score2: null }
+            ];
+        }
+
+        // Les 2 équipes avec le plus de buts sur l'ensemble des demies vont en finale
+        function resolveCDFDemies() {
+            const demis = cdfData.rounds[2];
+            if (!demis || demis.length < 3) return;
+            if (!demis.every(m => m && m.team1 && m.team2 && m.score1 !== null && m.score2 !== null)) return;
+
+            const goals = {};
+            demis.forEach(m => {
+                goals[m.team1] = (goals[m.team1] || 0) + m.score1;
+                goals[m.team2] = (goals[m.team2] || 0) + m.score2;
+            });
+
+            // Tri par buts marqués (décroissant), départage aléatoire en cas d'égalité
+            const ranked = Object.entries(goals).sort((a, b) => b[1] - a[1] || Math.random() - 0.5).map(([t]) => t);
+            if (ranked.length < 2) return;
+
+            cdfData.rounds[3] = [{ team1: ranked[0], team2: ranked[1], score1: null, score2: null }];
         }
 
         window.updateCDFScore = function (round, matchIdx, goalNum, value) {
@@ -3833,23 +4080,36 @@
         });
 
         document.getElementById('reset-cdf-btn')?.addEventListener('click', () => {
-            if (!confirm("Reset toute la CDF?")) return;
-            cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: cdfData.fileId, filename: 'peluches_cdf_data.json' };
-            document.getElementById('cdf-draw-section').style.display = 'none';
-            document.getElementById('cdf-draw-results').innerHTML = '';
-            document.getElementById('cdf-bracket-container').innerHTML = '';
-            const celebrationDiv = document.getElementById('cdf-champion-celebration');
-            if (celebrationDiv) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
-            document.getElementById('tirage-cdf-btn').style.display = 'inline-block';
+            if (!confirm("Reset la saison CDF actuelle ?")) return;
+            // Réinitialise la saison active (toutes les saisons restent conservées)
+            const active = getActiveCompSeason('cdf');
+            if (active) { active.participants = []; active.currentRound = 0; active.rounds = {}; active.champion = null; active._trophyAwarded = false; }
+            cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: cdfData.seasons, active_season_id: cdfData.active_season_id, fileId: cdfData.fileId, filename: 'peluches_cdf_data.json' };
+            resetCompUI('cdf');
+            populateCompSeasonSelector('cdf');
             saveCDFToDrive();
             showMessage("CDF réinitialisée.", 2000);
         });
 
+        document.getElementById('reset-ldc-btn')?.addEventListener('click', () => {
+            if (!confirm("Reset la saison LDC actuelle ?")) return;
+            const active = getActiveCompSeason('ldc');
+            if (active) { active.participants = []; active.currentRound = 0; active.rounds = {}; active.champion = null; active._trophyAwarded = false; }
+            ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: ldcData.seasons, active_season_id: ldcData.active_season_id, fileId: ldcData.fileId, filename: 'peluches_ldc_data.json' };
+            resetCompUI('ldc');
+            populateCompSeasonSelector('ldc');
+            saveLDCToDrive();
+            showMessage("LDC réinitialisée.", 2000);
+        });
+
         function populateCDF() {
+            populateCompSeasonSelector('cdf');
+            const drawSection = document.getElementById('cdf-draw-section');
+            if (drawSection) drawSection.style.display = 'none';
             if (cdfData.rounds && Object.keys(cdfData.rounds).length > 0) {
                 renderCDFBracket();
             }
-            // Le bouton Tirage reste visible si le tirage n'est pas terminé (8 matchs en 8èmes)
+            // Le bouton Tirage reste visible si le tirage n'est pas terminé (6 matchs en 8èmes)
             const expectedMatches = Math.floor((cdfData.participants.length || 16) / 2);
             const drawComplete = !!(cdfData.rounds[0] && cdfData.rounds[0].filter(Boolean).length >= expectedMatches);
             document.getElementById('tirage-cdf-btn').style.display = drawComplete ? 'none' : 'inline-block';
@@ -3863,6 +4123,11 @@
 
             if (!container || !ballsContainer) return;
 
+            // S'assurer qu'une saison active existe avant de tirer
+            ensureCompActiveSeason('ldc');
+            ldcDrawnClubs = []; ldcCurrentMatch = [];
+            populateCompSeasonSelector('ldc');
+
             // LDC: tous les clubs de L1 et L2
             const l1Teams = Object.keys(leagueDataStore.l1.teams || {});
             const l2Teams = Object.keys(leagueDataStore.l2.teams || {});
@@ -3871,6 +4136,7 @@
             ldcData.currentRound = 0;
             ldcData.rounds = {};
             ldcData.champion = null;
+            ldcData._trophyAwarded = false;
 
             if (ldcData.participants.length < 8) {
                 showMessage(`Il faut au moins 8 clubs pour la LDC. Actuellement: ${ldcData.participants.length}`, 4000, true);
@@ -3972,7 +4238,7 @@
                 ldcData.champion = ldcData.rounds[2][0].winner;
                 html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;">🏆 Champion LDC : ${ldcData.champion}</span></div>`;
                 // Auto-ajouter trophée LDC
-                if (!palmaresData[ldcData.champion]) palmaresData[ldcData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0 };
+                if (!palmaresData[ldcData.champion]) palmaresData[ldcData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!ldcData._trophyAwarded) {
                     palmaresData[ldcData.champion]['LDC']++;
                     ldcData._trophyAwarded = true;
@@ -4025,9 +4291,14 @@
         });
 
         function populateLDC() {
+            populateCompSeasonSelector('ldc');
+            const drawSection = document.getElementById('ldc-draw-section');
+            if (drawSection) drawSection.style.display = 'none';
             if (ldcData.rounds && Object.keys(ldcData.rounds).length > 0) {
                 renderLDCBracket();
             }
+            const celebrationDiv = document.getElementById('ldc-champion-celebration');
+            if (celebrationDiv && !ldcData.champion) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
             document.getElementById('tirage-ldc-btn').style.display = ldcData.rounds[0] ? 'none' : 'inline-block';
         }
 
@@ -4524,12 +4795,13 @@
 
             Object.keys(allTeamsInStore).sort().forEach(teamName => {
                 if (teamName === "BYE") return;
-                const teamGlobalPalmares = palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
+                const teamGlobalPalmares = palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
                 const row = document.createElement('tr');
 
                 let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('');
                 let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
                 let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('');
+                let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<i class="fas fa-trophy trophy-cdf"></i>').join('');
 
                 row.innerHTML = `
                     <td class="team-info text-left"><img src="${getClubLogo(teamName)}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
@@ -4554,6 +4826,13 @@
                             <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'LDC', false)"><i class="fas fa-minus"></i></button>
                         </div>
                     </td>
+                    <td class="trophy-cell">
+                        ${cdfTrophiesHTML || '-'}
+                        <div class="action-cell">
+                            <button class="add-trophy" onclick="modifyPalmares('${teamName}', 'CDF', true)"><i class="fas fa-plus"></i></button>
+                            <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'CDF', false)"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -4561,7 +4840,7 @@
 
         window.modifyPalmares = function (teamName, trophyType, isAdding) {
             if (!googleAccessToken) { showMessage("Connectez-vous pour modifier le palmarès.", 3000, true); return; }
-            if (!palmaresData[teamName]) palmaresData[teamName] = { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0 };
+            if (!palmaresData[teamName]) palmaresData[teamName] = { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
             if (palmaresData[teamName][trophyType] === undefined) palmaresData[teamName][trophyType] = 0;
 
             if (isAdding) palmaresData[teamName][trophyType]++;
@@ -4731,8 +5010,12 @@
 
         // ==================== EVENT LISTENERS BOUTONS ====================
         document.querySelectorAll('.nouvelle-saison-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2];
-            btn.addEventListener('click', () => createNewSeason(leagueId));
+            const target = btn.id.split('-')[2];
+            if (target === 'ldc' || target === 'cdf') {
+                btn.addEventListener('click', () => createNewCompSeason(target));
+            } else {
+                btn.addEventListener('click', () => createNewSeason(target));
+            }
         });
         document.querySelectorAll('.sauvegarde-json-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -4748,11 +5031,19 @@
             });
         });
         document.querySelectorAll('.delete-season-btn').forEach(btn => {
-            const leagueId = btn.id.split('-')[2];
-            btn.addEventListener('click', () => deleteSelectedSeason(leagueId));
+            const target = btn.id.split('-')[2];
+            if (target === 'ldc' || target === 'cdf') {
+                btn.addEventListener('click', () => deleteCompSeason(target));
+            } else {
+                btn.addEventListener('click', () => deleteSelectedSeason(target));
+            }
         });
         document.querySelectorAll('.season-selector-container select').forEach(selector => {
-            selector.addEventListener('change', handleSeasonChange);
+            if (selector.dataset.comp) {
+                selector.addEventListener('change', handleCompSeasonChange);
+            } else {
+                selector.addEventListener('change', handleSeasonChange);
+            }
         });
 
         document.querySelectorAll('a[data-tab-link-footer]').forEach(link => {

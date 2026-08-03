@@ -686,6 +686,35 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+        }
+
+        .team-card .delete-club-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            background-color: rgba(255, 49, 49, 0.15);
+            color: var(--neon-red);
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            z-index: 2;
+            opacity: 0.75;
+        }
+
+        .team-card .delete-club-btn:hover {
+            background-color: var(--neon-red);
+            color: #fff;
+            transform: scale(1.15);
+            opacity: 1;
+            box-shadow: 0 0 10px rgba(255, 49, 49, 0.5);
         }
 
         .team-card:hover {
@@ -2270,9 +2299,8 @@
                     </div>
                 </div>
                 <div class="cdf-draw-container" id="cdf-draw-section" style="display: none;">
-                    <p style="font-size: 1.2rem; margin-bottom: 15px;">Tirez les clubs un par un pour former les matchs
-                        :</p>
-                    <div class="cdf-balls-container" id="cdf-balls-container"></div>
+                    <p style="font-size: 1.2rem; margin-bottom: 15px;">Le tirage au sort est automatique : cliquez sur «
+                        Nouveau Tirage CDF » pour mélanger les clubs de L1 et L2.</p>
                     <div id="cdf-draw-results" style="margin-top: 20px;"></div>
                 </div>
                 <div id="cdf-bracket-container"></div>
@@ -3063,6 +3091,23 @@
                 const logoSrc = (logoFilename.startsWith('data:') || logoFilename.startsWith('http')) ? logoFilename : `${BASE_URL}${logoFilename}`;
                 teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
                 
+                // Poubelle de suppression uniquement pour les clubs de L3
+                if (teamsGridId.includes('l3')) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-club-btn';
+                    deleteBtn.title = `Supprimer ${teamName} de la L3`;
+                    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        window.deleteClubFromL3(teamName);
+                    });
+                    deleteBtn.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                    teamCard.appendChild(deleteBtn);
+                }
+                
                 teamCard.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     let leagueId = 'l1';
@@ -3561,105 +3606,109 @@
             showMessage(`${name} ajouté en L3 !`, 2000);
         });
 
+        // Supprimer un club de la L3 (bouton poubelle sur sa carte)
+        window.deleteClubFromL3 = function (clubName) {
+            if (!leagueDataStore.l3.clubs[clubName]) return;
+            if (!confirm(`Supprimer le club "${clubName}" de la L3 ?`)) return;
+            delete leagueDataStore.l3.clubs[clubName];
+            initRoulette();
+            populateTeamsGridDOM('l3-teams-grid', leagueDataStore.l3.clubs);
+            if (googleAccessToken) saveDataToDrive('l3');
+            showMessage(`${clubName} supprimé de la L3.`, 2000);
+        };
+
         // ==================== CDF ====================
+        // 16 équipes : 8èmes (8 matchs) -> Quarts (4) -> Demies (2) -> Finale (1)
+        const CDF_ROUND_NAMES = ['8èmes', 'Quarts', 'Demies', 'Finale'];
+        const CDF_FINAL_ROUND = CDF_ROUND_NAMES.length - 1;
+
         function startCDFDraw() {
-            const container = document.getElementById('cdf-draw-section');
-            const ballsContainer = document.getElementById('cdf-balls-container');
+            const drawSection = document.getElementById('cdf-draw-section');
             const resultsDiv = document.getElementById('cdf-draw-results');
 
-            if (!container || !ballsContainer) return;
+            if (!drawSection) return;
 
-            // Récupérer les clubs de L1, L2, L3
+            // Réinitialiser l'état (si un tirage précédent était en cours)
+            document.getElementById('tirage-cdf-btn').style.display = 'none';
+            document.getElementById('cdf-bracket-container').innerHTML = '';
+            const celebrationDiv = document.getElementById('cdf-champion-celebration');
+            if (celebrationDiv) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
+
+            // La CDF ne concerne que les clubs de L1 et L2 (pas de L3)
             const l1Teams = Object.keys(leagueDataStore.l1.teams || {});
             const l2Teams = Object.keys(leagueDataStore.l2.teams || {});
-            const l3Teams = Object.keys(leagueDataStore.l3.clubs || {});
 
-            cdfData.participants = [...l1Teams.slice(0, 6), ...l2Teams.slice(0, 6), ...l3Teams.slice(0, 4)];
+            cdfData.participants = [...l1Teams.slice(0, 8), ...l2Teams.slice(0, 8)];
             cdfData.currentRound = 0;
             cdfData.rounds = {};
             cdfData.champion = null;
 
+            if (l1Teams.length + l2Teams.length > 16) {
+                showMessage(`${l1Teams.length + l2Teams.length} clubs trouvés en L1 + L2, seuls 16 participent à la CDF.`, 3500);
+            }
+
+            if (cdfData.participants.length < 2) {
+                showMessage("Pas assez de clubs (L1 + L2) pour la CDF.", 4000, true);
+                document.getElementById('tirage-cdf-btn').style.display = 'inline-block';
+                return;
+            }
+
+            // Compléter avec des BYE jusqu'à 16 équipes si besoin
             if (cdfData.participants.length < 16) {
-                showMessage(`${cdfData.participants.length} clubs trouvés. Complétion avec des clubs de la base/BYE...`, 3000);
-                // Compléter avec des clubs de la base
-                const baseClubNames = Object.keys(baseClubsData.clubs || {});
-                for (const bc of baseClubNames) {
-                    if (cdfData.participants.length >= 16) break;
-                    cdfData.participants.push(bc);
-                }
-                // Compléter avec des BYE si toujours pas assez
+                let byeCounter = 1;
                 while (cdfData.participants.length < 16) {
-                    cdfData.participants.push(`BYE ${cdfData.participants.length - 15}`);
+                    cdfData.participants.push(`BYE ${byeCounter++}`);
                 }
             }
 
-            container.style.display = 'flex';
-            ballsContainer.innerHTML = '';
-            resultsDiv.innerHTML = '<p style="text-align:center; color: var(--nav-cdf-color); font-weight:bold;">Cliquez sur un club pour le tirer au sort</p>';
-
+            // TIRAGE AU SORT 100% AUTOMATIQUE : mélange puis appariement direct 2 à 2
             const shuffled = [...cdfData.participants].sort(() => Math.random() - 0.5);
+            cdfData.rounds[0] = [];
 
-            shuffled.forEach((clubName, index) => {
-                const ball = document.createElement('div');
-                ball.className = 'cdf-ball';
-                ball.dataset.club = clubName;
+            let drawHtml = '<p style="text-align:center; color: var(--nav-cdf-color); font-weight:bold;">Tirage au sort automatique des 8èmes :</p>';
 
-                let logoSrc = `${BASE_URL}default_logo.png`;
-                if (leagueDataStore.l1.teams?.[clubName]) logoSrc = `${BASE_URL}${leagueDataStore.l1.teams[clubName].logo}`;
-                else if (leagueDataStore.l2.teams?.[clubName]) logoSrc = `${BASE_URL}${leagueDataStore.l2.teams[clubName].logo}`;
-                else if (leagueDataStore.l3.clubs?.[clubName]) logoSrc = `${BASE_URL}${leagueDataStore.l3.clubs[clubName].logo}`;
-                else if (baseClubsData.clubs?.[clubName]) logoSrc = baseClubsData.clubs[clubName].logo.startsWith('data:') ? baseClubsData.clubs[clubName].logo : `${BASE_URL}${baseClubsData.clubs[clubName].logo}`;
+            for (let i = 0; i < shuffled.length; i += 2) {
+                const matchIdx = cdfData.rounds[0].length;
+                const team1 = shuffled[i];
+                const team2 = shuffled[i + 1];
+                cdfData.rounds[0].push({ team1, team2, score1: null, score2: null });
+                const matchNum = matchIdx + 1;
 
-                ball.innerHTML = `<img src="${logoSrc}" alt="${clubName}"><span>${clubName}</span>`;
-                ball.addEventListener('click', () => handleCDFBallClick(clubName, ball));
-                ballsContainer.appendChild(ball);
-            });
-        }
-
-        let cdfDrawnClubs = [];
-        let cdfCurrentMatch = [];
-
-        function handleCDFBallClick(clubName, ballEl) {
-            if (ballEl.classList.contains('drawn')) return;
-
-            ballEl.classList.add('selected');
-            setTimeout(() => {
-                ballEl.classList.remove('selected');
-                ballEl.classList.add('drawn');
-            }, 300);
-
-            cdfDrawnClubs.push(clubName);
-            cdfCurrentMatch.push(clubName);
-
-            const resultsDiv = document.getElementById('cdf-draw-results');
-
-            if (cdfCurrentMatch.length === 2) {
-                const matchNum = Math.floor(cdfDrawnClubs.length / 2);
-                if (!cdfData.rounds[0]) cdfData.rounds[0] = [];
-                cdfData.rounds[0].push({ team1: cdfCurrentMatch[0], team2: cdfCurrentMatch[1], score1: null, score2: null });
-
-                resultsDiv.innerHTML += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${cdfCurrentMatch[0]}</strong> vs <strong>${cdfCurrentMatch[1]}</strong></p>`;
-                cdfCurrentMatch = [];
-
-                if (cdfDrawnClubs.length === 16) {
-                    resultsDiv.innerHTML += '<p style="margin-top:15px; font-weight:bold; color: var(--neon-green);">Tirage terminé ! Les 16èmes de finale sont définis.</p>';
-                    document.getElementById('tirage-cdf-btn').style.display = 'none';
-                    saveCDFToDrive();
-                    renderCDFBracket();
+                // BYE : qualification automatique de l'équipe réelle
+                if (isByeTeam(team1) && !isByeTeam(team2)) {
+                    advanceCDFWinner(0, matchIdx, team2);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team2}</strong> qualifié(e) (BYE)</p>`;
+                } else if (isByeTeam(team2) && !isByeTeam(team1)) {
+                    advanceCDFWinner(0, matchIdx, team1);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (BYE)</p>`;
+                } else if (isByeTeam(team1) && isByeTeam(team2)) {
+                    advanceCDFWinner(0, matchIdx, team1);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (double BYE)</p>`;
+                } else {
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> vs <strong>${team2}</strong></p>`;
                 }
             }
+
+            drawHtml += '<p style="margin-top:15px; font-weight:bold; color: var(--neon-green);">Tirage terminé ! Les 8èmes de finale sont définis.</p>';
+            resultsDiv.innerHTML = drawHtml;
+            drawSection.style.display = 'flex';
+
+            saveCDFToDrive();
+            renderCDFBracket();
         }
+
+        const isByeTeam = (t) => typeof t === 'string' && t.startsWith('BYE');
 
         function renderCDFBracket() {
             const container = document.getElementById('cdf-bracket-container');
             if (!container || !cdfData.rounds || !cdfData.rounds[0]) return;
 
-            const roundNames = ['16èmes', '8èmes', 'Quarts', 'Demies', 'Finale'];
+            const roundNames = CDF_ROUND_NAMES;
             let html = '<div class="cdf-bracket">';
 
-            for (let r = 0; r <= 4; r++) {
+            for (let r = 0; r < roundNames.length; r++) {
                 const roundMatches = cdfData.rounds[r];
-                if (!roundMatches || roundMatches.length === 0) break;
+                if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
 
                 html += `<div class="cdf-round"><div class="cdf-round-title">🏆 ${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
 
@@ -3669,14 +3718,18 @@
                     const logo2 = match.team2 ? getClubLogo(match.team2) : `${BASE_URL}default_logo.png`;
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
+                    // Un match n'est saisissable que si les 2 équipes sont connues et qu'aucune n'est un BYE (déjà tranché au tirage)
+                    const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${match.penaltyWinner} aux tirs au but</div>` : '';
                     html += `
                         <div class="cdf-match-card">
                             <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${match.team1 || '?'}"><span>${match.team1 || '?'}</span></div>
                             <div class="cdf-score-inputs">
-                                <input type="number" min="0" value="${match.score1 ?? ''}" onchange="updateCDFScore(${r}, ${i}, 1, this.value)">
+                                <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                                 -
-                                <input type="number" min="0" value="${match.score2 ?? ''}" onchange="updateCDFScore(${r}, ${i}, 2, this.value)">
+                                <input type="number" min="0" value="${match.score2 ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, 2, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                             </div>
+                            ${penaltyNote}
                             <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${match.team2 || '?'}"><span>${match.team2 || '?'}</span></div>
                         </div>
                     `;
@@ -3684,14 +3737,67 @@
                 html += '</div>';
             }
 
-            // Afficher le champion si c'est la finale et qu'il y a un gagnant
-            if (cdfData.rounds[4] && cdfData.rounds[4][0] && cdfData.rounds[4][0].winner) {
-                cdfData.champion = cdfData.rounds[4][0].winner;
+            // Afficher le champion si la finale est jouée et a un vainqueur
+            const finalRoundIdx = roundNames.length - 1;
+            if (cdfData.rounds[finalRoundIdx] && cdfData.rounds[finalRoundIdx][0] && cdfData.rounds[finalRoundIdx][0].winner) {
+                cdfData.champion = cdfData.rounds[finalRoundIdx][0].winner;
                 html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;">🏆 Champion CDF : ${cdfData.champion}</span></div>`;
+                const celebrationDiv = document.getElementById('cdf-champion-celebration');
+                if (celebrationDiv) {
+                    celebrationDiv.style.display = 'block';
+                    celebrationDiv.innerHTML = `
+                        <div style="text-align:center; margin-top: 20px;">
+                            <img src="${getClubLogo(cdfData.champion)}" alt="${cdfData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
+                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${cdfData.champion} remporte la Coupe de France !</h3>
+                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                        </div>`;
+                }
             }
 
             html += '</div>';
             container.innerHTML = html;
+        }
+
+        // Fait avancer un vainqueur vers le tour suivant (helper partagé CDF/BYE)
+        function advanceCDFWinner(round, matchIdx, winner) {
+            if (!cdfData.rounds[round] || !cdfData.rounds[round][matchIdx]) return;
+            const match = cdfData.rounds[round][matchIdx];
+            match.winner = winner;
+
+            // Le vainqueur se qualifie pour le tour suivant, sauf après la finale
+            if (round < CDF_FINAL_ROUND) {
+                const nextRound = round + 1;
+                const nextMatchIdx = Math.floor(matchIdx / 2);
+                const isFirstOfPair = matchIdx % 2 === 0;
+
+                if (!cdfData.rounds[nextRound]) cdfData.rounds[nextRound] = [];
+
+                if (!cdfData.rounds[nextRound][nextMatchIdx]) {
+                    cdfData.rounds[nextRound][nextMatchIdx] = { team1: null, team2: null, score1: null, score2: null };
+                }
+
+                if (isFirstOfPair) {
+                    cdfData.rounds[nextRound][nextMatchIdx].team1 = winner;
+                } else {
+                    cdfData.rounds[nextRound][nextMatchIdx].team2 = winner;
+                }
+
+                // Si le match du tour suivant est désormais complet avec un BYE, le résoudre en cascade
+                resolveCDFByeMatch(nextRound, nextMatchIdx);
+            }
+
+            renderCDFBracket();
+        }
+
+        // Résout automatiquement un match dont une équipe est un BYE (qualification directe)
+        function resolveCDFByeMatch(round, matchIdx) {
+            const match = cdfData.rounds[round] && cdfData.rounds[round][matchIdx];
+            if (!match || !match.team1 || !match.team2 || match.winner) return;
+            if (!isByeTeam(match.team1) && !isByeTeam(match.team2)) return;
+
+            // Si les deux équipes sont des BYE, l'une d'elles passe (cas extrême)
+            const realTeam = isByeTeam(match.team1) ? match.team2 : match.team1;
+            advanceCDFWinner(round, matchIdx, realTeam);
         }
 
         window.updateCDFScore = function (round, matchIdx, goalNum, value) {
@@ -3701,31 +3807,23 @@
             if (goalNum === 1) match.score1 = value === '' ? null : parseInt(value);
             else match.score2 = value === '' ? null : parseInt(value);
 
-            if (match.score1 !== null && match.score2 !== null) {
-                const winner = match.score1 > match.score2 ? match.team1 : match.team2;
-                match.winner = winner;
-
-                // Créer le tour suivant si ce n'est pas la finale
-                const totalMatchesThisRound = cdfData.rounds[round].length;
-                if (totalMatchesThisRound > 1) {
-                    const nextRound = round + 1;
-                    const nextMatchIdx = Math.floor(matchIdx / 2);
-                    const isFirstOfPair = matchIdx % 2 === 0;
-
-                    if (!cdfData.rounds[nextRound]) cdfData.rounds[nextRound] = [];
-
-                    if (!cdfData.rounds[nextRound][nextMatchIdx]) {
-                        cdfData.rounds[nextRound][nextMatchIdx] = { team1: null, team2: null, score1: null, score2: null };
-                    }
-
-                    if (isFirstOfPair) {
-                        cdfData.rounds[nextRound][nextMatchIdx].team1 = winner;
-                    } else {
-                        cdfData.rounds[nextRound][nextMatchIdx].team2 = winner;
-                    }
+            if (match.score1 !== null && match.score2 !== null && match.team1 && match.team2) {
+                // Un match avec un BYE est déjà tranché au tirage
+                let winner;
+                if (isByeTeam(match.team1)) winner = match.team2;
+                else if (isByeTeam(match.team2)) winner = match.team1;
+                else if (match.score1 > match.score2) winner = match.team1;
+                else if (match.score2 > match.score1) winner = match.team2;
+                else {
+                    // Égalité : séance de tirs au but pour départager
+                    winner = Math.random() < 0.5 ? match.team1 : match.team2;
+                    match.penaltyWinner = winner;
+                    match.penaltyShootout = true;
+                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${winner} l'emporte aux tirs au but !`, 3500);
                 }
 
-                renderCDFBracket();
+                match.winner = winner;
+                advanceCDFWinner(round, matchIdx, winner);
             }
             saveCDFToDrive();
         };
@@ -3738,7 +3836,10 @@
             if (!confirm("Reset toute la CDF?")) return;
             cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, fileId: cdfData.fileId, filename: 'peluches_cdf_data.json' };
             document.getElementById('cdf-draw-section').style.display = 'none';
+            document.getElementById('cdf-draw-results').innerHTML = '';
             document.getElementById('cdf-bracket-container').innerHTML = '';
+            const celebrationDiv = document.getElementById('cdf-champion-celebration');
+            if (celebrationDiv) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
             document.getElementById('tirage-cdf-btn').style.display = 'inline-block';
             saveCDFToDrive();
             showMessage("CDF réinitialisée.", 2000);
@@ -3748,7 +3849,10 @@
             if (cdfData.rounds && Object.keys(cdfData.rounds).length > 0) {
                 renderCDFBracket();
             }
-            document.getElementById('tirage-cdf-btn').style.display = cdfData.rounds[0] ? 'none' : 'inline-block';
+            // Le bouton Tirage reste visible si le tirage n'est pas terminé (8 matchs en 8èmes)
+            const expectedMatches = Math.floor((cdfData.participants.length || 16) / 2);
+            const drawComplete = !!(cdfData.rounds[0] && cdfData.rounds[0].filter(Boolean).length >= expectedMatches);
+            document.getElementById('tirage-cdf-btn').style.display = drawComplete ? 'none' : 'inline-block';
         }
 
         // ==================== LDC ====================

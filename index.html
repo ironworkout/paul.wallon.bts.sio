@@ -4845,6 +4845,15 @@
 
                 let logoToUse = catalogLogo || leagueStore[oldClubName].logo || 'default_logo.png';
 
+                // Préserver l'ancien club (avec son logo) dans la base clubs pour que son nom,
+                // son logo et ses trophées restent visibles dans le classement/palmarès des saisons précédentes
+                if (!baseClubsData.clubs[oldClubName]) {
+                    baseClubsData.clubs[oldClubName] = {
+                        logo: leagueStore[oldClubName].logo || 'default_logo.png',
+                        description: (leagueStore[oldClubName].description || '') + ` (anciennement renommé en ${newName})`
+                    };
+                }
+
                 // Mettre à jour l'équipe dans la ligue
                 const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
                 delete leagueStore[oldClubName];
@@ -5001,14 +5010,16 @@
         });
 
         // ==================== UTILITAIRES ====================
+        function resolveLogoUrl(logo) {
+            if (!logo) return `${BASE_URL}default_logo.png`;
+            return (logo.startsWith('data:') || logo.startsWith('http://') || logo.startsWith('https://')) ? logo : `${BASE_URL}${logo}`;
+        }
+
         function getClubLogo(clubName) {
-            if (leagueDataStore.l1.teams?.[clubName]) return `${BASE_URL}${leagueDataStore.l1.teams[clubName].logo}`;
-            if (leagueDataStore.l2.teams?.[clubName]) return `${BASE_URL}${leagueDataStore.l2.teams[clubName].logo}`;
-            if (leagueDataStore.l3.clubs?.[clubName]) return `${BASE_URL}${leagueDataStore.l3.clubs[clubName].logo}`;
-            if (baseClubsData.clubs?.[clubName]) {
-                const logo = baseClubsData.clubs[clubName].logo;
-                return logo?.startsWith('data:') ? logo : `${BASE_URL}${logo || 'default_logo.png'}`;
-            }
+            if (leagueDataStore.l1.teams?.[clubName]) return resolveLogoUrl(leagueDataStore.l1.teams[clubName].logo);
+            if (leagueDataStore.l2.teams?.[clubName]) return resolveLogoUrl(leagueDataStore.l2.teams[clubName].logo);
+            if (leagueDataStore.l3.clubs?.[clubName]) return resolveLogoUrl(leagueDataStore.l3.clubs[clubName].logo);
+            if (baseClubsData.clubs?.[clubName]) return resolveLogoUrl(baseClubsData.clubs[clubName].logo);
             return `${BASE_URL}default_logo.png`;
         }
 
@@ -5017,12 +5028,9 @@
             const tableBody = document.getElementById('palmares-table-body');
             if (!tableBody) return;
             tableBody.innerHTML = '';
-            const allTeamsInStore = {
-                ...leagueDataStore.l1.teams,
-                ...leagueDataStore.l2.teams,
-                ...leagueDataStore.l3.clubs,
-                ...baseClubsData.clubs
-            };
+            // Union des clubs actuels (ligues + base) ET de tous les clubs présents dans le palmarès
+            // (y compris ceux d'anciennes saisons qui ne font plus partie des ligues actuelles)
+            const allTeamsInStore = getAllTeamsInStore();
 
             Object.keys(allTeamsInStore).sort().forEach(teamName => {
                 if (teamName === "BYE") return;
@@ -5097,12 +5105,19 @@
         let classementSortDesc = true;
 
         function getAllTeamsInStore() {
-            return {
+            // Clubs actuels des ligues + base clubs
+            const store = {
                 ...leagueDataStore.l1.teams,
                 ...leagueDataStore.l2.teams,
                 ...leagueDataStore.l3.clubs,
                 ...baseClubsData.clubs
             };
+            // Ajouter les clubs historiques présents dans le palmarès mais absents des ligues actuelles
+            // (ex. clubs changés/échangés entre saisons) pour que noms ET trophées restent visibles
+            Object.keys(palmaresData || {}).forEach(name => {
+                if (name !== 'BYE' && !store[name]) store[name] = {};
+            });
+            return store;
         }
 
         function getClassementData() {

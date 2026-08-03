@@ -49,11 +49,12 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
-    getClassementData, populateClassement, sortClassementBy, CLASSEMENT_TROPHY_ORDER,
+    getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
-    get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; }
+    get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
+    get BASE_URL() { return BASE_URL; }
 };`;
 
 try {
@@ -192,6 +193,27 @@ assert(cTot[0].name === 'ClubTout', 'Tri Total : ClubTout en tête (6)');
 T.sortClassementBy('official');
 let cOff = T.getClassementData();
 assert(cOff[0].name === 'ClubTout', 'Retour au tri officiel : ClubTout en tête');
+
+console.log('\n=== TEST CLUBS HISTORIQUES (anciennes saisons) ===\n');
+// Simule : un club avec trophées dans palmaresData mais absent des ligues actuelles
+T.leagueDataStore.l1.teams = { 'ClubActuelL1': {} };
+T.leagueDataStore.l2.teams = { 'ClubActuelL2': {} };
+T.leagueDataStore.l3.clubs = {};
+T.baseClubsData.clubs = { 'AncienClubBase': { logo: 'ancien.png' } };
+T.palmaresData = { 'AncienClubRemplace': { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 1 } };
+const allClubs = T.getAllTeamsInStore();
+assert(!!allClubs['AncienClubRemplace'], 'Club historique (absent des ligues) présent dans getAllTeamsInStore');
+const classementHist = T.getClassementData();
+const histNames = classementHist.map(r => r.name);
+assert(histNames.includes('AncienClubRemplace'), 'Club historique visible dans le classement');
+const histRow = classementHist.find(r => r.name === 'AncienClubRemplace');
+assert(histRow.counts['CDF'] === 1, 'Trophée CDF du club historique conservé');
+
+// Résolution de logos : data: et http ne doivent pas être préfixés par BASE_URL
+assert(T.resolveLogoUrl('data:image/png;base64,ABC') === 'data:image/png;base64,ABC', 'Logo data: URL non préfixé');
+assert(T.resolveLogoUrl('https://exemple.com/logo.png') === 'https://exemple.com/logo.png', 'Logo http(s) non préfixé');
+assert(T.resolveLogoUrl('vafc.png') === T.BASE_URL + 'vafc.png', 'Logo simple préfixé par BASE_URL');
+assert(T.resolveLogoUrl(null) === T.BASE_URL + 'default_logo.png', 'Logo manquant -> default_logo');
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

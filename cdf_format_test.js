@@ -49,9 +49,11 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
+    getClassementData, populateClassement, sortClassementBy, CLASSEMENT_TROPHY_ORDER,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
-    get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; }
+    get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
+    get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; }
 };`;
 
 try {
@@ -151,6 +153,45 @@ T.resolveCDFDemies();
 assert(!!T.cdfData.rounds[3], 'Finale construite meme a egalite (departage aleatoire)');
 const f2 = T.cdfData.rounds[3][0];
 assert(f2.team1 !== f2.team2, 'Finale avec 2 equipes distinctes');
+
+console.log('\n=== TEST CLASSEMENT GENERAL (type JO) ===\n');
+T.palmaresData = {};
+T.palmaresData['ClubLDC'] = { 'Ligue 1': 0, 'Ligue 2': 1, 'LDC': 1, 'CDF': 0 };
+T.palmaresData['ClubL1'] = { 'Ligue 1': 3, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+T.palmaresData['ClubCDF'] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 2 };
+T.palmaresData['ClubL2'] = { 'Ligue 1': 0, 'Ligue 2': 5, 'LDC': 0, 'CDF': 0 };
+T.palmaresData['ClubTout'] = { 'Ligue 1': 2, 'Ligue 2': 2, 'LDC': 1, 'CDF': 1 };
+T.leagueDataStore.l1.teams = { ClubL1: {}, ClubLDC: {}, ClubTout: {} };
+T.leagueDataStore.l2.teams = { ClubL2: {}, ClubCDF: {}, ClubTout: {} };
+T.leagueDataStore.l3.clubs = {};
+T.baseClubsData.clubs = {};
+const classement = T.getClassementData();
+const names = classement.map(r => r.name);
+assert(names.length === 5, '5 clubs dans le classement');
+// LDC departage d'abord (or), puis Ligue 1, puis CDF, puis Ligue 2
+const rankIdx = (n) => names.indexOf(n);
+console.log('  Ordre obtenu:', names.join(' | '));
+// ClubTout (1 LDC + 2 L1) bat ClubLDC (1 LDC + 0 L1) au tiebreak Ligue 1
+assert(rankIdx('ClubTout') < rankIdx('ClubLDC'), 'ClubTout devant ClubLDC (1 LDC chacun, Ligue1 2 > 0)');
+assert(classement[0].name === 'ClubTout', 'Le leader est ClubTout (or = LDC puis Ligue 1)');
+assert(rankIdx('ClubLDC') < rankIdx('ClubL1'), 'LDC (or) avant Ligue 1 (argent)');
+assert(rankIdx('ClubL1') < rankIdx('ClubCDF'), 'Ligue 1 (argent) avant CDF (bronze)');
+assert(rankIdx('ClubCDF') < rankIdx('ClubL2'), 'CDF avant Ligue 2');
+assert(classement.every(r => r.total === Object.values(r.counts).reduce((a, b) => a + b, 0)), 'Total = somme des trophées');
+
+console.log('\n=== TEST TRI INTERACTIF DU CLASSEMENT ===\n');
+// Tri par Ligue 2 : ClubL2 (5) en tête, puis ClubTout (2)
+T.sortClassementBy('Ligue 2');
+let c2 = T.getClassementData();
+assert(c2[0].name === 'ClubL2', 'Tri Ligue 2 : ClubL2 en tête (5)');
+// Tri par Total : ClubTout (6) en tête
+T.sortClassementBy('total');
+let cTot = T.getClassementData();
+assert(cTot[0].name === 'ClubTout', 'Tri Total : ClubTout en tête (6)');
+// Retour au tri officiel
+T.sortClassementBy('official');
+let cOff = T.getClassementData();
+assert(cOff[0].name === 'ClubTout', 'Retour au tri officiel : ClubTout en tête');
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

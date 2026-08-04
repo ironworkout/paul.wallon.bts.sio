@@ -2482,6 +2482,12 @@
                 <input type="text" class="form-control" id="new-l3-club-name" placeholder="Ex: FC Plushies..."/>
                 <label class="form-label">Logo (depuis la base GitHub)</label>
                 <select class="form-control" id="new-l3-club-logo"></select>
+
+                        <div style="display:flex; gap:8px; margin-top:6px;">
+                            <button type="button" class="btn btn-danger" onclick="removeSelectedCatalogLogo('new-l3-club-logo')" style="padding:6px 12px; font-size:0.85rem;"><i class="fas fa-trash-alt"></i> Retirer ce logo de la liste</button>
+                            <button type="button" class="btn" onclick="restoreRemovedCatalogLogos()" style="padding:6px 12px; font-size:0.85rem; background:#555; color:#fff;"><i class="fas fa-undo"></i> Restaurer les logos retires</button>
+                        </div>
+
                 <img id="new-l3-logo-preview" src="" alt="Aperçu" style="display:none;max-height:80px;margin-top:8px;border-radius:8px;"/>
                 <label class="form-label">Description (optionnelle)</label>
                 <input type="text" class="form-control" id="new-l3-club-desc" placeholder="Description du club..."/>
@@ -2784,6 +2790,12 @@
                         <label for="swap-club-logo-catalog"><i class="fab fa-github"></i> Choisir un logo dans la BDD GitHub du projet :</label>
                         <select id="swap-club-logo-catalog" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px;">
                         </select>
+
+                        <div style="display:flex; gap:8px; margin-top:6px;">
+                            <button type="button" class="btn btn-danger" onclick="removeSelectedCatalogLogo('swap-club-logo-catalog')" style="padding:6px 12px; font-size:0.85rem;"><i class="fas fa-trash-alt"></i> Retirer ce logo de la liste</button>
+                            <button type="button" class="btn" onclick="restoreRemovedCatalogLogos()" style="padding:6px 12px; font-size:0.85rem; background:#555; color:#fff;"><i class="fas fa-undo"></i> Restaurer les logos retires</button>
+                        </div>
+
                     </div>
                     <div style="text-align:center; margin-top:10px;">
                         <label>Aperçu du logo sélectionné :</label><br>
@@ -2826,6 +2838,12 @@
                     <label><i class="fab fa-github"></i> Choisir dans la BDD des logos GitHub du projet :</label>
                     <select id="modal-github-logo-select" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                     </select>
+
+                        <div style="display:flex; gap:8px; margin-top:6px;">
+                            <button type="button" class="btn btn-danger" onclick="removeSelectedCatalogLogo('modal-github-logo-select')" style="padding:6px 12px; font-size:0.85rem;"><i class="fas fa-trash-alt"></i> Retirer ce logo de la liste</button>
+                            <button type="button" class="btn" onclick="restoreRemovedCatalogLogos()" style="padding:6px 12px; font-size:0.85rem; background:#555; color:#fff;"><i class="fas fa-undo"></i> Restaurer les logos retires</button>
+                        </div>
+
                 </div>
                 <div style="text-align: center; margin-top: 15px;">
                     <label>Aperçu du logo :</label><br>
@@ -2860,6 +2878,7 @@
             { filename: 'psg.png', name: 'PSG Peluches (psg.png)' },
             { filename: 'oo.png', name: 'Olympique Ours (oo.png)' },
             { filename: 'ascl.png', name: 'AS Carrotes (ascl.png)' },
+            { filename: 'As_doudou_c.png', name: 'AS Doudou C (As_doudou_c.png)' },
             { filename: 'asset.png', name: 'AS Saint-Ettours (asset.png)' },
             { filename: 'patapouf.png', name: 'Patapouf FC (patapouf.png)' },
             { filename: 'tours.png', name: 'Tours FC (tours.png)' },
@@ -2882,11 +2901,80 @@
             { filename: 'default_logo.png', name: 'Logo par défaut (default_logo.png)' }
         ];
 
+        // ---- Gestion des logos retires des listes deroulantes (persiste en localStorage) ----
+        const REMOVED_CATALOG_LOGOS_KEY = 'peluches_removed_catalog_logos';
+        let removedCatalogLogosCache = null;
+
+        function getRemovedCatalogLogos() {
+            if (removedCatalogLogosCache !== null) return removedCatalogLogosCache;
+            try {
+                const raw = localStorage.getItem(REMOVED_CATALOG_LOGOS_KEY);
+                removedCatalogLogosCache = raw ? (JSON.parse(raw) || []) : [];
+            } catch (e) {
+                removedCatalogLogosCache = [];
+            }
+            return removedCatalogLogosCache;
+        }
+
+        function setRemovedCatalogLogos(list) {
+            removedCatalogLogosCache = list.slice();
+            try { localStorage.setItem(REMOVED_CATALOG_LOGOS_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+
+        // Liste des logos encore proposes dans les listes deroulantes
+        function getVisibleCatalogLogos() {
+            const removed = getRemovedCatalogLogos();
+            return GITHUB_LOGOS_CATALOG.filter(l => !removed.includes(l.filename));
+        }
+
+        function refreshAllCatalogSelects() {
+            populateGithubLogoSelect('new-l3-club-logo', 'new-l3-logo-preview');
+            populateGithubLogoSelect('swap-club-logo-catalog', 'swap-logo-preview');
+            populateGithubLogoSelect('modal-github-logo-select', 'modal-logo-preview');
+            populateGithubLogoSelect('new-club-github-logo', 'logo-preview');
+        }
+
+        // Retirer le logo actuellement selectionne de toutes les listes deroulantes
+        window.removeSelectedCatalogLogo = function (selectId) {
+            const select = document.getElementById(selectId);
+            if (!select || !select.value) {
+                alert("Selectionnez d'abord un logo dans la liste pour le retirer.");
+                return;
+            }
+            const removed = getRemovedCatalogLogos();
+            if (!removed.includes(select.value)) removed.push(select.value);
+            setRemovedCatalogLogos(removed);
+            select.value = '';
+            refreshAllCatalogSelects();
+            // Masquer l'apercu du logo retire
+            if (select._logoPreviewId) {
+                const preview = document.getElementById(select._logoPreviewId);
+                if (preview) { preview.src = ''; preview.style.display = 'none'; }
+            }
+        };
+
+        // Remettre tous les logos retires dans les listes
+        window.restoreRemovedCatalogLogos = function () {
+            setRemovedCatalogLogos([]);
+            refreshAllCatalogSelects();
+        };
+
         function populateGithubLogoSelect(selectId, previewId) {
             const select = document.getElementById(selectId);
             if (!select) return;
+            select._logoPreviewId = previewId || null;
             select.innerHTML = '<option value="">-- Choisir un logo de la BDD GitHub --</option>';
-            GITHUB_LOGOS_CATALOG.forEach(logo => {
+            const removed = getRemovedCatalogLogos();
+            const currentVal = select.value;
+            // Si le logo actuellement selectionne (ex: logo d'un club en cours d'edition) a ete retire
+            // de la liste, on le garde visible pour ne pas perdre la selection.
+            if (currentVal && removed.includes(currentVal)) {
+                const option = document.createElement('option');
+                option.value = currentVal;
+                option.textContent = currentVal;
+                select.appendChild(option);
+            }
+            getVisibleCatalogLogos().forEach(logo => {
                 const option = document.createElement('option');
                 option.value = logo.filename;
                 option.textContent = logo.name;

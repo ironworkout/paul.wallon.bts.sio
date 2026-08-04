@@ -10,7 +10,7 @@ function makeElement() {
     return {
         style: {}, dataset: {},
         classList: { add: () => {}, remove: () => {}, contains: () => false, toggle: () => {} },
-        addEventListener: () => {}, appendChild: () => {}, removeChild: () => {},
+        addEventListener: () => {}, removeEventListener: () => {}, appendChild: () => {}, removeChild: () => {},
         innerHTML: '', value: '', textContent: '', disabled: false,
         querySelectorAll: () => [], querySelector: () => makeElement(),
         setAttribute: () => {}, getAttribute: () => null
@@ -51,6 +51,8 @@ js += `
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
     calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
+    GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
+    removeSelectedCatalogLogo: window.removeSelectedCatalogLogo, restoreRemovedCatalogLogos: window.restoreRemovedCatalogLogos,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
@@ -340,6 +342,65 @@ assert(s1L2Names.every(n => T.getClubLogo(n).includes('logoB.png') || T.getClubL
 
 
 console.log('\n========================================');
+console.log('=== TEST CATALOGUE LOGOS GITHUB (As_doudou_c.png + retirer/restaurer) ===');
+const catalog = T.GITHUB_LOGOS_CATALOG;
+assert(Array.isArray(catalog) && catalog.length > 0, 'Catalogue logos present');
+assert(catalog.some(l => l.filename === 'As_doudou_c.png'), 'As_doudou_c.png est dans le catalogue');
+assert(catalog.some(l => l.filename === 'vafc.png'), 'vafc.png toujours dans le catalogue');
+
+// par defaut : tous les logos visibles
+T.setRemovedCatalogLogos([]);
+assert(T.getVisibleCatalogLogos().length === catalog.length, 'Aucun logo retire -> tous visibles');
+
+// retirer un logo -> filtre
+T.setRemovedCatalogLogos(['vafc.png']);
+let visible = T.getVisibleCatalogLogos();
+assert(visible.length === catalog.length - 1, 'Un logo retire -> 1 de moins dans la liste');
+assert(!visible.some(l => l.filename === 'vafc.png'), "Le logo retire n'est plus propose");
+assert(visible.some(l => l.filename === 'As_doudou_c.png'), 'As_doudou_c.png reste propose');
+
+// restaurer -> tout revient
+T.restoreRemovedCatalogLogos();
+assert(T.getRemovedCatalogLogos().length === 0, 'Restaurer vide la liste des retires');
+assert(T.getVisibleCatalogLogos().length === catalog.length, 'Restaurer -> tous les logos de nouveau visibles');
+
+// populateGithubLogoSelect construit les <option> a partir des logos visibles
+const fakeSelect = { innerHTML: '', options: [], value: '', appendChild(o) { this.options.push(o); }, addEventListener(){}, removeEventListener(){}, style:{} };
+const savedGetEl = sandbox.document.getElementById;
+sandbox.document.getElementById = (id) => id === 'fake-select' ? fakeSelect : savedGetEl(id);
+T.setRemovedCatalogLogos(['psg.png']);
+T.populateGithubLogoSelect('fake-select');
+sandbox.document.getElementById = savedGetEl;
+assert(fakeSelect.options.length === catalog.length - 1, 'populateGithubLogoSelect : 1 option en moins (psg.png retire)');
+assert(!fakeSelect.options.some(o => o.value === 'psg.png'), 'populateGithubLogoSelect : psg.png absent des options');
+assert(fakeSelect.options.some(o => o.value === 'As_doudou_c.png'), 'populateGithubLogoSelect : As_doudou_c.png present en option');
+
+// Un logo retire mais encore selectionne (ex: logo du club en cours d'edition) reste propose
+T.setRemovedCatalogLogos(['fcd.png']);
+const fakeSel3 = { innerHTML: '', options: [], value: 'fcd.png', appendChild(o) { this.options.push(o); }, addEventListener(){}, removeEventListener(){}, style:{} };
+const savedGetEl3 = sandbox.document.getElementById;
+sandbox.document.getElementById = (id) => id === 'fake-select3' ? fakeSel3 : savedGetEl3(id);
+T.populateGithubLogoSelect('fake-select3');
+sandbox.document.getElementById = savedGetEl3;
+assert(fakeSel3.options.some(o => o.value === 'fcd.png'), 'Logo retire mais selectionne : option conservee (edition club)');
+
+// removeSelectedCatalogLogo retire le logo selectionne
+const fakeSelect2 = { innerHTML: '', options: [], value: 'usla.png', appendChild(o) { this.options.push(o); }, addEventListener(){}, removeEventListener(){}, style:{} };
+const savedGetEl2 = sandbox.document.getElementById;
+sandbox.document.getElementById = (id) => {
+    if (id === 'fake-select2') return fakeSelect2;
+    if (id === 'new-l3-club-logo') return { innerHTML:'', options:[], value:'', appendChild(){}, addEventListener(){}, removeEventListener(){}, style:{} };
+    if (id === 'swap-club-logo-catalog') return { innerHTML:'', options:[], value:'', appendChild(){}, addEventListener(){}, removeEventListener(){}, style:{} };
+    if (id === 'modal-github-logo-select') return { innerHTML:'', options:[], value:'', appendChild(){}, addEventListener(){}, removeEventListener(){}, style:{} };
+    if (id === 'new-club-github-logo') return { innerHTML:'', options:[], value:'', appendChild(){}, addEventListener(){}, removeEventListener(){}, style:{} };
+    return savedGetEl2(id);
+};
+T.setRemovedCatalogLogos([]);
+T.removeSelectedCatalogLogo('fake-select2');
+sandbox.document.getElementById = savedGetEl2;
+assert(T.getRemovedCatalogLogos().includes('usla.png'), 'removeSelectedCatalogLogo ajoute le logo selectionne aux retires');
+assert(!T.getVisibleCatalogLogos().some(l => l.filename === 'usla.png'), 'usla.png plus propose apres retrait');
+
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');
 process.exit(fail > 0 ? 1 : 0);

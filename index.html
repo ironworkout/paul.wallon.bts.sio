@@ -2265,6 +2265,30 @@
                 font-size: 0.5rem;
             }
         }
+
+        /* ==================== CONFETTIS TROPHÉES (réutilisés de l'ancienne section DNCG) ==================== */
+        .confetti {
+            position: fixed;
+            top: -20px;
+            width: 12px;
+            height: 18px;
+            pointer-events: none;
+            z-index: 9000;
+            border-radius: 2px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-5vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
@@ -3188,6 +3212,39 @@
             messageTimeoutId = setTimeout(() => { messageArea.classList.remove('visible'); }, duration);
         }
 
+        // ==================== CONFETTIS TROPHÉES ====================
+        // Réutilise le système de particules de l'ancienne section DNCG :
+        // de petits rectangles colorés qui tombent depuis le haut de l'écran.
+        // Palette adaptée au trophée : or (L1 / LDC), argent (L2), orange (CDF).
+        const CONFETTI_PALETTES = {
+            'Ligue 1': ['#ffd700', '#ffe66d', '#ffc107', '#fff3b0', '#f9e08a', '#b8860b'],
+            'Ligue 2': ['#c0c0c0', '#e8e8e8', '#dcdcdc', '#ffffff', '#b8b8b8', '#9e9e9e'],
+            'CDF': ['#ff9f43', '#ffb56b', '#ff7f00', '#ffd28f', '#e67e22', '#ffc085'],
+            'LDC': ['#ffd700', '#ffe66d', '#ffc107', '#fff3b0', '#9b59b6', '#d9b3ff']
+        };
+        const CONFETTI_DEFAULT_PALETTE = ['#ffd700', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#ff9f43', '#c0c0c0'];
+
+        function launchConfetti(trophyType) {
+            const palette = CONFETTI_PALETTES[trophyType] || CONFETTI_DEFAULT_PALETTE;
+            const particleCount = 80;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('confetti');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.backgroundColor = palette[Math.floor(Math.random() * palette.length)];
+                const delay = Math.random() * 1.5;
+                const duration = 2.5 + Math.random() * 1.5;
+                particle.style.animationDelay = `${delay.toFixed(2)}s`;
+                particle.style.animationDuration = `${duration.toFixed(2)}s`;
+                const size = 6 + Math.random() * 10;
+                particle.style.width = `${size.toFixed(1)}px`;
+                particle.style.height = `${(size * (0.6 + Math.random() * 0.9)).toFixed(1)}px`;
+                particle.style.borderRadius = Math.random() > 0.6 ? '50%' : '2px';
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), (delay + duration + 0.3) * 1000);
+            }
+        }
+
         async function gisInitInternal() {
             if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
                 try {
@@ -3873,6 +3930,7 @@
                 if (champion) {
                     if (!palmaresData[champion]) palmaresData[champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                     palmaresData[champion]['Ligue 1']++;
+                    launchConfetti('Ligue 1');
                     savePalmaresToDrive();
                     populatePalmaresTable();
                 }
@@ -3901,6 +3959,7 @@
                 if (championL2) {
                     if (!palmaresData[championL2]) palmaresData[championL2] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                     palmaresData[championL2]['Ligue 2']++;
+                    launchConfetti('Ligue 2');
                     savePalmaresToDrive();
                     populatePalmaresTable();
                 }
@@ -4518,7 +4577,9 @@
                 if (!cdfData._trophyAwarded) {
                     palmaresData[cdfData.champion]['CDF']++;
                     cdfData._trophyAwarded = true;
+                    launchConfetti('CDF');
                     savePalmaresToDrive();
+                    saveCDFToDrive();
                     populatePalmaresTable();
                 }
                 const celebrationDiv = document.getElementById('cdf-champion-celebration');
@@ -4969,7 +5030,9 @@
                 if (!ldcData._trophyAwarded) {
                     palmaresData[ldcData.champion]['LDC']++;
                     ldcData._trophyAwarded = true;
+                    launchConfetti('LDC');
                     savePalmaresToDrive();
+                    saveLDCToDrive();
                     populatePalmaresTable();
                 }
                 const celebrationDiv = document.getElementById('ldc-champion-celebration');
@@ -5721,8 +5784,12 @@
             if (!palmaresData[teamName]) palmaresData[teamName] = { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
             if (palmaresData[teamName][trophyType] === undefined) palmaresData[teamName][trophyType] = 0;
 
-            if (isAdding) palmaresData[teamName][trophyType]++;
-            else palmaresData[teamName][trophyType] = Math.max(0, palmaresData[teamName][trophyType] - 1);
+            if (isAdding) {
+                palmaresData[teamName][trophyType]++;
+                launchConfetti(trophyType);
+            } else {
+                palmaresData[teamName][trophyType] = Math.max(0, palmaresData[teamName][trophyType] - 1);
+            }
 
             populatePalmaresTable();
             // Rafraîchit aussi les cartes clubs, la Base et les badges des actus

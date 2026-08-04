@@ -1,4 +1,4 @@
-// Test du nouveau format CDF : 12 equipes -> 8emes(6) -> Quarts(3) -> Demies triangulaires(3) -> Finale(1)
+// Test du nouveau format CDF : 12 equipes -> 8emes(6) -> Quarts(3) -> Demies (1 match a 3 clubs) -> Finale(1)
 const fs = require('fs');
 const vm = require('vm');
 const html = fs.readFileSync('index.html', 'utf8');
@@ -69,17 +69,6 @@ try {
 const T = sandbox.__test;
 let pass = 0, fail = 0;
 function assert(cond, msg) { if (cond) { pass++; console.log('  OK ' + msg); } else { fail++; console.log('  FAIL ' + msg); } }
-function playMatch(round, matchIdx, s1, s2) {
-    const m = T.cdfData.rounds[round][matchIdx];
-    m.score1 = s1; m.score2 = s2;
-    let winner;
-    if (s1 > s2) winner = m.team1;
-    else if (s2 > s1) winner = m.team2;
-    else winner = Math.random() < 0.5 ? m.team1 : m.team2;
-    m.winner = winner;
-    T.advanceCDFWinner(round, matchIdx, winner);
-}
-
 console.log('\n=== TEST FORMAT CDF : 12 equipes reelles (pas de BYE) ===\n');
 T.leagueDataStore.l1.teams = {}; T.leagueDataStore.l2.teams = {}; T.leagueDataStore.l3.clubs = {};
 for (let i = 1; i <= 6; i++) T.leagueDataStore.l1.teams['L1 Club ' + i] = {};
@@ -117,19 +106,19 @@ console.log('Vainqueurs des quarts:', quarterWinners.join(', '));
 T.cdfData.rounds[1] = quarterWinners.map(w => ({ team1: w, team2: w, winner: w }));
 T.cdfData.rounds[2] = undefined;
 T.buildCDFDemies();
-assert(T.cdfData.rounds[2] && T.cdfData.rounds[2].length === 3, 'Demies triangulaires : 3 matchs');
-const demiTeams = new Set();
-T.cdfData.rounds[2].forEach(m => { demiTeams.add(m.team1); demiTeams.add(m.team2); });
-assert(demiTeams.size === 3, 'Les 3 equipes participent aux demies');
-assert(T.cdfData.rounds[2][0].team1 !== T.cdfData.rounds[2][0].team2, 'Pas de match contre soi-meme');
+assert(T.cdfData.rounds[2] && T.cdfData.rounds[2].length === 1, 'Demies : 1 seul match a 3 clubs');
+const demie = T.cdfData.rounds[2][0];
+assert(!!demie.team1 && !!demie.team2 && !!demie.team3, 'Le match de demies reunit les 3 clubs');
+const demiTeams = new Set([demie.team1, demie.team2, demie.team3]);
+assert(demiTeams.size === 3, 'Les 3 equipes participent a la demie');
+assert(demie.team1 !== demie.team2 && demie.team1 !== demie.team3 && demie.team2 !== demie.team3, '3 clubs distincts (pas de match contre soi-meme)');
 const [A, B, C] = quarterWinners;
-playMatch(2, 0, 3, 1);
-playMatch(2, 1, 2, 0);
-playMatch(2, 2, 2, 1);
-assert(!!T.cdfData.rounds[3], 'Finale construite apres les demies');
+demie.score1 = 3; demie.score2 = 2; demie.score3 = 1;
+T.resolveCDFDemies();
+assert(!!T.cdfData.rounds[3], 'Finale construite apres la demie');
 console.log('Finale:', T.cdfData.rounds[3][0].team1 + ' vs ' + T.cdfData.rounds[3][0].team2);
 const finalists = [T.cdfData.rounds[3][0].team1, T.cdfData.rounds[3][0].team2];
-assert(finalists.includes(A) && finalists.includes(B), 'Les 2 equipes avec le plus de buts (A et B) en finale');
+assert(finalists.includes(A) && finalists.includes(B), 'Les 2 clubs avec le plus de buts (A et B) en finale');
 const finalMatch = T.cdfData.rounds[3][0];
 finalMatch.score1 = 1; finalMatch.score2 = 0;
 finalMatch.winner = finalMatch.team1;
@@ -149,9 +138,7 @@ const qw2 = ['EqA', 'EqB', 'EqC'];
 T.cdfData.rounds[1] = qw2.map(w => ({ team1: w, team2: w, winner: w }));
 T.cdfData.rounds[2] = undefined;
 T.buildCDFDemies();
-T.cdfData.rounds[2][0].score1 = 1; T.cdfData.rounds[2][0].score2 = 1; T.cdfData.rounds[2][0].winner = 'EqA';
-T.cdfData.rounds[2][1].score1 = 1; T.cdfData.rounds[2][1].score2 = 1; T.cdfData.rounds[2][1].winner = 'EqB';
-T.cdfData.rounds[2][2].score1 = 1; T.cdfData.rounds[2][2].score2 = 1; T.cdfData.rounds[2][2].winner = 'EqC';
+T.cdfData.rounds[2][0].score1 = 1; T.cdfData.rounds[2][0].score2 = 1; T.cdfData.rounds[2][0].score3 = 1;
 T.resolveCDFDemies();
 assert(!!T.cdfData.rounds[3], 'Finale construite meme a egalite (departage aleatoire)');
 const f2 = T.cdfData.rounds[3][0];
@@ -279,6 +266,22 @@ assert(th.includes('LDC') && th.includes('×1'), 'LDC ×1 listé');
 assert(!th.includes('CDF') && !th.includes('Ligue 2'), 'Compétitions sans trophée absentes');
 assert(T.getClubTrophiesHTML('ClubSansTrophee') === '', 'Club sans trophée : aucun bloc');
 assert(T.getClubTrophiesHTML('Absent', 'carousel-trophies') === '', 'Club absent du palmarès : aucun bloc');
+
+console.log('\n=== TEST SAISIE DES SCORES DE LA DEMIE A 3 CLUBS ===\n');
+T.cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null };
+T.cdfData.rounds[2] = [{ team1: 'Eq1', team2: 'Eq2', team3: 'Eq3', score1: null, score2: null, score3: null }];
+const savedToken3 = sandbox.googleAccessToken;
+sandbox.googleAccessToken = null; // evite les ecritures Drive
+sandbox.window.updateCDFScore(2, 0, 1, 2);
+assert(!T.cdfData.rounds[3], 'Finale pas construite avant le 3e score');
+sandbox.window.updateCDFScore(2, 0, 2, 1);
+assert(!T.cdfData.rounds[3], 'Finale toujours pas construite (score 3 manquant)');
+sandbox.window.updateCDFScore(2, 0, 3, 3);
+assert(!!T.cdfData.rounds[3], 'Finale construite des la saisie du 3e score');
+const f3 = [T.cdfData.rounds[3][0].team1, T.cdfData.rounds[3][0].team2];
+assert(f3.includes('Eq3') && f3.includes('Eq1'), 'Les 2 meilleurs buteurs (Eq3:3, Eq1:2) en finale');
+assert(JSON.stringify(T.cdfData.rounds[2][0].finalists) === JSON.stringify(['Eq3', 'Eq1']), 'finalists = Eq3 et Eq1');
+sandbox.googleAccessToken = savedToken3;
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

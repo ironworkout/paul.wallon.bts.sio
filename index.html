@@ -4132,7 +4132,7 @@
         }
 
         // ==================== CDF ====================
-        // 12 équipes réelles (L1+L2, sans BYE) : 8èmes (6 matchs) -> Quarts (3) -> Demies triangulaires (3) -> Finale (1)
+        // 12 équipes réelles (L1+L2, sans BYE) : 8èmes (6 matchs) -> Quarts (3) -> Demies (1 match à 3 clubs) -> Finale (1)
         const CDF_ROUND_NAMES = ['8èmes', 'Quarts', 'Demies', 'Finale'];
         const CDF_FINAL_ROUND = CDF_ROUND_NAMES.length - 1;
 
@@ -4233,6 +4233,30 @@
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
+
+                    // --- DEMIES : 1 seul match avec les 3 clubs restants ---
+                    if (match.team3 !== undefined) {
+                        const f = match.finalists || [];
+                        const t1Class = f.includes(match.team1) ? ' winner' : '';
+                        const t2Class = f.includes(match.team2) ? ' winner' : '';
+                        const t3Class = f.includes(match.team3) ? ' winner' : '';
+                        const matchReady = !!(match.team1 && match.team2 && match.team3 && !isByeTeam(match.team1) && !isByeTeam(match.team2) && !isByeTeam(match.team3));
+                        const scoreInputStyle = 'width:44px; text-align:center; margin-left:8px; padding:5px 4px; border:1px solid var(--border-color); border-radius:4px; font-family:Roboto Mono, monospace; font-weight:700;';
+                        const inputDisabled = 'disabled title="En attente des équipes / BYE"';
+                        const scoreIn = (num, val) => `<input type="number" min="0" value="${val ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, ${num}, this.value)"` : inputDisabled} style="${scoreInputStyle}">`;
+                        const demiLabel = match.finalists && match.finalists.length === 2 ? `<div style="font-size:0.75rem; color:var(--neon-green); font-weight:bold; margin-top:6px; text-align:center;">✅ Qualifiés pour la finale : ${match.finalists.join(' & ')}</div>` : '';
+                        html += `
+                            <div class="cdf-match-card" style="min-width: 230px;">
+                                <div style="font-size:0.75rem; color:var(--nav-cdf-color); font-weight:bold; text-align:center; padding-bottom:6px;">⚡ Match à 3 : le club avec le plus de buts est 1er</div>
+                                <div class="cdf-team${t1Class}"><img src="${getClubLogo(match.team1)}" alt="${match.team1}"><span>${match.team1}</span>${scoreIn(1, match.score1)}</div>
+                                <div class="cdf-team${t2Class}"><img src="${getClubLogo(match.team2)}" alt="${match.team2}"><span>${match.team2}</span>${scoreIn(2, match.score2)}</div>
+                                <div class="cdf-team${t3Class}"><img src="${getClubLogo(match.team3)}" alt="${match.team3}"><span>${match.team3}</span>${scoreIn(3, match.score3)}</div>
+                                ${demiLabel}
+                            </div>
+                        `;
+                        return;
+                    }
+
                     const logo1 = match.team1 ? getClubLogo(match.team1) : `${BASE_URL}default_logo.png`;
                     const logo2 = match.team2 ? getClubLogo(match.team2) : `${BASE_URL}default_logo.png`;
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
@@ -4307,10 +4331,10 @@
                 // Si le match du tour suivant est désormais complet avec un BYE, le résoudre en cascade
                 resolveCDFByeMatch(nextRound, nextMatchIdx);
             } else if (round === 1) {
-                // Quarts (3 matchs) -> Demies triangulaires : attendre les 3 vainqueurs
+                // Quarts (3 matchs) -> Demies : attendre les 3 vainqueurs
                 buildCDFDemies();
             } else if (round === 2) {
-                // Demies triangulaires : les 3 matchs joués -> classement par buts pour la finale
+                // Demies (match à 3) joué -> classement par buts pour la finale
                 resolveCDFDemies();
             }
             // Finale (round 3) : champion déterminé dans renderCDFBracket
@@ -4329,38 +4353,39 @@
             advanceCDFWinner(round, matchIdx, realTeam);
         }
 
-        // Demies triangulaires : les 3 vainqueurs des quarts se rencontrent tous (A-B, A-C, B-C)
+        // Demies : les 3 vainqueurs des quarts se rencontrent dans UN SEUL match à 3 clubs
         function buildCDFDemies() {
             const quarters = cdfData.rounds[1];
             if (!quarters || quarters.length < 3) return;
             const winners = quarters.slice(0, 3).map(q => q && q.winner);
             if (!winners.every(w => w)) return; // pas encore les 3 vainqueurs
-            if (cdfData.rounds[2] && cdfData.rounds[2].length === 3) return; // déjà construit
+            if (cdfData.rounds[2] && cdfData.rounds[2][0] && cdfData.rounds[2][0].team3) return; // déjà construit
 
             const [A, B, C] = winners;
             cdfData.rounds[2] = [
-                { team1: A, team2: B, score1: null, score2: null },
-                { team1: A, team2: C, score1: null, score2: null },
-                { team1: B, team2: C, score1: null, score2: null }
+                { team1: A, team2: B, team3: C, score1: null, score2: null, score3: null }
             ];
         }
 
-        // Les 2 équipes avec le plus de buts sur l'ensemble des demies vont en finale
+        // Demies (1 match à 3 clubs) : les 2 clubs avec le plus de buts vont en finale
         function resolveCDFDemies() {
-            const demis = cdfData.rounds[2];
-            if (!demis || demis.length < 3) return;
-            if (!demis.every(m => m && m.team1 && m.team2 && m.score1 !== null && m.score2 !== null)) return;
+            const demie = cdfData.rounds[2] && cdfData.rounds[2][0];
+            if (!demie || !demie.team3) return;
+            if (!demie.team1 || !demie.team2 || !demie.team3) return;
+            if (demie.score1 === null || demie.score2 === null || demie.score3 === null) return;
+            // Ne pas écraser une finale déjà jouée (si un score de la demie est modifié ensuite)
+            if (cdfData.rounds[3] && cdfData.rounds[3][0] && cdfData.rounds[3][0].winner) return;
 
-            const goals = {};
-            demis.forEach(m => {
-                goals[m.team1] = (goals[m.team1] || 0) + m.score1;
-                goals[m.team2] = (goals[m.team2] || 0) + m.score2;
-            });
-
+            const entries = [
+                { t: demie.team1, g: demie.score1 },
+                { t: demie.team2, g: demie.score2 },
+                { t: demie.team3, g: demie.score3 }
+            ];
             // Tri par buts marqués (décroissant), départage aléatoire en cas d'égalité
-            const ranked = Object.entries(goals).sort((a, b) => b[1] - a[1] || Math.random() - 0.5).map(([t]) => t);
+            const ranked = entries.sort((a, b) => b.g - a.g || Math.random() - 0.5).map(e => e.t);
             if (ranked.length < 2) return;
 
+            demie.finalists = [ranked[0], ranked[1]];
             cdfData.rounds[3] = [{ team1: ranked[0], team2: ranked[1], score1: null, score2: null }];
         }
 
@@ -4368,6 +4393,20 @@
             if (!cdfData.rounds[round]) return;
             const match = cdfData.rounds[round][matchIdx];
             if (!match) return;
+
+            // Demies : match à 3 clubs (3 scores saisis) -> 2 finalistes par classement des buts
+            if (match.team3 !== undefined) {
+                if (goalNum === 1) match.score1 = value === '' ? null : parseInt(value);
+                else if (goalNum === 2) match.score2 = value === '' ? null : parseInt(value);
+                else match.score3 = value === '' ? null : parseInt(value);
+                if (match.score1 !== null && match.score2 !== null && match.score3 !== null) {
+                    resolveCDFDemies();
+                }
+                saveCDFToDrive();
+                renderCDFBracket();
+                return;
+            }
+
             if (goalNum === 1) match.score1 = value === '' ? null : parseInt(value);
             else match.score2 = value === '' ? null : parseInt(value);
 

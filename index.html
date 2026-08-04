@@ -5265,6 +5265,7 @@
 
         function onSwapLeagueChange() {
             const leagueId = document.getElementById('swap-league-select')?.value || 'l1';
+            const league = leagueDataStore[leagueId];
             const targetSelect = document.getElementById('swap-target-club');
             const seasonSelect = document.getElementById('swap-season-select');
             if (!targetSelect) return;

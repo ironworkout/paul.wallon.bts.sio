@@ -5067,7 +5067,15 @@
                     : null;
                 if (otherLeagueObj && otherLeagueObj.seasons) {
                     otherLeagueObj.seasons.forEach(s => {
-                        // On applique à toutes les saisons de l'autre ligue (cohérence cross-ligue)
+                        // On applique la meme logique de choix de saison que la ligue source :
+                        // les saisons historiques de l'autre ligue ne doivent pas etre reecrites,
+                        // sinon les clubs d'anciennes saisons (desormais dans une autre division)
+                        // disparaissent des classements et des tableaux de scores.
+                        const isMatchSeason = (seasonChoice === 'all') ||
+                            (seasonChoice === 'active' && s.season_id === otherLeagueObj.active_season_id) ||
+                            (seasonChoice == s.season_id);
+                        if (!isMatchSeason) return;
+                        // (saisons choisies uniquement, les historiques sont preserves)
                         if (s.fixtures) {
                             s.fixtures.forEach(round => {
                                 (round || []).forEach(match => {

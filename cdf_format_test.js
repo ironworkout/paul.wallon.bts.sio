@@ -49,7 +49,7 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
-    calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML,
+    calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
@@ -282,6 +282,62 @@ const f3 = [T.cdfData.rounds[3][0].team1, T.cdfData.rounds[3][0].team2];
 assert(f3.includes('Eq3') && f3.includes('Eq1'), 'Les 2 meilleurs buteurs (Eq3:3, Eq1:2) en finale');
 assert(JSON.stringify(T.cdfData.rounds[2][0].finalists) === JSON.stringify(['Eq3', 'Eq1']), 'finalists = Eq3 et Eq1');
 sandbox.googleAccessToken = savedToken3;
+console.log('=== TEST SWAP INTER-LIGUE : PRESERVATION DE LA SAISON 1 ===');
+T.leagueDataStore.l1.teams = { 'ClubA': { logo: 'logoA.png' }, 'ClubC': { logo: 'logoC.png' } };
+T.leagueDataStore.l2.teams = { 'ClubB': { logo: 'logoB.png' }, 'ClubD': { logo: 'logoD.png' } };
+T.baseClubsData.clubs = {};
+T.leagueDataStore.l1.seasons = [
+  { season_id: 1, fixtures: [[{ home: 'ClubA', away: 'ClubC', scoreHome: null, scoreAway: null }]], standings: { 'ClubA': { points: 3, matchs: 1, bp: 2, bc: 0, diff: 2 }, 'ClubC': { points: 0, matchs: 1, bp: 0, bc: 2, diff: -2 } } },
+  { season_id: 2, fixtures: [[{ home: 'ClubA', away: 'ClubC', scoreHome: null, scoreAway: null }]], standings: { 'ClubA': { points: 3, matchs: 1, bp: 2, bc: 0, diff: 2 }, 'ClubC': { points: 0, matchs: 1, bp: 0, bc: 2, diff: -2 } } }
+];
+T.leagueDataStore.l2.seasons = [
+  { season_id: 1, fixtures: [[{ home: 'ClubB', away: 'ClubD', scoreHome: null, scoreAway: null }]], standings: { 'ClubB': { points: 3, matchs: 1, bp: 2, bc: 0, diff: 2 }, 'ClubD': { points: 0, matchs: 1, bp: 0, bc: 2, diff: -2 } } },
+  { season_id: 2, fixtures: [[{ home: 'ClubB', away: 'ClubD', scoreHome: null, scoreAway: null }]], standings: { 'ClubB': { points: 3, matchs: 1, bp: 2, bc: 0, diff: 2 }, 'ClubD': { points: 0, matchs: 1, bp: 0, bc: 2, diff: -2 } } }
+];
+T.leagueDataStore.l1.active_season_id = 2;
+T.leagueDataStore.l2.active_season_id = 2;
+const swapEls = {};
+swapEls['swap-league-select'] = { value: 'l1' };
+swapEls['swap-target-club'] = { value: 'ClubA' };
+swapEls['swap-club-new-name'] = { value: '' };
+swapEls['swap-club-logo-catalog'] = { value: '' };
+swapEls['swap-season-select'] = { value: 'active' };
+swapEls['swap-other-club'] = { value: 'L2:ClubB' };
+swapEls['swap-club-modal'] = { classList: { remove: () => {}, add: () => {} } };
+const swapSavedGetEl = sandbox.document.getElementById;
+sandbox.document.getElementById = (id) => swapEls[id] || makeElement();
+const swapSavedQs = sandbox.document.querySelector;
+sandbox.document.querySelector = (sel) => (sel === 'input[name="swap-action-mode"]:checked') ? { value: 'swap' } : makeElement();
+const swapSavedToken = sandbox.googleAccessToken;
+sandbox.googleAccessToken = null;
+sandbox.window.executeSwapOrChangeClub();
+sandbox.googleAccessToken = swapSavedToken;
+sandbox.document.getElementById = swapSavedGetEl;
+sandbox.document.querySelector = swapSavedQs;
+
+assert(!!T.leagueDataStore.l1.teams['ClubB'] && !T.leagueDataStore.l1.teams['ClubA'], 'ClubA permute de L1 vers L2, ClubB prend sa place');
+assert(!!T.leagueDataStore.l2.teams['ClubA'] && !T.leagueDataStore.l2.teams['ClubB'], 'ClubB permute de L2 vers L1');
+
+const swapS1L1 = T.leagueDataStore.l1.seasons.find(s => s.season_id === 1);
+const swapS1L2 = T.leagueDataStore.l2.seasons.find(s => s.season_id === 1);
+const swapS2L1 = T.leagueDataStore.l1.seasons.find(s => s.season_id === 2);
+const swapS2L2 = T.leagueDataStore.l2.seasons.find(s => s.season_id === 2);
+const swapFlat = (s) => s.fixtures.reduce((acc, r) => acc.concat(r.map(m => [m.home, m.away])), []).flat();
+const s1L1Names = swapFlat(swapS1L1), s1L2Names = swapFlat(swapS1L2);
+const s2L1Names = swapFlat(swapS2L1), s2L2Names = swapFlat(swapS2L2);
+
+assert(s1L1Names.includes('ClubA') && s1L1Names.includes('ClubC'), 'Saison 1 L1 intacte (ClubA historique conserve)');
+assert(s1L2Names.includes('ClubB') && s1L2Names.includes('ClubD'), 'Saison 1 L2 intacte (ClubB historique conserve, plus de corruption)');
+assert(s2L1Names.includes('ClubB') && !s2L1Names.includes('ClubA'), 'Saison 2 L1 : permutation appliquee (ClubB)');
+assert(s2L2Names.includes('ClubA') && !s2L2Names.includes('ClubB'), 'Saison 2 L2 : permutation appliquee (ClubA)');
+
+const swapResolvable = (names) => names.filter(n => !T.getClubLogo(n).includes('default_logo')).length;
+assert(swapResolvable(s1L1Names) === s1L1Names.length, 'Saison 1 L1 : chaque club a un logo (ClubA resolu depuis L2)');
+assert(swapResolvable(s1L2Names) === s1L2Names.length, 'Saison 1 L2 : chaque club a un logo (ClubB resolu depuis L1)');
+assert(s1L1Names.every(n => T.getClubLogo(n).includes('logoA.png') || T.getClubLogo(n).includes('logoC.png')), 'Logos corrects en saison 1 L1');
+assert(s1L2Names.every(n => T.getClubLogo(n).includes('logoB.png') || T.getClubLogo(n).includes('logoD.png')), 'Logos corrects en saison 1 L2');
+
+
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

@@ -3184,7 +3184,7 @@
             }
             const activeSeason = leagueData.seasons?.find(s => s.season_id === leagueData.active_season_id);
             if (activeSeason && leagueId !== 'l3') {
-                activeSeason.standings = calculateStandings(leagueData.teams, activeSeason.fixtures);
+                activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
             }
             await updateFileContent(leagueData.fileId, leagueData);
         }
@@ -3310,16 +3310,42 @@
             return standings;
         }
 
+        // Construit la liste des clubs d'une saison à partir de SES propres données
+        // (fixtures + classement stocké), et non de l'effectif actuel de la ligue.
+        // Permet de préserver les clubs changés/échangés entre saisons dans les
+        // classements historiques.
+        function getSeasonTeamUniverse(season) {
+            const names = new Set();
+            let hasFixtures = false;
+            (season?.fixtures || []).forEach(round => {
+                (round || []).forEach(match => {
+                    if (!match) return;
+                    hasFixtures = true;
+                    if (match.home) names.add(match.home);
+                    if (match.away) names.add(match.away);
+                });
+            });
+            // Conserve aussi les clubs déjà présents au classement (sauf "fantômes" à 0
+            // match apparus suite à d'anciens recalculs basés sur l'effectif actuel)
+            Object.keys(season?.standings || {}).forEach(name => {
+                const st = season.standings[name];
+                if (!hasFixtures || (st && (st.matchs > 0 || st.points > 0))) names.add(name);
+            });
+            const teamsInfo = {};
+            names.forEach(n => teamsInfo[n] = {});
+            return teamsInfo;
+        }
+
         function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
             const matchesPerDay = (teamsInfo && Math.floor(Object.keys(teamsInfo).length / 2)) || 3;
             (fixturesData || []).forEach((round, index) => {
                 const row = document.createElement('tr'); let roundHtml = `<td>J.${index + 1}</td>`;
                 (round || []).forEach((match, matchIdx) => {
-                    if (!match || !teamsInfo[match.home] || !teamsInfo[match.away]) { roundHtml += '<td>-</td>'; return; }
+                    if (!match) { roundHtml += '<td>-</td>'; return; }
                     const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`; const scoreAwayInputId = `${leagueId}-r${index}-m${matchIdx}-a`;
                     const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
-                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${match.home}</span><img src="${BASE_URL}${teamsInfo[match.home].logo}" alt="${match.home}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${BASE_URL}${teamsInfo[match.away].logo}" alt="${match.away}" class="team-logo"><span>${match.away}</span></div></div></td>`;
+                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${match.home}</span><img src="${getClubLogo(match.home)}" alt="${match.home}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${getClubLogo(match.away)}" alt="${match.away}" class="team-logo"><span>${match.away}</span></div></div></td>`;
                 });
                 for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
                 row.innerHTML = roundHtml; fixturesBody.appendChild(row);
@@ -3334,8 +3360,7 @@
             sortedTeams.forEach(([teamName, teamData], index) => {
                 if (teamName === "BYE") return;
                 const row = document.createElement('tr');
-                const logoFilename = teamsForLogos[teamName]?.logo;
-                const logoSrc = logoFilename ? `${BASE_URL}${logoFilename}` : `${BASE_URL}default_logo.png`;
+                const logoSrc = getClubLogo(teamName);
                 row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
                 standingsBody.appendChild(row);
             });
@@ -3388,7 +3413,7 @@
             if (!activeSeason || !activeSeason.fixtures || !activeSeason.fixtures[roundIndex] || !activeSeason.fixtures[roundIndex][matchIndex]) return;
             if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
-            activeSeason.standings = calculateStandings(league.teams, activeSeason.fixtures);
+            activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
             if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams);
         }
 
@@ -3437,6 +3462,10 @@
             const standingsBody = document.getElementById(refIds.standingsBodyId);
 
             if (activeSeason) {
+                // Recalcule le classement de la saison affichée à partir de SES propres fixtures
+                // (et non de l'effectif actuel) : les clubs d'anciennes saisons gardent ainsi
+                // leur nom, leur logo et leurs statistiques au classement.
+                activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
                 if (fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
                 if (standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
             } else {
@@ -3869,12 +3898,26 @@
         // Supprimer un club de la L3 (bouton poubelle sur sa carte)
         window.deleteClubFromL3 = function (clubName) {
             if (!leagueDataStore.l3.clubs[clubName]) return;
-            if (!confirm(`Supprimer le club "${clubName}" de la L3 ?`)) return;
+            if (!confirm(`Archiver le club "${clubName}" (retiré de la L3) dans la Base ?`)) return;
+            const clubData = leagueDataStore.l3.clubs[clubName];
+            // Archive le club dans la Base des clubs (avec son logo) pour que son nom,
+            // son logo et ses trophées restent visibles dans les classements et le
+            // palmarès des saisons précédentes.
+            if (baseClubsData.clubs[clubName]) {
+                baseClubsData.clubs[clubName].logo = clubData.logo || baseClubsData.clubs[clubName].logo;
+            } else {
+                baseClubsData.clubs[clubName] = {
+                    logo: clubData.logo || 'default_logo.png',
+                    description: (clubData.description || '') + ' (retiré de la L3)'
+                };
+            }
             delete leagueDataStore.l3.clubs[clubName];
             initRoulette();
             populateTeamsGridDOM('l3-teams-grid', leagueDataStore.l3.clubs);
-            if (googleAccessToken) saveDataToDrive('l3');
-            showMessage(`${clubName} supprimé de la L3.`, 2000);
+            if (googleAccessToken) { saveDataToDrive('l3'); saveBaseClubsToDrive(); }
+            populateBaseClubs();
+            populatePalmaresTable();
+            showMessage(`${clubName} archivé dans la Base (retiré de la L3).`, 2500);
         };
 
         // ==================== SAISONS LDC / CDF (comme les ligues) ====================

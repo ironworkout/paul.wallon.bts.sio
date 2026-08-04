@@ -49,13 +49,15 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
+    calculateStandings, getSeasonTeamUniverse,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
     get BASE_URL() { return BASE_URL; }
-};`;
+};
+;initRoulette = () => {}; // stub canvas (roulette) pour les tests de suppression L3`;
 
 try {
     vm.runInContext(js, sandbox, { timeout: 10000 });
@@ -214,6 +216,57 @@ assert(T.resolveLogoUrl('data:image/png;base64,ABC') === 'data:image/png;base64,
 assert(T.resolveLogoUrl('https://exemple.com/logo.png') === 'https://exemple.com/logo.png', 'Logo http(s) non préfixé');
 assert(T.resolveLogoUrl('vafc.png') === T.BASE_URL + 'vafc.png', 'Logo simple préfixé par BASE_URL');
 assert(T.resolveLogoUrl(null) === T.BASE_URL + 'default_logo.png', 'Logo manquant -> default_logo');
+
+console.log('\n=== TEST SAISONS ANTERIEURES : CLUBS REMPLACES ===\n');
+// Scenario : saison passee avec X et Y, remplaces aujourd'hui par P et Q dans l'effectif.
+// Le classement de la saison passee doit conserver X et Y (nom + points), sans pollution par P/Q.
+const oldFixtures = [
+    [ { home: 'A', away: 'X', scoreHome: 2, scoreAway: 1 },
+      { home: 'B', away: 'Y', scoreHome: 0, scoreAway: 0 },
+      { home: 'C', away: 'D', scoreHome: 3, scoreAway: 1 } ],
+    [ { home: 'X', away: 'A', scoreHome: 1, scoreAway: 1 },
+      { home: 'Y', away: 'B', scoreHome: 2, scoreAway: 0 },
+      { home: 'D', away: 'C', scoreHome: 1, scoreAway: 2 } ]
+];
+const oldSeason = {
+    season_id: 1,
+    fixtures: oldFixtures,
+    standings: {
+        A: { points: 4, matchs: 2, bp: 3, bc: 2, diff: 1 },
+        B: { points: 1, matchs: 2, bp: 0, bc: 2, diff: -2 },
+        C: { points: 6, matchs: 2, bp: 5, bc: 2, diff: 3 },
+        D: { points: 0, matchs: 2, bp: 2, bc: 5, diff: -3 },
+        X: { points: 1, matchs: 2, bp: 2, bc: 3, diff: -1 },
+        Y: { points: 4, matchs: 2, bp: 2, bc: 0, diff: 2 }
+    }
+};
+const currentRoster = { A: {}, B: {}, C: {}, D: {}, P: {}, Q: {} };
+// Ancien comportement (bug) : recalcul avec l'effectif actuel
+const buggyStandings = T.calculateStandings(currentRoster, oldFixtures);
+assert(!buggyStandings['X'] && !buggyStandings['Y'], "Rappel du bug : X et Y disparaissent avec le recalcul sur l'effectif actuel");
+// Nouveau comportement : recalcul sur l'univers propre de la saison
+const healedStandings = T.calculateStandings(T.getSeasonTeamUniverse(oldSeason), oldFixtures);
+const healedNames = Object.keys(healedStandings);
+assert(healedNames.includes('X') && healedNames.includes('Y'), 'X et Y conserves au classement de la saison passee');
+assert(healedStandings['X'].points === 1 && healedStandings['Y'].points === 4, 'Points de X et Y conserves depuis les fixtures');
+assert(!healedNames.includes('P') && !healedNames.includes('Q'), "Clubs actuels (P, Q) absents de cette saison non ajoutes");
+assert(healedStandings['A'].points === 4 && healedStandings['C'].points === 6, 'Points des autres clubs intacts');
+// Club fantome (0 match, 0 point) herite d'une ancienne corruption -> purge
+const ghostSeason = { season_id: 1, fixtures: oldFixtures, standings: Object.assign({}, oldSeason.standings, { P: { points: 0, matchs: 0, bp: 0, bc: 0, diff: 0 } }) };
+const cleanedStandings = T.calculateStandings(T.getSeasonTeamUniverse(ghostSeason), oldFixtures);
+assert(!cleanedStandings['P'], 'Club fantome a 0 match purge du classement');
+
+console.log('\n=== TEST ARCHIVAGE CLUB SUPPRIME DE L3 ===\n');
+T.leagueDataStore.l3.clubs = { 'ClubArchive': { logo: 'archive.png', description: 'desc' } };
+T.baseClubsData.clubs = {};
+const savedGoogleToken = sandbox.googleAccessToken;
+sandbox.googleAccessToken = null; // evite les ecritures Drive pendant le test
+sandbox.window.deleteClubFromL3('ClubArchive');
+sandbox.googleAccessToken = savedGoogleToken;
+assert(!T.leagueDataStore.l3.clubs['ClubArchive'], 'Club retire de la L3');
+assert(!!T.baseClubsData.clubs['ClubArchive'], 'Club archive dans la Base des clubs');
+assert(T.baseClubsData.clubs['ClubArchive'].logo === 'archive.png', 'Logo du club conserve dans la Base');
+assert(!!T.getAllTeamsInStore()['ClubArchive'], 'Club archive visible dans getAllTeamsInStore (classements historiques)');
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

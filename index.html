@@ -1486,20 +1486,42 @@
             gap: 8px;
             align-items: center;
             margin-bottom: 14px;
-            padding: 10px;
-            background: rgba(102, 51, 153, 0.06);
-            border-radius: 8px;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(102, 51, 153, 0.10), rgba(102, 51, 153, 0.04));
+            border: 1px dashed rgba(102, 51, 153, 0.4);
+            border-radius: 10px;
+        }
+        .ldc-intl-form-title {
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--nav-ldc-color, #663399);
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
         }
         .ldc-intl-form input, .ldc-intl-form select {
-            padding: 7px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--card-bg, #1e1e2e);
-            color: var(--text-color, #eee);
+            padding: 9px 12px;
+            border: 1.5px solid #b9bcc9;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--text-color-dark, #212529);
             font-family: inherit;
+            font-size: 0.95rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .ldc-intl-form input::placeholder {
+            color: #7a7f8e;
+            opacity: 1;
+        }
+        .ldc-intl-form input:focus, .ldc-intl-form select:focus {
+            outline: none;
+            border-color: var(--nav-ldc-color, #663399);
+            box-shadow: 0 0 0 3px rgba(102, 51, 153, 0.18);
         }
         .ldc-intl-form input {
             min-width: 180px;
+            flex: 1;
         }
         .ldc-nat-section {
             border-top: 1px dashed var(--border-color);
@@ -4712,6 +4734,7 @@
             html += '</div>';
 
             html += `<div class="ldc-intl-form">
+                <span class="ldc-intl-form-title">➕ Ajouter un club international</span>
                 <input type="text" id="ldc-intl-name" placeholder="Nom du club (ex : Bayern Peluche)">
                 <input type="text" id="ldc-intl-country" placeholder="Pays (optionnel)">
                 <select id="ldc-intl-logo">`;

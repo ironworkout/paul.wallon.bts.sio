@@ -740,6 +740,49 @@
             margin-bottom: 8px;
         }
 
+        .team-trophies,
+        .carousel-trophies {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .team-trophies .trophies-total,
+        .carousel-trophies .trophies-total {
+            width: 100%;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+        .team-trophies span,
+        .carousel-trophies span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .team-trophies span {
+            background: rgba(255, 193, 7, 0.12);
+            border: 1px solid rgba(255, 193, 7, 0.25);
+            color: var(--accent-gold);
+        }
+        .team-trophies .trophies-total {
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+        }
+        .carousel-trophies span {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        }
+
         .palmares-content .section {
             background: linear-gradient(145deg, var(--palmares-bg-dark) 0%, #1f242b 100%);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.3);
@@ -2186,7 +2229,7 @@
                     <div class="carousel-item">
                         <img src="https://ironworkout.github.io/paul.wallon.bts.sio/vafc.png"
                             alt="Action de jeu Valenciennes FC">
-                        <div class="carousel-caption">
+                        <div class="carousel-caption" data-club="Valenciennes FC">
                             <h2>VALENCIENNES FC : LES GUERRIERS DU NORD !</h2>
                             <p>Suivez les exploits des héros locaux en Ligue 1.</p><a href="#l1-teams-section"
                                 class="btn">Découvrir les Équipes</a>
@@ -2981,7 +3024,7 @@
                     console.error("Erreur majeure chargement Drive:", error); showMessage("Erreur majeure chargement données Drive.", 6000, true);
                     if (driveStatusElement) { driveStatusElement.classList.remove('loading', 'success'); driveStatusElement.classList.add('error'); }
                     if (driveStatusTextElement) driveStatusTextElement.textContent = 'Erreur Données';
-                } finally { updateAuthUI(true); populateAllLeaguesUI(); populatePalmaresTable(); populateBaseClubs(); populateCDF(); populateLDC(); updateBarragesDisplay(); }
+                } finally { updateAuthUI(true); populateAllLeaguesUI(); populatePalmaresTable(); populateBaseClubs(); populateCDF(); populateLDC(); updateBarragesDisplay(); populateCarouselClubTrophies(); }
             } else handleTokenError({ error: "Réponse de token invalide" });
         }
         function handleAuthClick() {
@@ -3374,7 +3417,7 @@
                 const teamCard = document.createElement('div'); teamCard.className = 'team-card';
                 const logoFilename = teamData?.logo || 'default_logo.png';
                 const logoSrc = (logoFilename.startsWith('data:') || logoFilename.startsWith('http')) ? logoFilename : `${BASE_URL}${logoFilename}`;
-                teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
+                teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
                 
                 // Poubelle de suppression uniquement pour les clubs de L3
                 if (teamsGridId.includes('l3')) {
@@ -4684,6 +4727,7 @@
                 card.innerHTML = `
                     <img src="${logoSrc}" alt="${name}">
                     <h4>${name}</h4>
+                    ${getClubTrophiesHTML(name)}
                     <p>${data.description || ''}</p>
                     <div class="club-actions">
                         <button class="btn btn-sm" onclick="promoteFromBase('${name}')" style="background: var(--neon-green); font-size: 0.8rem;"><i class="fas fa-arrow-up"></i> Promouvoir</button>
@@ -5066,6 +5110,30 @@
             return `${BASE_URL}default_logo.png`;
         }
 
+        // Affiche le palmarès d'un club (nb de trophées + lesquels) sous forme de badges HTML
+        function getClubTrophiesHTML(clubName, containerClass = 'team-trophies') {
+            const p = palmaresData[clubName];
+            if (!p) return '';
+            // Réutilise l'ordre et les icônes officiels du classement général (LDC > Ligue 1 > CDF > Ligue 2)
+            const parts = CLASSEMENT_TROPHY_ORDER.filter(key => (p[key] || 0) > 0);
+            if (parts.length === 0) return '';
+            const total = parts.reduce((s, key) => s + (p[key] || 0), 0);
+            return `<div class="${containerClass}"><span class="trophies-total">🏆 ${total} ${total > 1 ? 'titres' : 'titre'}</span>` +
+                parts.map(key => `<span>${CLASSEMENT_TROPHY_ICONS[key]} ${key} ×${p[key]}</span>`).join('') + `</div>`;
+        }
+        // Enrichit les légendes des carrousels ("actus") marquées data-club avec le palmarès du club
+        function populateCarouselClubTrophies() {
+            document.querySelectorAll('.carousel-caption[data-club]').forEach(caption => {
+                const oldBadge = caption.querySelector('.carousel-trophies');
+                if (oldBadge) oldBadge.remove();
+                const html = getClubTrophiesHTML(caption.dataset.club, 'carousel-trophies');
+                if (!html) return;
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                caption.appendChild(div.querySelector('.carousel-trophies'));
+            });
+        }
+
         // ==================== PALMARES ====================
         function populatePalmaresTable() {
             const tableBody = document.getElementById('palmares-table-body');
@@ -5130,6 +5198,10 @@
             else palmaresData[teamName][trophyType] = Math.max(0, palmaresData[teamName][trophyType] - 1);
 
             populatePalmaresTable();
+            // Rafraîchit aussi les cartes clubs, la Base et les badges des actus
+            populateAllLeaguesUI();
+            populateBaseClubs();
+            populateCarouselClubTrophies();
             savePalmaresToDrive();
         };
 
@@ -5493,6 +5565,7 @@
             populateCDF();
             populateLDC();
             updateBarragesDisplay();
+            populateCarouselClubTrophies();
 
             document.querySelectorAll('.carousel').forEach(initializeCarousel);
 

@@ -49,7 +49,7 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
-    calculateStandings, getSeasonTeamUniverse,
+    calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
@@ -267,6 +267,18 @@ assert(!T.leagueDataStore.l3.clubs['ClubArchive'], 'Club retire de la L3');
 assert(!!T.baseClubsData.clubs['ClubArchive'], 'Club archive dans la Base des clubs');
 assert(T.baseClubsData.clubs['ClubArchive'].logo === 'archive.png', 'Logo du club conserve dans la Base');
 assert(!!T.getAllTeamsInStore()['ClubArchive'], 'Club archive visible dans getAllTeamsInStore (classements historiques)');
+
+console.log('\n=== TEST TROPHEES DANS LES PRESENTATIONS DE CLUBS ===\n');
+T.palmaresData = {
+    'ClubTrophee': { 'Ligue 1': 2, 'Ligue 2': 0, 'LDC': 1, 'CDF': 0 }
+};
+const th = T.getClubTrophiesHTML('ClubTrophee');
+assert(th.includes('3') && th.includes('titres'), 'Total des trophées affiché (3 titres)');
+assert(th.includes('Ligue 1') && th.includes('×2'), 'Ligue 1 ×2 listé');
+assert(th.includes('LDC') && th.includes('×1'), 'LDC ×1 listé');
+assert(!th.includes('CDF') && !th.includes('Ligue 2'), 'Compétitions sans trophée absentes');
+assert(T.getClubTrophiesHTML('ClubSansTrophee') === '', 'Club sans trophée : aucun bloc');
+assert(T.getClubTrophiesHTML('Absent', 'carousel-trophies') === '', 'Club absent du palmarès : aucun bloc');
 
 console.log('\n========================================');
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');

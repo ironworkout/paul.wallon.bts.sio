@@ -2763,7 +2763,7 @@
                 </div>
                 <div class="form-group">
                     <label for="swap-season-select"><i class="fas fa-calendar-alt"></i> Saison concernée par le changement :</label>
-                    <select id="swap-season-select" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;">
+                    <select id="swap-season-select" class="form-control" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px;" onchange="onSwapSeasonChange()">
                     </select>
                 </div>
                 <div class="form-group">
@@ -4914,28 +4914,62 @@
         }
         window.openSwapClubModal = openSwapClubModal;
 
+        // Logo brut (fichier, sans URL) d'un club, ou qu'il se trouve (L1/L2/L3/Base)
+        function getClubRawLogo(clubName) {
+            if (leagueDataStore.l1.teams?.[clubName]) return leagueDataStore.l1.teams[clubName].logo;
+            if (leagueDataStore.l2.teams?.[clubName]) return leagueDataStore.l2.teams[clubName].logo;
+            if (leagueDataStore.l3.clubs?.[clubName]) return leagueDataStore.l3.clubs[clubName].logo;
+            if (baseClubsData.clubs?.[clubName]) return baseClubsData.clubs[clubName].logo;
+            return 'default_logo.png';
+        }
+
+        // Remplit la liste "Club a modifier" avec les clubs actuels + ceux des saisons
+        // de la ligue (y compris les clubs historiques changes/echanges depuis, qui ne
+        // sont plus dans l'effectif actuel mais existent encore dans les anciennes saisons).
+        function populateSwapTargetClubs(leagueId) {
+            const targetSelect = document.getElementById('swap-target-club');
+            if (!targetSelect) return;
+            const seasonChoice = document.getElementById('swap-season-select')?.value || 'active';
+            const league = leagueDataStore[leagueId];
+
+            const names = new Set();
+            // Effectif actuel de la ligue
+            const currentDict = leagueId === 'l3' ? leagueDataStore.l3?.clubs : league?.teams;
+            Object.keys(currentDict || {}).forEach(n => { if (n !== 'BYE') names.add(n); });
+
+            // Clubs des saisons de la ligue (selon la saison choisie)
+            if (league?.seasons) {
+                league.seasons.forEach(s => {
+                    const isMatch = (seasonChoice === 'all') ||
+                        (seasonChoice === 'active' && s.season_id === league.active_season_id) ||
+                        (seasonChoice == s.season_id);
+                    if (isMatch) {
+                        Object.keys(getSeasonTeamUniverse(s)).forEach(n => { if (n !== 'BYE') names.add(n); });
+                    }
+                });
+            }
+
+            targetSelect.innerHTML = '';
+            [...names].sort().forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                targetSelect.appendChild(opt);
+            });
+        }
+
+        function onSwapSeasonChange() {
+            const leagueId = document.getElementById('swap-league-select')?.value || 'l1';
+            populateSwapTargetClubs(leagueId);
+            onSwapTargetClubChange();
+        }
+        window.onSwapSeasonChange = onSwapSeasonChange;
+
         function onSwapLeagueChange() {
             const leagueId = document.getElementById('swap-league-select')?.value || 'l1';
             const targetSelect = document.getElementById('swap-target-club');
             const seasonSelect = document.getElementById('swap-season-select');
             if (!targetSelect) return;
-            targetSelect.innerHTML = '';
-
-            let teams = {};
-            const league = leagueDataStore[leagueId];
-            if (leagueId === 'l3') {
-                teams = leagueDataStore.l3?.clubs || {};
-            } else {
-                teams = league?.teams || {};
-            }
-
-            Object.keys(teams).forEach(teamName => {
-                if (teamName === "BYE") return;
-                const opt = document.createElement('option');
-                opt.value = teamName;
-                opt.textContent = teamName;
-                targetSelect.appendChild(opt);
-            });
 
             if (seasonSelect) {
                 seasonSelect.innerHTML = '';
@@ -4960,6 +4994,7 @@
                 }
             }
 
+            populateSwapTargetClubs(leagueId);
             onSwapTargetClubChange();
         }
         window.onSwapLeagueChange = onSwapLeagueChange;
@@ -4972,17 +5007,17 @@
             let clubData = null;
             if (leagueId === 'l3') clubData = leagueDataStore.l3?.clubs?.[clubName];
             else clubData = leagueDataStore[leagueId]?.teams?.[clubName];
+            // Club historique (plus dans l'effectif actuel) : on remonte son logo depuis la Base
+            if (!clubData) clubData = { logo: getClubRawLogo(clubName) };
 
-            if (clubData) {
-                document.getElementById('swap-club-new-name').value = clubName;
-                const logoCatalogSelect = document.getElementById('swap-club-logo-catalog');
-                if (logoCatalogSelect) logoCatalogSelect.value = clubData.logo || '';
-                const preview = document.getElementById('swap-logo-preview');
-                if (preview) {
-                    const logo = clubData.logo || 'default_logo.png';
-                    preview.src = (logo.startsWith('data:') || logo.startsWith('http')) ? logo : `${BASE_URL}${logo}`;
-                    preview.style.display = 'block';
-                }
+            document.getElementById('swap-club-new-name').value = clubName;
+            const logoCatalogSelect = document.getElementById('swap-club-logo-catalog');
+            if (logoCatalogSelect) logoCatalogSelect.value = clubData.logo || '';
+            const preview = document.getElementById('swap-logo-preview');
+            if (preview) {
+                const logo = clubData.logo || 'default_logo.png';
+                preview.src = (logo.startsWith('data:') || logo.startsWith('http')) ? logo : `${BASE_URL}${logo}`;
+                preview.style.display = 'block';
             }
             populateSwapOtherClubsSelect();
         }
@@ -5046,7 +5081,13 @@
 
             const league = leagueDataStore[leagueId];
             const leagueStore = leagueId === 'l3' ? leagueDataStore.l3.clubs : league?.teams;
-            if (!leagueStore || !leagueStore[oldClubName]) return;
+            const clubInRoster = !!(leagueStore && leagueStore[oldClubName]);
+            // Un club historique (présent dans une saison mais plus dans l'effectif actuel)
+            // reste modifiable en mode "Modifier Nom & Logo" : son logo est retrouvé via la Base.
+            if (mode !== 'edit' && !clubInRoster) {
+                showMessage("La permutation n'est possible que pour un club de l'effectif actuel. Pour un club d'une saison précédente, utilisez « Modifier Nom & Logo ».", 4000, true);
+                return;
+            }
 
             if (mode === 'edit') {
                 const newName = document.getElementById('swap-club-new-name').value.trim();
@@ -5057,21 +5098,49 @@
                     return;
                 }
 
-                let logoToUse = catalogLogo || leagueStore[oldClubName].logo || 'default_logo.png';
+                const oldLogo = clubInRoster
+                    ? (leagueStore[oldClubName].logo || 'default_logo.png')
+                    : getClubRawLogo(oldClubName);
+                let logoToUse = catalogLogo || oldLogo || 'default_logo.png';
 
-                // Préserver l'ancien club (avec son logo) dans la base clubs pour que son nom,
-                // son logo et ses trophées restent visibles dans le classement/palmarès des saisons précédentes
-                if (!baseClubsData.clubs[oldClubName]) {
-                    baseClubsData.clubs[oldClubName] = {
-                        logo: leagueStore[oldClubName].logo || 'default_logo.png',
-                        description: (leagueStore[oldClubName].description || '') + ` (anciennement renommé en ${newName})`
-                    };
+                if (!clubInRoster) {
+                    // ---- Club historique (plus dans l'effectif actuel) ----
+                    if (newName === oldClubName) {
+                        // Simple changement de logo : mise à jour de l'entrée Base existante
+                        if (!baseClubsData.clubs[oldClubName]) {
+                            baseClubsData.clubs[oldClubName] = { logo: oldLogo || 'default_logo.png', description: '' };
+                        }
+                        baseClubsData.clubs[oldClubName].logo = logoToUse;
+                    } else {
+                        // Renommage : l'ancien nom reste archivé dans la Base (pour les saisons
+                        // non renommées), le nouveau nom reçoit le nouveau logo (saisons renommées).
+                        if (!baseClubsData.clubs[oldClubName]) {
+                            baseClubsData.clubs[oldClubName] = {
+                                logo: oldLogo || 'default_logo.png',
+                                description: ` (anciennement renommé en ${newName})`
+                            };
+                        }
+                        if (!baseClubsData.clubs[newName]) {
+                            baseClubsData.clubs[newName] = { logo: logoToUse, description: '' };
+                        } else {
+                            baseClubsData.clubs[newName].logo = logoToUse;
+                        }
+                    }
+                } else {
+                    // Préserver l'ancien club (avec son logo) dans la base clubs pour que son nom,
+                    // son logo et ses trophées restent visibles dans le classement/palmarès des saisons précédentes
+                    if (!baseClubsData.clubs[oldClubName]) {
+                        baseClubsData.clubs[oldClubName] = {
+                            logo: oldLogo || 'default_logo.png',
+                            description: (leagueStore[oldClubName].description || '') + ` (anciennement renommé en ${newName})`
+                        };
+                    }
+
+                    // Mettre à jour l'équipe dans la ligue
+                    const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
+                    delete leagueStore[oldClubName];
+                    leagueStore[newName] = clubObj;
                 }
-
-                // Mettre à jour l'équipe dans la ligue
-                const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
-                delete leagueStore[oldClubName];
-                leagueStore[newName] = clubObj;
 
                 // Appliquer le changement dans la/les saison(s) choisie(s)
                 if (league && league.seasons) {

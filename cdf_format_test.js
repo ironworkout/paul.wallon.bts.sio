@@ -52,6 +52,7 @@ js += `
     calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
+    populateSwapTargetClubs, onSwapSeasonChange, getClubRawLogo, getSeasonTeamUniverse, executeSwapOrChangeClub,
     removeSelectedCatalogLogo: window.removeSelectedCatalogLogo, restoreRemovedCatalogLogos: window.restoreRemovedCatalogLogos,
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
@@ -59,7 +60,17 @@ js += `
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
     get BASE_URL() { return BASE_URL; }
 };
-;initRoulette = () => {}; // stub canvas (roulette) pour les tests de suppression L3`;
+;initRoulette = () => {}; // stub canvas (roulette) pour les tests de suppression L3
+;populateAllLeaguesUI = () => {};
+;populateBaseClubs = () => {};
+;populatePalmaresTable = () => {};
+;populateCDF = () => {};
+;populateLDC = () => {};
+;saveDataToDrive = () => {};
+;saveBaseClubsToDrive = () => {};
+;updateBarragesDisplay = () => {};
+;populateCarouselClubTrophies = () => {};
+;updateAuthUI = () => {};`;
 
 try {
     vm.runInContext(js, sandbox, { timeout: 10000 });
@@ -342,6 +353,79 @@ assert(s1L2Names.every(n => T.getClubLogo(n).includes('logoB.png') || T.getClubL
 
 
 console.log('\n========================================');
+console.log('=== TEST SWAP : CLUBS DES SAISONS PRECEDENTES VISIBLES + MODIFIABLES ===');
+// Scenario : un club historique (ClubX) existe en saison 1 de L1 mais a ete change
+// depuis (plus dans l'effectif actuel). Il doit apparaitre dans la liste des clubs
+// a modifier, et son logo doit rester modifiable.
+T.leagueDataStore.l1.teams = { 'ClubA': { logo: 'logoA.png' }, 'ClubB': { logo: 'logoB.png' } };
+T.leagueDataStore.l1.seasons = [
+  { season_id: 1, active_season_id: 2, nom_saison: 'Saison 1',
+    fixtures: [[{ home: 'ClubX', away: 'ClubA', scoreHome: 1, scoreAway: 0 }]],
+    standings: { 'ClubX': { points: 3, matchs: 1, bp: 1, bc: 0, diff: 1 }, 'ClubA': { points: 0, matchs: 1, bp: 0, bc: 1, diff: -1 } } },
+  { season_id: 2, fixtures: [], standings: {} }
+];
+T.leagueDataStore.l1.active_season_id = 2;
+T.baseClubsData.clubs = { 'ClubX': { logo: 'oldlogo.png', description: 'historique' } };
+
+// getSeasonTeamUniverse retrouve ClubX depuis les fixtures de la saison 1
+const uni = T.getSeasonTeamUniverse(T.leagueDataStore.l1.seasons[0]);
+assert(!!uni['ClubX'], 'getSeasonTeamUniverse retrouve le club historique ClubX (saison 1)');
+assert(!!uni['ClubA'], 'getSeasonTeamUniverse retrouve aussi ClubA');
+
+// populateSwapTargetClubs inclut les clubs actuels + ceux de la saison choisie
+const fakeSel = { innerHTML: '', options: [], value: '', appendChild(o) { this.options.push(o); } };
+const savedGetElSwap = sandbox.document.getElementById;
+const savedQSwap = sandbox.document.querySelector;
+sandbox.document.getElementById = (id) => {
+    if (id === 'swap-target-club') return fakeSel;
+    if (id === 'swap-season-select') return { value: '1', innerHTML: '' };
+    return { style:{}, value:'', innerHTML:'' };
+};
+T.populateSwapTargetClubs('l1');
+const optVals = fakeSel.options.map(o => o.value);
+assert(optVals.includes('ClubX'), 'populateSwapTargetClubs : ClubX (historique saison 1) propose');
+assert(optVals.includes('ClubA'), 'populateSwapTargetClubs : ClubA (actuel) propose');
+
+// getClubRawLogo retrouve le logo du club historique dans la Base
+assert(T.getClubRawLogo('ClubX') === 'oldlogo.png', 'getClubRawLogo retrouve le logo de ClubX dans la Base');
+assert(T.getClubRawLogo('ClubA') === 'logoA.png', 'getClubRawLogo retrouve le logo de ClubA');
+
+// executeSwapOrChangeClub : mode edit sur un club historique (changement de logo)
+sandbox.document.getElementById = (id) => {
+    if (id === 'swap-league-select') return { value: 'l1' };
+    if (id === 'swap-target-club') return { value: 'ClubX' };
+    if (id === 'swap-season-select') return { value: '1' };
+    if (id === 'swap-club-new-name') return { value: 'ClubX' };
+    if (id === 'swap-club-logo-catalog') return { value: 'newlogo.png' };
+    return { style:{}, value:'', innerHTML:'', classList:{ add(){}, remove(){}, contains(){return false}, toggle(){} } };
+};
+sandbox.document.querySelector = (sel) => sel.includes('swap-action-mode') ? { value: 'edit' } : savedQSwap(sel);
+T.executeSwapOrChangeClub();
+sandbox.document.getElementById = savedGetElSwap;
+sandbox.document.querySelector = savedQSwap;
+assert(T.baseClubsData.clubs['ClubX'].logo === 'newlogo.png', 'Edit historique : logo de ClubX mis a jour dans la Base');
+assert(T.leagueDataStore.l1.seasons[0].fixtures[0][0].home === 'ClubX', 'Edit historique : fixtures saison 1 conserve ClubX');
+assert(!('ClubX' in T.leagueDataStore.l1.teams), 'Edit historique : ClubX pas ajoute a l effectif actuel');
+
+// Renommage d'un club historique : l'ancien nom reste archive, le nouveau nom recoit le logo
+T.baseClubsData.clubs['ClubY'] = undefined; delete T.baseClubsData.clubs['ClubY'];
+sandbox.document.getElementById = (id) => {
+    if (id === 'swap-league-select') return { value: 'l1' };
+    if (id === 'swap-target-club') return { value: 'ClubX' };
+    if (id === 'swap-season-select') return { value: '1' };
+    if (id === 'swap-club-new-name') return { value: 'ClubY' };
+    if (id === 'swap-club-logo-catalog') return { value: 'newlogo2.png' };
+    return { style:{}, value:'', innerHTML:'', classList:{ add(){}, remove(){}, contains(){return false}, toggle(){} } };
+};
+sandbox.document.querySelector = (sel) => sel.includes('swap-action-mode') ? { value: 'edit' } : savedQSwap(sel);
+T.executeSwapOrChangeClub();
+sandbox.document.getElementById = savedGetElSwap;
+sandbox.document.querySelector = savedQSwap;
+assert(!!T.baseClubsData.clubs['ClubX'], 'Renommage historique : ancien nom ClubX archive dans la Base');
+assert(T.baseClubsData.clubs['ClubY'].logo === 'newlogo2.png', 'Renommage historique : nouveau nom ClubY cree avec le logo');
+assert(T.leagueDataStore.l1.seasons[0].fixtures[0][0].home === 'ClubY', 'Renommage historique : fixtures saison 1 renommees en ClubY');
+assert(!('ClubX' in T.leagueDataStore.l1.teams) && !('ClubY' in T.leagueDataStore.l1.teams), 'Renommage historique : effectif actuel inchange');
+
 console.log('=== TEST CATALOGUE LOGOS GITHUB (As_doudou_c.png + retirer/restaurer) ===');
 const catalog = T.GITHUB_LOGOS_CATALOG;
 assert(Array.isArray(catalog) && catalog.length > 0, 'Catalogue logos present');

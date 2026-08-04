@@ -1,0 +1,8 @@
+# Freebuff (application interne - ne jamais committer)
+.freebuff/
+
+# Fichiers temporaires / OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

@@ -54,6 +54,15 @@ js += `
     GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
     populateSwapTargetClubs, onSwapSeasonChange, getClubRawLogo, getSeasonTeamUniverse, executeSwapOrChangeClub,
     removeSelectedCatalogLogo: window.removeSelectedCatalogLogo, restoreRemovedCatalogLogos: window.restoreRemovedCatalogLogos,
+    removeSelectedCatalogLogo: window.removeSelectedCatalogLogo, restoreRemovedCatalogLogos: window.restoreRemovedCatalogLogos,
+    startLDCDraw, renderLDCBracket, advanceLDCWinner, resolveLDCByeMatch, renderLDCSetupPanel, renderLDCNationalPanel, ldcLeagueTeams,
+    LDC_ROUND_NAMES, LDC_TARGET_CLUBS,
+    submitLDCInternationalClub: window.submitLDCInternationalClub,
+    onLDCNationalToggle: window.onLDCNationalToggle,
+    onLDCNationalSelectAll: window.onLDCNationalSelectAll,
+    get ldcData() { return ldcData; }, set ldcData(v) { ldcData = v; },
+    get ldcClubsData() { return ldcClubsData; }, set ldcClubsData(v) { ldcClubsData = v; },
+    get ldcNationalSelection() { return ldcNationalSelection; }, set ldcNationalSelection(v) { ldcNationalSelection = v; },
     get cdfData() { return cdfData; }, set cdfData(v) { cdfData = v; },
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
@@ -69,6 +78,8 @@ js += `
 ;saveDataToDrive = () => {};
 ;saveBaseClubsToDrive = () => {};
 ;updateBarragesDisplay = () => {};
+;saveLDCToDrive = () => {};
+;saveLDClubsToDrive = () => {};
 ;populateCarouselClubTrophies = () => {};
 ;updateAuthUI = () => {};`;
 
@@ -484,6 +495,98 @@ T.removeSelectedCatalogLogo('fake-select2');
 sandbox.document.getElementById = savedGetEl2;
 assert(T.getRemovedCatalogLogos().includes('usla.png'), 'removeSelectedCatalogLogo ajoute le logo selectionne aux retires');
 assert(!T.getVisibleCatalogLogos().some(l => l.filename === 'usla.png'), 'usla.png plus propose apres retrait');
+
+console.log('=== TEST LDC : clubs internationaux + choix nationaux + 32emes de finale ===');
+// --- Etat de depart propre ---
+T.ldcClubsData.clubs = {};
+T.ldcNationalSelection = { l1: [], l2: [], l3: [] };
+T.ldcData.participants = []; T.ldcData.rounds = {}; T.ldcData.champion = null; T.ldcData._trophyAwarded = false;
+T.ldcData.seasons = []; T.ldcData.active_season_id = null;
+assert(T.LDC_ROUND_NAMES.length === 5, 'LDC : 5 tours (32emes -> Finale)');
+assert(T.LDC_ROUND_NAMES[0] === '32èmes', 'Le 1er tour est les 32emes de finale');
+assert(T.LDC_ROUND_NAMES[4] === 'Finale', 'Le dernier tour est la Finale');
+assert(T.LDC_TARGET_CLUBS === 32, 'Cible de 32 clubs (32emes de finale)');
+
+// --- Ajout d'un club international via le formulaire (DOM mocké) ---
+sandbox.document.getElementById = (id) => {
+    const el = makeElement();
+    if (id === 'ldc-intl-name') el.value = 'Bayern Peluche';
+    if (id === 'ldc-intl-country') el.value = 'Allemagne';
+    if (id === 'ldc-intl-logo') el.value = 'ascl.png';
+    return el;
+};
+T.submitLDCInternationalClub();
+assert(!!T.ldcClubsData.clubs['Bayern Peluche'], 'Club international ajoute (Bayern Peluche)');
+assert(T.ldcClubsData.clubs['Bayern Peluche'].logo === 'ascl.png', 'Logo du club international enregistre');
+assert(T.ldcClubsData.clubs['Bayern Peluche'].country === 'Allemagne', 'Pays enregistre');
+T.ldcClubsData.clubs['Real Peluche'] = { logo: 'tfc.png', country: 'Espagne' };
+const storeNames = Object.keys(T.getAllTeamsInStore());
+assert(!storeNames.includes('Bayern Peluche') && !storeNames.includes('Real Peluche'), 'Clubs internationaux absents de getAllTeamsInStore (pas de stats)');
+assert(T.getClubLogo('Bayern Peluche') !== 'default_logo.png', 'Logo du club international resolu par getClubLogo');
+
+// --- Selection des clubs nationaux ---
+T.onLDCNationalToggle('l1', { checked: true, dataset: { club: 'L1 Club 1' } });
+assert(T.ldcNationalSelection.l1.includes('L1 Club 1'), 'Club national coche ajoute a la selection l1');
+T.onLDCNationalToggle('l1', { checked: false, dataset: { club: 'L1 Club 1' } });
+assert(!T.ldcNationalSelection.l1.includes('L1 Club 1'), 'Club national decoche retire de la selection l1');
+T.onLDCNationalSelectAll('l2', true);
+assert(T.ldcNationalSelection.l2.length === Object.keys(T.leagueDataStore.l2.teams).length, 'Tout cocher en L2');
+
+// --- Tirage automatique : internationaux + nationaux choisis, completes a 32 par BYE ---
+T.leagueDataStore.l1.teams = { 'L1 Club 1': {}, 'L1 Club 2': {} };
+T.leagueDataStore.l2.teams = { 'L2 Club 1': {}, 'L2 Club 2': {} };
+T.leagueDataStore.l3.clubs = { 'L3 Club 1': {} };
+T.ldcNationalSelection = { l1: ['L1 Club 1', 'L1 Club 2'], l2: ['L2 Club 1', 'L2 Club 2'], l3: ['L3 Club 1'] };
+T.ldcClubsData.clubs = { 'Bayern Peluche': { logo: 'ascl.png', country: 'Allemagne' }, 'Real Peluche': { logo: 'tfc.png', country: 'Espagne' } };
+T.startLDCDraw();
+assert(T.ldcData.participants.length === 32, '32 participants apres tirage');
+assert(T.ldcData.participants.includes('Bayern Peluche') && T.ldcData.participants.includes('Real Peluche'), 'Clubs internationaux dans le tirage');
+assert(T.ldcData.participants.includes('L1 Club 1') && T.ldcData.participants.includes('L3 Club 1'), 'Clubs nationaux choisis dans le tirage');
+const byeCount = T.ldcData.participants.filter(p => p.startsWith('BYE')).length;
+assert(byeCount === 25, byeCount + ' BYE pour completer a 32 (7 clubs reels)');
+assert(T.ldcData.rounds[0] && T.ldcData.rounds[0].filter(Boolean).length === 16, '32emes : 16 matchs generes');
+const unresolvedBye = T.ldcData.rounds[0].filter(m => m.team1 && m.team2 && (m.team1.startsWith('BYE') || m.team2.startsWith('BYE')) && !m.winner);
+assert(unresolvedBye.length === 0, 'Chaque match avec BYE est resolu automatiquement');
+const r0RealWinners = T.ldcData.rounds[0].map(m => m.winner).filter(w => w && !w.startsWith('BYE')).length;
+assert(r0RealWinners >= 1 && r0RealWinners <= 7, r0RealWinners + ' vrais clubs qualifies en 16emes (entre 1 et 7)');
+
+// --- Filtre des selections perimees + dedoublonnage au moment du tirage ---
+T.ldcNationalSelection = { l1: ['L1 Club 1', 'Club Disparu'], l2: [], l3: [] };
+T.ldcClubsData.clubs = { 'L1 Club 1': { logo: 'ascl.png', country: 'France' } }; // meme nom qu'un club national
+T.startLDCDraw();
+assert(!T.ldcData.participants.includes('Club Disparu'), 'Club perime (plus dans l effectif) exclu du tirage');
+const countDup = T.ldcData.participants.filter(p => p === 'L1 Club 1').length;
+assert(countDup === 1, 'Dedoublonnage : club identique international/national joue une seule fois');
+
+// --- Avancement manuel controle (appariement standard 2 par 2) ---
+T.ldcData.rounds = {};
+T.ldcData.rounds[0] = [{ team1: 'A', team2: 'B', score1: 2, score2: 1 }];
+T.advanceLDCWinner(0, 0, 'A');
+assert(T.ldcData.rounds[1] && T.ldcData.rounds[1][0].team1 === 'A', 'Vainqueur du match 0 -> 16emes (team1)');
+T.ldcData.rounds[0][1] = { team1: 'C', team2: 'D', score1: 1, score2: 3 };
+T.advanceLDCWinner(0, 1, 'D');
+assert(T.ldcData.rounds[1][0].team2 === 'D', 'Vainqueur du match 1 -> 16emes (team2)');
+
+// --- Simulation complete deterministe : 32 clubs -> champion ---
+T.ldcData.rounds = {};
+T.ldcData.champion = null; T.ldcData._trophyAwarded = false;
+T.ldcData.seasons = []; T.ldcData.active_season_id = null;
+const teams32 = []; for (let i = 1; i <= 32; i++) teams32.push('Team ' + i);
+T.ldcData.rounds[0] = [];
+for (let i = 0; i < 32; i += 2) T.ldcData.rounds[0].push({ team1: teams32[i], team2: teams32[i + 1], score1: null, score2: null });
+for (let r = 0; r < 4; r++) {
+    T.ldcData.rounds[r].forEach((m, idx) => {
+        if (m.team1 && m.team2) { m.score1 = 1; m.score2 = 0; m.winner = m.team1; T.advanceLDCWinner(r, idx, m.team1); }
+    });
+}
+assert(T.ldcData.rounds[1] && T.ldcData.rounds[1].filter(Boolean).length === 8, '16emes : 8 matchs');
+assert(T.ldcData.rounds[2] && T.ldcData.rounds[2].filter(Boolean).length === 4, '8emes : 4 matchs');
+assert(T.ldcData.rounds[3] && T.ldcData.rounds[3].filter(Boolean).length === 2, 'Quarts : 2 matchs');
+assert(T.ldcData.rounds[4] && T.ldcData.rounds[4][0].team1 && T.ldcData.rounds[4][0].team2, 'Finale : 2 finalistes (match unique)');
+T.ldcData.rounds[4][0].score1 = 1; T.ldcData.rounds[4][0].score2 = 0; T.ldcData.rounds[4][0].winner = T.ldcData.rounds[4][0].team1;
+T.renderLDCBracket();
+assert(T.ldcData.champion === 'Team 1', 'Champion LDC = Team 1 (team1 gagne toujours)');
+assert(T.palmaresData['Team 1'] && T.palmaresData['Team 1']['LDC'] === 1, 'Trophee LDC attribue au palmares du champion');
 
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');

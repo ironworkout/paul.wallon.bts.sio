@@ -1444,6 +1444,92 @@
             margin: 20px 0;
         }
 
+        /* LDC : panneau de configuration avant tirage (clubs internationaux + choix nationaux) */
+        .ldc-setup-panel {
+            background: rgba(102, 51, 153, 0.08);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--nav-ldc-color);
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 18px 0;
+            text-align: left;
+        }
+        .ldc-setup-panel h4 {
+            color: var(--nav-ldc-color);
+            margin: 0 0 10px 0;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .ldc-intl-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .ldc-intl-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-bg, #1e1e2e);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 10px;
+        }
+        .ldc-intl-item img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+        .ldc-intl-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 10px;
+            background: rgba(102, 51, 153, 0.06);
+            border-radius: 8px;
+        }
+        .ldc-intl-form input, .ldc-intl-form select {
+            padding: 7px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg, #1e1e2e);
+            color: var(--text-color, #eee);
+            font-family: inherit;
+        }
+        .ldc-intl-form input {
+            min-width: 180px;
+        }
+        .ldc-nat-section {
+            border-top: 1px dashed var(--border-color);
+            padding-top: 12px;
+        }
+        .ldc-nat-league {
+            margin: 8px 0 4px 0;
+        }
+        .ldc-nat-league > strong {
+            display: inline-block;
+            margin-bottom: 4px;
+            color: var(--accent-gold, #ffc107);
+            font-size: 0.95rem;
+        }
+        .ldc-nat-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+        }
+        .ldc-nat-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .ldc-nat-check:hover {
+            color: var(--nav-ldc-color);
+        }
+
         .cdf-balls-container {
             display: flex;
             flex-wrap: wrap;
@@ -2523,9 +2609,13 @@
                             Sauvegarder</button>
                     </div>
                 </div>
+                <div class="ldc-setup-panel" id="ldc-setup-panel">
+                    <p style="font-size: 0.9rem; opacity: 0.85; margin: 0 0 10px 0;">
+                        <i class="fas fa-info-circle"></i> Avant le tirage : gérez les <strong>clubs internationaux</strong> (aucune stat, non sélectionnables en L1/L2/L3) et choisissez les <strong>clubs nationaux</strong> qui participeront aux 32èmes de finale.
+                    </p>
+                </div>
                 <div class="cdf-draw-container" id="ldc-draw-section" style="display: none;">
-                    <p>Cliquez sur les clubs pour les tirer au sort :</p>
-                    <div class="cdf-balls-container" id="ldc-balls-container"></div>
+                    <p style="font-size: 1.2rem; margin-bottom: 15px;">Le tirage au sort est automatique : cliquez sur « Nouveau Tirage LDC » pour mélanger les clubs internationaux et les clubs nationaux choisis.</p>
                     <div id="ldc-draw-results" style="margin-top: 20px;"></div>
                 </div>
                 <div id="ldc-bracket-container"></div>
@@ -3041,6 +3131,10 @@
         let baseClubsData = { clubs: {}, fileId: null, filename: 'peluches_base_clubs.json' };
         let cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_cdf_data.json' };
         let ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_ldc_data.json' };
+        // Clubs internationaux de la LDC : pas de stats, non selectionnables pour L1/L2/L3
+        let ldcClubsData = { clubs: {}, fileId: null, filename: 'peluches_ldc_clubs.json' };
+        // Clubs nationaux (L1/L2/L3) selectionnes par l'utilisateur pour participer a la LDC
+        let ldcNationalSelection = { l1: [], l2: [], l3: [] };
         let barragesData = { ldc: { team1: null, team2: null, goals1: { home: null, away: null }, goals2: { home: null, away: null }, winner: null }, fileId: null, filename: 'peluches_barrages_data.json' };
 
         let googleAccessToken = null, tokenClient = null;
@@ -3265,6 +3359,21 @@
                 }
             }
 
+            // Charger clubs internationaux LDC
+            ldcClubsData.fileId = await findOrCreateFile(ldcClubsData.filename, JSON.stringify({ clubs: {} }));
+            if (ldcClubsData.fileId) {
+                const ldcClubsContent = await readFileContent(ldcClubsData.fileId);
+                if (ldcClubsContent) {
+                    try {
+                        const parsed = JSON.parse(ldcClubsContent);
+                        ldcClubsData.clubs = parsed.clubs || {};
+                        ldcClubsData.selection = parsed.selection || { l1: [], l2: [], l3: [] };
+                        ldcNationalSelection = ldcClubsData.selection;
+                        ldcClubsData.filename = 'peluches_ldc_clubs.json';
+                    } catch (e) { ldcClubsData.clubs = {}; }
+                }
+            }
+
             // Charger CDF
             cdfData.fileId = await findOrCreateFile(cdfData.filename, JSON.stringify({ seasons: [], active_season_id: null }));
             if (cdfData.fileId) {
@@ -3334,6 +3443,19 @@
             if (baseClubsData.fileId) {
                 await updateFileContent(baseClubsData.fileId, baseClubsData);
                 showMessage("Base clubs sauvegardée !", 2000);
+            }
+        }
+
+        async function saveLDClubsToDrive() {
+            if (!googleAccessToken) return;
+            // Persister clubs internationaux + selection des clubs nationaux dans le meme fichier
+            const payload = { clubs: ldcClubsData.clubs, selection: ldcNationalSelection };
+            if (!ldcClubsData.fileId) {
+                ldcClubsData.fileId = await findOrCreateFile(ldcClubsData.filename, JSON.stringify(payload));
+            }
+            if (ldcClubsData.fileId) {
+                await updateFileContent(ldcClubsData.fileId, payload);
+                showMessage("Clubs internationaux LDC sauvegardés !", 2000);
             }
         }
 
@@ -4082,7 +4204,6 @@
             data.rounds = season.rounds || {};
             data.champion = season.champion || null;
             data._trophyAwarded = season._trophyAwarded || false;
-            if (compId === 'ldc') { ldcDrawnClubs = []; ldcCurrentMatch = []; }
         }
 
         function populateCompSeasonSelector(compId) {
@@ -4143,7 +4264,6 @@
             data.active_season_id = newSeasonId;
             // Réinitialise l'état de travail pour la nouvelle saison
             data.participants = []; data.currentRound = 0; data.rounds = {}; data.champion = null; data._trophyAwarded = false;
-            if (compId === 'ldc') { ldcDrawnClubs = []; ldcCurrentMatch = []; }
             resetCompUI(compId);
             populateCompSeasonSelector(compId);
             if (compId === 'ldc') populateLDC(); else populateCDF();
@@ -4176,8 +4296,6 @@
             if (drawSection) drawSection.style.display = 'none';
             const drawResults = document.getElementById(isLdc ? 'ldc-draw-results' : 'cdf-draw-results');
             if (drawResults) drawResults.innerHTML = '';
-            const balls = document.getElementById(isLdc ? 'ldc-balls-container' : 'cdf-balls-container');
-            if (balls) balls.innerHTML = '';
             const bracket = document.getElementById(isLdc ? 'ldc-bracket-container' : 'cdf-bracket-container');
             if (bracket) bracket.innerHTML = '';
             const celebration = document.getElementById(isLdc ? 'ldc-champion-celebration' : 'cdf-champion-celebration');
@@ -4560,101 +4678,236 @@
         }
 
         // ==================== LDC ====================
+        // ---- LDC : comme la CDF, tirage 100% auto + saisie des scores ----
+        // 32 clubs (internationaux + nationaux choisis) : 32èmes -> 16èmes -> 8èmes -> Quarts -> Demies -> Finale
+        const LDC_ROUND_NAMES = ['32èmes', '16èmes', '8èmes', 'Quarts', 'Finale'];
+        const LDC_FINAL_ROUND = LDC_ROUND_NAMES.length - 1;
+        const LDC_TARGET_CLUBS = 32; // 32èmes de finale
+        let ldcEditingIntl = null; // club international en cours de modification (formulaire)
+
+        function ldcLeagueTeams(leagueId) {
+            return leagueId === 'l3' ? (leagueDataStore.l3.clubs || {}) : (leagueDataStore[leagueId].teams || {});
+        }
+
+        function renderLDCSetupPanel() {
+            const panel = document.getElementById('ldc-setup-panel');
+            if (!panel) return;
+            const clubs = ldcClubsData.clubs || {};
+            const names = Object.keys(clubs).sort((a, b) => a.localeCompare(b));
+
+            // ---- Clubs internationaux ----
+            let html = '<h4>🌍 Clubs internationaux <span style="font-size:0.8rem; font-weight:normal; opacity:0.8;">(aucune stat, non sélectionnables en L1/L2/L3)</span></h4>';
+            html += '<div class="ldc-intl-list">';
+            if (names.length === 0) html += '<p style="opacity:0.75; font-size:0.9rem;">Aucun club international pour l\'instant — ajoutez-en ci-dessous.</p>';
+            names.forEach(name => {
+                const c = clubs[name];
+                const safeName = name.replace(/['"]/g, '');
+                html += `<div class="ldc-intl-item">
+                    <img src="${getClubLogo(name)}" alt="${name}">
+                    <span><strong>${name}</strong>${c.country ? ` <span style="opacity:0.7;">(${c.country})</span>` : ''}</span>
+                    <button class="btn btn-sm" onclick="editLDCInternationalClub('${safeName}')"><i class="fas fa-pen"></i> Modifier</button>
+                    <button class="btn btn-sm" style="background:var(--neon-red);" onclick="deleteLDCInternationalClub('${safeName}')"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+            html += '</div>';
+
+            html += `<div class="ldc-intl-form">
+                <input type="text" id="ldc-intl-name" placeholder="Nom du club (ex : Bayern Peluche)">
+                <input type="text" id="ldc-intl-country" placeholder="Pays (optionnel)">
+                <select id="ldc-intl-logo">`;
+            getVisibleCatalogLogos().forEach(l => {
+                const sel = l.filename === 'default_logo.png' ? ' selected' : '';
+                html += `<option value="${l.filename}"${sel}>${l.name}</option>`;
+            });
+            html += `</select>
+                <button class="btn btn-success" id="ldc-intl-submit" onclick="submitLDCInternationalClub()"><i class="fas fa-plus"></i> Ajouter le club</button>
+                <button class="btn btn-sm" id="ldc-intl-cancel" style="display:none; background:#6c757d;" onclick="cancelEditLDCInternationalClub()">Annuler</button>
+            </div>`;
+
+            // ---- Choix des clubs nationaux (sous-panneau séparé pour ne pas effacer le formulaire) ----
+            html += '<div class="ldc-nat-section" id="ldc-nat-panel"></div>';
+            panel.innerHTML = html;
+            renderLDCNationalPanel();
+        }
+
+        function renderLDCNationalPanel() {
+            const natPanel = document.getElementById('ldc-nat-panel');
+            if (!natPanel) return;
+            let html = '<h4>🇫🇷 Clubs nationaux participants</h4>';
+            [['l1', 'Ligue 1'], ['l2', 'Ligue 2'], ['l3', 'Ligue 3']].forEach(([lg, label]) => {
+                const teamNames = Object.keys(ldcLeagueTeams(lg));
+                const sel = ldcNationalSelection[lg] || [];
+                html += `<div class="ldc-nat-league"><strong>${label}</strong> (${sel.length}/${teamNames.length})`;
+                if (teamNames.length > 0) {
+                    html += ` <button class="btn btn-sm" onclick="onLDCNationalSelectAll('${lg}', true)">Tout</button> <button class="btn btn-sm" onclick="onLDCNationalSelectAll('${lg}', false)">Aucun</button>`;
+                }
+                html += `<div class="ldc-nat-checks">`;
+                teamNames.forEach(n => {
+                    const checked = sel.includes(n) ? 'checked' : '';
+                    html += `<label class="ldc-nat-check"><input type="checkbox" data-league="${lg}" data-club="${n}" ${checked} onchange="onLDCNationalToggle('${lg}', this)"> ${n}</label>`;
+                });
+                html += '</div></div>';
+            });
+            natPanel.innerHTML = html;
+        }
+
+        function fillLDCIntlForm(name, country, logo) {
+            const nameEl = document.getElementById('ldc-intl-name');
+            const countryEl = document.getElementById('ldc-intl-country');
+            const logoEl = document.getElementById('ldc-intl-logo');
+            if (nameEl) nameEl.value = name || '';
+            if (countryEl) countryEl.value = country || '';
+            if (logoEl) logoEl.value = logo || 'default_logo.png';
+            const submitBtn = document.getElementById('ldc-intl-submit');
+            const cancelBtn = document.getElementById('ldc-intl-cancel');
+            if (submitBtn) submitBtn.innerHTML = ldcEditingIntl ? '<i class="fas fa-check"></i> Enregistrer la modification' : '<i class="fas fa-plus"></i> Ajouter le club';
+            if (cancelBtn) cancelBtn.style.display = ldcEditingIntl ? 'inline-block' : 'none';
+        }
+
+        window.submitLDCInternationalClub = function () {
+            const nameEl = document.getElementById('ldc-intl-name');
+            if (!nameEl || !nameEl.value.trim()) { showMessage("Donnez un nom au club international.", 3000, true); return; }
+            let name = nameEl.value.trim().replace(/["']/g, '');
+            const country = (document.getElementById('ldc-intl-country')?.value || '').trim();
+            const logo = (document.getElementById('ldc-intl-logo')?.value || 'default_logo.png');
+            const clubs = ldcClubsData.clubs;
+            if (ldcEditingIntl && ldcEditingIntl !== name) delete clubs[ldcEditingIntl];
+            clubs[name] = { logo, country };
+            ldcEditingIntl = null;
+            fillLDCIntlForm('', '', '');
+            saveLDClubsToDrive();
+            renderLDCSetupPanel();
+            showMessage(`Club international "${name}" enregistré !`, 2000);
+        };
+
+        window.editLDCInternationalClub = function (name) {
+            const c = ldcClubsData.clubs[name];
+            if (!c) return;
+            ldcEditingIntl = name;
+            fillLDCIntlForm(name, c.country || '', c.logo || '');
+            document.getElementById('ldc-intl-name')?.focus();
+            document.getElementById('ldc-setup-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.cancelEditLDCInternationalClub = function () {
+            ldcEditingIntl = null;
+            fillLDCIntlForm('', '', '');
+        };
+
+        window.deleteLDCInternationalClub = function (name) {
+            if (!confirm(`Supprimer le club international "${name}" ?`)) return;
+            delete ldcClubsData.clubs[name];
+            if (ldcEditingIntl === name) { ldcEditingIntl = null; fillLDCIntlForm('', '', ''); }
+            saveLDClubsToDrive();
+            renderLDCSetupPanel();
+        };
+
+        window.onLDCNationalToggle = function (league, checkboxEl) {
+            const sel = ldcNationalSelection[league] || (ldcNationalSelection[league] = []);
+            const idx = sel.indexOf(checkboxEl.dataset.club);
+            if (checkboxEl.checked && idx === -1) sel.push(checkboxEl.dataset.club);
+            if (!checkboxEl.checked && idx !== -1) sel.splice(idx, 1);
+            saveLDClubsToDrive();
+            renderLDCNationalPanel();
+        };
+
+        window.onLDCNationalSelectAll = function (league, checked) {
+            ldcNationalSelection[league] = checked ? Object.keys(ldcLeagueTeams(league)) : [];
+            saveLDClubsToDrive();
+            renderLDCNationalPanel();
+        };
+
         function startLDCDraw() {
-            const container = document.getElementById('ldc-draw-section');
-            const ballsContainer = document.getElementById('ldc-balls-container');
+            const drawSection = document.getElementById('ldc-draw-section');
             const resultsDiv = document.getElementById('ldc-draw-results');
+            if (!drawSection) return;
 
-            if (!container || !ballsContainer) return;
-
-            // S'assurer qu'une saison active existe avant de tirer
             ensureCompActiveSeason('ldc');
-            ldcDrawnClubs = []; ldcCurrentMatch = [];
-            populateCompSeasonSelector('ldc');
 
-            // LDC: tous les clubs de L1 et L2
-            const l1Teams = Object.keys(leagueDataStore.l1.teams || {});
-            const l2Teams = Object.keys(leagueDataStore.l2.teams || {});
+            document.getElementById('tirage-ldc-btn').style.display = 'none';
+            document.getElementById('ldc-bracket-container').innerHTML = '';
+            const celebrationDiv = document.getElementById('ldc-champion-celebration');
+            if (celebrationDiv) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
 
-            ldcData.participants = [...l1Teams, ...l2Teams];
+            // Participants : clubs internationaux + clubs nationaux choisis (filtrés sur l'effectif actuel : un club renommé/échangé depuis la sélection est ignoré)
+            const intl = Object.keys(ldcClubsData.clubs || {});
+            const nat = [];
+            [['l1', ldcNationalSelection.l1 || []], ['l2', ldcNationalSelection.l2 || []], ['l3', ldcNationalSelection.l3 || []]].forEach(([lg, sel]) => {
+                const teams = ldcLeagueTeams(lg);
+                sel.forEach(n => { if (teams[n]) nat.push(n); });
+            });
+            // Dédoublonnage (un club international ne doit pas être aussi en ligue)
+            const seen = new Set();
+            ldcData.participants = [];
+            [...intl, ...nat].forEach(n => { if (!seen.has(n)) { seen.add(n); ldcData.participants.push(n); } });
             ldcData.currentRound = 0;
             ldcData.rounds = {};
             ldcData.champion = null;
             ldcData._trophyAwarded = false;
 
-            if (ldcData.participants.length < 8) {
-                showMessage(`Il faut au moins 8 clubs pour la LDC. Actuellement: ${ldcData.participants.length}`, 4000, true);
+            if (ldcData.participants.length < 2) {
+                showMessage("Il faut au moins 2 clubs (internationaux + nationaux choisis) pour la LDC.", 4000, true);
+                document.getElementById('tirage-ldc-btn').style.display = 'inline-block';
                 return;
             }
 
-            // Réduire à 8 pour le tournoi
-            ldcData.participants = ldcData.participants.slice(0, 8);
+            if (ldcData.participants.length < 16) {
+                showMessage("Seulement " + ldcData.participants.length + " clubs réels : des BYE pourraient aller loin dans le tableau.", 4500);
+            }
 
-            container.style.display = 'flex';
-            ballsContainer.innerHTML = '';
-            resultsDiv.innerHTML = '<p style="text-align:center; color: var(--nav-ldc-color); font-weight:bold;">Tirage LDC - Cliquez sur les clubs</p>';
+            // Compléter avec des BYE jusqu'à 32 équipes (32èmes de finale)
+            let byeCounter = 1;
+            while (ldcData.participants.length < LDC_TARGET_CLUBS) {
+                ldcData.participants.push(`BYE ${byeCounter++}`);
+            }
 
+            // TIRAGE AU SORT 100% AUTOMATIQUE : mélange puis appariement direct 2 à 2 (16 matchs de 32èmes)
             const shuffled = [...ldcData.participants].sort(() => Math.random() - 0.5);
+            ldcData.rounds[0] = [];
 
-            shuffled.forEach(clubName => {
-                const ball = document.createElement('div');
-                ball.className = 'cdf-ball';
-                ball.style.background = 'linear-gradient(135deg, var(--nav-ldc-color), #8557d3)';
-                ball.dataset.club = clubName;
+            let drawHtml = '<p style="text-align:center; color: var(--nav-ldc-color); font-weight:bold;">Tirage au sort automatique des 32èmes de finale :</p>';
+            for (let i = 0; i < shuffled.length; i += 2) {
+                const matchIdx = ldcData.rounds[0].length;
+                const team1 = shuffled[i];
+                const team2 = shuffled[i + 1];
+                ldcData.rounds[0].push({ team1, team2, score1: null, score2: null });
+                const matchNum = matchIdx + 1;
 
-                const logoSrc = getClubLogo(clubName);
-                ball.innerHTML = `<img src="${logoSrc}" alt="${clubName}"><span>${clubName}</span>`;
-                ball.addEventListener('click', () => handleLDCBallClick(clubName, ball));
-                ballsContainer.appendChild(ball);
-            });
-        }
-
-        let ldcDrawnClubs = [];
-        let ldcCurrentMatch = [];
-
-        function handleLDCBallClick(clubName, ballEl) {
-            if (ballEl.classList.contains('drawn')) return;
-
-            ballEl.classList.add('selected');
-            setTimeout(() => {
-                ballEl.classList.remove('selected');
-                ballEl.classList.add('drawn');
-            }, 300);
-
-            ldcDrawnClubs.push(clubName);
-            ldcCurrentMatch.push(clubName);
-
-            const resultsDiv = document.getElementById('ldc-draw-results');
-
-            if (ldcCurrentMatch.length === 2) {
-                const matchNum = Math.floor(ldcDrawnClubs.length / 2);
-                if (!ldcData.rounds[0]) ldcData.rounds[0] = [];
-                ldcData.rounds[0].push({ team1: ldcCurrentMatch[0], team2: ldcCurrentMatch[1], score1: null, score2: null });
-
-                resultsDiv.innerHTML += `<p style="margin: 5px 0; color: var(--nav-ldc-color);">Match ${matchNum}: <strong>${ldcCurrentMatch[0]}</strong> vs <strong>${ldcCurrentMatch[1]}</strong></p>`;
-                ldcCurrentMatch = [];
-
-                if (ldcDrawnClubs.length === 8) {
-                    resultsDiv.innerHTML += '<p style="margin-top:15px; font-weight:bold; color: var(--accent-gold);">Tirage LDC terminé !</p>';
-                    document.getElementById('tirage-ldc-btn').style.display = 'none';
-                    saveLDCToDrive();
-                    renderLDCBracket();
+                if (isByeTeam(team1) && !isByeTeam(team2)) {
+                    advanceLDCWinner(0, matchIdx, team2);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team2}</strong> qualifié(e) (BYE)</p>`;
+                } else if (isByeTeam(team2) && !isByeTeam(team1)) {
+                    advanceLDCWinner(0, matchIdx, team1);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (BYE)</p>`;
+                } else if (isByeTeam(team1) && isByeTeam(team2)) {
+                    advanceLDCWinner(0, matchIdx, team1);
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (double BYE)</p>`;
+                } else {
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> vs <strong>${team2}</strong></p>`;
                 }
             }
+
+            drawHtml += '<p style="margin-top:15px; font-weight:bold; color: var(--neon-green);">Tirage terminé ! Les 32èmes de finale sont définis.</p>';
+            resultsDiv.innerHTML = drawHtml;
+            drawSection.style.display = 'flex';
+
+            populateCompSeasonSelector('ldc');
+            saveLDCToDrive();
+            renderLDCBracket();
         }
 
         function renderLDCBracket() {
             const container = document.getElementById('ldc-bracket-container');
             if (!container || !ldcData.rounds || !ldcData.rounds[0]) return;
 
-            const roundNames = ['¼ de finale', '½ finale', 'Finale'];
+            const roundNames = LDC_ROUND_NAMES;
             let html = '<div class="cdf-bracket">';
 
-            for (let r = 0; r <= 2; r++) {
+            for (let r = 0; r < roundNames.length; r++) {
                 const roundMatches = ldcData.rounds[r];
-                if (!roundMatches || roundMatches.length === 0) break;
+                if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
 
-                html += `<div class="cdf-round"><div class="cdf-round-title" style="color: var(--nav-ldc-color);">${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
+                html += `<div class="cdf-round"><div class="cdf-round-title" style="color: var(--nav-ldc-color);">🏆 ${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
@@ -4662,14 +4915,17 @@
                     const logo2 = match.team2 ? getClubLogo(match.team2) : `${BASE_URL}default_logo.png`;
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
+                    const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${match.penaltyWinner} aux tirs au but</div>` : '';
                     html += `
                         <div class="cdf-match-card" style="border-color: var(--nav-ldc-color);">
                             <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${match.team1 || '?'}"><span>${match.team1 || '?'}</span></div>
                             <div class="cdf-score-inputs">
-                                <input type="number" min="0" value="${match.score1 ?? ''}" onchange="updateLDCScore(${r}, ${i}, 1, this.value)">
+                                <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                                 -
-                                <input type="number" min="0" value="${match.score2 ?? ''}" onchange="updateLDCScore(${r}, ${i}, 2, this.value)">
+                                <input type="number" min="0" value="${match.score2 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 2, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                             </div>
+                            ${penaltyNote}
                             <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${match.team2 || '?'}"><span>${match.team2 || '?'}</span></div>
                         </div>
                     `;
@@ -4677,11 +4933,15 @@
                 html += '</div>';
             }
 
-            // Champion LDC
-            if (ldcData.rounds[2] && ldcData.rounds[2][0] && ldcData.rounds[2][0].winner) {
-                ldcData.champion = ldcData.rounds[2][0].winner;
+            // Champion LDC (jamais un BYE : si un BYE allait jusqu'au bout, pas de trophée)
+            const finalRoundIdx = LDC_FINAL_ROUND;
+            const finalWinner = ldcData.rounds[finalRoundIdx] && ldcData.rounds[finalRoundIdx][0] && ldcData.rounds[finalRoundIdx][0].winner;
+            if (finalWinner && isByeTeam(finalWinner)) {
+                html += '<div style="text-align:center; margin: 20px; opacity:0.75;"><span class="cdf-final-badge" style="font-size: 1rem; background: var(--nav-ldc-color); color: white;">Pas de vainqueur : trop peu de clubs réels pour la LDC (BYE)</span></div>';
+            }
+            if (finalWinner && !isByeTeam(finalWinner)) {
+                ldcData.champion = ldcData.rounds[finalRoundIdx][0].winner;
                 html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;">🏆 Champion LDC : ${ldcData.champion}</span></div>`;
-                // Auto-ajouter trophée LDC
                 if (!palmaresData[ldcData.champion]) palmaresData[ldcData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!ldcData._trophyAwarded) {
                     palmaresData[ldcData.champion]['LDC']++;
@@ -4689,43 +4949,77 @@
                     savePalmaresToDrive();
                     populatePalmaresTable();
                 }
+                const celebrationDiv = document.getElementById('ldc-champion-celebration');
+                if (celebrationDiv) {
+                    celebrationDiv.style.display = 'block';
+                    celebrationDiv.innerHTML = `
+                        <div style="text-align:center; margin-top: 20px;">
+                            <img src="${getClubLogo(ldcData.champion)}" alt="${ldcData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
+                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${ldcData.champion} remporte la Ligue des Champions des Peluches !</h3>
+                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                        </div>`;
+                }
             }
 
             html += '</div>';
             container.innerHTML = html;
         }
 
+        // Fait avancer un vainqueur LDC vers le tour suivant (helper partagé LDC/BYE)
+        function advanceLDCWinner(round, matchIdx, winner) {
+            if (!ldcData.rounds[round] || !ldcData.rounds[round][matchIdx]) return;
+            const match = ldcData.rounds[round][matchIdx];
+            match.winner = winner;
+
+            if (round < LDC_FINAL_ROUND) {
+                const nextRound = round + 1;
+                const nextMatchIdx = Math.floor(matchIdx / 2);
+                const isFirstOfPair = matchIdx % 2 === 0;
+
+                if (!ldcData.rounds[nextRound]) ldcData.rounds[nextRound] = [];
+                if (!ldcData.rounds[nextRound][nextMatchIdx]) {
+                    ldcData.rounds[nextRound][nextMatchIdx] = { team1: null, team2: null, score1: null, score2: null };
+                }
+                if (isFirstOfPair) ldcData.rounds[nextRound][nextMatchIdx].team1 = winner;
+                else ldcData.rounds[nextRound][nextMatchIdx].team2 = winner;
+
+                resolveLDCByeMatch(nextRound, nextMatchIdx);
+            }
+
+            renderLDCBracket();
+        }
+
+        // Résout automatiquement un match LDC dont une équipe est un BYE
+        function resolveLDCByeMatch(round, matchIdx) {
+            const match = ldcData.rounds[round] && ldcData.rounds[round][matchIdx];
+            if (!match || !match.team1 || !match.team2 || match.winner) return;
+            if (!isByeTeam(match.team1) && !isByeTeam(match.team2)) return;
+            const realTeam = isByeTeam(match.team1) ? match.team2 : match.team1;
+            advanceLDCWinner(round, matchIdx, realTeam);
+        }
+
         window.updateLDCScore = function (round, matchIdx, goalNum, value) {
             if (!ldcData.rounds[round]) return;
             const match = ldcData.rounds[round][matchIdx];
             if (!match) return;
+
             if (goalNum === 1) match.score1 = value === '' ? null : parseInt(value);
             else match.score2 = value === '' ? null : parseInt(value);
 
-            if (match.score1 !== null && match.score2 !== null) {
-                const winner = match.score1 > match.score2 ? match.team1 : match.team2;
-                match.winner = winner;
-
-                const totalMatchesThisRound = ldcData.rounds[round].length;
-                if (totalMatchesThisRound > 1) {
-                    const nextRound = round + 1;
-                    const nextMatchIdx = Math.floor(matchIdx / 2);
-                    const isFirstOfPair = matchIdx % 2 === 0;
-
-                    if (!ldcData.rounds[nextRound]) ldcData.rounds[nextRound] = [];
-
-                    if (!ldcData.rounds[nextRound][nextMatchIdx]) {
-                        ldcData.rounds[nextRound][nextMatchIdx] = { team1: null, team2: null, score1: null, score2: null };
-                    }
-
-                    if (isFirstOfPair) {
-                        ldcData.rounds[nextRound][nextMatchIdx].team1 = winner;
-                    } else {
-                        ldcData.rounds[nextRound][nextMatchIdx].team2 = winner;
-                    }
+            if (match.score1 !== null && match.score2 !== null && match.team1 && match.team2) {
+                let winner;
+                if (isByeTeam(match.team1)) winner = match.team2;
+                else if (isByeTeam(match.team2)) winner = match.team1;
+                else if (match.score1 > match.score2) winner = match.team1;
+                else if (match.score2 > match.score1) winner = match.team2;
+                else {
+                    winner = Math.random() < 0.5 ? match.team1 : match.team2;
+                    match.penaltyWinner = winner;
+                    match.penaltyShootout = true;
+                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${winner} l'emporte aux tirs au but !`, 3500);
                 }
-
-                renderLDCBracket();
+                match.winner = winner;
+                advanceLDCWinner(round, matchIdx, winner);
             }
             saveLDCToDrive();
         };
@@ -4736,6 +5030,7 @@
 
         function populateLDC() {
             populateCompSeasonSelector('ldc');
+            renderLDCSetupPanel();
             const drawSection = document.getElementById('ldc-draw-section');
             if (drawSection) drawSection.style.display = 'none';
             if (ldcData.rounds && Object.keys(ldcData.rounds).length > 0) {
@@ -4743,7 +5038,9 @@
             }
             const celebrationDiv = document.getElementById('ldc-champion-celebration');
             if (celebrationDiv && !ldcData.champion) { celebrationDiv.style.display = 'none'; celebrationDiv.innerHTML = ''; }
-            document.getElementById('tirage-ldc-btn').style.display = ldcData.rounds[0] ? 'none' : 'inline-block';
+            const expectedMatches = LDC_TARGET_CLUBS / 2; // 32èmes : 16 matchs
+            const drawComplete = !!(ldcData.rounds[0] && ldcData.rounds[0].filter(Boolean).length >= expectedMatches);
+            document.getElementById('tirage-ldc-btn').style.display = drawComplete ? 'none' : 'inline-block';
         }
 
         // ==================== BARRAAGES ====================
@@ -4920,6 +5217,7 @@
             if (leagueDataStore.l2.teams?.[clubName]) return leagueDataStore.l2.teams[clubName].logo;
             if (leagueDataStore.l3.clubs?.[clubName]) return leagueDataStore.l3.clubs[clubName].logo;
             if (baseClubsData.clubs?.[clubName]) return baseClubsData.clubs[clubName].logo;
+            if (ldcClubsData.clubs?.[clubName]) return ldcClubsData.clubs[clubName].logo;
             return 'default_logo.png';
         }
 
@@ -5311,6 +5609,7 @@
             if (leagueDataStore.l2.teams?.[clubName]) return resolveLogoUrl(leagueDataStore.l2.teams[clubName].logo);
             if (leagueDataStore.l3.clubs?.[clubName]) return resolveLogoUrl(leagueDataStore.l3.clubs[clubName].logo);
             if (baseClubsData.clubs?.[clubName]) return resolveLogoUrl(baseClubsData.clubs[clubName].logo);
+            if (ldcClubsData.clubs?.[clubName]) return resolveLogoUrl(ldcClubsData.clubs[clubName].logo);
             return `${BASE_URL}default_logo.png`;
         }
 

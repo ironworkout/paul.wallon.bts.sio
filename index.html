@@ -2575,12 +2575,6 @@
     <!-- LIGUE 3 -->
     <div class="tab-content l3-content" id="ligue3-content">
         <div class="container">
-            <div class="section action-buttons">
-                <button class="league-music-btn" data-league-audio="l3"
-                    aria-label="Jouer/Mettre en pause l'hymne de la Ligue 3">
-                    <i class="fas fa-play"></i> Hymne L3
-                </button>
-            </div>
 
             <!-- Section Roulette -->
             <div class="section">
@@ -2981,6 +2975,7 @@
                 <button class="modal-close" id="close-logo-modal">&times;</button>
             </div>
             <div class="modal-body">
+                <p id="logo-modal-context" style="font-size: 0.9rem; font-weight: 600; color: var(--secondary-color); background: rgba(0,123,255,0.08); border: 1px solid rgba(0,123,255,0.25); border-radius: 8px; padding: 8px 12px; margin-bottom: 15px;"></p>
                 <p>Sélectionnez la ligue cible :</p>
                 <select id="logo-target-league" class="form-group"
                     style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
@@ -3016,7 +3011,6 @@
 
     <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
     <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
-    <audio id="audio-l3" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue3.mp3" loop preload="auto"></audio>
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
@@ -3211,7 +3205,7 @@
         let audioElements = {};
 
         let currentPromotionLeague = null;
-        let logoChangeTarget = { league: null, club: null };
+        let logoChangeTarget = { league: null, club: null, seasonId: null, storedName: null };
         let rouletteClubs = [];
         let rouletteWinner = null;
 
@@ -3707,7 +3701,17 @@
             return teamsInfo;
         }
 
-        function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId) {
+        // Logo d'un club dans le contexte d'une SAISON : priorité à l'override local de la saison
+        // (season.logos, clé = nom stocké OU nom affiché), sinon logo global du club.
+        function resolveSeasonLogo(seasonLogos, storedName, displayName) {
+            if (seasonLogos) {
+                if (seasonLogos[storedName]) return resolveLogoUrl(seasonLogos[storedName]);
+                if (seasonLogos[displayName]) return resolveLogoUrl(seasonLogos[displayName]);
+            }
+            return getClubLogo(displayName);
+        }
+
+        function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId, seasonLogos) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
             const matchesPerDay = (teamsInfo && Math.floor(Object.keys(teamsInfo).length / 2)) || 3;
             (fixturesData || []).forEach((round, index) => {
@@ -3720,7 +3724,7 @@
                     // le nom actuel du club via le registre (anciens noms -> nom courant).
                     const displayHome = resolveCurrentClubName(match.home);
                     const displayAway = resolveCurrentClubName(match.away);
-                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${displayHome}</span><img src="${getClubLogo(displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${getClubLogo(displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div></td>`;
+                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${displayHome}</span><img src="${resolveSeasonLogo(seasonLogos, match.home, displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${resolveSeasonLogo(seasonLogos, match.away, displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div></td>`;
                 });
                 for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
                 row.innerHTML = roundHtml; fixturesBody.appendChild(row);
@@ -3728,7 +3732,7 @@
             document.querySelectorAll(`#${fixturesBodyId} .fixture-score-input`).forEach(input => input.addEventListener('change', handleScoreChange));
         }
 
-        function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos) {
+        function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos, seasonLogos, leagueId, seasonId) {
             const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
             if (!calculatedStandings || Object.keys(calculatedStandings).length === 0) { standingsBody.innerHTML = '<tr><td colspan="7">Aucune donnée de classement.</td></tr>'; return; }
             const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
@@ -3736,8 +3740,22 @@
                 if (teamName === "BYE") return;
                 const displayName = resolveCurrentClubName(teamName);
                 const row = document.createElement('tr');
-                const logoSrc = getClubLogo(displayName);
+                const logoSrc = resolveSeasonLogo(seasonLogos, teamName, displayName);
                 row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
+                // Clic droit sur un club du classement : changer son logo — si la saison affichée
+                // n'est pas la saison actuelle, la modification restera locale à CETTE saison.
+                if (leagueId) {
+                    const infoCell = row.querySelector('.team-info');
+                    if (infoCell) {
+                        infoCell.style.cursor = 'context-menu';
+                        infoCell.title = 'Clic droit : changer le logo (saison affichée)';
+                        infoCell.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openLogoModal(displayName, leagueId, seasonId, teamName);
+                        });
+                    }
+                }
                 standingsBody.appendChild(row);
             });
         }
@@ -3790,7 +3808,7 @@
             if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
             activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
-            if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams);
+            if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams, activeSeason.logos || {}, leagueId, activeSeason.season_id);
         }
 
         function createNewSeason(leagueId) {
@@ -3842,8 +3860,9 @@
                 // (et non de l'effectif actuel) : les clubs d'anciennes saisons gardent ainsi
                 // leur nom, leur logo et leurs statistiques au classement.
                 activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
-                if (fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId);
-                if (standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams);
+                const seasonLogos = activeSeason.logos || {};
+                if (fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId, seasonLogos);
+                if (standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams, seasonLogos, leagueId, activeSeason.season_id);
             } else {
                 if (fixturesBody) fixturesBody.innerHTML = '<tr><td colspan="4">Sélectionnez ou créez une saison.</td></tr>';
                 if (standingsBody) standingsBody.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';
@@ -5904,6 +5923,21 @@
                             baseClubsData.clubs[oldClubName] = { logo: oldLogo || 'default_logo.png', description: '' };
                         }
                         baseClubsData.clubs[oldClubName].logo = logoToUse;
+                        // Logo LOCAL à la/aux saison(s) ciblée(s) (season.logos) : la modif d'un
+                        // club d'une ancienne saison ne répercute PAS sur les saisons actuelles
+                        // ni futures ni sur le logo global du club.
+                        const lg = leagueDataStore[leagueId];
+                        if (lg && Array.isArray(lg.seasons)) {
+                            lg.seasons.forEach(s => {
+                                const isMatch = (seasonChoice === 'all') ||
+                                    (seasonChoice === 'active' && s.season_id === lg.active_season_id) ||
+                                    (seasonChoice == s.season_id);
+                                if (isMatch) {
+                                    if (!s.logos) s.logos = {};
+                                    s.logos[oldClubName] = logoToUse;
+                                }
+                            });
+                        }
                     } else {
                         if (!baseClubsData.clubs[oldClubName]) {
                             baseClubsData.clubs[oldClubName] = {
@@ -6012,6 +6046,7 @@
             if (googleAccessToken) {
                 saveDataToDrive('l1');
                 saveDataToDrive('l2');
+                saveDataToDrive('l3');
                 savePalmaresToDrive();
                 saveBaseClubsToDrive();
                 saveCDFToDrive();
@@ -6407,7 +6442,6 @@
             let audioToPlay = null;
             if (leagueId === 'ligue1' && audioElements.l1) audioToPlay = audioElements.l1;
             else if (leagueId === 'ligue2' && audioElements.l2) audioToPlay = audioElements.l2;
-            else if (leagueId === 'ligue3' && audioElements.l3) audioToPlay = audioElements.l3;
 
             if (audioToPlay) {
                 currentPlayingAudio = audioToPlay;
@@ -6537,7 +6571,7 @@
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2'), l3: document.getElementById('audio-l3') };
+            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2') };
 
             populateAllLeaguesUI();
             populatePalmaresTable();
@@ -6569,10 +6603,23 @@
             const confirmLogoBtn = document.getElementById('confirm-logo-btn');
             const modalLogoPreview = document.getElementById('modal-logo-preview');
 
-            function openLogoModal(clubName, leagueId) {
-                logoChangeTarget = { league: leagueId, club: clubName };
+            function openLogoModal(clubName, leagueId, seasonId, storedName) {
+                logoChangeTarget = { league: leagueId, club: clubName, seasonId: seasonId || null, storedName: storedName || null };
                 document.getElementById('logo-modal-title').innerHTML = `<i class="fas fa-image"></i> Logo: ${clubName}`;
                 document.getElementById('logo-target-league').value = leagueId;
+                // Note de contexte : précise si la modification sera locale à la saison affichée
+                // (ancienne saison) ou globale au club (saison actuelle + futures).
+                const ctxEl = document.getElementById('logo-modal-context');
+                if (ctxEl) {
+                    const lg = leagueDataStore[leagueId];
+                    const seasons = (lg && Array.isArray(lg.seasons)) ? lg.seasons : [];
+                    const latestId = seasons.length ? Math.max(...seasons.map(s => s.season_id)) : null;
+                    const seasonLocal = !!seasonId && latestId !== null && seasonId !== latestId;
+                    const seasonName = seasons.find(s => s.season_id === seasonId)?.nom_saison || (seasonId ? `Saison ${seasonId}` : '');
+                    ctxEl.textContent = seasonLocal
+                        ? `⚠️ Modification appliquée à la « ${seasonName} » uniquement — le logo du club reste inchangé pour les saisons actuelles et futures.`
+                        : 'Logo du club mis à jour partout (saison actuelle, saisons passées et futures incluses).';
+                }
                 populateGithubLogoSelect('modal-github-logo-select', 'modal-logo-preview');
                 if (modalLogoPreview) { modalLogoPreview.style.display = 'none'; modalLogoPreview.src = ''; }
                 if (logoModal) logoModal.classList.add('active');
@@ -6583,7 +6630,7 @@
             if (cancelLogoBtn) cancelLogoBtn.addEventListener('click', () => logoModal?.classList.remove('active'));
 
             if (confirmLogoBtn) confirmLogoBtn.addEventListener('click', () => {
-                const { league, club } = logoChangeTarget;
+                const { league, club, seasonId, storedName } = logoChangeTarget;
                 if (!club || !league) return;
                 const modalSelect = document.getElementById('modal-github-logo-select');
                 let newLogoData = modalSelect?.value;
@@ -6592,10 +6639,42 @@
                     return;
                 }
                 const actualLeague = document.getElementById('logo-target-league')?.value || league;
+                const lg = leagueDataStore[actualLeague];
+                const seasons = (lg && Array.isArray(lg.seasons)) ? lg.seasons : [];
+                const latestSeasonId = seasons.length ? Math.max(...seasons.map(s => s.season_id)) : null;
+
+                // Cas « ancienne ligue » : la modale a été ouverte depuis le classement d'une
+                // ancienne saison (seasonId fourni, ≠ saison actuelle). Le logo est alors stocké
+                // dans la saison (season.logos) : il persiste et s'affiche pour CETTE saison,
+                // sans répercuter sur les saisons actuelles ni futures (logo global intact).
+                // Un clic sur une carte d'équipe (seasonId = null, effectif actuel) reste global.
+                const seasonLocal = actualLeague !== 'l3' && seasonId !== null && latestSeasonId !== null && seasonId !== latestSeasonId;
+                if (seasonLocal) {
+                    const season = seasons.find(s => s.season_id === seasonId);
+                    if (season) {
+                        if (!season.logos) season.logos = {};
+                        season.logos[club] = newLogoData;
+                        if (storedName && storedName !== club) season.logos[storedName] = newLogoData;
+                        saveDataToDrive(actualLeague);
+                        populateAllLeaguesUI();
+                        populateBaseClubs();
+                        populatePalmaresTable();
+                        logoModal?.classList.remove('active');
+                        showMessage(`Logo de ${club} modifié pour la « ${season.nom_saison || 'Saison ' + season.season_id} » uniquement !`, 2500);
+                        return;
+                    }
+                }
+
+                // Mise à jour globale du club (saison actuelle + historique + futur) — comportement d'origine
                 if (actualLeague === 'l3') {
                     if (leagueDataStore.l3.clubs[club]) leagueDataStore.l3.clubs[club].logo = newLogoData;
                 } else {
                     if (leagueDataStore[actualLeague]?.teams?.[club]) leagueDataStore[actualLeague].teams[club].logo = newLogoData;
+                }
+                // Garde-fou persistance : si le club n'existe plus dans aucun effectif ni dans la
+                // Base, on l'archive dans la Base avec le nouveau logo (sinon rien n'était sauvé).
+                if (!leagueDataStore.l3.clubs?.[club] && !leagueDataStore.l1.teams?.[club] && !leagueDataStore.l2.teams?.[club] && !baseClubsData.clubs?.[club]) {
+                    baseClubsData.clubs[club] = { logo: newLogoData, description: '' };
                 }
                 if (baseClubsData.clubs?.[club]) baseClubsData.clubs[club].logo = newLogoData;
 

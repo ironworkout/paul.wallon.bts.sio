@@ -845,7 +845,44 @@
         .palmares-content .palmares-table .team-info img {
             width: 36px;
             height: 36px;
+        }
+
+        .palmares-content .palmares-table .team-info .logo-wrap {
+            position: relative;
+            display: inline-block;
             margin-right: 15px;
+            line-height: 0;
+            vertical-align: middle;
+        }
+
+        .palmares-content .palmares-table .team-info .logo-wrap img {
+            margin-right: 0;
+        }
+
+        .palmares-content .palmares-table .team-info .logo-wrap .delete-club-palmares {
+            position: absolute;
+            top: -9px;
+            right: -9px;
+            width: 19px;
+            height: 19px;
+            padding: 0;
+            border: 2px solid var(--palmares-bg-dark);
+            border-radius: 50%;
+            background: #dc3545;
+            color: #fff;
+            font-size: 0.55rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .palmares-content .palmares-table .team-info .logo-wrap .delete-club-palmares:hover {
+            transform: scale(1.2);
+            background: #c82333;
         }
 
         .palmares-content .palmares-table tbody tr:hover {
@@ -6159,7 +6196,13 @@
                 let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<i class="fas fa-trophy trophy-cdf"></i>').join('');
 
                 row.innerHTML = `
-                    <td class="team-info text-left"><img src="${getClubLogo(displayName)}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td>
+                    <td class="team-info text-left">
+                        <div class="logo-wrap">
+                            <img src="${getClubLogo(displayName)}" alt="${displayName}" class="team-logo">
+                            <button class="delete-club-palmares" title="Supprimer ${displayName} du palmarès" onclick="deletePalmaresClub('${displayName}')"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <span>${displayName}</span>
+                    </td>
                     <td class="trophy-cell">
                         ${l1TrophiesHTML || '-'}
                         <div class="action-cell">
@@ -6212,6 +6255,36 @@
             populateBaseClubs();
             populateCarouselClubTrophies();
             savePalmaresToDrive();
+        };
+
+        // Supprime un club du palmarès (bouton poubelle sur son logo). Toutes les identités du
+        // club (nom actuel + anciens noms via le registre) sont retirées de palmaresData.
+        window.deletePalmaresClub = function (teamName) {
+            if (!googleAccessToken) { showMessage("Connectez-vous pour modifier le palmarès.", 3000, true); return; }
+            if (!confirm(`Supprimer « ${teamName} » du palmarès ?`)) return;
+            const namesToDelete = new Set([teamName]);
+            const entry = findClubEntry(teamName);
+            if (entry && entry.id && window.clubRegistry && window.clubRegistry[entry.id]) {
+                const reg = window.clubRegistry[entry.id];
+                namesToDelete.add(reg.name);
+                (reg.aliases || []).forEach(a => namesToDelete.add(a));
+            } else if (window.clubRegistry) {
+                for (const id in window.clubRegistry) {
+                    const reg = window.clubRegistry[id];
+                    if (reg && reg.name === teamName) {
+                        namesToDelete.add(reg.name);
+                        (reg.aliases || []).forEach(a => namesToDelete.add(a));
+                        break;
+                    }
+                }
+            }
+            namesToDelete.forEach(n => { delete palmaresData[n]; });
+            populatePalmaresTable();
+            populateAllLeaguesUI();
+            populateBaseClubs();
+            populateCarouselClubTrophies();
+            savePalmaresToDrive();
+            showMessage(`${teamName} supprimé du palmarès — enregistré et poussé !`, 2500);
         };
 
         // ==================== CLASSEMENT GENERAL (type JO) ====================

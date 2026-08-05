@@ -2976,6 +2976,7 @@
             </div>
             <div class="modal-body">
                 <p id="logo-modal-context" style="font-size: 0.9rem; font-weight: 600; color: var(--secondary-color); background: rgba(0,123,255,0.08); border: 1px solid rgba(0,123,255,0.25); border-radius: 8px; padding: 8px 12px; margin-bottom: 15px;"></p>
+                <p style="font-size: 0.85rem; font-weight: 600; color: #28a745; background: rgba(40,167,69,0.08); border: 1px solid rgba(40,167,69,0.3); border-radius: 8px; padding: 8px 12px; margin-bottom: 15px;"><i class="fas fa-cloud-upload-alt"></i> <strong>Enregistrement &amp; push :</strong> toute modification validée ici est enregistrée dans le fichier de la ligue et poussée en ligne — elle persiste après rechargement de la page.</p>
                 <p>Sélectionnez la ligue cible :</p>
                 <select id="logo-target-league" class="form-group"
                     style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
@@ -6039,7 +6040,7 @@
                 applyNameChangeToCompetitions(changeMap, seasonChoice);
                 applyNameChangeToExtras(changeMap);
 
-                showMessage(`Interchange effectué : ${oldClubName} ↔ ${otherClubName} !`, 3000);
+                showMessage(`Interchange effectué : ${oldClubName} ↔ ${otherClubName} — enregistré et poussé !`, 3000);
             }
 
             rebuildClubRegistry();
@@ -6660,7 +6661,7 @@
                         populateBaseClubs();
                         populatePalmaresTable();
                         logoModal?.classList.remove('active');
-                        showMessage(`Logo de ${club} modifié pour la « ${season.nom_saison || 'Saison ' + season.season_id} » uniquement !`, 2500);
+                        showMessage(`Logo de ${club} modifié pour la « ${season.nom_saison || 'Saison ' + season.season_id} » uniquement — enregistré et poussé !`, 2500);
                         return;
                     }
                 }
@@ -6684,7 +6685,7 @@
                 populateBaseClubs();
                 populatePalmaresTable();
                 logoModal?.classList.remove('active');
-                showMessage(`Logo de ${club} mis à jour !`, 2000);
+                showMessage(`Logo de ${club} mis à jour — enregistré et poussé !`, 2000);
             });
 
             // Rendre les team-cards cliquables pour changer le logo

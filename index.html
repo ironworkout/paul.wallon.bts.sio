@@ -740,6 +740,15 @@
             margin-bottom: 8px;
         }
 
+        .club-alias {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: normal;
+            color: #8a93a3;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
         .team-trophies,
         .carousel-trophies {
             display: flex;
@@ -3491,6 +3500,18 @@
                 }
             }
 
+            // Identité unique des clubs : attribue un clubId stable à chaque club (migration) et
+            // reconstruit le registre (nom actuel + anciens noms) pour tracer les entités renommées.
+            const identityChanged = ensureClubIdentity();
+            rebuildClubRegistry();
+            if (identityChanged && googleAccessToken) {
+                await saveDataToDrive('l1');
+                await saveDataToDrive('l2');
+                await saveDataToDrive('l3');
+                await saveBaseClubsToDrive();
+                await saveLDClubsToDrive();
+            }
+
             console.log("Toutes les données chargées depuis Drive.");
         }
 
@@ -3706,7 +3727,7 @@
                 const teamCard = document.createElement('div'); teamCard.className = 'team-card';
                 const logoFilename = teamData?.logo || 'default_logo.png';
                 const logoSrc = (logoFilename.startsWith('data:') || logoFilename.startsWith('http')) ? logoFilename : `${BASE_URL}${logoFilename}`;
-                teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
+                teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${getClubAliasBadgeHTML(teamName)}${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
                 
                 // Poubelle de suppression uniquement pour les clubs de L3
                 if (teamsGridId.includes('l3')) {
@@ -5237,6 +5258,7 @@
                 card.innerHTML = `
                     <img src="${logoSrc}" alt="${name}">
                     <h4>${name}</h4>
+                    ${getClubAliasBadgeHTML(name)}
                     ${getClubTrophiesHTML(name)}
                     <p>${data.description || ''}</p>
                     <div class="club-actions">
@@ -5258,6 +5280,17 @@
 
             const clubData = baseClubsData.clubs[clubName];
             if (!clubData) return;
+
+            // Garde-fou identité : un club archivé partage le clubId de l'entité encore en
+            // activité ailleurs. Le promouvoir créerait deux entrées avec la même identité.
+            if (clubData.id) {
+                const destDict = target === 'l3' ? leagueDataStore.l3.clubs : leagueDataStore[target].teams;
+                const clash = Object.entries(destDict || {}).find(([, c]) => c && c.id === clubData.id);
+                if (clash) {
+                    showMessage(`« ${clubName} » est la même entité que « ${clash[0]} » déjà présent(e) en ${target.toUpperCase()} (identité ${clubData.id}). Promotion annulée.`, 5000, true);
+                    return;
+                }
+            }
 
             // Vérifier la taille de la ligue cible
             if (target === 'l3') {
@@ -5285,6 +5318,225 @@
             populateBaseClubs();
             showMessage(`${clubName} supprimé.`, 2000);
         };
+
+        // ==================== IDENTITÉ UNIQUE DES CLUBS (clubId stable) ====================
+        // Chaque club possède un identifiant stable (clubId) INDÉPENDANT de son nom.
+        // Le nom reste la clé d'affichage (compatibilité avec les données existantes), mais
+        // toutes les opérations de renommage / permutation / promotion PRÉSERVENT le clubId :
+        // une même entité reste donc traçable à travers les saisons, les divisions et les noms.
+        function getAllRosterDicts() {
+            return [
+                ['l1', leagueDataStore.l1?.teams],
+                ['l2', leagueDataStore.l2?.teams],
+                ['l3', leagueDataStore.l3?.clubs],
+                ['base', baseClubsData.clubs],
+                ['ldc', ldcClubsData.clubs]
+            ];
+        }
+
+        function slugifyClubName(name) {
+            const base = String(name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            return (base ? 'c_' + base : 'c_club');
+        }
+
+        // Migration : attribue un clubId stable à chaque club qui n'en a pas encore.
+        // Retourne true si au moins un id a été créé (à persister ensuite).
+        function ensureClubIdentity() {
+            const used = new Set();
+            let changed = false;
+            getAllRosterDicts().forEach(([, dict]) => {
+                Object.entries(dict || {}).forEach(([name, club]) => {
+                    if (!club || typeof club !== 'object') return;
+                    if (!club.id) {
+                        const base = slugifyClubName(name);
+                        let id = base;
+                        let i = 2;
+                        while (used.has(id)) id = base + '_' + (i++);
+                        club.id = id;
+                        changed = true;
+                    }
+                    used.add(club.id);
+                });
+            });
+            return changed;
+        }
+
+        // Reconstruit le registre id -> { name (nom actuel), aliases (anciens noms) }.
+        // Les anciens noms archivés dans la Base (même clubId) deviennent des alias :
+        // l'entité reste identifiable à travers les saisons, même après renommages successifs.
+        function rebuildClubRegistry() {
+            window.clubRegistry = {};
+            const leagueNames = new Set();
+            ['l1', 'l2', 'l3'].forEach(lid => {
+                const dict = lid === 'l3' ? (leagueDataStore['l3']?.clubs) : (leagueDataStore[lid]?.teams);
+                Object.keys(dict || {}).forEach(n => leagueNames.add(n));
+            });
+            const byId = {};
+            getAllRosterDicts().forEach(([, dict]) => {
+                Object.entries(dict || {}).forEach(([name, club]) => {
+                    if (!club || !club.id) return;
+                    const rec = byId[club.id] || (byId[club.id] = { names: [], isArchive: {} });
+                    rec.names.push(name);
+                    rec.isArchive[name] = typeof club.description === 'string' && club.description.includes('anciennement renommé en');
+                });
+            });
+            Object.entries(byId).forEach(([id, rec]) => {
+                const uniq = [...new Set(rec.names)];
+                // Nom actuel : priorité ligue, puis entrée non-archivée, puis premier nom
+                const current = uniq.find(n => leagueNames.has(n)) ||
+                    uniq.find(n => !rec.isArchive[n]) ||
+                    uniq[0];
+                window.clubRegistry[id] = { name: current, aliases: uniq.filter(n => n !== current) };
+            });
+            // Fusionne les alias stockés sur les entités elles-mêmes (renommages successifs)
+            getAllRosterDicts().forEach(([, dict]) => {
+                Object.entries(dict || {}).forEach(([name, club]) => {
+                    if (!club || !club.id || !Array.isArray(club.aliases)) return;
+                    const reg = window.clubRegistry[club.id];
+                    if (!reg) return;
+                    club.aliases.forEach(a => {
+                        if (a !== reg.name && !reg.aliases.includes(a)) reg.aliases.push(a);
+                    });
+                });
+            });
+            return window.clubRegistry;
+        }
+
+        // Retrouve l'objet club par son nom (actuel) dans n'importe quel effectif, ou null.
+        function findClubEntry(name) {
+            for (const [, dict] of getAllRosterDicts()) {
+                if (dict && dict[name]) return dict[name];
+            }
+            return null;
+        }
+
+        // clubId stable d'un club à partir de son nom actuel
+        function getClubId(name) {
+            const entry = findClubEntry(name);
+            return (entry && entry.id) || null;
+        }
+
+        // Nom actuel d'une entité à partir de n'importe lequel de ses noms (actuel ou ancien)
+        function resolveCurrentClubName(name) {
+            const entry = findClubEntry(name);
+            if (entry && entry.id && window.clubRegistry && window.clubRegistry[entry.id]) {
+                return window.clubRegistry[entry.id].name;
+            }
+            return name;
+        }
+
+        // Badge "ex : ancien nom" pour tracer l'identité d'un club renommé
+        function getClubAliasBadgeHTML(name) {
+            const entry = findClubEntry(name);
+            if (!entry || !entry.id || !window.clubRegistry || !window.clubRegistry[entry.id]) return '';
+            const reg = window.clubRegistry[entry.id];
+            const aliases = (reg.aliases || []).filter(a => a !== name);
+            if (reg.name === name) {
+                if (aliases.length === 0) return '';
+                return `<span class="club-alias" title="Identité unique : ${entry.id}">(ex : ${aliases.join(', ')})</span>`;
+            }
+            // Carte d'archive : ce nom est un ANCIEN nom de l'entite encore active ailleurs
+            return `<span class="club-alias" title="Identité unique : ${entry.id}">➜ renommé en ${reg.name}</span>`;
+        }
+        window.getClubAliasBadgeHTML = getClubAliasBadgeHTML;
+
+        // Applique un renommage / une permutation de noms (changeMap: ancien -> nouveau) aux
+        // fixtures et au classement d'une saison de ligue. Reconstruction sans collision :
+        // les deux sens d'une permutation sont appliqués proprement, même si les deux noms
+        // coexistent dans la même saison.
+        function applyNameChangeToLeagueSeason(season, changeMap) {
+            if (!season || !changeMap) return;
+            if (season.fixtures) {
+                season.fixtures.forEach(round => {
+                    (round || []).forEach(match => {
+                        if (!match) return;
+                        if (match.home && changeMap[match.home]) match.home = changeMap[match.home];
+                        if (match.away && changeMap[match.away]) match.away = changeMap[match.away];
+                    });
+                });
+            }
+            if (season.standings) {
+                const newStandings = {};
+                Object.entries(season.standings).forEach(([name, st]) => {
+                    newStandings[changeMap[name] || name] = st;
+                });
+                season.standings = newStandings;
+            }
+        }
+
+        // Idem pour les coupes (participants / rounds / champion) : CDF, LDC et saisons archivées
+        function applyNameChangeToCompState(compState, changeMap) {
+            if (!compState || !changeMap) return;
+            if (Array.isArray(compState.participants)) {
+                compState.participants = compState.participants.map(n => (changeMap[n] || n));
+            }
+            Object.values(compState.rounds || {}).forEach(roundMatches => {
+                (roundMatches || []).forEach(match => {
+                    if (!match) return;
+                    ['team1', 'team2', 'team3', 'winner', 'penaltyWinner'].forEach(k => {
+                        if (typeof match[k] === 'string' && changeMap[match[k]]) match[k] = changeMap[match[k]];
+                    });
+                    if (Array.isArray(match.finalists)) {
+                        match.finalists = match.finalists.map(n => (changeMap[n] || n));
+                    }
+                });
+            });
+            if (typeof compState.champion === 'string' && changeMap[compState.champion]) {
+                compState.champion = changeMap[compState.champion];
+            }
+        }
+
+        // Les trophées suivent l'ENTITÉ (pas le nom) : renommage simple
+        function moveClubPalmares(oldName, newName) {
+            if (oldName === newName || !palmaresData) return;
+            if (palmaresData[oldName]) {
+                palmaresData[newName] = palmaresData[oldName];
+                delete palmaresData[oldName];
+            } else if (!palmaresData[newName]) {
+                palmaresData[newName] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+            }
+        }
+
+        // Les trophées suivent l'ENTITÉ : échange de noms entre deux clubs (permutation)
+        function permuteClubPalmares(nameA, nameB) {
+            if (nameA === nameB || !palmaresData) return;
+            if (!palmaresData[nameA] && !palmaresData[nameB]) return;
+            const tmp = palmaresData[nameA];
+            palmaresData[nameA] = palmaresData[nameB] || { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+            palmaresData[nameB] = tmp || { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+        }
+
+        // Barrages + sélection nationale LDC : renommage/permutation cohérente
+        function applyNameChangeToExtras(changeMap) {
+            if (!changeMap) return;
+            Object.keys(ldcNationalSelection || {}).forEach(lg => {
+                const sel = ldcNationalSelection[lg] || [];
+                ldcNationalSelection[lg] = sel.map(n => (changeMap[n] || n));
+            });
+            const b = barragesData?.ldc;
+            if (b) {
+                ['team1', 'team2', 'winner'].forEach(k => {
+                    if (typeof b[k] === 'string' && changeMap[b[k]]) b[k] = changeMap[b[k]];
+                });
+            }
+        }
+
+        // Applique la permutation/renommage aux coupes en évitant de traiter deux fois la saison
+        // active (l'état courant partage ses références avec la saison active archivée).
+        function applyNameChangeToCompetitions(changeMap, seasonChoice) {
+            [cdfData, ldcData].forEach(comp => {
+                const active = (comp.seasons || []).find(s => s.season_id === comp.active_season_id) || null;
+                if (seasonChoice === 'all') {
+                    (comp.seasons || []).forEach(s => {
+                        if (s !== active) applyNameChangeToCompState(s, changeMap);
+                    });
+                }
+                const coverActive = (seasonChoice === 'all') || (seasonChoice === 'active') ||
+                    (active && seasonChoice == active.season_id);
+                if (coverActive) applyNameChangeToCompState(comp, changeMap);
+                if (active) syncActiveCompSeason(comp === cdfData ? 'cdf' : 'ldc');
+            });
+        }
 
         // ==================== CHANGER / INTERCHANGER CLUB (AVANT-SAISON) ====================
         function openSwapClubModal(leagueId = 'l1') {
@@ -5338,6 +5590,9 @@
                 const opt = document.createElement('option');
                 opt.value = name;
                 opt.textContent = name;
+                const optEntry = findClubEntry(name);
+                const optAliases = (optEntry && optEntry.id && window.clubRegistry && window.clubRegistry[optEntry.id] && window.clubRegistry[optEntry.id].aliases) || [];
+                if (optAliases.length > 0) opt.textContent += ` — ex : ${optAliases.join(', ')}`;
                 targetSelect.appendChild(opt);
             });
         }
@@ -5464,6 +5719,9 @@
                 return;
             }
 
+            ensureClubIdentity();
+            rebuildClubRegistry();
+
             const league = leagueDataStore[leagueId];
             const leagueStore = leagueId === 'l3' ? leagueDataStore.l3.clubs : league?.teams;
             const clubInRoster = !!(leagueStore && leagueStore[oldClubName]);
@@ -5486,68 +5744,115 @@
                 const oldLogo = clubInRoster
                     ? (leagueStore[oldClubName].logo || 'default_logo.png')
                     : getClubRawLogo(oldClubName);
-                let logoToUse = catalogLogo || oldLogo || 'default_logo.png';
+                const logoToUse = catalogLogo || oldLogo || 'default_logo.png';
+                const oldDesc = clubInRoster ? (leagueStore[oldClubName].description || '') : '';
 
-                if (!clubInRoster) {
-                    // ---- Club historique (plus dans l'effectif actuel) ----
+                // --- Collision de noms : le nouveau nom appartient déjà à un AUTRE club ---
+                // Ex. « renommer Olympique Ours en Peluche SG » alors que Peluche SG existe déjà.
+                // Au lieu d'ÉCRASER l'autre club (perte de données), on ÉCHANGE les noms des deux
+                // entités : chacune garde son histoire, ses résultats, son clubId et ses trophées.
+                const collidingEntry = findClubEntry(newName);
+                const isCollision = !!(collidingEntry && collidingEntry.id && getClubId(oldClubName) &&
+                    collidingEntry.id !== getClubId(oldClubName));
+                if (isCollision && !confirm(`« ${newName} » est déjà un autre club.\n\nVoulez-vous ÉCHANGER les noms des deux clubs ?\nChaque club garde son histoire, ses résultats et ses trophées ; seuls les noms s'échangent.`)) {
+                    return;
+                }
+
+                const changeMap = {};
+                changeMap[oldClubName] = newName;
+                if (isCollision) changeMap[newName] = oldClubName;
+
+                // ---- 1. Effectifs : l'entité change de nom, son clubId est préservé ----
+                if (isCollision) {
+                    const otherData = findClubEntry(newName); // capturé AVANT tout déplacement
+                    if (clubInRoster) {
+                        const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
+                        delete leagueStore[oldClubName];
+                        // L'autre entité (qui portait newName) prend l'ancien nom
+                        for (const [, dict] of getAllRosterDicts()) {
+                            if (dict && dict[newName]) { delete dict[newName]; dict[oldClubName] = otherData; break; }
+                        }
+                        leagueStore[newName] = clubObj;
+                    } else if (otherData) {
+                        // Club historique : l'autre entité prend simplement son ancien nom
+                        for (const [, dict] of getAllRosterDicts()) {
+                            if (dict && dict[newName]) { delete dict[newName]; dict[oldClubName] = otherData; break; }
+                        }
+                    }
+                    // Trace d'identité pour l'échange de noms : chaque entité garde la mémoire
+                    // de l'autre nom (visible via le badge « ex : » sur ses cartes).
+                    const xEntry = clubInRoster ? leagueStore[newName] : null;
+                    if (xEntry) {
+                        if (!Array.isArray(xEntry.aliases)) xEntry.aliases = [];
+                        if (!xEntry.aliases.includes(oldClubName)) xEntry.aliases.push(oldClubName);
+                    }
+                    const yEntry = findClubEntry(oldClubName);
+                    if (yEntry) {
+                        if (!Array.isArray(yEntry.aliases)) yEntry.aliases = [];
+                        if (!yEntry.aliases.includes(newName)) yEntry.aliases.push(newName);
+                    }
+                } else if (clubInRoster) {
+                    const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
+                    delete leagueStore[oldClubName];
+                    leagueStore[newName] = clubObj;
+                } else {
+                    // ---- Club historique (plus dans l'effectif actuel) : archive dans la Base ----
+                    let histId = getClubId(oldClubName) || slugifyClubName(oldClubName);
                     if (newName === oldClubName) {
-                        // Simple changement de logo : mise à jour de l'entrée Base existante
                         if (!baseClubsData.clubs[oldClubName]) {
                             baseClubsData.clubs[oldClubName] = { logo: oldLogo || 'default_logo.png', description: '' };
                         }
                         baseClubsData.clubs[oldClubName].logo = logoToUse;
                     } else {
-                        // Renommage : l'ancien nom reste archivé dans la Base (pour les saisons
-                        // non renommées), le nouveau nom reçoit le nouveau logo (saisons renommées).
                         if (!baseClubsData.clubs[oldClubName]) {
                             baseClubsData.clubs[oldClubName] = {
                                 logo: oldLogo || 'default_logo.png',
-                                description: ` (anciennement renommé en ${newName})`
+                                description: ` (anciennement renommé en ${newName})`,
+                                id: histId
                             };
                         }
                         if (!baseClubsData.clubs[newName]) {
-                            baseClubsData.clubs[newName] = { logo: logoToUse, description: '' };
+                            baseClubsData.clubs[newName] = { logo: logoToUse, description: '', id: histId };
                         } else {
                             baseClubsData.clubs[newName].logo = logoToUse;
+                            baseClubsData.clubs[newName].id = histId;
                         }
                     }
-                } else {
-                    // Préserver l'ancien club (avec son logo) dans la base clubs pour que son nom,
-                    // son logo et ses trophées restent visibles dans le classement/palmarès des saisons précédentes
+                }
+
+                // ---- 2. Saisons choisies de TOUTES les ligues : renommage/permutation propre ----
+                // (le changeMap est sans effet sur les saisons qui ne contiennent pas ces noms)
+                ['l1', 'l2'].forEach(lid => {
+                    const lg = leagueDataStore[lid];
+                    if (!lg || !lg.seasons) return;
+                    lg.seasons.forEach(s => {
+                        const isMatchSeason = (seasonChoice === 'all') ||
+                            (seasonChoice === 'active' && s.season_id === lg.active_season_id) ||
+                            (seasonChoice == s.season_id);
+                        if (isMatchSeason) applyNameChangeToLeagueSeason(s, changeMap);
+                    });
+                });
+
+                // ---- 3. Palmarès : les trophées suivent l'entité, pas le nom ----
+                if (isCollision) permuteClubPalmares(oldClubName, newName);
+                else moveClubPalmares(oldClubName, newName);
+
+                // ---- 4. Coupes (CDF/LDC), barrages, sélection LDC ----
+                applyNameChangeToCompetitions(changeMap, seasonChoice);
+                applyNameChangeToExtras(changeMap);
+
+                // ---- 5. Trace d'identité : archive de l'ancien nom (même clubId) dans la Base ----
+                if (!isCollision && clubInRoster && newName !== oldClubName) {
+                    const entId = getClubId(newName);
                     if (!baseClubsData.clubs[oldClubName]) {
                         baseClubsData.clubs[oldClubName] = {
                             logo: oldLogo || 'default_logo.png',
-                            description: (leagueStore[oldClubName].description || '') + ` (anciennement renommé en ${newName})`
+                            description: oldDesc + ` (anciennement renommé en ${newName})`,
+                            id: entId
                         };
+                    } else {
+                        baseClubsData.clubs[oldClubName].id = entId;
                     }
-
-                    // Mettre à jour l'équipe dans la ligue
-                    const clubObj = { ...leagueStore[oldClubName], logo: logoToUse };
-                    delete leagueStore[oldClubName];
-                    leagueStore[newName] = clubObj;
-                }
-
-                // Appliquer le changement dans la/les saison(s) choisie(s)
-                if (league && league.seasons) {
-                    league.seasons.forEach(s => {
-                        const isMatchSeason = (seasonChoice === 'all') ||
-                            (seasonChoice === 'active' && s.season_id === league.active_season_id) ||
-                            (seasonChoice == s.season_id);
-                        if (isMatchSeason) {
-                            if (s.fixtures) {
-                                s.fixtures.forEach(round => {
-                                    (round || []).forEach(match => {
-                                        if (match.home === oldClubName) match.home = newName;
-                                        if (match.away === oldClubName) match.away = newName;
-                                    });
-                                });
-                            }
-                            if (s.standings && s.standings[oldClubName]) {
-                                s.standings[newName] = s.standings[oldClubName];
-                                delete s.standings[oldClubName];
-                            }
-                        }
-                    });
                 }
 
                 showMessage(`Changement appliqué pour ${newName} !`, 3000);
@@ -5566,92 +5871,60 @@
                 const currentData = leagueStore[oldClubName];
                 const otherData = otherStore[otherClubName];
 
+                // Échange des ENTITÉS entre les deux effectifs : chaque club garde son clubId
                 delete leagueStore[oldClubName];
                 delete otherStore[otherClubName];
-
                 leagueStore[otherClubName] = otherData;
                 otherStore[oldClubName] = currentData;
 
-                // Appliquer l'interchange dans les matchs et classements de la saison choisie
-                // --- Ligue source (sélectionnée) ---
-                if (league && league.seasons) {
-                    league.seasons.forEach(s => {
-                        const isMatchSeason = (seasonChoice === 'all') ||
-                            (seasonChoice === 'active' && s.season_id === league.active_season_id) ||
-                            (seasonChoice == s.season_id);
-                        if (isMatchSeason) {
-                            if (s.fixtures) {
-                                s.fixtures.forEach(round => {
-                                    (round || []).forEach(match => {
-                                        if (match.home === oldClubName) match.home = otherClubName;
-                                        else if (match.home === otherClubName) match.home = oldClubName;
-                                        if (match.away === oldClubName) match.away = otherClubName;
-                                        else if (match.away === otherClubName) match.away = oldClubName;
-                                    });
-                                });
-                            }
-                            if (s.standings) {
-                                const temp = s.standings[oldClubName];
-                                if (s.standings[otherClubName]) s.standings[oldClubName] = s.standings[otherClubName];
-                                else delete s.standings[oldClubName];
-                                if (temp) s.standings[otherClubName] = temp;
-                            }
-                        }
-                    });
-                }
+                // Permutation des noms appliquée à l'historique (matchs + classements) pour que
+                // les saisons choisies restent cohérentes avec les nouveaux effectifs.
+                const changeMap = {};
+                changeMap[oldClubName] = otherClubName;
+                changeMap[otherClubName] = oldClubName;
 
-                // --- Ligue destination (l'autre ligue) : renommer ses références ---
-                // Si l'autre ligue a des saisons (L1 ou L2), on met à jour ses fixtures/standings
-                // pour que l'ancien club de l'autre ligue (otherClubName) soit remplacé par oldClubName
-                const otherLeagueLc = otherLeague.toLowerCase();
-                const otherLeagueObj = (otherLeagueLc !== 'base' && otherLeagueLc !== 'l3')
-                    ? leagueDataStore[otherLeagueLc]
-                    : null;
-                if (otherLeagueObj && otherLeagueObj.seasons) {
-                    otherLeagueObj.seasons.forEach(s => {
-                        // On applique la meme logique de choix de saison que la ligue source :
-                        // les saisons historiques de l'autre ligue ne doivent pas etre reecrites,
-                        // sinon les clubs d'anciennes saisons (desormais dans une autre division)
-                        // disparaissent des classements et des tableaux de scores.
+                // --- Saisons choisies de TOUTES les ligues : permutation propre ---
+                // Les saisons historiques non choisies ne sont pas réécrites : les clubs
+                // d'anciennes saisons (désormais dans une autre division) restent visibles.
+                ['l1', 'l2'].forEach(lid => {
+                    const lg = leagueDataStore[lid];
+                    if (!lg || !lg.seasons) return;
+                    lg.seasons.forEach(s => {
                         const isMatchSeason = (seasonChoice === 'all') ||
-                            (seasonChoice === 'active' && s.season_id === otherLeagueObj.active_season_id) ||
+                            (seasonChoice === 'active' && s.season_id === lg.active_season_id) ||
                             (seasonChoice == s.season_id);
-                        if (!isMatchSeason) return;
-                        // (saisons choisies uniquement, les historiques sont preserves)
-                        if (s.fixtures) {
-                            s.fixtures.forEach(round => {
-                                (round || []).forEach(match => {
-                                    // L'autre ligue avait otherClubName, il devient oldClubName
-                                    if (match.home === otherClubName) match.home = oldClubName;
-                                    else if (match.home === oldClubName) match.home = otherClubName;
-                                    if (match.away === otherClubName) match.away = oldClubName;
-                                    else if (match.away === oldClubName) match.away = otherClubName;
-                                });
-                            });
-                        }
-                        if (s.standings) {
-                            // Renommer otherClubName → oldClubName dans les standings de l'autre ligue
-                            if (s.standings[otherClubName] !== undefined) {
-                                s.standings[oldClubName] = s.standings[otherClubName];
-                                delete s.standings[otherClubName];
-                            }
-                        }
+                        if (isMatchSeason) applyNameChangeToLeagueSeason(s, changeMap);
                     });
-                    // Sauvegarder aussi l'autre ligue
-                    if (googleAccessToken) saveDataToDrive(otherLeagueLc);
-                }
+                });
+
+                // --- Palmarès : trophées suivant la même permutation que l'historique ---
+                permuteClubPalmares(oldClubName, otherClubName);
+
+                // --- Coupes (CDF/LDC), barrages, sélection LDC ---
+                applyNameChangeToCompetitions(changeMap, seasonChoice);
+                applyNameChangeToExtras(changeMap);
 
                 showMessage(`Interchange effectué : ${oldClubName} ↔ ${otherClubName} !`, 3000);
             }
 
-            if (googleAccessToken) saveDataToDrive(leagueId);
-            saveBaseClubsToDrive();
+            rebuildClubRegistry();
+            if (googleAccessToken) {
+                saveDataToDrive('l1');
+                saveDataToDrive('l2');
+                savePalmaresToDrive();
+                saveBaseClubsToDrive();
+                saveCDFToDrive();
+                saveLDCToDrive();
+                saveLDClubsToDrive();
+                saveBarragesToDrive();
+            }
             populateAllLeaguesUI();
             populateBaseClubs();
             populatePalmaresTable();
             document.getElementById('swap-club-modal')?.classList.remove('active');
         }
         window.executeSwapOrChangeClub = executeSwapOrChangeClub;
+
 
         // Gestion nouveau club dans la Base
         document.getElementById('submit-new-club-btn')?.addEventListener('click', () => {
@@ -5716,7 +5989,7 @@
             document.querySelectorAll('.carousel-caption[data-club]').forEach(caption => {
                 const oldBadge = caption.querySelector('.carousel-trophies');
                 if (oldBadge) oldBadge.remove();
-                const html = getClubTrophiesHTML(caption.dataset.club, 'carousel-trophies');
+                const html = getClubTrophiesHTML(resolveCurrentClubName(caption.dataset.club), 'carousel-trophies');
                 if (!html) return;
                 const div = document.createElement('div');
                 div.innerHTML = html;

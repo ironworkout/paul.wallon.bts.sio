@@ -628,6 +628,7 @@
             display: flex;
             align-items: center;
             flex: 1;
+            min-width: 0;
         }
 
         .fixtures-table .fixture-team.home {
@@ -642,6 +643,14 @@
 
         .fixtures-table .fixture-team span {
             margin: 0 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .fixtures-table .fixture-team img.team-logo {
+            flex-shrink: 0;
         }
 
         .fixtures-table .fixture-score-inputs {
@@ -3504,12 +3513,21 @@
             // reconstruit le registre (nom actuel + anciens noms) pour tracer les entités renommées.
             const identityChanged = ensureClubIdentity();
             rebuildClubRegistry();
-            if (identityChanged && googleAccessToken) {
+            // Harmonisation : réécrit les anciens noms encore présents dans les données stockées
+            // (fixtures, classements, coupes, barrages, sélection LDC, palmarès) vers les noms
+            // actuels du registre. Une seule passe, idempotente, persistée si des changements.
+            const harmonized = harmonizeStoredClubNames();
+            if (harmonized) rebuildClubRegistry();
+            if ((identityChanged || harmonized) && googleAccessToken) {
                 await saveDataToDrive('l1');
                 await saveDataToDrive('l2');
                 await saveDataToDrive('l3');
                 await saveBaseClubsToDrive();
                 await saveLDClubsToDrive();
+                await savePalmaresToDrive();
+                await saveCDFToDrive();
+                await saveLDCToDrive();
+                await saveBarragesToDrive();
             }
 
             console.log("Toutes les données chargées depuis Drive.");
@@ -3698,7 +3716,11 @@
                     if (!match) { roundHtml += '<td>-</td>'; return; }
                     const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`; const scoreAwayInputId = `${leagueId}-r${index}-m${matchIdx}-a`;
                     const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
-                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${match.home}</span><img src="${getClubLogo(match.home)}" alt="${match.home}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${getClubLogo(match.away)}" alt="${match.away}" class="team-logo"><span>${match.away}</span></div></div></td>`;
+                    // Resolution d'identite : les fixtures stockent le nom de l'epoque ; on affiche
+                    // le nom actuel du club via le registre (anciens noms -> nom courant).
+                    const displayHome = resolveCurrentClubName(match.home);
+                    const displayAway = resolveCurrentClubName(match.away);
+                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${displayHome}</span><img src="${getClubLogo(displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${getClubLogo(displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div></td>`;
                 });
                 for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
                 row.innerHTML = roundHtml; fixturesBody.appendChild(row);
@@ -3712,9 +3734,10 @@
             const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
             sortedTeams.forEach(([teamName, teamData], index) => {
                 if (teamName === "BYE") return;
+                const displayName = resolveCurrentClubName(teamName);
                 const row = document.createElement('tr');
-                const logoSrc = getClubLogo(teamName);
-                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
+                const logoSrc = getClubLogo(displayName);
+                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
                 standingsBody.appendChild(row);
             });
         }
@@ -4503,15 +4526,15 @@
                 // BYE : qualification automatique de l'équipe réelle
                 if (isByeTeam(team1) && !isByeTeam(team2)) {
                     advanceCDFWinner(0, matchIdx, team2);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team2}</strong> qualifié(e) (BYE)</p>`;
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team2)}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team2) && !isByeTeam(team1)) {
                     advanceCDFWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (BYE)</p>`;
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team1) && isByeTeam(team2)) {
                     advanceCDFWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (double BYE)</p>`;
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> qualifié(e) (double BYE)</p>`;
                 } else {
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> vs <strong>${team2}</strong></p>`;
+                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> vs <strong>${resolveCurrentClubName(team2)}</strong></p>`;
                 }
             }
 
@@ -4552,29 +4575,31 @@
                         const scoreInputStyle = 'width:44px; text-align:center; margin-left:8px; padding:5px 4px; border:1px solid var(--border-color); border-radius:4px; font-family:Roboto Mono, monospace; font-weight:700;';
                         const inputDisabled = 'disabled title="En attente des équipes / BYE"';
                         const scoreIn = (num, val) => `<input type="number" min="0" value="${val ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, ${num}, this.value)"` : inputDisabled} style="${scoreInputStyle}">`;
-                        const demiLabel = match.finalists && match.finalists.length === 2 ? `<div style="font-size:0.75rem; color:var(--neon-green); font-weight:bold; margin-top:6px; text-align:center;">✅ Qualifiés pour la finale : ${match.finalists.join(' & ')}</div>` : '';
+                        const demiLabel = match.finalists && match.finalists.length === 2 ? `<div style="font-size:0.75rem; color:var(--neon-green); font-weight:bold; margin-top:6px; text-align:center;">✅ Qualifiés pour la finale : ${match.finalists.map(resolveCurrentClubName).join(' & ')}</div>` : '';
+                        const dT1 = resolveCurrentClubName(match.team1), dT2 = resolveCurrentClubName(match.team2), dT3 = resolveCurrentClubName(match.team3);
                         html += `
                             <div class="cdf-match-card" style="min-width: 230px;">
                                 <div style="font-size:0.75rem; color:var(--nav-cdf-color); font-weight:bold; text-align:center; padding-bottom:6px;">⚡ Match à 3 : le club avec le plus de buts est 1er</div>
-                                <div class="cdf-team${t1Class}"><img src="${getClubLogo(match.team1)}" alt="${match.team1}"><span>${match.team1}</span>${scoreIn(1, match.score1)}</div>
-                                <div class="cdf-team${t2Class}"><img src="${getClubLogo(match.team2)}" alt="${match.team2}"><span>${match.team2}</span>${scoreIn(2, match.score2)}</div>
-                                <div class="cdf-team${t3Class}"><img src="${getClubLogo(match.team3)}" alt="${match.team3}"><span>${match.team3}</span>${scoreIn(3, match.score3)}</div>
+                                <div class="cdf-team${t1Class}"><img src="${getClubLogo(dT1)}" alt="${dT1}"><span>${dT1}</span>${scoreIn(1, match.score1)}</div>
+                                <div class="cdf-team${t2Class}"><img src="${getClubLogo(dT2)}" alt="${dT2}"><span>${dT2}</span>${scoreIn(2, match.score2)}</div>
+                                <div class="cdf-team${t3Class}"><img src="${getClubLogo(dT3)}" alt="${dT3}"><span>${dT3}</span>${scoreIn(3, match.score3)}</div>
                                 ${demiLabel}
                             </div>
                         `;
                         return;
                     }
 
-                    const logo1 = match.team1 ? getClubLogo(match.team1) : `${BASE_URL}default_logo.png`;
-                    const logo2 = match.team2 ? getClubLogo(match.team2) : `${BASE_URL}default_logo.png`;
+                    const dTeam1 = resolveCurrentClubName(match.team1), dTeam2 = resolveCurrentClubName(match.team2);
+                    const logo1 = dTeam1 ? getClubLogo(dTeam1) : `${BASE_URL}default_logo.png`;
+                    const logo2 = dTeam2 ? getClubLogo(dTeam2) : `${BASE_URL}default_logo.png`;
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     // Un match n'est saisissable que si les 2 équipes sont connues et qu'aucune n'est un BYE (déjà tranché au tirage)
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${match.penaltyWinner} aux tirs au but</div>` : '';
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but</div>` : '';
                     html += `
                         <div class="cdf-match-card">
-                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${match.team1 || '?'}"><span>${match.team1 || '?'}</span></div>
+                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
                             <div class="cdf-score-inputs">
                                 <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                                 -
@@ -4592,11 +4617,12 @@
             const finalRoundIdx = roundNames.length - 1;
             if (cdfData.rounds[finalRoundIdx] && cdfData.rounds[finalRoundIdx][0] && cdfData.rounds[finalRoundIdx][0].winner) {
                 cdfData.champion = cdfData.rounds[finalRoundIdx][0].winner;
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;">🏆 Champion CDF : ${cdfData.champion}</span></div>`;
+                const championCDF = resolveCurrentClubName(cdfData.champion);
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;">🏆 Champion CDF : ${championCDF}</span></div>`;
                 // Auto-ajouter le trophée CDF au palmarès (une seule fois par saison)
-                if (!palmaresData[cdfData.champion]) palmaresData[cdfData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+                if (!palmaresData[championCDF]) palmaresData[championCDF] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!cdfData._trophyAwarded) {
-                    palmaresData[cdfData.champion]['CDF']++;
+                    palmaresData[championCDF]['CDF']++;
                     cdfData._trophyAwarded = true;
                     launchConfetti('CDF');
                     savePalmaresToDrive();
@@ -4608,8 +4634,8 @@
                     celebrationDiv.style.display = 'block';
                     celebrationDiv.innerHTML = `
                         <div style="text-align:center; margin-top: 20px;">
-                            <img src="${getClubLogo(cdfData.champion)}" alt="${cdfData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
-                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${cdfData.champion} remporte la Coupe de France !</h3>
+                            <img src="${getClubLogo(championCDF)}" alt="${championCDF}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
+                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${championCDF} remporte la Coupe de France !</h3>
                             <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
@@ -5016,22 +5042,23 @@
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
-                    const logo1 = match.team1 ? getClubLogo(match.team1) : `${BASE_URL}default_logo.png`;
-                    const logo2 = match.team2 ? getClubLogo(match.team2) : `${BASE_URL}default_logo.png`;
+                    const dTeam1 = resolveCurrentClubName(match.team1), dTeam2 = resolveCurrentClubName(match.team2);
+                    const logo1 = dTeam1 ? getClubLogo(dTeam1) : `${BASE_URL}default_logo.png`;
+                    const logo2 = dTeam2 ? getClubLogo(dTeam2) : `${BASE_URL}default_logo.png`;
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${match.penaltyWinner} aux tirs au but</div>` : '';
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but</div>` : '';
                     html += `
                         <div class="cdf-match-card" style="border-color: var(--nav-ldc-color);">
-                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${match.team1 || '?'}"><span>${match.team1 || '?'}</span></div>
+                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
                             <div class="cdf-score-inputs">
                                 <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                                 -
                                 <input type="number" min="0" value="${match.score2 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 2, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
                             </div>
                             ${penaltyNote}
-                            <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${match.team2 || '?'}"><span>${match.team2 || '?'}</span></div>
+                            <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${dTeam2 || '?'}"><span>${dTeam2 || '?'}</span></div>
                         </div>
                     `;
                 });
@@ -5046,10 +5073,11 @@
             }
             if (finalWinner && !isByeTeam(finalWinner)) {
                 ldcData.champion = ldcData.rounds[finalRoundIdx][0].winner;
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;">🏆 Champion LDC : ${ldcData.champion}</span></div>`;
-                if (!palmaresData[ldcData.champion]) palmaresData[ldcData.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+                const championDisplay = resolveCurrentClubName(ldcData.champion);
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;">🏆 Champion LDC : ${championDisplay}</span></div>`;
+                if (!palmaresData[championDisplay]) palmaresData[championDisplay] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!ldcData._trophyAwarded) {
-                    palmaresData[ldcData.champion]['LDC']++;
+                    palmaresData[championDisplay]['LDC']++;
                     ldcData._trophyAwarded = true;
                     launchConfetti('LDC');
                     savePalmaresToDrive();
@@ -5170,14 +5198,16 @@
             const team5L1 = l1Standings[4]; // 5e de L1
 
             if (team2L2) {
-                document.querySelector('#barrage-team2-l2 img').src = getClubLogo(team2L2);
-                document.querySelector('#barrage-team2-l2 span').textContent = team2L2;
-                barragesData.ldc.team1 = team2L2;
+                const dTeam2L2 = resolveCurrentClubName(team2L2);
+                document.querySelector('#barrage-team2-l2 img').src = getClubLogo(dTeam2L2);
+                document.querySelector('#barrage-team2-l2 span').textContent = dTeam2L2;
+                barragesData.ldc.team1 = dTeam2L2;
             }
             if (team5L1) {
-                document.querySelector('#barrage-team5-l1 img').src = getClubLogo(team5L1);
-                document.querySelector('#barrage-team5-l1 span').textContent = team5L1;
-                barragesData.ldc.team2 = team5L1;
+                const dTeam5L1 = resolveCurrentClubName(team5L1);
+                document.querySelector('#barrage-team5-l1 img').src = getClubLogo(dTeam5L1);
+                document.querySelector('#barrage-team5-l1 span').textContent = dTeam5L1;
+                barragesData.ldc.team2 = dTeam5L1;
             }
 
             // Ajouter les écouteurs sur les inputs
@@ -5416,11 +5446,22 @@
             return (entry && entry.id) || null;
         }
 
-        // Nom actuel d'une entité à partir de n'importe lequel de ses noms (actuel ou ancien)
+        // Nom actuel d'une entité à partir de n'importe lequel de ses noms (actuel ou ancien).
+        // 1) Le nom est trouve dans un effectif (ou archive Base partageant le clubId) : on renvoie
+        //    le nom actuel du registre pour cette identite.
+        // 2) Sinon, on cherche le nom dans les alias du registre (anciens noms memorises sur les
+        //    entites lors d'un renommage/echange) : l'entite reste identifiable.
         function resolveCurrentClubName(name) {
+            if (!name) return name;
             const entry = findClubEntry(name);
             if (entry && entry.id && window.clubRegistry && window.clubRegistry[entry.id]) {
                 return window.clubRegistry[entry.id].name;
+            }
+            if (window.clubRegistry) {
+                for (const id in window.clubRegistry) {
+                    const reg = window.clubRegistry[id];
+                    if (reg && Array.isArray(reg.aliases) && reg.aliases.includes(name)) return reg.name;
+                }
             }
             return name;
         }
@@ -5536,6 +5577,66 @@
                 if (coverActive) applyNameChangeToCompState(comp, changeMap);
                 if (active) syncActiveCompSeason(comp === cdfData ? 'cdf' : 'ldc');
             });
+        }
+
+        // Harmonisation au chargement : réécrit les anciens noms présents dans les DONNÉES stockées
+        // (fixtures, classements, coupes, barrages, sélection LDC, palmarès) vers les noms ACTUELS
+        // connus du registre d'identité. Règle de sécurité : un alias n'est réécrit que s'il n'est
+        // PAS le nom actuel d'un autre club de ligue (évite de corrompre un club encore vivant sous
+        // ce nom). Retourne true si au moins un changement a été appliqué (à persister ensuite).
+        function harmonizeStoredClubNames() {
+            if (!window.clubRegistry) return false;
+            // Noms actuellement utilisés par les effectifs de ligue (intouchables)
+            const liveLeagueNames = new Set();
+            ['l1', 'l2', 'l3'].forEach(lid => {
+                const dict = lid === 'l3' ? (leagueDataStore['l3']?.clubs) : (leagueDataStore[lid]?.teams);
+                Object.keys(dict || {}).forEach(n => liveLeagueNames.add(n));
+            });
+            // Construit le mapping alias -> nom actuel (seulement pour les alias non vivants)
+            const changeMap = {};
+            Object.values(window.clubRegistry).forEach(reg => {
+                if (!reg || !reg.name) return;
+                (reg.aliases || []).forEach(alias => {
+                    if (alias === reg.name || liveLeagueNames.has(alias)) return;
+                    if (changeMap[alias] && changeMap[alias] !== reg.name) return; // alias ambigu : on laisse
+                    changeMap[alias] = reg.name;
+                });
+            });
+            if (Object.keys(changeMap).length === 0) return false;
+            // Vraie idempotence : ne signale un changement que si l'ancien nom est réellement
+            // encore présent quelque part dans les données (sinon l'archive Base suffirait à
+            // refaire une passe inutile à chaque chargement).
+            const presentNames = new Set();
+            ['l1', 'l2'].forEach(lid => {
+                (leagueDataStore[lid]?.seasons || []).forEach(s => {
+                    (s.fixtures || []).forEach(r => (r || []).forEach(m => { if (m) { presentNames.add(m.home); presentNames.add(m.away); } }));
+                    Object.keys(s.standings || {}).forEach(n => presentNames.add(n));
+                });
+            });
+            [cdfData, ldcData].forEach(c => {
+                if (!c) return;
+                (c.participants || []).forEach(n => presentNames.add(n));
+                (c.rounds || []).forEach(r => (r || []).forEach(m => { if (m) { presentNames.add(m.team1); presentNames.add(m.team2); } }));
+                presentNames.add(c.champion); presentNames.add(c.penaltyWinner);
+            });
+            ['team1', 'team2', 'winner'].forEach(k => { if (typeof barragesData?.ldc?.[k] === 'string') presentNames.add(barragesData.ldc[k]); });
+            Object.keys(ldcNationalSelection || {}).forEach(lg => (ldcNationalSelection[lg] || []).forEach(n => presentNames.add(n)));
+            Object.keys(palmaresData || {}).forEach(n => presentNames.add(n));
+            Object.keys(changeMap).forEach(k => { if (!presentNames.has(k)) delete changeMap[k]; });
+            if (Object.keys(changeMap).length === 0) return false;
+            ['l1', 'l2'].forEach(lid => {
+                (leagueDataStore[lid]?.seasons || []).forEach(s => applyNameChangeToLeagueSeason(s, changeMap));
+            });
+            applyNameChangeToCompetitions(changeMap, 'all');
+            applyNameChangeToExtras(changeMap);
+            // Palmarès : permutation si les deux sens existent, sinon simple déplacement
+            const done = new Set();
+            Object.entries(changeMap).forEach(([oldN, newN]) => {
+                if (done.has(oldN) || done.has(newN)) return;
+                if (changeMap[newN] === oldN) { permuteClubPalmares(oldN, newN); done.add(oldN); done.add(newN); }
+                else { moveClubPalmares(oldN, newN); done.add(oldN); }
+            });
+            return true;
         }
 
         // ==================== CHANGER / INTERCHANGER CLUB (AVANT-SAISON) ====================
@@ -5965,6 +6066,7 @@
         }
 
         function getClubLogo(clubName) {
+            clubName = resolveCurrentClubName(clubName);
             if (leagueDataStore.l1.teams?.[clubName]) return resolveLogoUrl(leagueDataStore.l1.teams[clubName].logo);
             if (leagueDataStore.l2.teams?.[clubName]) return resolveLogoUrl(leagueDataStore.l2.teams[clubName].logo);
             if (leagueDataStore.l3.clubs?.[clubName]) return resolveLogoUrl(leagueDataStore.l3.clubs[clubName].logo);
@@ -6006,9 +6108,13 @@
             // (y compris ceux d'anciennes saisons qui ne font plus partie des ligues actuelles)
             const allTeamsInStore = getAllTeamsInStore();
 
+            const seenPalmares = new Set();
             Object.keys(allTeamsInStore).sort().forEach(teamName => {
                 if (teamName === "BYE") return;
-                const teamGlobalPalmares = palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
+                const displayName = resolveCurrentClubName(teamName);
+                if (seenPalmares.has(displayName)) return; // archive + effectif = même entité : une seule ligne
+                seenPalmares.add(displayName);
+                const teamGlobalPalmares = palmaresData[displayName] || palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
                 const row = document.createElement('tr');
 
                 let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('');
@@ -6017,33 +6123,33 @@
                 let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<i class="fas fa-trophy trophy-cdf"></i>').join('');
 
                 row.innerHTML = `
-                    <td class="team-info text-left"><img src="${getClubLogo(teamName)}" alt="${teamName}" class="team-logo"><span>${teamName}</span></td>
+                    <td class="team-info text-left"><img src="${getClubLogo(displayName)}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td>
                     <td class="trophy-cell">
                         ${l1TrophiesHTML || '-'}
                         <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${teamName}', 'Ligue 1', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'Ligue 1', false)"><i class="fas fa-minus"></i></button>
+                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 1', true)"><i class="fas fa-plus"></i></button>
+                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 1', false)"><i class="fas fa-minus"></i></button>
                         </div>
                     </td>
                     <td class="trophy-cell">
                         ${l2TrophiesHTML || '-'}
                         <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${teamName}', 'Ligue 2', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'Ligue 2', false)"><i class="fas fa-minus"></i></button>
+                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 2', true)"><i class="fas fa-plus"></i></button>
+                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 2', false)"><i class="fas fa-minus"></i></button>
                         </div>
                     </td>
                     <td class="trophy-cell">
                         ${cdfTrophiesHTML || '-'}
                         <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${teamName}', 'CDF', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'CDF', false)"><i class="fas fa-minus"></i></button>
+                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'CDF', true)"><i class="fas fa-plus"></i></button>
+                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'CDF', false)"><i class="fas fa-minus"></i></button>
                         </div>
                     </td>
                     <td class="trophy-cell">
                         ${ldcTrophiesHTML || '-'}
                         <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${teamName}', 'LDC', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${teamName}', 'LDC', false)"><i class="fas fa-minus"></i></button>
+                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'LDC', true)"><i class="fas fa-plus"></i></button>
+                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'LDC', false)"><i class="fas fa-minus"></i></button>
                         </div>
                     </td>
                 `;
@@ -6105,10 +6211,14 @@
         function getClassementData() {
             const allTeamsInStore = getAllTeamsInStore();
 
+            const seenClassement = new Set();
             const rows = Object.keys(allTeamsInStore)
                 .filter(name => name !== "BYE")
                 .map(name => {
-                    const p = palmaresData[name] || { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+                    const displayName = resolveCurrentClubName(name);
+                    if (seenClassement.has(displayName)) return null; // même entité résolue : une seule ligne
+                    seenClassement.add(displayName);
+                    const p = palmaresData[displayName] || palmaresData[name] || { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                     const counts = {
                         'LDC': p['LDC'] || 0,
                         'Ligue 1': p['Ligue 1'] || 0,
@@ -6116,8 +6226,9 @@
                         'Ligue 2': p['Ligue 2'] || 0
                     };
                     const total = counts['LDC'] + counts['Ligue 1'] + counts['CDF'] + counts['Ligue 2'];
-                    return { name, counts, total };
-                });
+                    return { name: displayName, counts, total };
+                })
+                .filter(Boolean);
 
             if (classementSortKey && classementSortKey !== 'official') {
                 // Tri personnalisé demandé par l'utilisateur (clic sur un en-tête)
@@ -6184,11 +6295,12 @@
                 const top3 = rows.slice(0, 3);
                 podiumDiv.innerHTML = top3.map((row, idx) => {
                     const medal = CLASSEMENT_RANK_MEDALS[idx] || '';
+                    const displayName = resolveCurrentClubName(row.name);
                     return `
                         <div class="podium-club podium-${idx + 1}">
                             <span class="podium-medal">${medal}</span>
-                            <img src="${getClubLogo(row.name)}" alt="${row.name}">
-                            <span class="podium-name">${row.name}</span>
+                            <img src="${getClubLogo(displayName)}" alt="${displayName}">
+                            <span class="podium-name">${displayName}</span>
                             <span class="podium-trophies">${row.total} trophée${row.total > 1 ? 's' : ''}</span>
                         </div>`;
                 }).join('');
@@ -6203,9 +6315,10 @@
                     `<td class="medal-count"><span class="trophy-icon-sm">${CLASSEMENT_TROPHY_ICONS[key]}</span>${row.counts[key]}</td>`
                 ).join('');
 
+                const displayRowName = resolveCurrentClubName(row.name);
                 tr.innerHTML = `
                     <td class="rank-cell${rankClass}">${rank}${rankMedal}</td>
-                    <td class="team-info text-left"><img src="${getClubLogo(row.name)}" alt="${row.name}" class="team-logo"><span>${row.name}</span></td>
+                    <td class="team-info text-left"><img src="${getClubLogo(displayRowName)}" alt="${displayRowName}" class="team-logo"><span>${displayRowName}</span></td>
                     ${countsHTML}
                     <td class="classement-total">${row.total}</td>
                 `;

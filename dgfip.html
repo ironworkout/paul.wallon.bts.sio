@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide complet — 3 postes DGFiP (entretien contractuel)</title>
+<style>
+:root{--bleu:#003366;--bleu2:#0b4d8c;--jaune:#e8a33d;--fond:#f4f6fa;--texte:#1c2733;--muted:#5a6b7d;--carte:#fff;--bord:#e2e8f0;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--fond);color:var(--texte);line-height:1.55}
+header.hero{background:linear-gradient(135deg,var(--bleu),var(--bleu2) 70%,#0a5c8c);color:#fff;padding:.75rem 1rem .85rem;text-align:center}
+header.hero .hero-top{display:flex;justify-content:center;align-items:center;gap:.7rem;flex-wrap:wrap}
+header.hero .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:.15rem .7rem;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;margin:0}
+header.hero h1{font-size:clamp(1rem,2.3vw,1.3rem);line-height:1.2}
+header.hero p.sub{margin:.35rem auto 0;max-width:800px;color:#d7e4f2;font-size:.8rem}
+nav.toc{background:#fff;border-bottom:1px solid var(--bord);position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,51,102,.06)}
+nav.toc .inner{max-width:1000px;margin:0 auto;display:flex;gap:.1rem;justify-content:center;overflow-x:auto;padding:.3rem .3rem;font-size:.78rem;font-weight:700}
+nav.toc a{white-space:nowrap;color:var(--bleu2);text-decoration:none;padding:.42rem .55rem;border-radius:999px}
+nav.toc a:hover{background:#eaf1fa}
+main{max-width:1000px;margin:0 auto;padding:1.5rem 1rem 3rem}
+section{margin-top:2.2rem}
+section>h2{font-size:1.3rem;color:var(--bleu);border-bottom:3px solid var(--jaune);padding-bottom:.45rem;margin-bottom:1rem}
+.card{background:var(--carte);border:1px solid var(--bord);border-radius:14px;padding:1.05rem 1.2rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,51,102,.05)}
+.note{background:#fff7e8;border:1px solid #f0d9a8;border-left:5px solid var(--jaune);border-radius:10px;padding:.8rem 1rem;margin:.8rem 0;font-size:.92rem}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.poste{background:#fff;border:1px solid var(--bord);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,51,102,.07);display:flex;flex-direction:column}
+.poste .head{padding:.8rem 1rem;color:#fff}.poste .head h3{font-size:1rem}.poste .head .meta{font-size:.75rem;opacity:.85;margin-top:.2rem}
+.poste .body{padding:.9rem 1rem;flex:1}.poste .body ul{padding-left:1.2rem;font-size:.88rem}.poste .body li{margin:.2rem 0}
+.head-sip{background:linear-gradient(135deg,#0b6e4f,#12805d)}
+.head-sdif{background:linear-gradient(135deg,#7a5a00,#a87b1c)}
+.head-bil{background:linear-gradient(135deg,#0b4d8c,#1763ad)}
+.poste .s2{font-size:.88rem;color:var(--muted);margin:.15rem 0 .55rem;line-height:1.5}
+p.lead{font-size:.88rem;color:var(--muted);font-style:italic;margin:0 0 .6rem}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--bord);font-size:.9rem}
+th{background:var(--bleu);color:#fff;text-align:left;padding:.6rem .8rem}
+td{padding:.55rem .8rem;border-top:1px solid var(--bord);vertical-align:top}
+tr:nth-child(even) td{background:#f8fafd}
+h3.sub{color:var(--bleu2);font-size:1.02rem;margin:1rem 0 .5rem}
+ul{padding-left:1.3rem;margin:.3rem 0}li{margin:.22rem 0}
+details.q{background:#fff;border:1px solid var(--bord);border-radius:12px;margin-bottom:.6rem;overflow:hidden}
+details.q summary{cursor:pointer;list-style:none;padding:.8rem 1rem;font-weight:600;display:flex;gap:.6rem;font-size:.93rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .chev{color:var(--bleu2);transition:transform .15s}
+details.q[open] summary .chev{transform:rotate(90deg)}
+details.q[open] summary{background:#eef4fc}
+details.q .ans{padding:.3rem 1.1rem 1rem;font-size:.92rem}.details.q .ans p{margin:.35rem 0}
+.qnum{display:inline-block;background:var(--bleu);color:#fff;border-radius:8px;padding:.05rem .55rem;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem}
+.mot{background:#eef4fc;border-radius:8px;padding:.15rem .55rem;font-weight:700;color:var(--bleu2);font-size:.88rem}
+.refl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem}
+.refl .r{background:#fff;border:1px solid var(--bord);border-radius:12px;padding:.8rem .9rem;position:relative}
+.refl .r .n{position:absolute;top:-.6rem;left:.9rem;background:var(--bleu);color:#fff;font-weight:700;border-radius:999px;padding:.1rem .6rem;font-size:.75rem}
+.refl .r b{display:block;margin:.2rem 0 .3rem;color:var(--bleu2)}.refl .r p{font-size:.85rem;color:var(--muted)}
+.check{list-style:none;padding-left:0}.check li{padding:.35rem 0 .35rem 1.9rem;position:relative;border-bottom:1px dashed var(--bord)}
+.check li::before{content:"☐";position:absolute;left:.4rem;font-size:1.05rem;color:var(--bleu2)}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--bord);margin-top:2rem}
+/* === Onglets segmentes : une section a la fois === */
+section.sec{display:none}
+section.sec.active{display:block;animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+nav.toc a.active{background:var(--bleu);color:#fff}
+.seg-nav{display:flex;justify-content:space-between;gap:.6rem;margin-top:1.8rem;padding-top:1.1rem;border-top:1px solid var(--bord)}
+.seg-nav button{flex:1;max-width:280px;border:1px solid var(--bord);background:#fff;border-radius:12px;padding:.75rem 1rem;cursor:pointer;font-weight:600;color:var(--bleu2);font-size:.88rem;transition:all .15s}
+.seg-nav button:hover:not(:disabled){background:var(--bleu);color:#fff;border-color:var(--bleu)}
+.seg-nav button:disabled{opacity:.35;cursor:default}
+.seg-nav .spacer{flex:1}
+/* === Couleurs par categorie (section questions) === */
+.card.cat-classiques details.q{border-left:5px solid var(--bleu)}
+.card.cat-classiques .qnum{background:var(--bleu)}
+.card.cat-personnelles details.q{border-left:5px solid #0b6e4f}
+.card.cat-personnelles .qnum{background:#0b6e4f}
+.card.cat-oubliées details.q{border-left:5px solid #7a3ec8}
+.card.cat-oubliées .qnum{background:#7a3ec8}
+.card.cat-classiques .sub{color:var(--bleu)}
+.card.cat-personnelles .sub{color:#0b6e4f}
+.card.cat-oubliées .sub{color:#7a3ec8}
+.legend{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+.lg{font-size:.75rem;font-weight:700;border-radius:999px;padding:.25rem .7rem;color:#fff}
+.lg-b{background:var(--bleu)}.lg-v{background:#0b6e4f}.lg-m{background:#7a3ec8}
+.fbtn{border:none;cursor:pointer;border-radius:10px;padding:.5rem .95rem;font-size:.85rem;font-weight:600;background:var(--bleu);color:#fff;transition:all .15s}
+.fbtn:hover{filter:brightness(1.12)}
+.fbtn.ghost{background:#fff;color:var(--bleu2);border:1px solid var(--bord)}
+.fbtn:disabled{opacity:.4;cursor:default}
+/* === Mode cartes flash === */
+#flash{margin-top:.5rem}
+.f-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+.f-cat{font-size:.78rem;font-weight:700;border-radius:999px;padding:.3rem .85rem;color:#fff}
+.f-cat.c0{background:var(--bleu)}.f-cat.c1{background:#0b6e4f}.f-cat.c2{background:#7a3ec8}.f-cat.c3{background:var(--jaune);color:#2a2a2a}
+.f-count{font-weight:700;color:var(--bleu2);font-size:.9rem;margin-left:auto}
+.f-wrap{perspective:1300px;margin:0 auto;max-width:640px}
+.f-card{position:relative;width:100%;height:310px;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.f-card.flipped{transform:rotateY(180deg)}
+.f-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;justify-content:center;box-shadow:0 8px 24px rgba(0,51,102,.15)}
+.f-front{background:#fff;border:1px solid var(--bord);color:var(--texte)}
+.f-back{background:linear-gradient(135deg,var(--bleu),var(--bleu2));color:#fff;transform:rotateY(180deg)}
+.f-q{font-size:1.05rem;font-weight:700;line-height:1.45}
+.f-a{font-size:.92rem;line-height:1.5;overflow:auto;max-height:220px}
+.f-hint{margin-top:1rem;font-size:.75rem;opacity:.6;text-align:center}
+.f-nav{display:flex;justify-content:space-between;align-items:center;gap:.8rem;margin-top:1rem;max-width:640px;margin-left:auto;margin-right:auto}
+.f-dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;max-width:300px}
+.f-dots span{width:8px;height:8px;border-radius:50%;background:#cbd6e4;flex-shrink:0}
+.f-dots span.on{background:var(--bleu2)}
+.f-dots span.done{background:var(--jaune)}
+.flashbar{margin:0 0 .8rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.tabn{display:inline-block;background:var(--jaune);color:#2a2a2a;border-radius:999px;font-size:.6rem;font-weight:800;padding:.12rem .42rem;margin-left:.3rem;vertical-align:middle;line-height:1.2}
+.flashbox{margin:0 0 1rem}
+@media print{nav.toc,.seg-nav{display:none}body{background:#fff}section.sec{display:block!important;animation:none;margin-top:1.4rem}.card,.poste,details.q{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="hero-top">
+<span class="badge">Préparation entretiens DGFiP</span>
+<h1>🎯 Tout en un — 3 postes, le savoir, l'entretien</h1>
+</div>
+<p class="sub">SIP · SDIF · BIL · la DGFiP · univers métier · mises en situation &amp; méthode CGT (40 cas) · 53 questions d'entretien</p>
+
+</header>
+<nav class="toc"><div class="inner">
+<a href="#postes">3 postes</a><a href="#dgfiP">DGFiP</a><a href="#metier">Métier</a><a href="#outils">Outils</a><a href="#vocab">Vocab</a><a href="#situations">Situations</a><a href="#rgpd">RGPD</a><a href="#questions">Questions</a><a href="#modeles">Modèles</a><a href="#vos-questions">Vos questions</a><a href="#actualite">Actu</a>
+</div></nav>
+<main>
+<section id="postes" class="sec">
+<h2>📌 1 · Les 3 postes en un coup d'œil</h2>
+<div class="grid3">
+<div class="poste"><div class="head head-sip"><h3>3 · SIP Douai</h3><div class="meta">Réf. 2026-32202 · Fiscalité des particuliers</div></div>
+<div class="body"><p class="s2"><b>En 2 phrases :</b> le SIP est le guichet unique du particulier — chaque foyer y déclare, reçoit son avis d'imposition, paie et conteste. Il sert à rendre l'impôt simple, juste et humain, via un accueil physique, téléphonique et numérique.</p><ul>
+<li><b>Interlocuteur unique du particulier</b> : déclarations, avis, paiements, réclamations</li>
+<li><b>Accueil multicanal</b> (physique, téléphone, numérique) toute l'année</li>
+<li>Campagnes : déclaration IR, taxe d'habitation, avis d'imposition</li>
+<li>Contentieux, défaillance déclarative, recouvrement amiable, comptabilité</li>
+<li>35 emplois · 1 A+, 3 A, 7 B, 24 C</li>
+</ul></div></div>
+<div class="poste"><div class="head head-sdif"><h3>1 · SDIF Valenciennes</h3><div class="meta">Réf. 2026-32209 · Impôts fonciers</div></div>
+<div class="body"><p class="s2"><b>En 2 phrases :</b> le SDIF calcule et recouvre les impôts fonciers (taxe foncière, taxes d'urbanisme) pour tout le département du Nord. Il sert à identifier, évaluer et imposer chaque parcelle et chaque construction, en tenant à jour le cadastre et les fichiers fonciers.</p><ul>
+<li><b>Taxes foncières + taxes d'urbanisme</b> du département du Nord</li>
+<li>3 pôles : habitation (17), professionnels (7), topographie &amp; cadastre (11)</li>
+<li><b>Mise à jour des fichiers fonciers</b>, enregistrement des réclamations</li>
+<li>Réponse aux demandes simples (délivrance documentaire, renseignements)</li>
+</ul></div></div>
+<div class="poste"><div class="head head-bil"><h3>2 · Budget-Logistique Lille</h3><div class="meta">Réf. 2026-32213 · Division BIL</div></div>
+<div class="body"><p class="s2"><b>En 2 phrases :</b> la division Budget-Logistique gère l'argent et les achats de la direction : budgets, commandes, stocks, contrats, loyers. Elle sert à ce que les 75 services fonctionnent (mobilier, matériel, locaux), dans le respect strict de la comptabilité publique.</p><ul>
+<li><b>Achats</b> pour les 75 services (mobilier, informatique, téléphonie) + <b>stock</b></li>
+<li><b>Loyers et charges</b> des centres des finances publiques</li>
+<li><b>Suivi de contrats</b> : nettoyage, TPE…</li>
+<li>Budget &gt; 10 M€ · travail avec 2 contrôleurs sous un cadre A</li>
+<li><b>Règles de la comptabilité publique</b> strictes</li>
+</ul></div></div>
+</div>
+<div class="note">⚖️ <b>Commun aux 3 :</b> CDD jusqu'au 31/08/2029 (art. L332-2 2° CGFP) · 1 962 € brut/mois (23 551 €/an) · catégorie C · prérequis : <b>première expérience en gestion</b> · compétences : bureautique, accueil, travail en équipe, <b>rigueur</b>.</div>
+</section>
+
+<section id="dgfiP" class="sec">
+<h2>🏛️ 2 · La DGFiP en bref (à savoir par cœur)</h2>
+<div class="card">
+<p><b>DGFiP</b> = Direction générale des Finances publiques · créée en <b>2008</b> par la fusion de la DGI (impôts) et de la DGCP (comptabilité publique) · direction à réseau, <b>95 000 agents</b>, présente sur tout le territoire. Missions :</p>
+<ul>
+<li>Collecter et recouvrer l'impôt avec le meilleur service aux usagers</li>
+<li>Lutter contre la fraude fiscale</li>
+<li>Tenir la comptabilité de l'État, des collectivités et établissements publics</li>
+<li>Expertise et conseil financier aux collectivités et entreprises</li>
+<li>Contrôler et exécuter les dépenses publiques</li>
+<li>Élaborer les textes législatifs fiscaux · gérer des régimes de retraites · piloter la stratégie immobilière de l'État</li>
+</ul>
+<p style="margin-top:.5rem"><b>DRFiP Hauts-de-France</b> : <b>2 400 emplois</b>, <b>75 services territoriaux</b> (SIP, professionnels, pôles de recouvrement, contrôle fiscal, publicité foncière, enregistrement, centres des impôts fonciers, gestion comptable, trésoreries).</p>
+<div class="note">📌 <b>Phrase prête :</b> « La DGFiP est une direction à réseau de 95 000 agents qui collecte l'impôt, tient la comptabilité publique et conseille les collectivités. La DRFiP des Hauts-de-France compte 2 400 agents répartis dans 75 services. » La DGFiP est dirigée par la directrice générale Amélie Verdier.</div>
+</div>
+</section>
+<section id="metier" class="sec">
+<h2>🧠 3 · Les 3 univers métier — l'essentiel approfondi</h2>
+<div class="card">
+<h3 class="sub">🟢 Univers SIP (fiscalité des particuliers)</h3>
+<p class="lead">Le bagage pour aider un usager au SIP : l'impôt sur le revenu d'abord, puis les impôts locaux et la réclamation.</p>
+<ul>
+<li><b>Impôt sur le revenu</b> : déclaration chaque printemps (en ligne, préremplie) · <b>barème 2026</b> (revenus 2025) : 0 % jusqu'à 11 600 € · 11 % de 11 601 à 29 579 € · 30 % de 29 580 à 84 577 € · 41 % de 84 578 à 181 917 € · 45 % au-delà · <b>prélèvement à la source</b> (2019) : taux neutre ou personnalisé, prélevé chaque mois sur les salaires, sans acompte pour les salariés</li>
+<li><b>Avis d'imposition</b> à l'automne · si impôt à payer : paiement en ligne, <b>mensualisation</b> ou échéancier possible</li>
+<li><b>Quotient familial</b> : 1 part (célibataire), 2 parts (couple) + 0,5 part par enfant (1 part dès le 3ᵉ) → réduit l'impôt · <b>crédits d'impôt</b> : emploi à domicile, dons (66 %), garde d'enfants</li>
+<li><b>Taxe d'habitation</b> : l'<b>occupant</b> · supprimée pour les <b>résidences principales</b> (2023) · reste due sur les <b>secondaires</b> (surtaxe possible de +5 % à +60 % en zone tendue) · <b>Taxe foncière</b> : le <b>propriétaire au 1er janvier</b>, TFPB / TFPNB · <b>IFI</b> : patrimoine immobilier net &gt; 1,3 M€</li>
+<li><b>Réclamation</b> : contestation écrite (en ligne ou courrier), enregistrée, instruite, <b>réponse motivée</b> · délai : <b>31/12 de la 2ᵉ année</b> suivant l'imposition · <b>sursis de paiement</b> possible pendant l'instruction</li>
+<li><b>Défaillance déclarative</b> : relance → mise en demeure → <b>taxation d'office</b> (majorations 10 % → 80 %) · recouvrement : paiement en ligne, plans d'étalement proposés avant contrainte</li>
+<li><b>Accueil multicanal</b> : guichet, téléphone, messagerie sécurisée d'impots.gouv.fr — le cœur du poste SIP</li></ul>
+</div>
+<div class="card">
+<h3 class="sub">🟡 Univers SDIF (fiscalité foncière &amp; cadastre)</h3>
+<p class="lead">Le bagage pour travailler au SDIF : comprendre comment la taxe foncière se calcule et comment le cadastre se tient à jour.</p>
+<ul>
+<li><b>Taxe foncière</b> : <b>TFPB</b> (bâti) / <b>TFPNB</b> (non bâti), due par le <b>propriétaire au 1er janvier</b> — celui qui possède au 1er janvier paie l'année entière, même s'il vend ensuite</li>
+<li><b>Base = valeur locative cadastrale</b> : surface, nature, catégorie, situation · <b>revalorisation forfaitaire annuelle</b> des valeurs locatives</li>
+<li><b>Changements en cours d'année</b> : achats/ventes, constructions, destructions → mutation (publicité foncière), mise à jour des fichiers pour l'année suivante</li>
+<li><b>Exonérations / dégrèvements</b> : constructions neuves (2 ans), locaux vacants, logements économes en énergie · selon délibérations des collectivités</li>
+<li><b>Cadastre</b> : plan officiel des parcelles, référence = section + n° (ex. AB 125) · consultable sur <b>cadastre.gouv.fr</b> · <b>fichier immobilier</b> + <b>fichiers fonciers</b> (parcelles, locaux, propriétaires) à tenir à jour</li>
+<li><b>Taxes d'urbanisme</b> : <b>taxe d'aménagement</b> (permis de construire) — parts communale et départementale (ex-TDCAUE), redevance d'archéologie préventive</li>
+<li><b>Réclamations foncières</b> : enregistrer, transmettre, expliquer (revalorisation, règle du 1er janvier, calcul de la valeur locative) · délai 31/12 de la 2ᵉ année</li>
+<li><b>Délivrance documentaire</b> : délivrer aux usagers leurs justificatifs (attestation de non-imposition, attestation de revenus, avis de situation fiscale, extrait de plan cadastral) — une mission à part entière du SDIF (la réponse complète est à la question 1 de la section 3bis)</li></ul>
+</div>
+<div class="card">
+<h3 class="sub">🔵 Univers BIL (achats &amp; comptabilité publique)</h3>
+<p class="lead">Le bagage pour le service Budget-Logistique : savoir comment l'argent public se dépense, de la commande au paiement.</p>
+<ul>
+<li><b>Circuit de la dépense</b> (par cœur) : <b>1. Engagement</b> (décision + vérifier les crédits) → <b>2. Liquidation</b> (constat du <b>service fait</b>, contrôle du montant) → <b>3. Mandatement</b> (ordre de payer) → <b>4. Paiement</b> (le comptable contrôle et paie)</li>
+<li><b>Séparation ordonnateur / comptable</b> : l'ordonnateur décide et mandate ; le <b>comptable public</b> contrôle la régularité (imputation, service fait, crédits disponibles) et paie — jamais les deux à la fois</li>
+<li><b>Démarche d'achat</b> : besoin → <b>devis</b> (comparer plusieurs offres) → <b>bon de commande</b> → livraison/réception → <b>service fait</b> → facture → <b>paiement sous 30 jours</b> (intérêts moratoires sinon)</li>
+<li><b>Marchés publics</b> : ≤ 60 000 € HT (depuis avril 2026) → devis simple, pas de publicité obligatoire · 60 000 – 90 000 € → MAPA (publicité adaptée) · &gt; 90 000 € → publicité formelle (BOAMP) · ≥ 140 000 € (État) → procédure formalisée (appel d'offres)</li>
+<li><b>Chorus</b> : l'outil national de gestion de la dépense de l'État (engagements, mandats, paiements, factures)</li>
+<li><b>Stock</b> : entrées/sorties, <b>inventaire</b> périodique, seuils de réapprovisionnement, vérification des livraisons</li>
+<li><b>Contrats de service</b> : nettoyage, TPE, maintenance — suivi des échéances et renouvellements, qualité de la prestation (condition du paiement)</li>
+<li><b>Loyers &amp; charges</b> : baux des centres des finances publiques, contrôle des appels de loyer, <b>indexation</b> (ILC), états des lieux</li></ul>
+</div>
+</section>
+
+<section id="outils" class="sec">
+<h2>🧰 3bis · Documents, outils &amp; chiffres (avec réponses complètes)</h2>
+<div class="card">
+<p>Les <b>notions complémentaires</b> que le jury peut tester : déplie la question, la réponse complète est prête à dire à l'oral.</p>
+
+<details class="q"><summary><span class="qnum">D1</span><span class="chev">▶</span> Quels documents délivrez-vous aux usagers ?</summary>
+<div class="ans"><p><b>Clé :</b> « Les usagers demandent souvent un justificatif : attestation de non-imposition ou d'imposition, attestation de revenus, avis de situation fiscale, ou une copie du plan cadastral pour les propriétaires. Je vérifie d'abord l'identité de la personne, puis je délivre le document et j'explique son usage — ces documents servent à leurs démarches de la vie courante, comme le logement ou la CAF. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">D2</span><span class="chev">▶</span> Quels outils utilisez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> « Côté usagers, tout passe par impots.gouv.fr : la déclaration, le paiement et la messagerie sécurisée. Le plan cadastral se consulte en ligne sur cadastre.gouv.fr. Côté service, les dépenses de l'État sont gérées dans Chorus, où chaque paiement est tracé, de l'engagement à la facture. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">D3</span><span class="chev">▶</span> Dans quels délais l'État paie-t-il ses fournisseurs ?</summary>
+<div class="ans"><p><b>Clé :</b> « Le délai réglementaire de paiement des fournisseurs est de 30 jours ; au-delà, des intérêts moratoires sont dus automatiquement. C'est pourquoi les factures doivent être traitées rapidement et avec rigueur, dès leur réception. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">D4</span><span class="chev">▶</span> Connaissez-vous les règles des marchés publics ?</summary>
+<div class="ans"><p><b>Clé :</b> « Les petits achats, jusqu'à 60 000 euros, se font par devis simple, sans publicité obligatoire. De 60 000 à 90 000 euros, la publicité est adaptée. Au-delà de 90 000 euros, la publicité formelle est obligatoire, notamment au BOAMP. À partir de 140 000 euros, la procédure est formalisée, c'est-à-dire l'appel d'offres. Ces règles garantissent l'égalité d'accès des fournisseurs et le bon usage de l'argent public. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">D5</span><span class="chev">▶</span> Comment se calcule l'impôt sur le revenu ?</summary>
+<div class="ans"><p><b>Clé :</b> « L'impôt sur le revenu est progressif : chaque tranche de revenu est taxée à son taux, de 0 % à 45 % : 0 % jusqu'à 11 600 euros, 11 % de 11 601 à 29 579 euros, 30 % de 29 580 à 84 577 euros, 41 % de 84 578 à 181 917 euros, puis 45 %. Depuis 2019, le prélèvement à la source applique un taux personnalisé chaque mois, puis la déclaration de printemps ajuste le montant définitif. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">D6</span><span class="chev">▶</span> Y a-t-il des exonérations de taxe foncière ?</summary>
+<div class="ans"><p><b>Clé :</b> « Oui : une construction neuve est exonérée de taxe foncière à 100 % pendant 2 ans, pour encourager le logement. Les logements performants sur le plan énergétique peuvent l'être pendant 5 ans, de 50 % à 100 %. Ensuite, chaque commune vote son taux, ce qui explique les écarts entre territoires. »</p></div></details>
+
+</div>
+</section>
+
+<section id="vocab" class="sec">
+<h2>🔤 4 · Vocabulaire &amp; sigles — le minimum vital</h2>
+<div class="card">
+<table>
+<tr><th>Sigle / terme</th><th>Signification</th></tr>
+<tr><td><span class="mot">SIP</span></td><td>Service des Impôts des Particuliers (interlocuteur unique du particulier)</td></tr>
+<tr><td><span class="mot">SDIF</span></td><td>Service Départemental des Impôts Fonciers</td></tr>
+<tr><td><span class="mot">SIE</span></td><td>Service des Impôts des Entreprises</td></tr>
+<tr><td><span class="mot">PF</span></td><td>Publicité foncière — enregistrement des mutations immobilières (achats/ventes), alimente le cadastre</td></tr>
+<tr><td><span class="mot">IR / PAS</span></td><td>Impôt sur le revenu / Prélèvement à la source</td></tr>
+<tr><td><span class="mot">TH / TF / IFI</span></td><td>Taxe d'habitation (occupant) / Taxe foncière (propriétaire) / Impôt sur la fortune immobilière</td></tr>
+<tr><td><span class="mot">TFPB / TFPNB</span></td><td>Taxe foncière propriétés bâties / non bâties</td></tr>
+<tr><td><span class="mot">VLC</span></td><td>Valeur locative cadastrale (base des impôts fonciers)</td></tr>
+<tr><td><span class="mot">TA</span></td><td>Taxe d'aménagement (urbanisme)</td></tr>
+<tr><td><span class="mot">BIL</span></td><td>Division Budget Informatique Logistique</td></tr>
+<tr><td><span class="mot">Ordonnateur / Comptable</span></td><td>Décide et mandate / contrôle et paie</td></tr>
+<tr><td><span class="mot">Engagement → Paiement</span></td><td>Le circuit de la dépense publique</td></tr>
+<tr><td><span class="mot">Service fait</span></td><td>Preuve que la prestation a été réalisée</td></tr>
+<tr><td><span class="mot">Réclamation</span></td><td>Contestation écrite d'une imposition</td></tr>
+<tr><td><span class="mot">CGFP</span></td><td>Code général de la fonction publique</td></tr>
+<tr><td><span class="mot">SGC</span></td><td>Service de Gestion Comptable — ex-trésoreries, gestion comptable des collectivités et établissements</td></tr>
+<tr><td><span class="mot">RFR</span></td><td>Revenu Fiscal de Référence — figure sur l'avis d'imposition, sert de base à de nombreux droits (CAF, logement…)</td></tr>
+<tr><td><span class="mot">Médiateur</span></td><td>Saisine gratuite en cas de litige persistant avec l'administration fiscale (après une réclamation)</td></tr>
+<tr><td><span class="mot">FranceConnect</span></td><td>Identité numérique pour se connecter aux services publics en ligne (impots.gouv.fr…)</td></tr>
+</table>
+</div>
+</section>
+<section id="situations" class="sec">
+<h2>🛡️ 5 · Mises en situation &amp; méthode CGT — réflexes + 40 cas</h2>
+<div class="refl">
+<div class="r"><span class="n">1</span><b>Pause</b><p>2-3 secondes. Jamais du tac au tac : ça montre que tu analyses.</p></div>
+<div class="r"><span class="n">2</span><b>Analyse à voix haute</b><p>Acteurs, enjeux (sécurité, humain, juridique), urgence, marges de manœuvre.</p></div>
+<div class="r"><span class="n">3</span><b>Cadre de référence</b><p>Valeurs du service public : probité, neutralité, secret professionnel, respect des règles.</p></div>
+<div class="r"><span class="n">4</span><b>Trancher</b><p>Décision ferme et justifiée. Jamais « je ne sais pas » sans proposition.</p></div>
+</div>
+<div class="card">
+<h3 class="sub">Les cas les plus probables dans ces 3 postes</h3>
+<table>
+<tr><th>Cas</th><th>Réaction attendue</th></tr>
+<tr><td><b>Usager furieux au guichet/téléphone</b> (avis erroné, taxe trop élevée)</td><td>Calme · écoute · reformulation · vérifier l'info · expliquer les recours (réclamation, médiateur) · orienter si besoin · limites fermes si insultes</td></tr>
+<tr><td><b>Usager qui « connaît quelqu'un » pour un traitement de faveur</b></td><td>Refus poli : égalité de traitement, impartialité · tous les dossiers sont traités pareil</td></tr>
+<tr><td><b>Collègue qui contourne une procédure « pour aller plus vite »</b></td><td>Refuser · rappeler que tout est tracé/contrôlé · signaler à la hiérarchie si persiste</td></tr>
+<tr><td><b>Erreur que tu découvres dans ton travail</b></td><td>Le signaler immédiatement au responsable · corriger si possible · être transparent (c'est mieux que de la cacher)</td></tr>
+<tr><td><b>Surcharge de travail en période de campagne</b></td><td>Prioriser (urgent/important) · alerter tôt · proposer des solutions (répartition, reports)</td></tr>
+<tr><td><b>Un proche te demande des infos fiscales</b></td><td>Refus net : secret professionnel absolu, même en famille</td></tr>
+<tr><td><b>Fournisseur qui ne livre pas / prestation non faite</b></td><td>Relancer · trace écrite · ne pas payer sans service fait · informer le responsable</td></tr>
+</table>
+<div class="note">💡 <b>Méthode à réciter :</b> « Je prends un temps pour analyser. Il y a ici un enjeu [sécurité/humain/réglementaire]. Conformément aux règles, je [action]. Si besoin, j'en réfère à ma hiérarchie avec une proposition. »</div>
+</div>
+<div class="card">
+<p>La CGT Finances Publiques propose une grille simple et redoutable pour TOUTE mise en situation :</p>
+<ul>
+<li><b>1 · Protéger</b> : protéger la mission, les collègues et les usagers (remplacer l'agent en difficulté, sécuriser la caisse, mettre à l'abri)</li>
+<li><b>2 · Alerter</b> : prévenir la hiérarchie, les services concernés, les secours si besoin</li>
+<li><b>3 · Secourir</b> : dans un second temps, aider la personne (l'écouter, l'orienter vers le médecin de prévention, trouver une solution de moyen terme)</li>
+</ul>
+<div class="note">💡 <b>Application type :</b> « L'agent d'accueil craque devant les usagers » → 1. protéger : le faire remplacer immédiatement et assurer l'accueil · 2. alerter : informer la hiérarchie · 3. secourir : le recevoir, comprendre, proposer un soutien et une orientation vers le médecin de prévention. <b>Règle d'or : régler l'urgence d'abord, rendre compte, puis proposer une solution de fond.</b></div>
+</div>
+
+<div class="card">
+<h3 class="sub">Les cas CGT — vie d'équipe &amp; management</h3>
+<details class="q"><summary><span class="qnum">C1</span><span class="chev">▶</span> Un agent part à la retraite dans 6 mois et ne travaille plus. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je parle avec l'agent en individuel pour comprendre ce qui se passe : lassitude, santé, fin de carrière ? Je lui propose des missions valorisantes, comme transmettre son savoir ou former son remplaçant, et j'alerte ma hiérarchie pour préparer la transmission.</p></div></details>
+<details class="q"><summary><span class="qnum">C2</span><span class="chev">▶</span> 2 agents du même secteur posent exactement les mêmes congés. Comment arbitrer ?</summary>
+<div class="ans"><p><b>Clé :</b> J'arbitre avec des critères objectifs et transparents : les congés déjà pris l'an dernier, les charges de famille, l'ancienneté. Je propose un roulement et, en dernier ressort, je tranche en expliquant clairement ma décision.</p></div></details>
+<details class="q"><summary><span class="qnum">C3</span><span class="chev">▶</span> 2 agents quittent le service au prochain mouvement. Comment réorganiser ?</summary>
+<div class="ans"><p><b>Clé :</b> Je fais d'abord l'état des missions du service, je les priorise, puis je répartis le travail dans l'équipe. J'anticipe les formations des remplaçants et j'informe ma hiérarchie des besoins.</p></div></details>
+<details class="q"><summary><span class="qnum">C4</span><span class="chev">▶</span> Un agent vous dit qu'il s'ennuie dans son travail. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je l'écoute pour comprendre ce qui lui manque, j'identifie ses compétences et ses envies, puis je lui confie de nouvelles missions ou un projet, et je peux proposer une formation. Un agent qui s'ennuie se dégrade.</p></div></details>
+<details class="q"><summary><span class="qnum">C5</span><span class="chev">▶</span> Des agents expérimentés refusent la nouvelle organisation. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> J'écoute d'abord leurs craintes, souvent la peur du changement, et j'explique le sens de la réforme. Je les associe à la mise en œuvre et, si le refus persiste, je rappelle le principe d'obéissance hiérarchique.</p></div></details>
+<details class="q"><summary><span class="qnum">C6</span><span class="chev">▶</span> Conflit ouvert entre 2 agents du service. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je reçois d'abord chaque agent séparément pour recueillir les faits, puis je les réunis pour recentrer sur le travail et fixer des règles communes. Je ne prends pas parti et je suis la situation dans le temps.</p></div></details>
+<details class="q"><summary><span class="qnum">C7</span><span class="chev">▶</span> Un agent utilise sa messagerie professionnelle pour du perso. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je rappelle la charte informatique : un usage professionnel et des accès tracés. Je recadre avec bienveillance, et s'il y a un abus répété, j'en informe ma hiérarchie. L'usage modéré est toléré, pas l'abus.</p></div></details>
+<details class="q"><summary><span class="qnum">C8</span><span class="chev">▶</span> Un agent est mal habillé, tatoué ou percé. Quelle attitude ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne juge pas l'apparence : seul compte le respect des règles du service et la neutralité. Si la tenue est vraiment inadaptée à l'accueil, je le dis avec tact.</p></div></details>
+<details class="q"><summary><span class="qnum">C9</span><span class="chev">▶</span> Un agent est sale et sent mauvais, les collègues sont gênés. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est délicat : j'en parle avec bienveillance et discrétion, en entretien individuel, car cela peut cacher un problème de santé ou social. J'oriente vers la médecine de prévention ou l'assistante sociale, et j'alerte ma hiérarchie.</p></div></details>
+<details class="q"><summary><span class="qnum">C10</span><span class="chev">▶</span> Un agent travaille avec des écouteurs sur les oreilles. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je regarde si cela nuit au travail : accueil, communication. Si oui, j'en parle et on fixe les moments où c'est possible, comme les tâches de concentration ; sinon, je laisse l'autonomie.</p></div></details>
+<details class="q"><summary><span class="qnum">C11</span><span class="chev">▶</span> Le vendredi 17h, le chef exige une pile de dossiers pour lundi matin. Comment réagir ?</summary>
+<div class="ans"><p><b>Clé :</b> J'évalue honnêtement la faisabilité. Si c'est possible, je propose un plan avec des priorités ; si c'est impossible, je demande des arbitrages dès le vendredi, plutôt que de bâcler ou de m'épuiser en silence.</p></div></details>
+<details class="q"><summary><span class="qnum">C12</span><span class="chev">▶</span> Votre équipe affirme que votre supérieur est incompétent. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne participe pas à la rumeur. Je recadre sur le respect de la hiérarchie et, si des difficultés réelles existent, je les fais remonter de manière constructive et factuelle.</p></div></details>
+<details class="q"><summary><span class="qnum">C13</span><span class="chev">▶</span> Votre collègue ne fait rien sur un dossier commun et s'attribue tout le travail. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> J'en parle d'abord directement et calmement avec lui, en clarifiant la répartition des tâches, et je garde des traces de mon travail. Si cela persiste, j'en parle à mon responsable avec des faits.</p></div></details>
+<details class="q"><summary><span class="qnum">C14</span><span class="chev">▶</span> Un collègue a des problèmes de boisson. Comment réagir ?</summary>
+<div class="ans"><p><b>Clé :</b> Je protège d'abord : c'est une question de sécurité et de santé, pas de jugement. J'alerte ma hiérarchie et j'oriente vers la médecine de prévention. Je ne couvre pas et je n'ignore pas.</p></div></details>
+<details class="q"><summary><span class="qnum">C15</span><span class="chev">▶</span> 3 jeunes diplômés dénigrent un collègue plus ancien et moins diplômé. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je recadre fermement : le respect et la lutte contre les discriminations ne sont pas négociables. Je valorise l'expérience de l'agent concerné et je veille au climat de l'équipe, avec une tolérance zéro sur le harcèlement.</p></div></details>
+<details class="q"><summary><span class="qnum">C16</span><span class="chev">▶</span> Un agent pointe, repart, et revient 5 min plus tard (dépose son enfant à la crèche). Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> J'agis avec bienveillance : je comprends la situation et je vois avec la hiérarchie si un aménagement d'horaires est possible, puisque les horaires sont variables. Je rappelle le respect des règles si nécessaire.</p></div></details>
+<details class="q"><summary><span class="qnum">C17</span><span class="chev">▶</span> Un groupe prend une collègue comme bouc émissaire. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> J'agis vite : je recadre le groupe, je rappelle la politique de lutte contre le harcèlement et je soutiens la collègue. J'informe ma hiérarchie, je ne laisse jamais faire.</p></div></details>
+<details class="q"><summary><span class="qnum">C18</span><span class="chev">▶</span> Un agent vient avec sa radio pendant la coupe du monde. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je rappelle le respect du cadre de travail et des collègues : le bruit gêne la concentration. Je fixe des règles, avec souplesse mais fermeté, par exemple en limitant la radio aux pauses.</p></div></details>
+<details class="q"><summary><span class="qnum">C19</span><span class="chev">▶</span> Tous les agents demandent le télétravail les mêmes jours (lundi, mercredi, vendredi). Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> J'applique le cadre réglementaire du télétravail et j'organise un roulement pour garantir la continuité du service et l'accueil. J'arbitre sur des critères objectifs et je tranche en dernier ressort.</p></div></details>
+<details class="q"><summary><span class="qnum">C20</span><span class="chev">▶</span> Une équipe de 4 : 3 font bien leur travail, le 4e est trop lent et pénalise le service. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je commence par comprendre : formation, surcharge, problème personnel ? Je propose un accompagnement avec des objectifs progressifs et je vérifie régulièrement. Si rien n'évolue, je le dis à ma hiérarchie pour adapter les missions.</p></div></details>
+</div>
+
+<div class="card">
+<h3 class="sub">Les cas CGT — usagers, déontologie &amp; hiérarchie</h3>
+<details class="q"><summary><span class="qnum">C21</span><span class="chev">▶</span> Un contribuable satisfait vous offre une boîte de chocolats. L'acceptez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je refuse poliment mais fermement : la probité, c'est ne recevoir aucun avantage lié à mes fonctions. Je remercie pour la reconnaissance mais je décline, en expliquant que je ne peux pas accepter de cadeau.</p></div></details>
+<details class="q"><summary><span class="qnum">C22</span><span class="chev">▶</span> Un collègue arrive en Porsche et se gare plus loin que le parking prévu. Qu'est-ce que cela vous inspire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne juge pas l'apparence ni les biens personnels : cela n'a rien à voir avec le travail. Je ne commente pas, je ne tire aucune conclusion et je reste neutre.</p></div></details>
+<details class="q"><summary><span class="qnum">C23</span><span class="chev">▶</span> Un contribuable menace de se suicider dans les locaux. Comment réagir ?</summary>
+<div class="ans"><p><b>Clé :</b> Je garde mon sang-froid et je l'écoute avec humanité, en préservant sa dignité. Je préviens immédiatement les secours, SAMU 15 ou police 17, et le chef de service. Je ne promets pas d'annulation de dette, je propose des solutions de paiement.</p></div></details>
+<details class="q"><summary><span class="qnum">C24</span><span class="chev">▶</span> Le préfet vous demande urgemment des infos sur une entreprise. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je respecte la procédure : les demandes officielles passent par le circuit hiérarchique et les services compétents, dans le cadre du secret professionnel. Je n'envoie rien par un canal non officiel.</p></div></details>
+<details class="q"><summary><span class="qnum">C25</span><span class="chev">▶</span> Une amie vous parle de son divorce et vous demande des infos sur son futur ex-mari. Que répondez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je refuse net et avec pédagogie : le secret professionnel est absolu, même entre amis, et sa violation est un délit. Je n'ai pas le droit de révéler ce que je sais par mon travail, même à un proche.</p></div></details>
+<details class="q"><summary><span class="qnum">C26</span><span class="chev">▶</span> Un usager pose une question à laquelle vous ne savez pas répondre. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Je n'invente pas. Je reconnais honnêtement que je ne sais pas, je cherche l'information auprès d'un collègue ou dans la documentation, puis je rappelle l'usager avec la réponse, ou je l'oriente vers le bon service.</p></div></details>
+<details class="q"><summary><span class="qnum">C27</span><span class="chev">▶</span> Un agent regarde le dossier fiscal d'un collègue ou d'un supérieur. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je rappelle que c'est illégal : les accès sont tracés et consulter un dossier sans motif professionnel est un délit. Si cela persiste, j'en informe la hiérarchie, sinon je serais complice par omission.</p></div></details>
+<details class="q"><summary><span class="qnum">C28</span><span class="chev">▶</span> Vous constatez des vols (collègues ou supérieur qui volent). Comment réagir ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne cache rien : je préserve les preuves, j'informe immédiatement ma hiérarchie directe, ou au-dessus si le supérieur est impliqué, et je laisse les procédures se dérouler.</p></div></details>
+<details class="q"><summary><span class="qnum">C29</span><span class="chev">▶</span> Un agent vous signale que votre supérieur n'a pas déclaré ses revenus. Que faire ?</summary>
+<div class="ans"><p><b>Clé :</b> Je reste prudent : je demande des éléments tangibles, je ne nourris pas la rumeur, et si les éléments sont sérieux, j'emprunte la voie hiérarchique ou le dispositif d'alerte, comme le référent déontologue.</p></div></details>
+<details class="q"><summary><span class="qnum">C30</span><span class="chev">▶</span> L'usager est mécontent, voire agressif, et l'agent d'accueil s'en va. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> J'applique la méthode protéger, alerter, secourir : d'abord je protège en prenant le relais de l'accueil et en sécurisant, puis j'alerte ma hiérarchie, enfin je secours en écoutant l'agent et en l'orientant vers la médecine de prévention.</p></div></details>
+<details class="q"><summary><span class="qnum">C31</span><span class="chev">▶</span> Vous êtes surchargé, et la direction vous demande d'organiser une session de formation dans 1 semaine et demie. Que faire ? Pourquoi ne pas refuser ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne dis pas non d'emblée : j'évalue la charge de travail, je propose un plan avec des priorités et je demande des arbitrages, comme le report d'autres tâches ou des renforts. Refuser net serait perçu comme un manque d'implication.</p></div></details>
+<details class="q"><summary><span class="qnum">C32</span><span class="chev">▶</span> En désaccord avec votre hiérarchique sur une décision. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> J'expose mon point de vue de façon constructive et argumentée, je propose une alternative, mais j'exécute la décision si elle est légale : c'est l'obéissance hiérarchique. Je ne refuse que si elle est illégale ou dangereuse.</p></div></details>
+<details class="q"><summary><span class="qnum">C33</span><span class="chev">▶</span> Un responsable propose en réunion des méthodes qu'on sait inefficaces. Quelle attitude ?</summary>
+<div class="ans"><p><b>Clé :</b> Je fais part de mes observations avec respect et de manière constructive : je donne des faits et je propose des pistes, en participant à la réflexion collective. Je ne sabote pas et je ne critique pas en public.</p></div></details>
+<details class="q"><summary><span class="qnum">C34</span><span class="chev">▶</span> Comment délivrez-vous une information à votre équipe ?</summary>
+<div class="ans"><p><b>Clé :</b> J'organise une réunion ou un message clair et structuré, je vérifie la compréhension, je laisse la place aux questions et j'assure le suivi. Une information transmise doit être claire pour tous.</p></div></details>
+<details class="q"><summary><span class="qnum">C35</span><span class="chev">▶</span> Comment motiver son équipe ?</summary>
+<div class="ans"><p><b>Clé :</b> Je reconnais le travail fait, je donne du sens aux missions, j'implique l'équipe dans les décisions, je propose des formations et des évolutions, et je maintiens un bon climat avec une écoute régulière.</p></div></details>
+<details class="q"><summary><span class="qnum">C36</span><span class="chev">▶</span> Faut-il établir un planning de congés à l'avance ? Qu'en pensez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Oui : anticiper permet d'organiser la continuité du service, d'éviter les conflits et d'arbitrer équitablement. C'est un outil de gestion courante, pas une option.</p></div></details>
+<details class="q"><summary><span class="qnum">C37</span><span class="chev">▶</span> Qu'en pensez-vous : un seul entretien d'évaluation annuel par agent ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est un moment officiel important mais insuffisant : le suivi doit être continu, avec des échanges réguliers et des points d'étape, pour être utile et pas une simple formalité.</p></div></details>
+<details class="q"><summary><span class="qnum">C38</span><span class="chev">▶</span> Quelle est la différence entre droit de réserve et secret professionnel ?</summary>
+<div class="ans"><p><b>Clé :</b> Le secret professionnel, c'est l'interdiction de divulguer les informations obtenues dans le cadre du travail, sous peine de sanctions pénales. Le devoir de réserve, c'est l'obligation de discrétion dans les expressions publiques, sans porter atteinte à la neutralité.</p></div></details>
+<details class="q"><summary><span class="qnum">C39</span><span class="chev">▶</span> Est-on fonctionnaire en dehors du travail ?</summary>
+<div class="ans"><p><b>Clé :</b> Oui, dans une certaine mesure : le devoir de réserve et la dignité de la fonction s'appliquent aussi hors service, par exemple sur les réseaux sociaux. On reste identifié comme agent public même en dehors du travail.</p></div></details>
+<details class="q"><summary><span class="qnum">C40</span><span class="chev">▶</span> Un agent arrive en Porsche / une question d'apparence en général. Quelle attitude ?</summary>
+<div class="ans"><p><b>Clé :</b> Je ne juge pas et je ne commente pas la vie privée des collègues : seule compte la tenue professionnelle adaptée au service et le comportement au travail. Neutralité et respect.</p></div></details>
+</div>
+</section>
+
+<section id="rgpd" class="sec">
+<h2>🔒 6 · Protection des données &amp; secret professionnel (RGPD)</h2>
+<div class="card">
+<h3 class="sub">Pourquoi c'est primordial</h3>
+<p>Les 3 postes manipulent des <b>données fiscales personnelles</b> (revenus, patrimoine, adresses). Un jury de recrutement teste presque toujours ce réflexe. Le <b>secret professionnel</b> s'impose à tous les agents (y compris contractuels, art. L121-6 du CGFP) et sa violation est un <b>délit</b> (art. 226-13 du code pénal).</p>
+<h3 class="sub">Les règles concrètes à citer</h3>
+<ul>
+<li>Ne <b>jamais consulter</b> un dossier hors nécessité de service (les accès sont <b>tracés</b>)</li>
+<li><b>Ne jamais communiquer</b> d'information fiscale à un tiers — ni par téléphone, ni par mail, ni à la famille</li>
+<li>Vérifier l'<b>identité</b> de l'appelant avant toute information (rappel : secret même entre conjoints)</li>
+<li>Écran <b>verrouillé</b> quand on quitte son poste, documents sensibles rangés, pas de photocopies non autorisées</li>
+<li>Ne pas laisser traîner de données sur un support personnel (clé USB, téléphone)</li>
+<li>Signaler tout <b>doute ou incident</b> (mail frauduleux, demande suspecte) au responsable</li>
+<li>Appliquer le <b>RGPD</b> : ne collecter que les données nécessaires, durée de conservation limitée, répondre aux demandes d'accès des usagers selon la procédure</li>
+<li>Signaler sans délai toute <b>violation de données</b> (mail piraté, dossier égaré) au référent protection des données</li>
+</ul>
+<div class="note">💡 <b>Phrase prête :</b> « Je suis tenu au secret professionnel, y compris comme contractuel. Concrètement : pas de consultation hors service, pas de divulgation, écran verrouillé, vérification de l'identité avant de répondre. »</div>
+</div>
+</section>
+
+<section id="questions" class="sec">
+<h2>❓ 7 · Les questions d'entretien — 25 classiques + 15 personnelles + 13 simples (clique pour la piste)</h2>
+
+<div class="legend">
+<span class="lg lg-b">■ Classiques (1-25)</span><span class="lg lg-v">■ Personnelles (P1-P15)</span><span class="lg lg-m">■ Oubliées (O1-O13)</span>
+
+</div>
+
+
+<div class="card" style="font-size:.9rem">L'entretien contractuel dure ~20-30 min : 2-3 questions sur ton parcours, puis surtout <b>motivation + adéquation au poste + comportement</b>. Voici les 25 questions les plus posées, avec la piste de réponse attendue — complétées par 15 questions personnelles, puis 13 questions simples du quotidien (les « oubliées ») ci-dessous.</div>
+
+<div class="card cat-classiques">
+<details class="q"><summary><span class="qnum">1</span><span class="chev">▶</span> Pourquoi la DGFiP ? Pourquoi les finances publiques ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je veux mettre mes compétences de gestion au service de l'intérêt général. La DGFiP collecte l'impôt qui finance les services publics — c'est un métier utile et concret. » + 1 chiffre appris (95 000 agents).</p></div></details>
+
+<details class="q"><summary><span class="qnum">2</span><span class="chev">▶</span> Pourquoi ce poste en particulier (SIP / SDIF / BIL) ?</summary>
+<div class="ans"><p><b>Piste :</b> reprendre l'offre : « Ce poste d'assistant administratif m'attire parce que [accueil des usagers / gestion des données foncières / achats et rigueur comptable] correspond à mon expérience en gestion et à ce que j'aime faire. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">3</span><span class="chev">▶</span> Que savez-vous de la DGFiP ?</summary>
+<div class="ans"><p><b>Piste :</b> « La DGFiP, direction générale des finances publiques, est un service de l'État rattaché au ministère de l'Économie et des Finances. Elle compte environ 95 000 agents et remplit deux grandes missions : la gestion fiscale — assiette, recouvrement et contrôle de l'impôt — et la gestion publique — tenue des comptes de l'État, des collectivités et des établissements publics. Elle est organisée en direction générale à Bercy, des directions régionales (DRFiP) et des services locaux comme les SIP. La DRFiP des Hauts-de-France compte 2 400 agents répartis dans 75 services. Elle modernise ses services avec impots.gouv.fr et la dématérialisation. » (≈ 40 secondes — la même réponse que le modèle M1.)</p></div></details>
+
+<details class="q"><summary><span class="qnum">4</span><span class="chev">▶</span> Pourquoi le service public plutôt que le privé ?</summary>
+<div class="ans"><p><b>Piste :</b> « L'argent public a une finalité d'intérêt général ; la rigueur est la même qu'en entreprise, mais le sens est différent : chaque dossier traité, c'est un citoyen aidé. » Éviter de critiquer le privé.</p></div></details>
+
+<details class="q"><summary><span class="qnum">5</span><span class="chev">▶</span> Quelles sont vos qualités ?</summary>
+<div class="ans"><p><b>Piste :</b> choisir 2-3 qualités <b>de l'offre</b> (rigueur, relationnel, écoute) et les <b>prouver par un exemple</b> : « Rigoureuse : quand je tenais [poste], je vérifiais toujours [chose]. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">6</span><span class="chev">▶</span> Quels sont vos défauts ?</summary>
+<div class="ans"><p><b>Piste :</b> un vrai défaut + la correction : « Je peux être perfectionniste, donc je m'impose des priorités et des délais pour ne pas ralentir le service. » Jamais « je n'ai pas de défauts ».</p></div></details>
+
+<details class="q"><summary><span class="qnum">7</span><span class="chev">▶</span> Comment gérez-vous le stress / la pression ?</summary>
+<div class="ans"><p><b>Piste :</b> organisation : listes, priorités, respiration, alerter tôt. Exemple : « En période de pic d'activité, je priorise l'urgent et j'anticipe. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">8</span><span class="chev">▶</span> Comment réagissez-vous face à un usager mécontent ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je reste calme, je laisse la personne s'exprimer sans l'interrompre, puis je reformule sa demande pour vérifier que j'ai compris. Ensuite je propose une solution : vérification de son dossier, enregistrement d'une réclamation, rendez-vous, ou orientation vers le bon service. Si la personne devient insultante ou menaçante, je reste professionnel, je pose des limites fermes et j'alerte mon responsable. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">9</span><span class="chev">▶</span> Comment organisez-vous votre travail / gérez-vous les délais ?</summary>
+<div class="ans"><p><b>Piste :</b> liste des tâches, priorités urgent/important, point régulier avec le responsable, anticipation des pics (campagnes).</p></div></details>
+<details class="q"><summary><span class="qnum">10</span><span class="chev">▶</span> Avez-vous déjà travaillé en équipe ? Racontez.</summary>
+<div class="ans"><p><b>Piste :</b> un exemple concret (poste, rôle, résultat). « Dans [expérience], on était X personnes, je m'occupais de [tâche], on se coordonnait avec [outil/réunions]. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">11</span><span class="chev">▶</span> Comment réagissez-vous à la critique ou au recadrage ?</summary>
+<div class="ans"><p><b>Piste :</b> « J'écoute, je remercie, je corrige. Une critique est une occasion d'apprendre — et en gestion, l'erreur doit se dire vite pour être réparée. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">12</span><span class="chev">▶</span> Êtes-vous rigoureux ? Prouvez-le.</summary>
+<div class="ans"><p><b>Piste :</b> « Oui : dans [expérience], je vérifiais systématiquement mes saisies deux fois avant de les valider, et je n'ai jamais eu de dossier à corriger. » (concret et chiffré : contrôle des chiffres, relecture, double saisie, respect de délais stricts, classement)</p></div></details>
+
+<details class="q"><summary><span class="qnum">13</span><span class="chev">▶</span> Quel est votre niveau en bureautique ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je maîtrise bien les outils bureautiques : Word pour les courriers et les tableaux, Excel pour la saisie et les formules simples (tris, sommes), la messagerie et internet. Les 3 offres demandent une bonne pratique des outils bureautiques, et je suis à l'aise pour apprendre les outils métier de la DGFiP. » (donner un niveau précis et honnête)</p></div></details>
+
+<details class="q"><summary><span class="qnum">14</span><span class="chev">▶</span> Avez-vous déjà géré un budget, des achats ou de la comptabilité ?</summary>
+<div class="ans"><p><b>Piste :</b> « Oui : dans [poste/expérience], je tenais un tableau de suivi des factures, je gérais la caisse et je passais les commandes de fournitures, avec des contrôles systématiques. » (c'est le <b>prérequis de l'offre</b> : gestion de caisse, suivi de factures, achats, stocks, tableaux de suivi). Si peu d'expérience : « Je n'ai pas encore tenu de budget, mais ma rigueur et ma motivation me permettront d'apprendre vite les procédures. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">15</span><span class="chev">▶</span> Pourquoi quittez-vous votre poste actuel ? Que cherchez-vous ?</summary>
+<div class="ans"><p><b>Piste :</b> toujours positif : « Je cherche un poste stable et utile, avec des missions de gestion claires, dans un grand service organisé. » Jamais de critique de l'ancien employeur.</p></div></details>
+
+<details class="q"><summary><span class="qnum">16</span><span class="chev">▶</span> Que pouvez-vous apporter à ce service ?</summary>
+<div class="ans"><p><b>Piste :</b> relier ton expérience aux besoins : « Mon expérience de [gestion] me permet d'être opérationnelle rapidement sur [la tenue des fichiers / l'accueil / les achats], avec de la rigueur et un bon relationnel. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">17</span><span class="chev">▶</span> Un CDD jusqu'au 31/08/2029 vous convient-il ? Êtes-vous disponible rapidement ?</summary>
+<div class="ans"><p><b>Piste :</b> oui clair : « Oui, un engagement de 3 ans correspond à mon projet. Je suis disponible dès [date]. » Montrer la stabilité (c'est un critère d'évaluation).</p></div></details>
+
+<details class="q"><summary><span class="qnum">18</span><span class="chev">▶</span> Comment voyez-vous votre avenir dans l'administration ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je veux d'abord réussir sur ce poste, monter en compétences, puis évoluer (formation, concours interne, titularisation). » Ambition raisonnable + fidélité.</p></div></details>
+<details class="q"><summary><span class="qnum">19</span><span class="chev">▶</span> Comment réagissez-vous face à une erreur que vous avez commise ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je la signale tout de suite à mon responsable, je mesure l'impact, je corrige ou je propose une correction, et je note la leçon pour ne pas la refaire. » Transparence = confiance.</p></div></details>
+
+<details class="q"><summary><span class="qnum">20</span><span class="chev">▶</span> Que feriez-vous si un collègue vous demande de contourner une procédure ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je refuse : les procédures protègent l'argent public et les usagers, et tout est tracé. Je le rappelle au collègue, et j'en parle à la hiérarchie si ça persiste. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">21</span><span class="chev">▶</span> Comment gérez-vous les tâches répétitives ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je les prends comme un gage de fiabilité : saisie, classement, contrôles. Je m'applique à garder le même niveau de vigilance et je signale toute anomalie repérée. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">22</span><span class="chev">▶</span> Un dossier vous semble incomplet ou incohérent. Que faites-vous ?</summary>
+<div class="ans"><p><b>Piste :</b> « Je ne bloque pas : je vérifie les pièces, je note ce qui manque, je contacte le demandeur ou le service concerné pour compléter, et j'informe mon responsable. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">23</span><span class="chev">▶</span> Comment voyez-vous la relation avec votre hiérarchie ?</summary>
+<div class="ans"><p><b>Piste :</b> « Une relation de confiance et de transparence : je rends compte de mon travail, je remonte les difficultés avec des propositions, et je respecte l'organisation. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">24</span><span class="chev">▶</span> Pourquoi vous et pas un autre candidat ?</summary>
+<div class="ans"><p><b>Piste :</b> « Parce que j'ai [l'expérience en gestion demandée], que je suis motivée par ce service précis, disponible sur la durée, et que ma rigueur me rendra rapidement opérationnelle. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">25</span><span class="chev">▶</span> Quel est votre projet professionnel ?</summary>
+<div class="ans"><p><b>Piste :</b> « M'inscrire durablement dans ce service, devenir une référence sur les tâches qui me seront confiées, puis évoluer au sein de la DGFiP. » Cohérent avec le CDD long.</p></div></details>
+</div>
+<div class="card cat-personnelles">
+<h3 class="sub">Questions personnelles &amp; professionnelles (du PDF CGT)</h3>
+<details class="q"><summary><span class="qnum">P1</span><span class="chev">▶</span> Préférez-vous travailler en équipe ou diriger une équipe ?</summary>
+<div class="ans"><p><b>Clé :</b> pour ces postes : « J'aime le travail en équipe, l'entraide et la bonne coordination. Je n'ai pas vocation à encadrer aujourd'hui, mais je suis volontaire pour prendre des responsabilités progressivement. »</p></div></details>
+<details class="q"><summary><span class="qnum">P2</span><span class="chev">▶</span> Comment avez-vous préparé vos épreuves / cet entretien ?</summary>
+<div class="ans"><p><b>Clé :</b> montrer le sérieux : « J'ai étudié les missions de la DGFiP, relu attentivement l'offre, préparé mes réponses sur le poste et l'environnement professionnel. »</p></div></details>
+<details class="q"><summary><span class="qnum">P3</span><span class="chev">▶</span> Donnez-moi deux exemples de prise d'initiative.</summary>
+<div class="ans"><p><b>Clé :</b> 2 exemples concrets de ton vécu : une amélioration proposée, une organisation mise en place, un problème résolu sans qu'on te le demande. Toujours avec contexte + action + résultat.</p></div></details>
+<details class="q"><summary><span class="qnum">P4</span><span class="chev">▶</span> Vous obtenez une affectation à plusieurs centaines de km. Que faites-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> « J'accepterais : c'est une opportunité professionnelle et je suis mobile. » Pour ces 3 postes, le lieu est local (59) — rassure le jury sur la stabilité géographique.</p></div></details>
+<details class="q"><summary><span class="qnum">P5</span><span class="chev">▶</span> Qu'attendez-vous de votre hiérarchie ?</summary>
+<div class="ans"><p><b>Clé :</b> « De la clarté sur les missions et les priorités, des retours réguliers sur mon travail, et un cadre bienveillant pour progresser. »</p></div></details>
+<details class="q"><summary><span class="qnum">P6</span><span class="chev">▶</span> 2 qualités et 2 défauts (variante de qualités/défauts).</summary>
+<div class="ans"><p><b>Clé :</b> « Mes qualités : la rigueur — je vérifie toujours deux fois mes chiffres — et le relationnel — j'aime l'accueil et l'entraide en équipe. Mes défauts : je peux être perfectionniste, donc je m'impose des priorités et des délais pour ne pas ralentir le service ; et je peux mettre du temps à prendre la parole en réunion, donc je prépare mes points à l'avance. » (2 qualités utiles pour le poste + 2 vrais défauts corrigés — jamais « je n'ai pas de défauts ».)</p></div></details>
+<details class="q"><summary><span class="qnum">P7</span><span class="chev">▶</span> Que faites-vous de votre temps libre ?</summary>
+<div class="ans"><p><b>Clé :</b> répondre sincèrement (lecture, sport, famille…) : ça montre l'équilibre et la capacité à tenir dans la durée. Éviter les réponses toutes faites.</p></div></details>
+<details class="q"><summary><span class="qnum">P8</span><span class="chev">▶</span> Quel est le dernier livre que vous avez lu ?</summary>
+<div class="ans"><p><b>Clé :</b> un vrai livre (même un roman) dont tu peux parler 1 minute : ça montre la curiosité. Préparer à l'avance une réponse honnête.</p></div></details>
+<details class="q"><summary><span class="qnum">P9</span><span class="chev">▶</span> Quelle question auriez-vous aimé que l'on vous pose ?</summary>
+<div class="ans"><p><b>Clé :</b> choisir une question où tu es fort : « J'aurais aimé qu'on me parle de [ton atout] » → opportunité de mettre en valeur un point fort.</p></div></details>
+<details class="q"><summary><span class="qnum">P10</span><span class="chev">▶</span> Quelle question n'auriez-vous pas aimé que l'on vous pose ?</summary>
+<div class="ans"><p><b>Clé :</b> répondre sans se piéger : « Aucune en particulier, j'ai préparé l'entretien. » Ne jamais dévoiler une vraie faiblesse non maîtrisée.</p></div></details>
+<details class="q"><summary><span class="qnum">P11</span><span class="chev">▶</span> Un échec ou une réussite : racontez.</summary>
+<div class="ans"><p><b>Clé :</b> réussite : contexte-action-résultat · échec : ce qui s'est passé, ce que tu en as appris, comment tu t'es repris. L'essentiel : la capacité à rebondir.</p></div></details>
+<details class="q"><summary><span class="qnum">P12</span><span class="chev">▶</span> Où vous voyez-vous dans 10 ans ?</summary>
+<div class="ans"><p><b>Clé :</b> « Dans la DGFiP, monté en compétences, peut-être en ayant évolué (concours interne). » Cohérent + fidélité.</p></div></details>
+<details class="q"><summary><span class="qnum">P13</span><span class="chev">▶</span> Quelles sont vos préférences pour vos prochains postes ?</summary>
+<div class="ans"><p><b>Clé :</b> en lien avec le poste visé : « Je souhaite un poste d'assistant administratif avec des missions de gestion et du contact, comme celui-ci. »</p></div></details>
+<details class="q"><summary><span class="qnum">P14</span><span class="chev">▶</span> Pourquoi ne pas avoir postulé avant ? Avez-vous passé d'autres concours ?</summary>
+<div class="ans"><p><b>Clé :</b> honnêteté : « J'ai mûri mon projet / je n'avais pas les conditions (contrat, lieu). » Ne jamais critiquer, rester positif sur son parcours.</p></div></details>
+<details class="q"><summary><span class="qnum">P15</span><span class="chev">▶</span> Pourquoi avoir choisi ces études / changé d'orientation ?</summary>
+<div class="ans"><p><b>Clé :</b> expliquer la cohérence ou le changement assumé : « Je me suis orienté vers la gestion parce que j'aime l'organisation et le concret. » Les changements se justifient s'ils sont expliqués.</p></div></details>
+</div>
+<div class="card cat-oubliées">
+<h3 class="sub">⚡ Les simples qu'on oublie — 13 questions pièges du quotidien (à ne pas rater)</h3>
+<details class="q"><summary><span class="qnum">O1</span><span class="chev">▶</span> « La rémunération proposée (1 962 € brut/mois) vous convient-elle ? »</summary>
+<div class="ans"><p><b>Piste :</b> « Oui, elle correspond à ce que j'attendais pour ce poste et à ma situation. Ce qui compte pour moi, c'est la stabilité de l'emploi, les missions et l'environnement de travail. » Jamais de négociation ni de réserve en entretien. Variante « combien voulez-vous gagner ? » → « Je m'en remets à la grille de la fonction publique. »</p></div></details>
+<details class="q"><summary><span class="qnum">O2</span><span class="chev">▶</span> « Les horaires variables, ça vous convient ? »</summary>
+<div class="ans"><p><b>Piste :</b> « Oui, tout à fait : je suis organisé et je sais gérer mon temps. Les horaires variables offrent une souplesse qui me convient, tant que la continuité du service et l'accueil sont assurés. » (Les 3 offres les mentionnent — c'est une occasion de montrer que tu as lu l'offre.)</p></div></details>
+<details class="q"><summary><span class="qnum">O3</span><span class="chev">▶</span> « Comment décrochez-vous au téléphone ? »</summary>
+<div class="ans"><p><b>Piste :</b> se présenter : « Bonjour, service des impôts des particuliers, [nom], je vous écoute. » · ton posé et souriant · laisser l'appelant s'exprimer · identifier le besoin et reformuler · <b>ne donner aucune information sans vérifier l'identité</b> · noter les coordonnées · orienter vers le bon service si besoin.</p></div></details>
+<details class="q"><summary><span class="qnum">O4</span><span class="chev">▶</span> « Un usager ne parle pas français, que faites-vous ? »</summary>
+<div class="ans"><p><b>Piste :</b> rester calme et patient · parler lentement avec des mots simples · s'aider de gestes ou de documents · proposer un accompagnement (collègue, service d'interprétariat) · ne jamais laisser l'usager repartir sans solution ou orientation.</p></div></details>
+<details class="q"><summary><span class="qnum">O5</span><span class="chev">▶</span> « Un usager en situation de handicap arrive (malentendant, fauteuil…) : que faites-vous ? »</summary>
+<div class="ans"><p><b>Piste :</b> accueil égal et naturel, sans gêne · adapter : se lever, proposer un siège, guichet adapté · pour un malentendant : parler en face, articuler, écrire si besoin · bienveillance et patience. L'accueil doit être <b>accessible à tous</b> — c'est une valeur du service public.</p></div></details>
+<details class="q"><summary><span class="qnum">O6</span><span class="chev">▶</span> « Un collègue débordé vous demande de l'aide alors que vous êtes chargé : que faites-vous ? »</summary>
+<div class="ans"><p><b>Piste :</b> esprit d'équipe : aider si possible après avoir vérifié ses propres priorités · proposer un coup de main ciblé (une tâche, un créneau) · si les deux charges sont trop lourdes, le dire à la hiérarchie pour rééquilibrer. Ni refus sec, ni sacrifice de son propre travail.</p></div></details>
+<details class="q"><summary><span class="qnum">O7</span><span class="chev">▶</span> « Vous ne comprenez pas une consigne, que faites-vous ? »</summary>
+<div class="ans"><p><b>Piste :</b> demander immédiatement des précisions (mieux vaut poser une question que faire une erreur) · reformuler pour confirmer la compréhension · noter la consigne · en dernier recours, vérifier auprès d'un collègue expérimenté ou du responsable.</p></div></details>
+<details class="q"><summary><span class="qnum">O8</span><span class="chev">▶</span> « Comment annoncez-vous une mauvaise nouvelle à un usager ? »</summary>
+<div class="ans"><p><b>Piste :</b> empathie et clarté : annoncer directement et simplement · expliquer le motif (règle, délai, pièce manquante) · proposer les solutions et recours (réclamation, complément, orientation) · rester calme et professionnel face à la réaction.</p></div></details>
+<details class="q"><summary><span class="qnum">O9</span><span class="chev">▶</span> « Décrivez-moi votre journée type idéale. »</summary>
+<div class="ans"><p><b>Piste :</b> montrer l'organisation : accueil et courrier le matin · traitement des dossiers et saisies · point avec le responsable · gestion des priorités · classement et rangement en fin de journée. Ajouter la <b>disponibilité pour les imprévus</b> (usager, campagne).</p></div></details>
+<details class="q"><summary><span class="qnum">O10</span><span class="chev">▶</span> « Pourquoi vous et pas un candidat interne ? »</summary>
+<div class="ans"><p><b>Piste :</b> sans dénigrer : « Je comprends que des candidats internes connaissent déjà les outils, mais j'apporte une expérience en gestion, une motivation neuve et une disponibilité immédiate. J'apprends vite et je m'engage sur la durée du contrat. »</p></div></details>
+<details class="q"><summary><span class="qnum">O11</span><span class="chev">▶</span> « Êtes-vous prêt à faire de la formation avant la prise de poste ? »</summary>
+<div class="ans"><p><b>Piste :</b> « Oui, volontiers : j'apprends vite et une formation me permettra d'être opérationnel dès le début. Je suis disponible pour toute formation proposée. » C'est aussi l'occasion de montrer ton engagement sur la durée.</p></div></details>
+<details class="q"><summary><span class="qnum">O12</span><span class="chev">▶</span> « Quel est votre rapport à l'erreur ? »</summary>
+<div class="ans"><p><b>Piste :</b> « L'erreur fait partie de l'apprentissage, mais en matière fiscale elle peut avoir des conséquences : je suis donc rigoureux et je vérifie. Si j'en commets une, je la signale tout de suite pour la corriger — c'est comme ça qu'on progresse. » (rigueur + transparence)</p></div></details>
+<details class="q"><summary><span class="qnum">O13</span><span class="chev">▶</span> « Comment restez-vous motivé sur des tâches répétitives ? »</summary>
+<div class="ans"><p><b>Piste :</b> « Les tâches répétitives (saisie, classement, contrôles) demandent de la fiabilité, et j'aime faire les choses correctement. Je garde le même niveau de vigilance, je me fixe des repères de progression, et je reste attentif aux anomalies — c'est ce qui rend ces tâches utiles. »</p></div></details>
+</div>
+</section>
+
+<section id="modeles" class="sec">
+<h2>💬 8 · Les 7 réponses modèles à apprendre (presque par cœur)</h2>
+<div class="card">
+<p>Le jour J, sous le stress, on perd ses moyens. Ces <b>7 réponses complètes</b> sont ta trame de secours : apprends la structure, adapte les mots. Chacune dure <b>30 à 60 secondes</b> à l'oral — la bonne longueur.</p>
+
+<details class="q"><summary><span class="qnum">M1</span><span class="chev">▶</span> « Que savez-vous de la DGFiP ? » — la réponse en 40 secondes</summary>
+<div class="ans"><p><b>À réciter :</b> « La DGFiP, direction générale des finances publiques, est un service de l'État rattaché au ministère de l'Économie et des Finances. Elle compte environ 95 000 agents et remplit deux grandes missions : <b>la gestion fiscale</b> — c'est-à-dire l'assiette, le recouvrement et le contrôle de l'impôt — et <b>la gestion publique</b>, c'est-à-dire la tenue des comptes de l'État, des collectivités et des établissements publics. Elle est organisée en direction générale à Bercy, des directions régionales (DRFiP) et des services locaux comme les SIP, les services des impôts des particuliers, où je postule. Elle modernise en permanence ses services avec impots.gouv.fr et la dématérialisation. »</p>
+<p class="note">💡 <b>Pourquoi ça marche :</b> missions + chiffre + organisation + modernisation = le jury coche « motivé et renseigné ».</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M2</span><span class="chev">▶</span> « Pourquoi ce poste d'assistant administratif ? » — le modèle adaptable</summary>
+<div class="ans"><p><b>À réciter (structure) :</b> « Trois raisons. <b>D'abord</b>, le sens du service public : j'ai envie de servir les usagers et de contribuer au bon fonctionnement des services publics. <b>Ensuite</b>, le poste correspond à mes compétences : je suis rigoureux, organisé, à l'aise avec l'outil informatique, et à l'aise avec le contact. <b>Enfin</b>, la DGFiP offre des perspectives : c'est un employeur stable et structurant, où l'on peut évoluer. Et ce poste précis m'intéresse parce que [missions de l'offre : l'accueil des usagers / la gestion des budgets / le travail sur la fiscalité foncière] correspondent vraiment à ce que je veux faire. »</p>
+<p class="note">⚠️ <b>Règle d'or :</b> la raison 3 DOIT citer une mission réelle de l'offre (relis l'offre avant). Jamais « parce qu'il fallait un emploi ».</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M3</span><span class="chev">▶</span> « Comment garantissez-vous la confidentialité des données des usagers ? »</summary>
+<div class="ans"><p><b>À réciter :</b> « La confidentialité est une priorité absolue, car je manipulerai des données fiscales personnelles et sensibles. Concrètement : je n'accède <b>jamais</b> à un dossier hors nécessité de service, sachant que les accès sont tracés ; je verrouille mon poste dès que je m'en éloigne ; je ne laisse jamais un dossier visible sur mon bureau ; et je ne communique <b>aucune information par téléphone ou par écrit sans avoir vérifié l'identité de la personne</b>. Je suis tenu au secret professionnel, comme tous les agents de la DGFiP, et j'applique les règles du RGPD : minimiser la collecte, sécuriser les supports, signaler tout incident à la hiérarchie. »</p>
+<p class="note">✔️ Cette réponse est la plus sous-estimée des candidats — le jury adore l'entendre.</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M4</span><span class="chev">▶</span> « Un usager est furieux à l'accueil, que faites-vous ? »</summary>
+<div class="ans"><p><b>À réciter (méthode CGT) :</b> « D'abord je <b>protège</b> : je reste calme et professionnel, je ne prends rien personnellement, et je m'assure que les autres usagers et mon collègue ne sont pas perturbés. Ensuite j'<b>écoute</b> : je laisse la personne exprimer son mécontentement sans l'interrompre, avec une posture d'écoute. Puis j'<b>analyse</b> : je reformule sa demande pour être sûr d'avoir compris — "Si je comprends bien, vous êtes mécontent car…". Je lui explique ce que je peux faire, ou je l'oriente vers le bon interlocuteur. Et si la situation devient agressive ou menaçante, j'<b>alerte</b> mon responsable et, si besoin, le service de sécurité — sans jamais chercher à gérer seul une escalade. »</p>
+<p class="note">✔️ Séquence : écouter → reformuler → solutionner → alerter si besoin.</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M5</span><span class="chev">▶</span> « Un proche vous demande des informations sur un dossier, que faites-vous ? »</summary>
+<div class="ans"><p><b>À réciter :</b> « Je refuse clairement, mais avec tact. Je réponds : "Je comprends votre demande, mais je suis tenu au <b>secret professionnel</b> : je ne peux ni consulter ni communiquer des informations sur les dossiers, même à ma famille ou mes amis. C'est une obligation légale prévue par le code général de la fonction publique, et le non-respect est une faute grave, passible de sanctions disciplinaires et pénales." J'ajoute, pour ne pas laisser un malaise : "Ce que je peux faire, c'est vous expliquer les démarches à suivre officiellement pour obtenir l'information." »</p>
+<p class="note">✔️ Refus net + base légale + solution alternative = parfait.</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M6</span><span class="chev">▶</span> « Vous découvrez que vous avez fait une erreur dans un dossier, que faites-vous ? »</summary>
+<div class="ans"><p><b>À réciter :</b> « Je ne cherche pas à la cacher : une erreur dissimulée devient une faute. J'<b>informe immédiatement mon responsable</b> de l'erreur, en expliquant ce qui s'est passé et son impact. Ensuite, je propose une <b>correction</b> : si je connais la procédure de rectification, je l'applique ; sinon, je demande à mon responsable ou à un collègue expérimenté comment réparer. Enfin, je <b>tire la leçon</b> : je note la bonne procédure pour ne pas reproduire l'erreur. Le jury attend exactement cela : transparence, réaction rapide, sens des responsabilités. »</p>
+<p class="note">✔️ Alerter → corriger → s'améliorer. Jamais : minimiser, nier ou cacher.</p></div>
+</details>
+
+<details class="q"><summary><span class="qnum">M7</span><span class="chev">▶</span> « Vous êtes seul(e) et un usager pose une question à laquelle vous ne savez pas répondre »</summary>
+<div class="ans"><p><b>À réciter :</b> « Je ne blufferai jamais : donner une mauvaise information en matière fiscale peut avoir des conséquences pour l'usager et pour le service. Je réponds honnêtement : "Je ne peux pas vous répondre avec certitude tout de suite, mais je vais vérifier." Je prends les coordonnées de l'usager ou je le mets en relation avec le service compétent, et je m'engage à revenir vers lui avec la bonne réponse, ou je l'oriente vers le bon interlocuteur (accueil, gestionnaire, numéro de téléphone officiel). Ensuite, je me renseigne auprès de mon responsable ou de ma documentation pour <b>être capable de répondre la prochaine fois</b>. »</p>
+<p class="note">✔️ L'honnêteté est une compétence. Ne jamais inventer un délai, un montant ou une règle.</p></div>
+</details>
+</div>
+</section>
+
+<section id="vos-questions" class="sec">
+<h2>🙋 9 · « Avez-vous des questions ? » — la question piège finale</h2>
+<div class="card">
+<p><b>Ne réponds jamais « non, tout est clair ».</b> Prépare 2-3 questions qui montrent que tu as lu l'offre :</p>
+<ul>
+<li><b>SIP :</b> « Comment s'organise l'accueil multicanal au quotidien ? » · « Comment la campagne de déclaration est-elle répartie dans l'équipe ? »</li>
+<li><b>SDIF :</b> « Comment se répartissent les dossiers entre les 3 pôles ? » · « Quels outils (bases foncières, cadastre) les assistants utilisent-ils ? »</li>
+<li><b>BIL :</b> « Comment le service est-il organisé entre budget et logistique ? » · « Quels types de contrats suivez-vous le plus souvent ? »</li>
+<li><b>Génériques :</b> « Quelles sont les principales qualités attendues dans ce service ? » · « Comment se passe l'intégration ? » · « Quelles sont les prochaines étapes du recrutement ? »</li>
+</ul>
+<div class="note">✍️ <b>Modèle :</b> « Oui, merci, j'ai deux questions. Premièrement… Deuxièmement… » · ⛔ Éviter : salaire en premier, question dont la réponse est dans l'offre, liste de 10 questions.</div>
+</div>
+</section>
+<section id="actualite" class="sec">
+<h2>📰 10 · Actualité &amp; culture économique — l'essentiel + 30 Q&amp;A</h2>
+<div class="card">
+<ul>
+<li><b>Prélèvement à la source</b> : l'impôt sur le revenu est prélevé chaque mois depuis 2019</li>
+<li><b>Taxe d'habitation</b> : supprimée pour les résidences principales (2023) ; reste la déclaration d'occupation et la taxe sur les résidences secondaires</li>
+<li><b>Dématérialisation</b> : déclaration et paiement en ligne (impots.gouv.fr), messagerie sécurisée — l'accueil numérique est devenu le premier canal</li>
+<li><b>Modernisation</b> : data (datalab), services en ligne, simplification des démarches pour les usagers</li>
+<li><b>Budget 2026</b> : déficit public 2025 = 5,1 % du PIB (152,5 Mds€) ; dette publique ≈ 115,6 % du PIB (3 460 Mds€) — effort de maîtrise des dépenses publiques</li>
+<li><b>Contexte</b> : enjeux de déficit public, de lutte contre la fraude et de modernisation du service public — la DGFiP est au cœur</li>
+</ul>
+<div class="note">💡 <b>À citer naturellement :</b> « Je sais que la DGFiP modernise ses services et que l'accueil numérique est devenu essentiel — c'est d'ailleurs ce que reflète l'accueil multicanal de ce poste. »</div>
+</div>
+<div class="card">
+<h3 class="sub">Actualité &amp; culture économique (chiffres 2025-2026 vérifiés)</h3>
+<details class="q"><summary><span class="qnum">A1</span><span class="chev">▶</span> Quel est le premier poste de dépense de l'État ?</summary>
+<div class="ans"><p><b>Clé :</b> Ce sont les missions régaliennes et sociales qui dominent : l'enseignement scolaire, la défense, la sécurité. Au global, les dépenses les plus lourdes sont la protection sociale, c'est-à-dire les retraites et la santé, puis l'éducation. Pour l'État lui-même, l'enseignement scolaire est souvent cité en premier.</p></div></details>
+<details class="q"><summary><span class="qnum">A2</span><span class="chev">▶</span> L'impôt est-il juste ? Est-il normal de payer des impôts ?</summary>
+<div class="ans"><p><b>Clé :</b> Je répondrais de façon nuancée : l'impôt finance les services publics, l'école, l'hôpital, la sécurité. Sur le revenu, il est progressif : plus on gagne, plus on paie proportionnellement. En revanche, d'autres impôts comme la TVA sont proportionnels. La justice fiscale est un débat permanent : l'impôt doit être juste, efficace et lisible.</p></div></details>
+<details class="q"><summary><span class="qnum">A3</span><span class="chev">▶</span> Quel est l'impôt qui rapporte le plus en France ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est la TVA, la taxe sur la valeur ajoutée, qui rapporte le plus : environ 210 milliards d'euros bruts, et près de 98 milliards nets pour l'État en 2025. L'impôt sur le revenu suit avec environ 95 milliards nets.</p></div></details>
+<details class="q"><summary><span class="qnum">A4</span><span class="chev">▶</span> Quelles sont les recettes fiscales / non fiscales de l'État ?</summary>
+<div class="ans"><p><b>Clé :</b> Les recettes fiscales, ce sont la TVA, l'impôt sur le revenu, l'impôt sur les sociétés, la TICPE sur les carburants, les droits de mutation et l'IFI. Les recettes non fiscales, ce sont les dividendes des participations de l'État, comme EDF, les amendes, les produits de cessions et les revenus du domaine. Il y a aussi les prélèvements sur recettes, environ 75 à 78 milliards, qui sont reversés à l'Union européenne et aux collectivités.</p></div></details>
+<details class="q"><summary><span class="qnum">A5</span><span class="chev">▶</span> PIB, dette publique et déficit public de la France ?</summary>
+<div class="ans"><p><b>Clé :</b> Le PIB de la France est d'environ 3 000 milliards d'euros, avec une croissance autour de 0,7 à 0,9 % en 2025. Le déficit public de 2025 est de 5,1 % du PIB, soit environ 152 milliards d'euros. La dette publique atteint environ 115,6 % du PIB, soit 3 460 milliards d'euros. C'est un enjeu de maîtrise des finances publiques.</p></div></details>
+<details class="q"><summary><span class="qnum">A6</span><span class="chev">▶</span> Que pensez-vous du prélèvement à la source (PAS) ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est une modernisation : l'impôt est prélevé en temps réel sur le revenu, ce qui évite le décalage d'un an et les surprises. Il y a deux taux : le taux personnalisé, calculé sur les derniers revenus connus, et le taux neutre, sans application aux autres revenus du foyer. Il a fallu l'expliquer aux usagers, mais c'est aujourd'hui bien rodé.</p></div></details>
+<details class="q"><summary><span class="qnum">A7</span><span class="chev">▶</span> Que pensez-vous de la déclaration en ligne ?</summary>
+<div class="ans"><p><b>Clé :</b> La dématérialisation simplifie les démarches, réduit les erreurs et le papier. Mais il faut maintenir un accompagnement pour les usagers éloignés du numérique, d'où l'accueil multicanal : physique, téléphonique et numérique. C'est d'ailleurs directement le principe des postes auxquels je postule.</p></div></details>
+<details class="q"><summary><span class="qnum">A8</span><span class="chev">▶</span> L'informatisation est-elle à l'origine des suppressions de postes ?</summary>
+<div class="ans"><p><b>Clé :</b> L'informatisation a transformé les métiers : moins de saisie, plus de conseil et de contrôle, et des gains de productivité. Mais la DGFiP recrute encore massivement pour remplacer les départs à la retraite et faire face aux nouvelles missions, comme la modernisation des services.</p></div></details>
+<details class="q"><summary><span class="qnum">A9</span><span class="chev">▶</span> La sécurité de l'emploi des fonctionnaires : droit ou obligation ?</summary>
+<div class="ans"><p><b>Clé :</b> Le statut, c'est une stabilité de l'emploi, un droit statutaire. Mais il s'accompagne d'obligations : servir l'intérêt général, respecter le devoir de réserve, la loyauté et la neutralité. Les deux vont ensemble.</p></div></details>
+<details class="q"><summary><span class="qnum">A10</span><span class="chev">▶</span> ISF et IFI, quelle différence ?</summary>
+<div class="ans"><p><b>Clé :</b> L'ISF, supprimé en 2018, taxait le patrimoine total, c'est-à-dire financier et immobilier. L'IFI, l'impôt sur la fortune immobilière, ne taxe que le patrimoine immobilier net taxable, au-delà de 1,3 million d'euros. Les actifs financiers en sont exclus.</p></div></details>
+<details class="q"><summary><span class="qnum">A11</span><span class="chev">▶</span> La flat tax, c'est quoi ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est le prélèvement forfaitaire unique, le PFU, de 30 % : 12,8 % d'impôt sur le revenu plus 17,2 % de prélèvements sociaux. Il s'applique aux revenus du capital, les dividendes et les plus-values, depuis 2018.</p></div></details>
+<details class="q"><summary><span class="qnum">A12</span><span class="chev">▶</span> Qu'est-ce que le CICE ? Est-ce encore un crédit d'impôt ?</summary>
+<div class="ans"><p><b>Clé :</b> Le CICE, crédit d'impôt pour la compétitivité et l'emploi, a été supprimé en 2019 et transformé en baisse de cotisations patronales. Ce n'est donc plus un crédit d'impôt aujourd'hui.</p></div></details>
+<details class="q"><summary><span class="qnum">A13</span><span class="chev">▶</span> Qu'est-ce qu'un agent PACTE ?</summary>
+<div class="ans"><p><b>Clé :</b> Le PACTE, c'est le parcours d'accès aux carrières de la fonction publique territoriale, hospitalière et d'État. C'est un dispositif de recrutement sans concours, pour des candidats sans diplôme, avec un parcours de formation et de professionnalisation.</p></div></details>
+<details class="q"><summary><span class="qnum">A14</span><span class="chev">▶</span> La suppression de la taxe d'habitation, qu'en pensez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> La taxe d'habitation a été supprimée pour les résidences principales en 2023, et les collectivités sont compensées. Elle reste due sur les résidences secondaires. Le principal enjeu aujourd'hui, c'est la lisibilité de l'impôt local et son financement.</p></div></details>
+<details class="q"><summary><span class="qnum">A15</span><span class="chev">▶</span> Le télétravail : qu'en pensez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> « Le télétravail améliore la qualité de vie et l'attractivité, à condition d'organiser la continuité du service et l'accueil des usagers. C'est un droit encadré : dans la fonction publique, on peut télétravailler jusqu'à 3 jours par semaine, avec au moins 2 jours de présence dans le service. Il y a une indemnité de 2,88 € par jour télétravaillé, plafonnée à environ 253 € par an. Dans les faits, beaucoup de services comme la DGFiP retiennent plutôt 2 jours par semaine, avec des jours fixes ou un roulement pour garantir l'accueil. »</p></div></details>
+
+<details class="q"><summary><span class="qnum">A16</span><span class="chev">▶</span> Quel est le travail d'un agent C, d'un contrôleur, d'un inspecteur ?</summary>
+<div class="ans"><p><b>Clé :</b> La catégorie C, ce sont les tâches d'exécution et de gestion courante : accueil, saisie, tenue de fichiers, courrier. La catégorie B, ce sont les contrôleurs : gestion, contrôle et encadrement d'équipes de catégorie C. La catégorie A, ce sont les inspecteurs : pilotage, expertise, direction de service. Pour ce poste : je candidate sur un poste d'assistant administratif de catégorie C, avec des missions de gestion.</p></div></details>
+<details class="q"><summary><span class="qnum">A17</span><span class="chev">▶</span> Quelle est la dernière nouveauté en matière de gestion publique / fiscalité des particuliers ?</summary>
+<div class="ans"><p><b>Clé :</b> Je citerais une chose bien maîtrisée : la dématérialisation totale, avec la déclaration préremplie et le paiement en ligne, ou le prélèvement à la source, ou encore la suppression de la taxe d'habitation. Une seule suffit, à condition de bien l'expliquer.</p></div></details>
+<details class="q"><summary><span class="qnum">A18</span><span class="chev">▶</span> La loi Essoc, qu'est-ce que cela a changé ?</summary>
+<div class="ans"><p><b>Clé :</b> ESSOC, c'est l'État au service d'une société de confiance, une loi de 2018. Elle instaure le droit à l'erreur, les rescrits et un renforcement du dialogue avec l'usager. À ne pas confondre avec l'ESS, l'économie sociale et solidaire. Si je ne suis pas sûr, je peux dire : je connais surtout le principe du droit à l'erreur.</p></div></details>
+<details class="q"><summary><span class="qnum">A19</span><span class="chev">▶</span> Y a-t-il des contractuels à la DGFiP ? Qu'en pensez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Oui, la DGFiP recrute des contractuels pour certains postes, comme celui auquel je postule. C'est une voie d'accès qui répond à des besoins ponctuels ou spécifiques, et qui peut ensuite ouvrir vers la titularisation via les concours.</p></div></details>
+<details class="q"><summary><span class="qnum">A20</span><span class="chev">▶</span> Peut-on supprimer l'accueil physique à la DGFiP ?</summary>
+<div class="ans"><p><b>Clé :</b> Non, pas totalement : beaucoup d'usagers, comme les personnes âgées, les personnes éloignées du numérique ou les situations complexes, ont besoin d'un accueil physique. L'avenir, c'est l'accueil multicanal : physique, téléphonique et numérique, comme sur ce poste.</p></div></details>
+<details class="q"><summary><span class="qnum">A21</span><span class="chev">▶</span> L'État doit-il être « rentable » ?</summary>
+<div class="ans"><p><b>Clé :</b> L'État n'a pas vocation à faire du profit : il produit des services publics. En revanche, ses finances doivent être saines et efficaces : maîtriser la dépense, évaluer les politiques publiques, sans oublier la qualité du service rendu.</p></div></details>
+<details class="q"><summary><span class="qnum">A22</span><span class="chev">▶</span> Nom du directeur général de la DGFiP ? Nom du ministre ?</summary>
+<div class="ans"><p><b>Clé :</b> La directrice générale des finances publiques est Amélie Verdier, depuis mars 2024. Le ministre de l'Économie et des Finances est Roland Lescure, depuis octobre 2025. Le ministre de l'Action et des Comptes publics est David Amiel, depuis février 2026. Je les reverrais la veille de l'entretien, car les gouvernements changent souvent.</p></div></details>
+<details class="q"><summary><span class="qnum">A23</span><span class="chev">▶</span> Combien d'agents la DGFiP compte-t-elle ? Combien de départs par an ?</summary>
+<div class="ans"><p><b>Clé :</b> La DGFiP compte environ 95 000 agents, selon les sources entre 92 000 et 95 000. Il y a environ 6 000 départs par an, dont à peu près 3 700 retraites. C'est pour cela que la DGFiP recrute massivement et régulièrement.</p></div></details>
+<details class="q"><summary><span class="qnum">A24</span><span class="chev">▶</span> Qu'est-ce que le « ras-le-bol fiscal » ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est un sentiment de surcharge ressenti par certains contribuables. La réponse, c'est un impôt plus lisible, plus juste, et un service de qualité qui explique l'utilisation de l'impôt. Je reste nuancé, sans jugement.</p></div></details>
+<details class="q"><summary><span class="qnum">A25</span><span class="chev">▶</span> Que pensez-vous du travail du dimanche ?</summary>
+<div class="ans"><p><b>Clé :</b> Dans le service public, le travail du dimanche est une organisation exceptionnelle, liée aux besoins des usagers : certains services sont ouverts le dimanche. L'essentiel, c'est des compensations et du volontariat clairs.</p></div></details>
+<details class="q"><summary><span class="qnum">A26</span><span class="chev">▶</span> FMI, OCDE et Bruxelles proposent des réformes structurelles. Qu'en pensez-vous ?</summary>
+<div class="ans"><p><b>Clé :</b> Les institutions internationales recommandent des réformes, sur les retraites ou les dépenses publiques. La France doit les examiner avec discernement, en tenant compte de son modèle social. Je reste équilibré, sans avis dogmatique.</p></div></details>
+<details class="q"><summary><span class="qnum">A27</span><span class="chev">▶</span> Que pensez-vous de la parité homme-femme à la DGFiP ?</summary>
+<div class="ans"><p><b>Clé :</b> C'est une préoccupation réelle de la fonction publique : l'égalité de traitement, la lutte contre les discriminations et la mixité dans l'encadrement. C'est une valeur du service public.</p></div></details>
+<details class="q"><summary><span class="qnum">A28</span><span class="chev">▶</span> Qu'est-ce que les lignes directrices de gestion ?</summary>
+<div class="ans"><p><b>Clé :</b> Ce sont des orientations générales fixées par l'administration, sur la mobilité, la promotion et le recrutement. Elles encadrent la gestion des agents, elles sont publiées et opposables. Elles rendent la gestion des ressources humaines plus lisible et plus transparente.</p></div></details>
+<details class="q"><summary><span class="qnum">A29</span><span class="chev">▶</span> La DGFiP est-elle concernée par le plan de relance ?</summary>
+<div class="ans"><p><b>Clé :</b> Oui, d'abord via la gestion des fonds et la modernisation des services, mais surtout la DGFiP est un acteur central de la dépense publique et des finances de l'État en général.</p></div></details>
+<details class="q"><summary><span class="qnum">A30</span><span class="chev">▶</span> Quelle est l'actualité qui vous a marqué récemment ?</summary>
+<div class="ans"><p><b>Clé :</b> Je préparerais un ou deux sujets d'actualité dont je peux parler une minute, en économie, société ou technologie, avec un avis nuancé. Je suivrais les informations dans les jours précédant l'entretien. Surtout, je ne dirais jamais que je ne regarde pas l'actualité.</p></div></details>
+</div>
+</section>
+
+
+
+
+<div class="seg-nav">
+<button id="prev-seg" type="button">← Section precedente</button>
+<div class="spacer"></div>
+<button id="next-seg" type="button">Section suivante →</button>
+</div>
+
+</main>
+<footer>Guide complet généré avec Buffy · combine postes-contractuels-dgfip.html, fiche-fiscalite-particuliers.html, fiche-fiscalite-fonciere.html, fiche-achats-comptabilite-publique.html, fiche-dgfip-mise-en-situation.html</footer>
+<script>
+const SECTIONS = [...document.querySelectorAll('section.sec')].map(s => s.id);
+let cur = 0;
+
+function showSeg(id, updateHash){
+  const idx = SECTIONS.indexOf(id);
+  if (idx < 0) return;
+  cur = idx;
+  document.querySelectorAll('section.sec').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav.toc a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+  document.getElementById('prev-seg').disabled = idx === 0;
+  document.getElementById('next-seg').disabled = idx === SECTIONS.length - 1;
+  if (updateHash){ try { history.replaceState(null, '', '#'+id); } catch(e){} }
+  window.scrollTo({top:0, behavior:'auto'});
+}
+document.querySelectorAll('nav.toc a').forEach(a => {
+  a.addEventListener('click', e => { e.preventDefault(); showSeg(a.getAttribute('href').slice(1), true); });
+});
+document.getElementById('prev-seg').addEventListener('click', () => { if (cur > 0) showSeg(SECTIONS[cur-1], true); });
+document.getElementById('next-seg').addEventListener('click', () => { if (cur < SECTIONS.length-1) showSeg(SECTIONS[cur+1], true); });
+
+(function setTabBadges(){
+  document.querySelectorAll('nav.toc a').forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const n = sec.querySelectorAll('details.q').length;
+    if (n > 0){
+      const b = document.createElement('span');
+      b.className = 'tabn';
+      b.textContent = n;
+      a.appendChild(b);
+    }
+  });
+})();
+
+const FLASH_SECTIONS = ['outils', 'situations', 'questions', 'modeles', 'actualite'];
+const CATS = { outils: ['Outils'], situations: ['Situation'], questions: ['Classique', 'Personnelle', 'Oubliée'], modeles: ['Modèle'], actualite: ['Actualité'] };
+const flashState = {};
+let activeFlash = null;
+
+function setupFlash(secId){
+  const sec = document.getElementById(secId);
+  if (!sec) return;
+  const st = { deck: [], order: [], cur: -1, on: false, secId };
+  flashState[secId] = st;
+
+  const bar = document.createElement('div');
+  bar.className = 'flashbar';
+  const btn = document.createElement('button');
+  btn.className = 'fbtn';
+  btn.id = 'btn-flash-' + secId;
+  btn.type = 'button';
+  btn.textContent = '🃏 Mode cartes aléatoires';
+  bar.appendChild(btn);
+  sec.insertBefore(bar, sec.firstChild.nextSibling);
+
+  const box = document.createElement('div');
+  box.className = 'flashbox';
+  box.id = 'flash-' + secId;
+  box.style.display = 'none';
+  box.innerHTML =
+    '<div class="f-toolbar">' +
+      '<span class="f-cat c0" id="f-cat-' + secId + '">—</span>' +
+      '<button class="fbtn" id="f-draw-' + secId + '" type="button">🎲 Tirer une carte</button>' +
+      '<button class="fbtn ghost" id="f-reset-' + secId + '" type="button">🔄 Recommencer</button>' +
+      '<span class="f-count" id="f-count-' + secId + '">0</span>' +
+    '</div>' +
+    '<div class="f-wrap" id="f-wrap-' + secId + '"><div class="f-card" id="f-card-' + secId + '">' +
+      '<div class="f-face f-front"><div class="f-q" id="f-q-' + secId + '">Prêt ? Clique sur « 🎲 Tirer une carte ».</div><div class="f-hint">Clique sur la carte pour voir la réponse</div></div>' +
+      '<div class="f-face f-back"><div class="f-a" id="f-a-' + secId + '"></div><div class="f-hint" style="color:rgba(255,255,255,.7)">Clique pour revenir à la question</div></div>' +
+    '</div></div>' +
+    '<div class="f-nav">' +
+      '<button class="fbtn ghost" id="f-prev-' + secId + '" type="button">⬅ Précédente</button>' +
+      '<div class="f-dots" id="f-dots-' + secId + '"></div>' +
+      '<button class="fbtn ghost" id="f-next-' + secId + '" type="button">Suivante ➡</button>' +
+    '</div>';
+  bar.insertAdjacentElement('afterend', box);
+
+  function buildDeck(){
+    st.deck = [...sec.querySelectorAll('details.q')].map(d => {
+      const sum = d.querySelector('summary');
+      let q = (sum ? sum.textContent : '').replace(/▶/g, '').replace(/\s+/g, ' ').trim();
+      let a = (d.querySelector('.ans') ? d.querySelector('.ans').textContent : '').replace(/\s+/g, ' ').trim();
+      a = a.replace(/^(Piste|Clé|À réciter|Réponse)\s*:\s*/, '');
+      let cat = 0;
+      if (secId === 'questions'){
+        if (d.closest('.cat-personnelles')) cat = 1;
+        else if (d.closest('.cat-oubliées')) cat = 2;
+      }
+      return { q, a, cat };
+    });
+  }
+  function shuffleDeck(){
+    st.order = st.deck.map((_, i) => i).sort(() => Math.random() - 0.5);
+    st.cur = -1;
+  }
+  function render(){
+    const qEl = document.getElementById('f-q-' + secId);
+    const aEl = document.getElementById('f-a-' + secId);
+    const chip = document.getElementById('f-cat-' + secId);
+    const cnt = document.getElementById('f-count-' + secId);
+    const card = document.getElementById('f-card-' + secId);
+    const dots = document.getElementById('f-dots-' + secId);
+    const pv = document.getElementById('f-prev-' + secId);
+    const nx = document.getElementById('f-next-' + secId);
+    if (st.cur < 0){
+      qEl.textContent = 'Prêt ? Clique sur « 🎲 Tirer une carte ».';
+      aEl.textContent = '';
+      chip.textContent = '—';
+      chip.className = 'f-cat c3';
+      cnt.textContent = '0/' + st.deck.length;
+      card.classList.remove('flipped');
+      dots.innerHTML = '';
+      pv.disabled = true; nx.disabled = true;
+      return;
+    }
+    const c = st.deck[st.order[st.cur]];
+    qEl.textContent = c.q;
+    aEl.textContent = c.a;
+    chip.textContent = (CATS[secId] && CATS[secId][c.cat]) || '—';
+    chip.className = 'f-cat c' + c.cat;
+    cnt.textContent = (st.cur + 1) + '/' + st.deck.length;
+    card.classList.remove('flipped');
+    dots.innerHTML = '';
+    st.order.forEach((_, i) => {
+      const s = document.createElement('span');
+      if (i < st.cur) s.className = 'done';
+      if (i === st.cur) s.className = 'on';
+      dots.appendChild(s);
+    });
+    pv.disabled = st.cur === 0;
+    nx.disabled = st.cur === st.order.length - 1;
+  }
+  function draw(){
+    if (st.cur >= st.order.length - 1){
+      document.getElementById('f-q-' + secId).textContent = '🎉 Deck terminé ! Relance avec « 🔄 Recommencer ».';
+      document.getElementById('f-a-' + secId).textContent = '';
+      document.getElementById('f-cat-' + secId).textContent = 'Terminé';
+      document.getElementById('f-cat-' + secId).className = 'f-cat c3';
+      document.getElementById('f-card-' + secId).classList.remove('flipped');
+      return;
+    }
+    st.cur++;
+    render();
+  }
+  function hideList(hide){
+    sec.querySelectorAll('.card, .legend').forEach(el => { el.style.display = hide ? 'none' : ''; });
+  }
+  btn.addEventListener('click', () => {
+    if (st.on){
+      st.on = false; activeFlash = null;
+      box.style.display = 'none';
+      hideList(false);
+      btn.textContent = '🃏 Mode cartes aléatoires';
+    } else {
+      buildDeck();
+      if (st.order.length !== st.deck.length) shuffleDeck();
+      st.on = true; activeFlash = st;
+      box.style.display = 'block';
+      hideList(true);
+      btn.textContent = '📋 Revenir à la liste';
+      render();
+    }
+  });
+  document.getElementById('f-draw-' + secId).addEventListener('click', draw);
+  document.getElementById('f-reset-' + secId).addEventListener('click', () => { shuffleDeck(); render(); });
+  document.getElementById('f-prev-' + secId).addEventListener('click', () => { if (st.cur > 0){ st.cur--; render(); } });
+  document.getElementById('f-next-' + secId).addEventListener('click', () => { if (st.cur < st.order.length - 1){ st.cur++; render(); } });
+  document.getElementById('f-wrap-' + secId).addEventListener('click', () => { if (st.cur >= 0) document.getElementById('f-card-' + secId).classList.toggle('flipped'); });
+  st.render = render; st.draw = draw;
+}
+FLASH_SECTIONS.forEach(setupFlash);
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea')) return;
+  if (activeFlash){
+    const st = activeFlash;
+    if (e.key === 'ArrowLeft' && st.cur > 0){ st.cur--; st.render(); }
+    if (e.key === 'ArrowRight' && st.cur < st.order.length - 1){ st.cur++; st.render(); }
+    if (e.key === ' '){ e.preventDefault(); if (st.cur >= 0) document.getElementById('f-card-' + st.secId).classList.toggle('flipped'); }
+    return;
+  }
+  if (e.key === 'ArrowLeft' && cur > 0) showSeg(SECTIONS[cur - 1], true);
+  if (e.key === 'ArrowRight' && cur < SECTIONS.length - 1) showSeg(SECTIONS[cur + 1], true);
+});
+
+const start = location.hash ? location.hash.slice(1) : SECTIONS[0];
+showSeg(SECTIONS.includes(start) ? start : SECTIONS[0], false);
+
+</script>
+</body>
+</html>

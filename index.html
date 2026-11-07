@@ -107,8 +107,10 @@
         }
 
         .logo img {
+            width: 45px;
             height: 45px;
             margin-right: 12px;
+            filter: drop-shadow(0 0 7px rgba(255, 193, 7, 0.35));
         }
 
         .logo h1 {
@@ -2400,69 +2402,234 @@
         .classement-table th .trophee { --t: 1.55em; vertical-align: -0.42em; margin-left: 4px; }
         .cdf-final-badge .trophee { --t: 1.25em; vertical-align: -0.28em; margin-right: 5px; }
         .trophee--grand { --t: 3.6em; margin-right: 8px; }
-        /* ===== Bandeaux visuels des coupes (photos existantes + trophée réel) ===== */
+        /* ===== Habillage TV des coupes (esprit Canal+ / beIN, 100 % CSS, 0 octet réseau) ===== */
         .banner-coupe {
+            --bg-deep: #070b16;
+            --bg-mid: #101c3a;
+            --accent: #d4af37;
+            --accent-rgb: 212, 175, 55;
             position: relative;
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            gap: 18px;
-            margin: 0 0 24px;
-            min-height: 215px;
-            padding: 24px 28px;
-            border-radius: 16px;
+            gap: 24px;
+            margin: 0 0 26px;
+            padding: 26px 30px;
+            min-height: 232px;
+            border-radius: 14px;
             overflow: hidden;
             isolation: isolate;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            color: #fff;
+            background:
+                radial-gradient(120% 140% at 6% 0%, rgba(var(--accent-rgb), 0.18), transparent 48%),
+                radial-gradient(90% 130% at 100% 100%, rgba(var(--accent-rgb), 0.22), transparent 60%),
+                linear-gradient(132deg, var(--bg-deep) 0%, var(--bg-mid) 54%, var(--bg-deep) 100%);
+            box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.26), 0 18px 42px rgba(0, 0, 0, 0.45);
         }
 
-        .banner-coupe img {
+        /* faisceau de projecteur */
+        .banner-coupe::before {
+            content: "";
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -2;
+            top: -60%;
+            right: -6%;
+            width: 62%;
+            height: 220%;
+            transform: rotate(9deg);
+            background: conic-gradient(from 196deg at 68% 0%, transparent 0deg, rgba(255, 255, 255, 0.10) 22deg, transparent 50deg);
+            pointer-events: none;
+            z-index: -1;
         }
 
+        /* balayage lumineux lent */
         .banner-coupe::after {
             content: "";
             position: absolute;
             inset: 0;
+            background: linear-gradient(112deg, transparent 32%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.02) 49%, transparent 58%);
+            transform: translateX(-30%);
+            animation: banner-sheen 11s ease-in-out infinite;
+            pointer-events: none;
             z-index: -1;
-            background: linear-gradient(90deg, rgba(16, 28, 58, 0.95) 0%, rgba(16, 28, 58, 0.72) 55%, rgba(16, 28, 58, 0.28) 100%);
         }
 
-        .banner-coupe--cdf::after {
-            background: linear-gradient(90deg, rgba(91, 42, 134, 0.95) 0%, rgba(199, 36, 177, 0.6) 58%, rgba(199, 36, 177, 0.22) 100%);
+        @keyframes banner-sheen {
+            0%, 100% { transform: translateX(-34%); }
+            50% { transform: translateX(34%); }
         }
 
-        .banner-coupe figcaption {
+        /* grain de retransmission */
+        .banner-coupe__grain {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
+            opacity: 0.06;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        /* signature de chaîne */
+        .banner-coupe__brand {
+            position: absolute;
+            top: 18px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .banner-coupe__mark {
+            display: grid;
+            place-items: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 6px;
+            font-family: "Oswald", sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #0a1020;
+            background: linear-gradient(160deg, #f8e3a0, var(--accent));
+            box-shadow: 0 3px 12px rgba(var(--accent-rgb), 0.5);
+        }
+
+        .banner-coupe__wordmark {
+            font-family: "Oswald", sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+        }
+
+        .banner-coupe__wordmark b { color: var(--accent); font-weight: 700; }
+
+        .banner-coupe__tagline {
+            padding-left: 10px;
+            margin-left: 3px;
+            border-left: 1px solid rgba(255, 255, 255, 0.22);
+            font-size: 0.66rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .banner-coupe__content {
             display: flex;
             flex-direction: column;
-            gap: 7px;
-            max-width: 62%;
-            color: #fff;
+            align-items: flex-start;
+            gap: 8px;
+            max-width: 66%;
+            padding-top: 40px;
+            padding-left: 16px;
+            border-left: 2px solid rgba(var(--accent-rgb), 0.55);
+        }
+
+        .banner-coupe__live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 9px 3px 7px;
+            border-radius: 999px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            background: rgba(232, 17, 45, 0.92);
+            box-shadow: 0 2px 10px rgba(232, 17, 45, 0.35);
+        }
+
+        .banner-coupe__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            animation: banner-live 1.8s ease-in-out infinite;
+        }
+
+        @keyframes banner-live {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.8); }
         }
 
         .banner-coupe__kicker {
-            font-size: 0.72rem;
-            letter-spacing: 0.16em;
+            font-size: 0.7rem;
+            letter-spacing: 0.17em;
             text-transform: uppercase;
-            color: #d4af37;
+            color: var(--accent);
         }
 
-        .banner-coupe--cdf .banner-coupe__kicker { color: #ffd2f5; }
-
-        .banner-coupe figcaption strong {
+        .banner-coupe__content strong {
             font-family: "Oswald", sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 0.02em;
-            line-height: 1.15;
+            font-size: 1.95rem;
+            font-weight: 700;
+            line-height: 1.02;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+            text-shadow: 0 4px 22px rgba(0, 0, 0, 0.5);
         }
 
-        .banner-coupe figcaption span:last-child { font-size: 0.9rem; opacity: 0.92; }
-        .banner-coupe__trophee { --t: 7em; flex: none; align-self: center; }
+        .banner-coupe__meta {
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .banner-coupe__trophy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 9px;
+            flex: none;
+            margin-bottom: 4px;
+        }
+
+        .banner-coupe__trophy .trophee {
+            --t: 7.6em;
+            filter: drop-shadow(0 14px 26px rgba(var(--accent-rgb), 0.45));
+        }
+
+        .banner-coupe__trophy span {
+            font-family: "Oswald", sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* variante Coupe de France : violet / magenta, diagonales */
+        .banner-coupe--cdf {
+            --bg-deep: #2a0f3f;
+            --bg-mid: #5b2a86;
+            --accent: #ff5cd8;
+            --accent-rgb: 255, 92, 216;
+        }
+
+        .banner-coupe--cdf::before {
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            transform: none;
+            background: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.055) 0 2px, transparent 2px 16px);
+        }
+
+        .banner-coupe--cdf::after {
+            background: linear-gradient(112deg, transparent 30%, rgba(255, 255, 255, 0.15) 42%, rgba(255, 255, 255, 0.03) 48%, transparent 56%);
+        }
+
+        .banner-coupe--cdf .banner-coupe__mark {
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            color: #fff;
+            background: linear-gradient(160deg, #ff8ae4, #c724b1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .banner-coupe::after,
+            .banner-coupe__dot { animation: none; }
+        }
 
         .carousel-item::after {
             content: "";
@@ -2479,10 +2646,15 @@
         .carousel-item img { background: #101c3a; }
 
         @media (max-width: 768px) {
-            .banner-coupe { min-height: 150px; padding: 16px 18px; }
-            .banner-coupe figcaption { max-width: 100%; }
-            .banner-coupe figcaption strong { font-size: 1.15rem; }
-            .banner-coupe__trophee { --t: 4em; }
+            .banner-coupe { min-height: 176px; padding: 18px; gap: 12px; }
+            .banner-coupe__brand { top: 12px; left: 18px; }
+            .banner-coupe__tagline { display: none; }
+            .banner-coupe__content { flex: 1 1 auto; min-width: 0; max-width: none; padding-top: 34px; padding-left: 11px; }
+            .banner-coupe__content strong { font-size: 1.15rem; }
+            .banner-coupe__kicker { font-size: 0.6rem; }
+            .banner-coupe__meta { display: none; }
+            .banner-coupe__trophy .trophee { --t: 3.7em; }
+            .banner-coupe__trophy span { display: none; }
         }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
@@ -2556,8 +2728,7 @@
     <header>
         <div class="container header-container">
             <a href="#" data-tab-link="ligue1" class="logo nav-link">
-                <img width="360" height="360" src="OIP.png" loading="lazy" decoding="async"
-                    alt="Logo Campeonato Peluches Élite">
+                <img width="45" height="45" src="embleme-peluche.svg" alt="" loading="eager" decoding="async">
                 <h1>Peluche Élite</h1>
             </a>
             <nav>
@@ -2889,14 +3060,22 @@
     <div class="tab-content ldc-content" id="ldc-content">
         <div class="container">
             <figure class="banner-coupe banner-coupe--ldc">
-                <img src="teddy-crowd.webp" width="1536" height="1024" loading="lazy" decoding="async"
-                    alt="Tribune de peluches sous les projecteurs">
-                <figcaption>
+                <span class="banner-coupe__grain" aria-hidden="true"></span>
+                <div class="banner-coupe__brand">
+                    <span class="banner-coupe__mark" aria-hidden="true">+</span>
+                    <span class="banner-coupe__wordmark">Peluche<b>+</b></span>
+                    <span class="banner-coupe__tagline">La chaîne du foot en feutrine</span>
+                </div>
+                <figcaption class="banner-coupe__content">
+                    <span class="banner-coupe__live"><span class="banner-coupe__dot" aria-hidden="true"></span>Direct · 21h00</span>
                     <span class="banner-coupe__kicker">Coupe aux grandes oreilles · compétition née en 1955</span>
-                    <strong>73,5 cm d’argent massif</strong>
-                    <span>Deux anses démesurées : le trophée que toutes les peluches rêvent de soulever.</span>
+                    <strong>Ligue des Champions<br>des Peluches</strong>
+                    <span class="banner-coupe__meta">73,5 cm d’argent massif · deux anses démesurées</span>
                 </figcaption>
-                <svg class="trophee trophee--ldc banner-coupe__trophee" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>
+                <div class="banner-coupe__trophy" aria-hidden="true">
+                    <svg class="trophee trophee--ldc" focusable="false"><use href="#trophee-ldc"/></svg>
+                    <span>Le trophée</span>
+                </div>
             </figure>
 
             <div class="section">
@@ -2939,14 +3118,22 @@
     <div class="tab-content cdf-content" id="cdf-content">
         <div class="container">
             <figure class="banner-coupe banner-coupe--cdf">
-                <img src="tifo-peluches.webp" width="1536" height="1024" loading="lazy" decoding="async"
-                    alt="Tifo de peluches dans les tribunes">
-                <figcaption>
+                <span class="banner-coupe__grain" aria-hidden="true"></span>
+                <div class="banner-coupe__brand">
+                    <span class="banner-coupe__mark" aria-hidden="true">be</span>
+                    <span class="banner-coupe__wordmark">be<b>Peluche</b> Sports</span>
+                    <span class="banner-coupe__tagline">La coupe des surprises, en direct</span>
+                </div>
+                <figcaption class="banner-coupe__content">
+                    <span class="banner-coupe__live"><span class="banner-coupe__dot" aria-hidden="true"></span>Direct · 21h05</span>
                     <span class="banner-coupe__kicker">Coupe Charles-Simon · créée en 1917</span>
-                    <strong>3,2 kg d’argent ciselé</strong>
-                    <span>Sur socle de marbre blanc : la coupe des surprises et des petits qui renversent les grands.</span>
+                    <strong>Coupe de France<br>des Peluches</strong>
+                    <span class="banner-coupe__meta">3,2 kg d’argent ciselé · socle de marbre blanc</span>
                 </figcaption>
-                <svg class="trophee trophee--cdf banner-coupe__trophee" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>
+                <div class="banner-coupe__trophy" aria-hidden="true">
+                    <svg class="trophee trophee--cdf" focusable="false"><use href="#trophee-cdf"/></svg>
+                    <span>Le trophée</span>
+                </div>
             </figure>
 
             <div class="section">

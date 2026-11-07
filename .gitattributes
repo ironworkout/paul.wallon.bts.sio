@@ -1,0 +1,12 @@
+# Normalisation des fins de ligne et des fichiers binaires.
+# Évite les diffs illisibles sur les images/sons et les conversions CRLF parasites.
+* text=auto eol=lf
+
+# Assets binaires : jamais de diff texte, jamais de fusion ligne à ligne.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.mp3 binary
+
+# Fichiers générés / sortie de tests
+*.log text eol=lf

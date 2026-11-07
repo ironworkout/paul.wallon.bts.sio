@@ -2,6 +2,10 @@
 
 Liste d'idées pour faire évoluer le projet, classées par thème et par impact/effort.
 
+**Légende** : ✅ = fait et vérifié. Dernière vérification : **7 novembre 2026**. Les chiffres cités
+(nombre de lignes de `index.html`, nombre d'assertions des tests) sont ceux mesurés à cette date.
+Une case ne se coche que si l'idée est réellement implémentée **et** vérifiée.
+
 ---
 
 ## 🎯 Priorité haute — fonctionnalités de jeu
@@ -10,6 +14,9 @@ Liste d'idées pour faire évoluer le projet, classées par thème et par impact
 Actuellement, un match à égalité est départagé par tirs au but *aléatoires*.
 - **Idée** : ajouter un mini-écran « Prolongations + Tirs au but » avec des boutons (ex. tir de chaque équipe, penalty raté/réussi).
 - **Effort** : moyen · **Impact** : ⭐⭐⭐⭐⭐ (le suspense du jeu !)
+- [ ] **Statut (7 nov. 2026)** : non fait. L'égalité est encore tranchée par `Math.random()` (CDF et LDC) ;
+  seule la compétition est enregistrée (`match.penaltyShootout` / `match.penaltyWinner`). Les barrages
+  affichent déjà « Égalité ! Ajoutez les prolongations. » : c'est le modèle à généraliser.
 
 ### 2. Statistiques de saison par club (meilleur buteur, passeurs)
 - **Idée** : pour chaque match saisi, demander les buteurs et ajouter un classement des buteurs dans chaque ligue (comme un Soulier d'Or des Peluches).
@@ -51,36 +58,51 @@ Un bouton « Exporter JSON » qui télécharge le palmarès (et un « Importer �
 Le site est clair avec quelques sections sombres (palmarès). Un bouton bascule clair/sombre apporterait une vraie cohérence visuelle.
 - **Effort** : moyen · **Impact** : ⭐⭐⭐⭐
 
-### 10. Animations de célébration améliorées (confettis sur les trophées)
+### ✅ 10. Animations de célébration améliorées (confettis sur les trophées)
 La DNCG utilise déjà des confettis ; on pourrait déclencher un **lâcher de confettis** à chaque trophée remporté (fin de saison, champion CDF/LDC).
 - **Effort** : faible · **Impact** : ⭐⭐⭐
+- [x] **Fait et vérifié (7 nov. 2026)** : `launchConfetti(trophyType)` avec une palette par compétition
+  (`CONFETTI_PALETTES`) est appelée à l'attribution du trophée en Ligue 1, Ligue 2, CDF et LDC.
+  CSS `.confetti` + `@keyframes confetti-fall` en place, réutilisés de l'ancienne section DNCG.
 
 ### 11. Sons / hymnes pour CDF et LDC
-Il y a des hymnes pour L1/L2/L3 (`ligue1.mp3`, `ligue2.mp3`, `ligue3.mp3`) — ajouter des hymnes LDC et CDF (ou les réutiliser).
+Il y a des hymnes pour L1 et L2 (`ligue1.mp3`, `ligue2.mp3`) ; l'hymne L3 a été supprimé (fichier introuvable) et le doublon `ligue3.mp3` a été retiré du dépôt le 7 nov. 2026.
 - **Effort** : faible · **Impact** : ⭐⭐⭐
+- [ ] **Statut (7 nov. 2026)** : `ldc.mp3` (1 Mo) est bien présent mais **jamais joué** par le site — il suffit
+  de le brancher pour la LDC, puis d'ajouter un hymne CDF. Seule la page annexe `champions.html` y fait référence.
 
 ### 12. Page mobile : défilement horizontal du tableau CDF
 Vérifier que le bracket CDF/LDC (qui utilise `overflow-x: auto`) soit bien utilisable sur téléphone (déjà stylé, à tester).
+- [ ] **Statut (7 nov. 2026)** : aucun code à écrire, `overflow-x: auto` est bien présent sur les
+  conteneurs de bracket ; il reste seulement à vérifier le rendu sur un vrai téléphone.
 
 ---
 
 ## 🛠️ Technique / robustesse
 
-### 13. Découper le fichier `index.html` (~5 500 lignes)
-Tout est dans un seul fichier (HTML + CSS + ~2 500 lignes de JS). Le découper en `style.css`, `app.js` et `index.html` réduirait le risque de bugs et faciliterait la maintenance.
+### 13. Découper le fichier `index.html` (6 786 lignes au 7 nov. 2026)
+Tout est dans un seul fichier (HTML + CSS + JS). Le découper en `style.css`, `app.js` et `index.html` réduirait le risque de bugs et faciliterait la maintenance.
 - **Effort** : élevé · **Impact** : ⭐⭐⭐⭐ (qualité de code)
+- [ ] **Statut (7 nov. 2026)** : non fait. Aucun CSS/JS externe : les anciens `style.css` et `app.js`,
+  jamais chargés, ont été retirés du dépôt le 7 nov. 2026. `index.html` reste à 6 786 lignes.
 
-### 14. Créer un `.gitignore` avec `.freebuff/`
+### ✅ 14. Créer un `.gitignore` avec `.freebuff/`
 Le dossier `.freebuff/` (base de données interne de l'app) apparaît constamment en untracked. L'ajouter au `.gitignore` éviterait tout risque de le committer par erreur.
 - **Effort** : très faible · **Impact** : ⭐⭐⭐
+- [x] **Fait et vérifié (7 nov. 2026)** : `.gitignore` présent et suivi par git ; il ignore `.freebuff/`,
+  `.DS_Store`, `Thumbs.db`, `*.tmp` et `*.log`.
 
 ### 15. Centraliser les données des équipes
 Les clubs sont définis dans plusieurs endroits (données initiales, base clubs, GitHub logos). Une source de vérité unique (un seul objet `teams` par ligue + fallback logos GitHub) simplifierait les ajouts/suppressions.
 - **Effort** : moyen · **Impact** : ⭐⭐⭐
 
 ### 16. Tests automatisés plus complets
-Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement (26 assertions). Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
+Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement. Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
 - **Effort** : faible · **Impact** : ⭐⭐⭐⭐
+- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **122 assertions**
+  (et non 26) et couvre la CDF, la LDC (tirage, BYE, vainqueurs, trophée), le Classement, le tri,
+  les swap, le catalogue de logos et l'univers des saisons passées. Restent à couvrir : création,
+  bascule, suppression et migration d'une saison.
 
 ### 17. Gestion d'erreur Drive plus douce
 Quand la session Drive expire, tout est protégé par des messages — mais les boutons restent actifs. Une déconnexion auto plus visible (ex. overlay) améliorerait l'expérience.

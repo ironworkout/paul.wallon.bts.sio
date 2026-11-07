@@ -1694,56 +1694,6 @@
             margin-bottom: 10px;
         }
 
-        .cdf-match-card {
-            background: white;
-            border: 2px solid var(--nav-cdf-color);
-            border-radius: 8px;
-            padding: 10px;
-            min-width: 150px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .cdf-match-card .cdf-team {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-radius: 4px;
-        }
-
-        .cdf-match-card .cdf-team img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-
-        .cdf-match-card .cdf-team span {
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.85rem;
-        }
-
-        .cdf-match-card .cdf-team.winner {
-            background-color: rgba(57, 255, 20, 0.2);
-        }
-
-        .cdf-match-card .cdf-score-inputs {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 8px;
-        }
-
-        .cdf-match-card .cdf-score-inputs input {
-            width: 35px;
-            text-align: center;
-            padding: 5px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-family: 'Roboto Mono', monospace;
-            font-weight: bold;
-        }
-
         .cdf-final-badge {
             background: var(--accent-gold);
             color: var(--primary-color);
@@ -2657,57 +2607,732 @@
             .banner-coupe__trophy span { display: none; }
         }
         /* ===== Galerie des foules en feutrine ===== */
-        .crowd-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 18px;
+        /* ============================================================
+           HABILLAGE TV 2026
+           1. Cartes clubs avec visuel de tribune
+           2. Tableaux de score Canal Plours (LDC) / bePeluche Sports (CDF)
+           3. Ligue 3 : roulette de promotion
+           4. Classement général
+           5. Barrages
+           ============================================================ */
+
+        /* ---------- 1. Cartes clubs ---------- */
+        .teams-grid {
+            grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+            gap: 22px;
         }
 
-        .crowd-card {
-            position: relative;
-            margin: 0;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #0a1020;
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
-        }
-
-        .crowd-card img {
-            display: block;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            transition: transform 0.45s ease;
-        }
-
-        .crowd-card:hover img { transform: scale(1.04); }
-
-        .crowd-card figcaption {
-            position: absolute;
-            inset: auto 0 0 0;
+        .team-card {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            padding: 34px 16px 14px;
-            color: #fff;
-            background: linear-gradient(to top, rgba(6, 10, 18, 0.92), rgba(6, 10, 18, 0.55) 55%, transparent);
+            padding: 0;
+            overflow: hidden;
+            text-align: center;
+            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
 
-        .crowd-card strong {
-            font-family: "Oswald", sans-serif;
-            font-size: 1.05rem;
-            letter-spacing: 0.02em;
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(10, 20, 40, 0.22);
+        }
+
+        .team-card__shot {
+            position: relative;
+            margin: 0;
+            aspect-ratio: 16 / 9;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(120% 120% at 50% 0%, #24345a, #0b1224 72%);
+        }
+
+        .team-card__clip {
+            position: absolute;
+            inset: 0;
+            display: block;
+            overflow: hidden;
+        }
+
+        .team-card .team-card__shot-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+        }
+
+        .team-card:hover .team-card__shot-img { transform: scale(1.06); }
+
+        .team-card__clip::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(5, 9, 18, 0.04) 32%, rgba(5, 9, 18, 0.34) 70%, rgba(5, 9, 18, 0.72) 100%);
+        }
+
+        .team-card .team-card__crest {
+            position: relative;
+            z-index: 2;
+            width: 84px;
+            height: 84px;
+            margin: 0;
+            padding: 7px;
+            border-radius: 50%;
+            background: #fff;
+            object-fit: contain;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .team-card__shot.has-photo .team-card__crest {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 62px;
+            height: 62px;
+            padding: 6px;
+            transform: translate(-50%, 45%);
+        }
+
+        .team-card__shot--empty {
+            background:
+                radial-gradient(90% 90% at 20% 10%, rgba(212, 175, 55, 0.16), transparent 60%),
+                radial-gradient(120% 120% at 80% 100%, #1b2a4a, #0a1020 70%);
+        }
+
+        .team-card__body {
+            padding: 18px 16px 20px;
+        }
+
+        .team-card__shot.has-photo + .team-card__body { padding-top: 42px; }
+
+        .team-card__body h4 {
+            font-size: 1.18rem;
+            margin-bottom: 4px;
+        }
+
+        .team-card__body p {
+            font-size: 0.86rem;
+            line-height: 1.45;
+            opacity: 0.78;
+            margin: 8px 2px 0;
+        }
+
+        .team-card .delete-club-btn {
+            top: 10px;
+            right: 10px;
+            background-color: rgba(8, 14, 28, 0.55);
+            color: #ff6b6b;
+            backdrop-filter: blur(4px);
+            opacity: 0.9;
+        }
+
+        /* Vignette de stade dans la liste des clubs internationaux LDC */
+        .ldc-intl-item .ldc-intl-shot {
+            width: 62px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        /* ---------- 2. Tableaux de score ---------- */
+        .cdf-bracket {
+            align-items: flex-start;
+            gap: 26px;
+            padding: 26px 4px;
+        }
+
+        .cdf-round {
+            gap: 14px;
+        }
+
+        .cdf-round-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #f2f5ff;
+            background: rgba(8, 14, 28, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
+        }
+
+        .cdf-round-title--ldc {
+            color: var(--accent-gold);
+            border-color: rgba(212, 175, 55, 0.55);
+            background: linear-gradient(135deg, #0a1020, #131c33);
+        }
+
+        .cdf-round-title--cdf {
+            color: #ffd9f7;
+            border-color: rgba(199, 36, 177, 0.55);
+            background: linear-gradient(135deg, #2a0738, #470d57);
+        }
+
+        .cdf-match-card.scorebug {
+            width: 236px;
+            min-width: 236px;
+            padding: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #070b16;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+        }
+
+        .scorebug__bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
         }
 
-        .crowd-card span {
-            font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.82);
+        .scorebug--ldc .scorebug__bar {
+            background: linear-gradient(90deg, #0a1020, #16203a);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.55);
+            color: var(--accent-gold);
+        }
+
+        .scorebug--cdf .scorebug__bar {
+            background: linear-gradient(90deg, #3a0b52, #7b1e8b);
+            border-bottom: 1px solid rgba(255, 90, 220, 0.5);
+            color: #ffd9f7;
+        }
+
+        .scorebug__mark {
+            display: grid;
+            place-items: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1;
+            background: var(--accent-gold);
+            color: #070b16;
+        }
+
+        .scorebug--cdf .scorebug__mark { background: #ff2bd1; color: #17001a; }
+
+        .scorebug__brand { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .scorebug__live {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.58rem;
+            opacity: 0.9;
+        }
+
+        .scorebug__live i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff2d55;
+            animation: scorebugLive 1.9s ease-out infinite;
+        }
+
+        @keyframes scorebugLive {
+            0% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0.65); }
+            70% { box-shadow: 0 0 0 6px rgba(255, 45, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0); }
+        }
+
+        .scorebug__shot {
+            position: relative;
+            height: 52px;
+            overflow: hidden;
+            background: #0a1020;
+        }
+
+        .scorebug__shot img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scorebug__shot::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(7, 11, 22, 0.1), rgba(7, 11, 22, 0.82));
+        }
+
+        .scorebug__row {
+            display: grid;
+            grid-template-columns: 24px 1fr 34px;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+            color: #e8eeff;
+            transition: background-color 0.2s ease;
+        }
+
+        .scorebug__row:last-of-type { border-bottom: none; }
+
+        .scorebug__row img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .scorebug__club {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.84rem;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .scorebug__digit {
+            width: 34px;
+            padding: 3px 0;
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 5px;
+        }
+
+        .scorebug__digit:focus {
+            outline: none;
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .scorebug__digit:disabled { opacity: 0.45; }
+
+        .scorebug--ldc .scorebug__digit {
+            color: #f6da8b;
+            border-color: rgba(212, 175, 55, 0.35);
+            background: rgba(212, 175, 55, 0.09);
+        }
+
+        .scorebug--cdf .scorebug__digit {
+            color: #ff9df0;
+            border-color: rgba(255, 90, 220, 0.35);
+            background: rgba(255, 43, 209, 0.09);
+        }
+
+        .scorebug__row.is-winner {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.02));
+            box-shadow: inset 3px 0 0 var(--accent-gold);
+        }
+
+        .scorebug--cdf .scorebug__row.is-winner {
+            background: linear-gradient(90deg, rgba(255, 43, 209, 0.22), rgba(255, 43, 209, 0.02));
+            box-shadow: inset 3px 0 0 #ff2bd1;
+        }
+
+        .scorebug__note {
+            margin: 0;
+            padding: 6px 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.64rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .scorebug--ldc .scorebug__note { color: #f6da8b; }
+        .scorebug--cdf .scorebug__note { color: #ff9df0; }
+
+        .scorebug--waiting .scorebug__row { opacity: 0.72; }
+
+        .scorebug--demi .scorebug__row { grid-template-columns: 24px 1fr 44px; }
+
+        .scorebug__qualify {
+            padding: 6px 10px 8px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #9dffbf;
+            border-top: 1px solid rgba(57, 255, 20, 0.25);
+        }
+
+        /* Bandeau champion */
+        .cdf-final-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(135deg, #1a2440, #0b1224);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .cdf-final-badge--ldc { border-color: rgba(212, 175, 55, 0.6); color: var(--accent-gold); }
+        .cdf-final-badge--cdf { border-color: rgba(255, 90, 220, 0.5); color: #ffd9f7; }
+
+        .ldc-star {
+            color: var(--accent-gold);
+            filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.55));
+        }
+
+        /* ---------- 3. Ligue 3 ---------- */
+        .l3-content .section-title .fa-dharmachakra { filter: drop-shadow(0 0 8px rgba(0, 200, 150, 0.45)); }
+
+        .roulette-wrapper {
+            position: relative;
+            padding: 34px 22px 30px;
+            border-radius: 22px;
+            border: 1px solid rgba(0, 200, 150, 0.22);
+            background:
+                radial-gradient(90% 70% at 50% 0%, rgba(0, 200, 150, 0.14), transparent 62%),
+                linear-gradient(180deg, #0a1120, #070b14);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 50px rgba(4, 8, 16, 0.35);
+            overflow: hidden;
+            gap: 26px;
+        }
+
+        .roulette-wrapper::before {
+            content: "";
+            position: absolute;
+            top: -55%;
+            left: 50%;
+            width: 620px;
+            height: 620px;
+            transform: translateX(-50%);
+            background: conic-gradient(from 90deg, transparent 0deg, rgba(0, 200, 150, 0.16) 90deg, transparent 200deg, rgba(212, 175, 55, 0.14) 300deg, transparent 360deg);
+            animation: l3Sweep 18s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes l3Sweep { to { transform: translateX(-50%) rotate(360deg); } }
+
+        .roulette-canvas-container {
+            z-index: 1;
+            border-radius: 50%;
+            padding: 10px;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.09), rgba(6, 10, 18, 0.6));
+            box-shadow: 0 0 0 1px rgba(0, 200, 150, 0.35), 0 0 45px rgba(0, 200, 150, 0.22), inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #roulette-canvas { border-radius: 50%; box-shadow: none; }
+
+        .roulette-pointer-arrow {
+            top: -14px;
+            border-left-width: 16px;
+            border-right-width: 16px;
+            border-top-width: 32px;
+            border-top-color: var(--accent-gold);
+            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+        }
+
+        .roulette-center-hub {
+            width: 62px;
+            height: 62px;
+            display: grid;
+            place-items: center;
+            font-size: 1.5rem;
+            color: #2b2200;
+            background: radial-gradient(circle at 35% 28%, #fff6d0, #d4af37 58%, #8a6d1f 100%);
+            box-shadow: 0 0 0 4px rgba(10, 16, 30, 0.85), 0 0 22px rgba(212, 175, 55, 0.55), inset 0 2px 5px rgba(255, 255, 255, 0.7);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .roulette-center-hub::after { content: "★"; line-height: 1; }
+
+        .roulette-controls { z-index: 1; }
+
+        .roulette-result {
+            z-index: 1;
+            min-height: 48px;
+            min-width: 280px;
+            padding: 12px 24px;
+            font-size: 1.05rem;
+            letter-spacing: 0.03em;
+            color: #cfe9ff;
+            background: rgba(10, 20, 38, 0.72);
+            border: 1px solid rgba(120, 200, 255, 0.22);
+            border-radius: 999px;
+            text-shadow: none;
+            backdrop-filter: blur(6px);
+        }
+
+        .roulette-result.winner {
+            color: #0b1224;
+            background: linear-gradient(135deg, #ffe9a3, #d4af37);
+            border-color: rgba(255, 255, 255, 0.5);
+            text-shadow: none;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+        }
+
+        /* ---------- 4. Classement général ---------- */
+        .classement-content .table-container {
+            border-radius: 16px;
+            border: 1px solid var(--palmares-border);
+            background: radial-gradient(120% 100% at 50% 0%, rgba(184, 134, 11, 0.12), transparent 60%);
+            overflow: auto;
+        }
+
+        .classement-table {
+            margin-top: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+        }
+
+        .classement-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+            background: rgba(6, 10, 20, 0.94);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.55);
+        }
+
+        .classement-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.022); }
+
+        .classement-table tbody tr.is-podium td { background: rgba(212, 175, 55, 0.06); }
+
+        .classement-table tbody tr.is-podium:hover td { background: rgba(212, 175, 55, 0.13); }
+
+        .classement-table tbody tr.is-podium td:first-child {
+            box-shadow: inset 3px 0 0 var(--accent-gold);
+        }
+
+        .classement-table td.rank-cell { font-size: 1.25rem; }
+
+        .classement-table td.rank-cell .rank-medal {
+            font-size: 1.15rem;
+            margin-top: 2px;
+        }
+
+        .classement-table .medal-count {
+            font-size: 1rem;
+        }
+
+        .classement-table .medal-count.is-zero { opacity: 0.32; font-weight: 400; }
+
+        .classement-table .classement-total {
+            display: inline-block;
+            min-width: 44px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 1.05rem;
+            background: rgba(212, 175, 55, 0.14);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        .classement-podium { gap: 20px; margin: 10px 0 26px; }
+
+        .podium-club {
+            min-height: 150px;
+            justify-content: flex-end;
+            border-radius: 16px 16px 6px 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        .podium-club.podium-1 {
+            min-height: 182px;
+            border-width: 2px;
+            box-shadow: 0 18px 40px rgba(255, 215, 0, 0.22);
+        }
+
+        .podium-club.podium-2 { min-height: 158px; }
+        .podium-club.podium-3 { min-height: 142px; }
+
+        .podium-club .podium-medal {
+            font-size: 1.7rem;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        .podium-club img {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25), 0 8px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .podium-club.podium-1 img { width: 72px; height: 72px; }
+
+        /* ---------- 5. Barrages ---------- */
+        .barrage-match {
+            position: relative;
+            padding: 28px 26px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(253, 126, 20, 0.34);
+            background:
+                radial-gradient(90% 80% at 50% 0%, rgba(253, 126, 20, 0.18), transparent 60%),
+                linear-gradient(165deg, #0b1224, #111a33 58%, #080d18);
+            box-shadow: 0 24px 50px rgba(4, 8, 16, 0.32);
+            overflow: hidden;
+        }
+
+        .barrage-match::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--nav-barrages-color), #ffd08a 45%, transparent);
+        }
+
+        .barrage-match h3 {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto 26px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #ffe0c2;
+            background: rgba(253, 126, 20, 0.14);
+            border: 1px solid rgba(253, 126, 20, 0.4);
+        }
+
+        .barrage-match h3 { display: flex; width: fit-content; }
+
+        .barrage-teams {
+            align-items: stretch;
+            gap: 18px;
+        }
+
+        .barrage-team {
+            padding: 18px 20px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            justify-content: center;
+        }
+
+        .barrage-team img {
+            width: 74px;
+            height: 74px;
+            padding: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .barrage-team span {
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            color: #f4f7ff;
+        }
+
+        .barrage-score-section { gap: 10px; flex: 0 1 360px; }
+
+        .barrage-leg {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: rgba(4, 8, 16, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .barrage-leg-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #ffb26b;
+            opacity: 1;
+            margin-bottom: 8px;
+        }
+
+        .barrage-inputs { justify-content: center; }
+
+        .barrage-inputs input {
+            width: 54px;
+            padding: 8px 0;
+            font-size: 1.35rem;
+            color: #ffb26b;
+            background: #070b16;
+            border: 1px solid rgba(253, 126, 20, 0.4);
+            border-radius: 10px;
+        }
+
+        .barrage-inputs input:focus {
+            outline: none;
+            border-color: #ffb26b;
+            box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.18);
+        }
+
+        .barrage-vs { font-size: 1.4rem; opacity: 0.5; }
+
+        .barrage-total {
+            margin-top: 22px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+            color: #ffe0c2;
+            background: linear-gradient(90deg, rgba(253, 126, 20, 0.2), rgba(253, 126, 20, 0.04));
+            border: 1px solid rgba(253, 126, 20, 0.34);
+        }
+
+        .barrage-winner {
+            margin-top: 14px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            letter-spacing: 0.03em;
+            color: #04150c;
+            background: linear-gradient(135deg, #6bf0a8, #1fbf6b);
+            box-shadow: 0 12px 30px rgba(31, 191, 107, 0.28);
+        }
+
+        .barrage-winner.show { animation: barrageWin 0.5s ease-out; }
+
+        @keyframes barrageWin {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ---------- 6. Adaptations mobiles ---------- */
+        @media (max-width: 768px) {
+            .teams-grid { grid-template-columns: 1fr; }
+            .cdf-match-card.scorebug { width: 100%; min-width: 190px; }
+            .cdf-bracket { gap: 14px; }
+            .roulette-wrapper { padding: 24px 12px; }
+            .roulette-canvas-container { width: 320px; height: 320px; }
+            #roulette-canvas { width: 300px; height: 300px; }
+            .roulette-result { min-width: 0; width: 100%; font-size: 0.95rem; }
+            .barrage-match { padding: 20px 16px; }
+            .barrage-teams { gap: 12px; }
+            .barrage-team { min-width: 120px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .crowd-card img { transition: none; }
+            .team-card .team-card__shot-img,
+            .roulette-wrapper::before,
+            .scorebug__live i,
+            .barrage-winner.show { animation: none !important; transition: none !important; }
         }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
@@ -2745,6 +3370,10 @@
                 <stop offset="46%" stop-color="#e4e2da"/><stop offset="68%" stop-color="#ffffff"/>
                 <stop offset="100%" stop-color="#c9c6bd"/>
             </linearGradient>
+            <linearGradient id="troph-or" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff3c4"/><stop offset="42%" stop-color="#d4af37"/>
+                <stop offset="100%" stop-color="#8a6d1f"/>
+            </linearGradient>
             <linearGradient id="troph-socle" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="#3a434d"/><stop offset="45%" stop-color="#222a32"/>
                 <stop offset="100%" stop-color="#12171c"/>
@@ -2760,6 +3389,9 @@
             <ellipse cx="60" cy="53" rx="21" ry="4.6" fill="url(#troph-creux)"/>
             <ellipse cx="50" cy="104" rx="5" ry="30" fill="#ffffff" opacity="0.32"/>
             <path d="M44 86a16 16 0 0 1 32 0" fill="none" stroke="#5f6c78" stroke-width="0.8" opacity="0.45"/>
+            <!-- Étoile de la Ligue des Champions gravée sur la panse -->
+            <path d="M60 89 L62.6 96.4 L70.5 96.6 L64.2 101.4 L66.5 108.9 L60 104.4 L53.5 108.9 L55.8 101.4 L49.5 96.6 L57.4 96.4 Z"
+                fill="url(#troph-or)" opacity="0.95"/>
             <path d="M49 176h22l-3 16a4 4 0 0 1-4 3H56a4 4 0 0 1-4-3Z" fill="url(#troph-socle)"/>
             <rect x="47" y="172" width="26" height="4" rx="1" fill="url(#troph-argent)"/>
         </symbol>
@@ -2923,86 +3555,7 @@
                     <div class="teams-grid" id="l1-teams-grid"></div>
                 </div>
             </div>
-            <div class="section" id="l1-foules-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-users"></i> Les foules en feutrine</h2>
-                </div>
-                <div class="section-content">
-                    <div class="crowd-gallery">
-                        <figure class="crowd-card">
-                            <img src="foule-toulours.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tribune violettes de Toulours, bannières au manchot et peluches debout sous les projecteurs">
-                            <figcaption><strong>Toulours FC</strong><span>Le stade violet des Manchots, club de 1937</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="foule-olympique-ours.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Virage bleu de l’Olympique d’Ours, drapeaux à l’ours blanc et fumigènes">
-                            <figcaption><strong>Olympique d’Ours</strong><span>Les ours de Lyon, fondés en 1950</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="foule-clermandala.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tribune verte de Clermandala FC, drapeaux au petit Grogu et fumée verte">
-                            <figcaption><strong>Clermandala FC</strong><span>Le vert de Clermont, club né en 1990</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="foule-orange-blanc.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tribune orange et blanche des lapins d’AS Carottes, écharpes et banderoles">
-                            <figcaption><strong>AS Carottes Lapines</strong><span>Les lapins orange et blanc d’AS Carrotes</span></figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-            <div class="section" id="l1-tifos-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-flag"></i> Tifos et stades</h2>
-                </div>
-                <div class="section-content">
-                    <div class="crowd-gallery">
-                        <figure class="crowd-card">
-                            <img src="stade-oursons.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Kop rouge des Oursons FC, banderoles You’ll Never Work Alours et oiseau blanc sur fond rouge">
-                            <figcaption><strong>Oursons FC</strong><span>You’ll Never Work Alours · le kop rouge</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tifo-psg.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tifo géant PELUCHE SAINT GERMOURS déployé au Parc, ours en peluche au centre">
-                            <figcaption><strong>PSG Peluches</strong><span>Peluche Saint Germours · le tifo du Parc</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tifo-poussins.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tifo FC POUSSINS jaune et vert dans une enceinte moderne"
-                            >
-                            <figcaption><strong>FC Poussins</strong><span>Le virage jaune et vert des Poussins</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tifo-patapouf.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tifo géant bleu et jaune à l’éléphant Patapouf, écharpes PATAPOUF FOOT CLUB">
-                            <figcaption><strong>Patapouf FC</strong><span>L’éléphant Patapouf en tifo géant</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="stade-saint-ettours.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tribune verte de Saint Ettours avec fumigènes et drapeaux ASSE">
-                            <figcaption><strong>AS Saint-Ettours</strong><span>Le Chaudron, tout en vert</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="stade-vafc.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Kop rouge du VAFC, drapeaux et écharpes Hauts-de-France">
-                            <figcaption><strong>VAFC</strong><span>Le kop rouge des Hauts-de-France</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="foule-tours.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tribune du Tours FC, banderoles TOURS FC et drapeaux bleu et blanc">
-                            <figcaption><strong>Tours FC</strong><span>Le ciel et noir de la Vallée du Cher</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tifo-doudou.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Tifo bleu et blanc AS DOUDOU CLUB avec une banderole d’animaux en peluche">
-                            <figcaption><strong>AS Doudou Club</strong><span>Le tifo bleu et blanc du club</span></figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-        </div>
+</div>
     </div>
 
     <!-- LIGUE 2 -->
@@ -3201,8 +3754,8 @@
                 <span class="banner-coupe__grain" aria-hidden="true"></span>
                 <div class="banner-coupe__brand">
                     <span class="banner-coupe__mark" aria-hidden="true">+</span>
-                    <span class="banner-coupe__wordmark">Peluche<b>+</b></span>
-                    <span class="banner-coupe__tagline">La chaîne du foot en feutrine</span>
+                    <span class="banner-coupe__wordmark">Canal<b>Plours</b></span>
+                    <span class="banner-coupe__tagline">Le rendez-vous foot du câble, depuis 1984</span>
                 </div>
                 <figcaption class="banner-coupe__content">
                     <span class="banner-coupe__live"><span class="banner-coupe__dot" aria-hidden="true"></span>Direct · 21h00</span>
@@ -3216,34 +3769,7 @@
                 </div>
             </figure>
 
-            <div class="section" id="ldc-soirees-section">
-                <div class="section-header">
-                    <h2 class="section-title" style="color: var(--nav-ldc-color);">
-                        <i class="fas fa-moon"></i> Les soirées européennes
-                    </h2>
-                </div>
-                <div class="section-content">
-                    <div class="crowd-gallery">
-                        <figure class="crowd-card">
-                            <img src="stade-madrours.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Virage blanc du Real Madrours sous les projecteurs, banderoles REAL MADROURS et ours en peluche">
-                            <figcaption><strong>Real Madrours</strong><span>Le virage blanc des nuits de Ligue des Champions</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tifo-dourstmund.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Mur jaune de Dourstmund, tifo géant à l’effigie d’un ours et fumigènes">
-                            <figcaption><strong>Dourstmund</strong><span>Le Mur Jaune, version feutrine</span></figcaption>
-                        </figure>
-                        <figure class="crowd-card">
-                            <img src="tribune-popolglimt.webp" width="1600" height="900" loading="lazy" decoding="async"
-                                alt="Petite tribune jaune de PopoGlimt au pied des montagnes, drapeau norvégien">
-                            <figcaption><strong>PopoGlimt</strong><span>La tribune jaune venue du nord</span></figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
+<div class="section">
                 <div class="section-header">
                     <h2 class="section-title"
                         style="color: var(--nav-ldc-color); text-shadow: 0 0 10px rgba(212,175,55,0.5);">
@@ -4404,15 +4930,59 @@
             });
         }
 
+        // ==================== VISUELS DE TRIBUNE PAR CLUB ====================
+        // Chaque club parodié dispose de son stade : la photo est posée sur sa carte, dans la
+        // ligue où il évolue (et dans le panneau LDC pour les clubs internationaux).
+        const CLUB_TRIBUNE_SHOTS = {
+            'Valenciennes FC': 'stade-vafc',
+            'VAFC': 'stade-vafc',
+            'Toulours FC': 'foule-toulours',
+            'PSG Peluches': 'tifo-psg',
+            'Olympique Ours': 'foule-olympique-ours',
+            "Olympique d'Ours": 'foule-olympique-ours',
+            'AS Carrotes': 'foule-orange-blanc',
+            'AS Saint-Ettours': 'stade-saint-ettours',
+            'Patapouf FC': 'tifo-patapouf',
+            'Tours FC': 'foule-tours',
+            'FC Poussins': 'tifo-poussins',
+            'Clermandala 63': 'foule-clermandala',
+            'Clermandala FC': 'foule-clermandala',
+            'Oursons FC': 'stade-oursons',
+            'FC Doudou': 'tifo-doudou',
+            'AS Doudou Club': 'tifo-doudou',
+            'Real Madrours': 'stade-madrours',
+            'Dourstmund': 'tifo-dourstmund',
+            'PopoGlimt': 'tribune-popolglimt'
+        };
+
+        function getClubTribune(clubName) {
+            const slug = CLUB_TRIBUNE_SHOTS[clubName];
+            return slug ? { card: `${slug}-card.webp`, full: `${slug}.webp` } : null;
+        }
+
         function populateTeamsGridDOM(teamsGridId, teamsData) {
             const teamsGrid = document.getElementById(teamsGridId); if (!teamsGrid) return; teamsGrid.innerHTML = '';
             if (!teamsData) return;
             Object.entries(teamsData).forEach(([teamName, teamData]) => {
                 if (teamName === "BYE") return;
-                const teamCard = document.createElement('div'); teamCard.className = 'team-card';
+                const teamCard = document.createElement('div');
                 const logoFilename = teamData?.logo || 'default_logo.png';
                 const logoSrc = (logoFilename.startsWith('data:') || logoFilename.startsWith('http')) ? logoFilename : `${BASE_URL}${logoFilename}`;
-                teamCard.innerHTML = `<img src="${logoSrc}" alt="${teamName}"><h4>${teamName}</h4>${getClubAliasBadgeHTML(teamName)}${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}`;
+                const tribune = getClubTribune(teamName);
+                teamCard.className = tribune ? 'team-card has-photo' : 'team-card';
+                const shotHtml = tribune
+                    ? `<figure class="team-card__shot has-photo">
+                            <span class="team-card__clip">
+                                <img class="team-card__shot-img" src="${tribune.card}" srcset="${tribune.card} 760w, ${tribune.full} 1600w"
+                                    sizes="(max-width: 640px) 92vw, 300px" width="760" height="428" loading="lazy" decoding="async"
+                                    alt="Tribune de ${teamName}">
+                            </span>
+                            <img class="team-card__crest" src="${logoSrc}" alt="${teamName}" onerror="this.onerror=null;this.src='embleme-peluche.svg'">
+                        </figure>`
+                    : `<figure class="team-card__shot team-card__shot--empty">
+                            <img class="team-card__crest" src="${logoSrc}" alt="${teamName}" onerror="this.onerror=null;this.src='embleme-peluche.svg'">
+                        </figure>`;
+                teamCard.innerHTML = `${shotHtml}<div class="team-card__body"><h4>${teamName}</h4>${getClubAliasBadgeHTML(teamName)}${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}</div>`;
                 
                 // Poubelle de suppression uniquement pour les clubs de L3
                 if (teamsGridId.includes('l3')) {
@@ -5212,6 +5782,37 @@
 
         const isByeTeam = (t) => typeof t === 'string' && t.startsWith('BYE');
 
+        // ==================== TABLEAUX DE SCORE (HABILLAGE TV) ====================
+        // Un seul gabarit pour les deux diffuseurs : Canal Plours pour la LDC,
+        // bePeluche Sports pour la CDF.
+        function buildScorebug(opts) {
+            const kind = opts.kind === 'ldc' ? 'ldc' : 'cdf';
+            const isLdc = kind === 'ldc';
+            const rows = (opts.rows || []).filter(Boolean).map(row => {
+                const disabledAttr = row.ready ? '' : 'disabled title="En attente des équipes / BYE"';
+                const changeAttr = row.ready ? `onchange="${opts.handler}(${opts.round}, ${row.matchIdx}, ${row.num}, this.value)"` : '';
+                return `<div class="scorebug__row${row.winner ? ' is-winner' : ''}">
+                        <img src="${row.logo}" alt="">
+                        <span class="scorebug__club">${row.name || '?'}</span>
+                        <input class="scorebug__digit" type="number" min="0" value="${row.score ?? ''}" ${changeAttr} ${disabledAttr}>
+                    </div>`;
+            }).join('');
+            const shotTeam = (opts.clubs || []).find(n => n && getClubTribune(n));
+            const shot = shotTeam
+                ? `<div class="scorebug__shot"><img src="${getClubTribune(shotTeam).card}" width="760" height="428" loading="lazy" decoding="async" alt=""></div>`
+                : '';
+            const qualify = opts.qualify ? `<div class="scorebug__qualify">${opts.qualify}</div>` : '';
+            const note = opts.note ? `<div class="scorebug__note">${opts.note}</div>` : '';
+            return `<div class="cdf-match-card scorebug scorebug--${kind}${opts.demi ? ' scorebug--demi' : ''}${opts.waiting ? ' scorebug--waiting' : ''}">
+                    <div class="scorebug__bar">
+                        <span class="scorebug__mark" aria-hidden="true">${isLdc ? '+' : 'be'}</span>
+                        <span class="scorebug__brand">${isLdc ? 'Canal Plours' : 'bePeluche Sports'}</span>
+                        <span class="scorebug__live"><i aria-hidden="true"></i>Direct</span>
+                    </div>
+                    ${shot}${rows}${qualify}${note}
+                </div>`;
+        }
+
         function renderCDFBracket() {
             const container = document.getElementById('cdf-bracket-container');
             if (!container || !cdfData.rounds || !cdfData.rounds[0]) return;
@@ -5223,7 +5824,7 @@
                 const roundMatches = cdfData.rounds[r];
                 if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
 
-                html += `<div class="cdf-round"><div class="cdf-round-title">🏆 ${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
+                html += `<div class="cdf-round"><div class="cdf-round-title cdf-round-title--cdf">${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
@@ -5235,20 +5836,22 @@
                         const t2Class = f.includes(match.team2) ? ' winner' : '';
                         const t3Class = f.includes(match.team3) ? ' winner' : '';
                         const matchReady = !!(match.team1 && match.team2 && match.team3 && !isByeTeam(match.team1) && !isByeTeam(match.team2) && !isByeTeam(match.team3));
-                        const scoreInputStyle = 'width:44px; text-align:center; margin-left:8px; padding:5px 4px; border:1px solid var(--border-color); border-radius:4px; font-family:Roboto Mono, monospace; font-weight:700;';
-                        const inputDisabled = 'disabled title="En attente des équipes / BYE"';
-                        const scoreIn = (num, val) => `<input type="number" min="0" value="${val ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, ${num}, this.value)"` : inputDisabled} style="${scoreInputStyle}">`;
-                        const demiLabel = match.finalists && match.finalists.length === 2 ? `<div style="font-size:0.75rem; color:var(--neon-green); font-weight:bold; margin-top:6px; text-align:center;">✅ Qualifiés pour la finale : ${match.finalists.map(resolveCurrentClubName).join(' & ')}</div>` : '';
                         const dT1 = resolveCurrentClubName(match.team1), dT2 = resolveCurrentClubName(match.team2), dT3 = resolveCurrentClubName(match.team3);
-                        html += `
-                            <div class="cdf-match-card" style="min-width: 230px;">
-                                <div style="font-size:0.75rem; color:var(--nav-cdf-color); font-weight:bold; text-align:center; padding-bottom:6px;">⚡ Match à 3 : le club avec le plus de buts est 1er</div>
-                                <div class="cdf-team${t1Class}"><img src="${getClubLogo(dT1)}" alt="${dT1}"><span>${dT1}</span>${scoreIn(1, match.score1)}</div>
-                                <div class="cdf-team${t2Class}"><img src="${getClubLogo(dT2)}" alt="${dT2}"><span>${dT2}</span>${scoreIn(2, match.score2)}</div>
-                                <div class="cdf-team${t3Class}"><img src="${getClubLogo(dT3)}" alt="${dT3}"><span>${dT3}</span>${scoreIn(3, match.score3)}</div>
-                                ${demiLabel}
-                            </div>
-                        `;
+                        html += buildScorebug({
+                        kind: 'cdf',
+                        handler: 'updateCDFScore',
+                        round: r,
+                        demi: true,
+                        waiting: !matchReady,
+                        qualify: match.finalists && match.finalists.length === 2 ? `Qualifiés en finale : ${match.finalists.map(resolveCurrentClubName).join(' & ')}` : '',
+                        clubs: [dT1, dT2, dT3],
+                        note: 'Match à 3 · le plus grand nombre de buts passe',
+                        rows: [
+                            { name: dT1, logo: getClubLogo(dT1), score: match.score1, winner: t1Class !== '', num: 1, matchIdx: i, ready: matchReady },
+                            { name: dT2, logo: getClubLogo(dT2), score: match.score2, winner: t2Class !== '', num: 2, matchIdx: i, ready: matchReady },
+                            { name: dT3, logo: getClubLogo(dT3), score: match.score3, winner: t3Class !== '', num: 3, matchIdx: i, ready: matchReady }
+                        ]
+                    });
                         return;
                     }
 
@@ -5259,19 +5862,19 @@
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     // Un match n'est saisissable que si les 2 équipes sont connues et qu'aucune n'est un BYE (déjà tranché au tirage)
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})</div>` : '';
-                    html += `
-                        <div class="cdf-match-card">
-                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
-                            <div class="cdf-score-inputs">
-                                <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
-                                -
-                                <input type="number" min="0" value="${match.score2 ?? ''}" ${matchReady ? `onchange="updateCDFScore(${r}, ${i}, 2, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
-                            </div>
-                            ${penaltyNote}
-                            <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${match.team2 || '?'}"><span>${match.team2 || '?'}</span></div>
-                        </div>
-                    `;
+                    const penaltyNote = match.penaltyShootout ? `Tirs au but · ${resolveCurrentClubName(match.penaltyWinner)} (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})` : '';
+                    html += buildScorebug({
+                        kind: 'cdf',
+                        handler: 'updateCDFScore',
+                        round: r,
+                        waiting: !matchReady,
+                        clubs: [dTeam1, dTeam2],
+                        note: penaltyNote,
+                        rows: [
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: team1Class !== '', num: 1, matchIdx: i, ready: matchReady },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: team2Class !== '', num: 2, matchIdx: i, ready: matchReady }
+                        ]
+                    });
                 });
                 html += '</div>';
             }
@@ -5281,7 +5884,7 @@
             if (cdfData.rounds[finalRoundIdx] && cdfData.rounds[finalRoundIdx][0] && cdfData.rounds[finalRoundIdx][0].winner) {
                 cdfData.champion = cdfData.rounds[finalRoundIdx][0].winner;
                 const championCDF = resolveCurrentClubName(cdfData.champion);
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;"><svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> Champion CDF : ${championCDF}</span></div>`;
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge cdf-final-badge--cdf"><svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> Champion CDF : ${championCDF}</span></div>`;
                 // Auto-ajouter le trophée CDF au palmarès (une seule fois par saison)
                 if (!palmaresData[championCDF]) palmaresData[championCDF] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!cdfData._trophyAwarded) {
@@ -5513,7 +6116,9 @@
             names.forEach(name => {
                 const c = clubs[name];
                 const safeName = name.replace(/['"]/g, '');
+                const intlShot = getClubTribune(name);
                 html += `<div class="ldc-intl-item">
+                    ${intlShot ? `<img class="ldc-intl-shot" src="${intlShot.card}" width="760" height="428" loading="lazy" decoding="async" alt="Tribune de ${name}">` : ''}
                     <img src="${getClubLogo(name)}" alt="${name}">
                     <span><strong>${name}</strong>${c.country ? ` <span style="opacity:0.7;">(${c.country})</span>` : ''}</span>
                     <button class="btn btn-sm" onclick="editLDCInternationalClub('${safeName}')"><i class="fas fa-pen"></i> Modifier</button>
@@ -5719,7 +6324,7 @@
                 const roundMatches = ldcData.rounds[r];
                 if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
 
-                html += `<div class="cdf-round"><div class="cdf-round-title" style="color: var(--nav-ldc-color);">🏆 ${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
+                html += `<div class="cdf-round"><div class="cdf-round-title cdf-round-title--ldc">${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
@@ -5729,19 +6334,19 @@
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})</div>` : '';
-                    html += `
-                        <div class="cdf-match-card" style="border-color: var(--nav-ldc-color);">
-                            <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
-                            <div class="cdf-score-inputs">
-                                <input type="number" min="0" value="${match.score1 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 1, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
-                                -
-                                <input type="number" min="0" value="${match.score2 ?? ''}" ${matchReady ? `onchange="updateLDCScore(${r}, ${i}, 2, this.value)"` : 'disabled title="En attente des équipes / BYE"'}>
-                            </div>
-                            ${penaltyNote}
-                            <div class="cdf-team${team2Class}"><img src="${logo2}" alt="${dTeam2 || '?'}"><span>${dTeam2 || '?'}</span></div>
-                        </div>
-                    `;
+                    const penaltyNote = match.penaltyShootout ? `Tirs au but · ${resolveCurrentClubName(match.penaltyWinner)} (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})` : '';
+                    html += buildScorebug({
+                        kind: 'ldc',
+                        handler: 'updateLDCScore',
+                        round: r,
+                        waiting: !matchReady,
+                        clubs: [dTeam1, dTeam2],
+                        note: penaltyNote,
+                        rows: [
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: team1Class !== '', num: 1, matchIdx: i, ready: matchReady },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: team2Class !== '', num: 2, matchIdx: i, ready: matchReady }
+                        ]
+                    });
                 });
                 html += '</div>';
             }
@@ -5750,12 +6355,12 @@
             const finalRoundIdx = LDC_FINAL_ROUND;
             const finalWinner = ldcData.rounds[finalRoundIdx] && ldcData.rounds[finalRoundIdx][0] && ldcData.rounds[finalRoundIdx][0].winner;
             if (finalWinner && isByeTeam(finalWinner)) {
-                html += '<div style="text-align:center; margin: 20px; opacity:0.75;"><span class="cdf-final-badge" style="font-size: 1rem; background: var(--nav-ldc-color); color: white;">Pas de vainqueur : trop peu de clubs réels pour la LDC (BYE)</span></div>';
+                html += '<div style="text-align:center; margin: 20px; opacity:0.75;"><span class="cdf-final-badge cdf-final-badge--ldc">Pas de vainqueur : trop peu de clubs réels pour la LDC (BYE)</span></div>';
             }
             if (finalWinner && !isByeTeam(finalWinner)) {
                 ldcData.champion = ldcData.rounds[finalRoundIdx][0].winner;
                 const championDisplay = resolveCurrentClubName(ldcData.champion);
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;"><svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> Champion LDC : ${championDisplay}</span></div>`;
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge cdf-final-badge--ldc"><svg class="ldc-star" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4 6.2 20.5l1.1-6.5L2.6 9.4l6.5-.9z" fill="currentColor"/></svg><svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> Champion LDC : ${championDisplay}</span></div>`;
                 if (!palmaresData[championDisplay]) palmaresData[championDisplay] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!ldcData._trophyAwarded) {
                     palmaresData[championDisplay]['LDC']++;
@@ -7048,8 +7653,9 @@
                 const tr = document.createElement('tr');
                 const rankClass = rank <= 3 ? ` rank-${rank}` : '';
                 const rankMedal = rank <= 3 ? `<span class="rank-medal">${CLASSEMENT_RANK_MEDALS[rank - 1]}</span>` : '';
+                tr.className = rank <= 3 ? `is-podium is-podium-${rank}` : '';
                 const countsHTML = CLASSEMENT_TROPHY_ORDER.map(key =>
-                    `<td class="medal-count"><span class="trophy-icon-sm">${CLASSEMENT_TROPHY_ICONS[key]}</span>${row.counts[key]}</td>`
+                    `<td class="medal-count${row.counts[key] ? '' : ' is-zero'}"><span class="trophy-icon-sm">${CLASSEMENT_TROPHY_ICONS[key]}</span>${row.counts[key]}</td>`
                 ).join('');
 
                 const displayRowName = resolveCurrentClubName(row.name);

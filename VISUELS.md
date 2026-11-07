@@ -119,3 +119,44 @@ font en CSS (cercle bordé or ou violet, bande dégradée), pour rester nets sur
 3. Produire les 10 visuels ci-dessus, puis les brancher aux emplacements indiqués.
 4. Après chaque ajout : `node cdf_format_test.js` et vérifier que le poids total des médias ne dépasse pas
    ~8 Mo.
+
+---
+
+## Habillage TV 2026 — cartes clubs et tableaux de score
+
+### Les stades intégrés aux cartes clubs
+Chaque club parodié affiche désormais son stade sur sa propre carte, dans la compétition où il évolue
+(L1, L2, L3) et dans la liste des clubs internationaux pour la LDC. Les galeries séparées ont disparu :
+l'image est rattachée au club, pas à une page.
+
+| Club | Visuel | Ligue |
+| --- | --- | --- |
+| Valenciennes FC | `stade-vafc` | L1 |
+| Toulours FC | `foule-toulours` | L1 |
+| PSG Peluches | `tifo-psg` | L1 |
+| Olympique Ours | `foule-olympique-ours` | L1 |
+| AS Carrotes | `foule-orange-blanc` | L1 |
+| AS Saint-Ettours | `stade-saint-ettours` | L2 |
+| Patapouf FC | `tifo-patapouf` | L2 |
+| Tours FC | `foule-tours` | L2 |
+| FC Poussins | `tifo-poussins` | L2 |
+| Clermandala 63 | `foule-clermandala` | L2 |
+| Oursons FC | `stade-oursons` | L3 |
+| FC Doudou | `tifo-doudou` | L3 |
+| Real Madrours | `stade-madrours` | LDC |
+| Dourstmund | `tifo-dourstmund` | LDC |
+| PopoGlimt | `tribune-popolglimt` | LDC |
+
+Chaque visuel existe en deux tailles : `*.webp` (1600 × 900, ~120–260 Ko) et `*-card.webp`
+(760 px, ~40–75 Ko) servi via `srcset` pour les cartes. Les clubs sans photo gardent une carte
+sobre : écusson sur dégradé nuit.
+
+### Tableaux de score
+Un gabarit unique (`buildScorebug`) sert les deux diffuseurs :
+
+- **Canal Plours** (LDC) : fond nuit, liseré et chiffres or, marque « + », pastille DIRECT rouge,
+  bande de stade en tête de match, ligne du qualifié surlignée.
+- **bePeluche Sports** (CDF) : dégradé violet, accents magenta, mêmes codes de lecture.
+
+Le trophée de la LDC porte désormais une **étoile** gravée en or sur la panse, reprise à côté du
+bandeau « Champion LDC ».

@@ -1316,6 +1316,14 @@
         document.addEventListener('DOMContentLoaded', async () => {
             messageArea = document.getElementById('message-area');
             ldcAudioPlayer = document.getElementById('ldc-audio-player'); 
+            if (ldcAudioPlayer) { ldcAudioPlayer.pause(); ldcAudioPlayer.currentTime = 0; }
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && ldcAudioPlayer && !ldcAudioPlayer.paused) {
+                    ldcAudioPlayer.pause();
+                    const icone = document.querySelector('#ldc-music-btn i');
+                    if (icone) { icone.classList.remove('fa-pause'); icone.classList.add('fa-play'); }
+                }
+            });
             
             document.getElementById('nouvelle-saison-ldc-btn')?.addEventListener('click', createNewLdcSeason);
             document.getElementById('sauvegarde-ldc-btn')?.addEventListener('click', () => saveLdcDataToDrive());

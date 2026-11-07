@@ -2656,6 +2656,59 @@
             .banner-coupe__trophy .trophee { --t: 3.7em; }
             .banner-coupe__trophy span { display: none; }
         }
+        /* ===== Galerie des foules en feutrine ===== */
+        .crowd-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .crowd-card {
+            position: relative;
+            margin: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #0a1020;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+        }
+
+        .crowd-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            transition: transform 0.45s ease;
+        }
+
+        .crowd-card:hover img { transform: scale(1.04); }
+
+        .crowd-card figcaption {
+            position: absolute;
+            inset: auto 0 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 34px 16px 14px;
+            color: #fff;
+            background: linear-gradient(to top, rgba(6, 10, 18, 0.92), rgba(6, 10, 18, 0.55) 55%, transparent);
+        }
+
+        .crowd-card strong {
+            font-family: "Oswald", sans-serif;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .crowd-card span {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .crowd-card img { transition: none; }
+        }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
             .cdf-bracket { gap: 10px; }
@@ -2868,6 +2921,35 @@
                 </div>
                 <div class="section-content">
                     <div class="teams-grid" id="l1-teams-grid"></div>
+                </div>
+            </div>
+            <div class="section" id="l1-foules-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-users"></i> Les foules en feutrine</h2>
+                </div>
+                <div class="section-content">
+                    <div class="crowd-gallery">
+                        <figure class="crowd-card">
+                            <img src="foule-toulours.webp" width="1600" height="900" loading="lazy" decoding="async"
+                                alt="Tribune violettes de Toulours, bannières au manchot et peluches debout sous les projecteurs">
+                            <figcaption><strong>Toulours FC</strong><span>Le stade violet des Manchots, club de 1937</span></figcaption>
+                        </figure>
+                        <figure class="crowd-card">
+                            <img src="foule-olympique-ours.webp" width="1600" height="900" loading="lazy" decoding="async"
+                                alt="Virage bleu de l’Olympique d’Ours, drapeaux à l’ours blanc et fumigènes">
+                            <figcaption><strong>Olympique d’Ours</strong><span>Les ours de Lyon, fondés en 1950</span></figcaption>
+                        </figure>
+                        <figure class="crowd-card">
+                            <img src="foule-clermandala.webp" width="1600" height="900" loading="lazy" decoding="async"
+                                alt="Tribune verte de Clermandala FC, drapeaux au petit Grogu et fumée verte">
+                            <figcaption><strong>Clermandala FC</strong><span>Le vert de Clermont, club né en 1990</span></figcaption>
+                        </figure>
+                        <figure class="crowd-card">
+                            <img src="foule-orange-blanc.webp" width="1600" height="900" loading="lazy" decoding="async"
+                                alt="Tribune orange et blanche des lapins d’AS Carottes, écharpes et banderoles">
+                            <figcaption><strong>AS Carottes Lapines</strong><span>Les lapins orange et blanc d’AS Carrotes</span></figcaption>
+                        </figure>
+                    </div>
                 </div>
             </div>
         </div>
@@ -7144,6 +7226,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
             audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2'), ldc: document.getElementById('audio-ldc') };
+
+            // Aucune musique ne doit demarrer sans un clic : pause forcee au chargement
+            Object.values(audioElements).forEach(audio => {
+                if (audio && !audio.paused) { audio.pause(); audio.currentTime = 0; }
+            });
+            // et coupure des qu on quitte la page
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) return;
+                stopAllLeagueMusic();
+                document.querySelectorAll('.league-music-btn i').forEach(icon => {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                });
+            });
 
             populateAllLeaguesUI();
             populatePalmaresTable();

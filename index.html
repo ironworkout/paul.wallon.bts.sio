@@ -3059,6 +3059,12 @@
     <!-- LDC -->
     <div class="tab-content ldc-content" id="ldc-content">
         <div class="container">
+            <div class="section action-buttons">
+                <button class="league-music-btn" data-league-audio="ldc"
+                    aria-label="Jouer/Mettre en pause l'hymne de la Ligue des Champions">
+                    <i class="fas fa-play"></i> Hymne LDC
+                </button>
+            </div>
             <figure class="banner-coupe banner-coupe--ldc">
                 <span class="banner-coupe__grain" aria-hidden="true"></span>
                 <div class="banner-coupe__brand">
@@ -3463,6 +3469,7 @@
 
     <audio id="audio-l1" src="ligue1.mp3" loop preload="none"></audio>
     <audio id="audio-l2" src="ligue2.mp3" loop preload="none"></audio>
+    <audio id="audio-ldc" src="ldc.mp3" loop preload="none"></audio>
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
@@ -7006,6 +7013,7 @@
             let audioToPlay = null;
             if (leagueId === 'ligue1' && audioElements.l1) audioToPlay = audioElements.l1;
             else if (leagueId === 'ligue2' && audioElements.l2) audioToPlay = audioElements.l2;
+            else if (leagueId === 'ldc' && audioElements.ldc) audioToPlay = audioElements.ldc;
 
             if (audioToPlay) {
                 currentPlayingAudio = audioToPlay;
@@ -7135,7 +7143,7 @@
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2') };
+            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2'), ldc: document.getElementById('audio-ldc') };
 
             populateAllLeaguesUI();
             populatePalmaresTable();

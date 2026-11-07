@@ -2400,6 +2400,90 @@
         .classement-table th .trophee { --t: 1.55em; vertical-align: -0.42em; margin-left: 4px; }
         .cdf-final-badge .trophee { --t: 1.25em; vertical-align: -0.28em; margin-right: 5px; }
         .trophee--grand { --t: 3.6em; margin-right: 8px; }
+        /* ===== Bandeaux visuels des coupes (photos existantes + trophée réel) ===== */
+        .banner-coupe {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 0 0 24px;
+            min-height: 215px;
+            padding: 24px 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            isolation: isolate;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .banner-coupe img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .banner-coupe::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(90deg, rgba(16, 28, 58, 0.95) 0%, rgba(16, 28, 58, 0.72) 55%, rgba(16, 28, 58, 0.28) 100%);
+        }
+
+        .banner-coupe--cdf::after {
+            background: linear-gradient(90deg, rgba(91, 42, 134, 0.95) 0%, rgba(199, 36, 177, 0.6) 58%, rgba(199, 36, 177, 0.22) 100%);
+        }
+
+        .banner-coupe figcaption {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            max-width: 62%;
+            color: #fff;
+        }
+
+        .banner-coupe__kicker {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #d4af37;
+        }
+
+        .banner-coupe--cdf .banner-coupe__kicker { color: #ffd2f5; }
+
+        .banner-coupe figcaption strong {
+            font-family: "Oswald", sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.02em;
+            line-height: 1.15;
+        }
+
+        .banner-coupe figcaption span:last-child { font-size: 0.9rem; opacity: 0.92; }
+        .banner-coupe__trophee { --t: 7em; flex: none; align-self: center; }
+
+        .carousel-item::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 45%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .carousel-item img { background: #101c3a; }
+
+        @media (max-width: 768px) {
+            .banner-coupe { min-height: 150px; padding: 16px 18px; }
+            .banner-coupe figcaption { max-width: 100%; }
+            .banner-coupe figcaption strong { font-size: 1.15rem; }
+            .banner-coupe__trophee { --t: 4em; }
+        }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
             .cdf-bracket { gap: 10px; }
@@ -2472,7 +2556,7 @@
     <header>
         <div class="container header-container">
             <a href="#" data-tab-link="ligue1" class="logo nav-link">
-                <img src="OIP.png" loading="lazy" decoding="async"
+                <img width="360" height="360" src="OIP.png" loading="lazy" decoding="async"
                     alt="Logo Campeonato Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
@@ -2517,7 +2601,7 @@
             <div class="carousel" id="accueil-section-l1">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="teddy-crowd.webp" loading="lazy" decoding="async"
+                        <img width="1536" height="1024" src="teddy-crowd.webp" loading="eager" fetchpriority="high" decoding="async"
                             alt="Ambiance stade L1">
                         <div class="carousel-caption">
                             <h2>UNE AMBIANCE INCROYABLE EN TRIBUNES !</h2>
@@ -2526,7 +2610,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="peluches-celebration.webp" loading="lazy" decoding="async"
+                        <img width="1536" height="1024" src="peluches-celebration.webp" loading="lazy" decoding="async"
                             alt="Célébration de but en L1">
                         <div class="carousel-caption">
                             <h2>BUTS ET ÉMOTIONS GARANTIS !</h2>
@@ -2535,11 +2619,11 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="vafc.png" loading="lazy" decoding="async"
-                            alt="Action de jeu Valenciennes FC">
+                        <img src="valenciennes-supporters.webp" width="1536" height="1024" loading="lazy" decoding="async"
+                            alt="Supporters de Valenciennes en feutrine dans les tribunes">
                         <div class="carousel-caption" data-club="Valenciennes FC">
-                            <h2>VALENCIENNES FC : LES GUERRIERS DU NORD !</h2>
-                            <p>Suivez les exploits des héros locaux en Ligue 1.</p><a href="#l1-teams-section"
+                            <h2>VALENCIENNES FC : LES ATHÉNIENS !</h2>
+                            <p>Fondé en 1913, le club du Hainaut et ses supporters en feutrine.</p><a href="#l1-teams-section"
                                 class="btn">Découvrir les Équipes</a>
                         </div>
                     </div>
@@ -2629,7 +2713,7 @@
             </div>
             <div class="carousel" id="accueil-section-l2">
                 <div class="carousel-inner">
-                    <div class="carousel-item active"><img
+                    <div class="carousel-item active"><img width="1536" height="1024"
                             src="tifo-peluches.webp" alt="Ambiance L2" loading="lazy" decoding="async">
                         <div class="carousel-caption">
                             <h2>LIGUE 2 DES OURS : LA FORGE DES CHAMPIONS !</h2>
@@ -2637,7 +2721,7 @@
                                 href="#l2-fixtures-section" class="btn">Calendrier L2</a>
                         </div>
                     </div>
-                    <div class="carousel-item"><img
+                    <div class="carousel-item"><img width="1536" height="1024"
                             src="peluches-bras-dessus-bras-dessous.webp" loading="lazy" decoding="async"
                             alt="Equipes L2">
                         <div class="carousel-caption">
@@ -2646,7 +2730,7 @@
                                 class="btn">Nos Clubs L2</a>
                         </div>
                     </div>
-                    <div class="carousel-item"><img
+                    <div class="carousel-item"><img width="1536" height="1024"
                             src="rabbit-goalkeeper.webp" loading="lazy" decoding="async"
                             alt="Gardien Lapin en action">
                         <div class="carousel-caption">
@@ -2804,6 +2888,17 @@
     <!-- LDC -->
     <div class="tab-content ldc-content" id="ldc-content">
         <div class="container">
+            <figure class="banner-coupe banner-coupe--ldc">
+                <img src="teddy-crowd.webp" width="1536" height="1024" loading="lazy" decoding="async"
+                    alt="Tribune de peluches sous les projecteurs">
+                <figcaption>
+                    <span class="banner-coupe__kicker">Coupe aux grandes oreilles · compétition née en 1955</span>
+                    <strong>73,5 cm d’argent massif</strong>
+                    <span>Deux anses démesurées : le trophée que toutes les peluches rêvent de soulever.</span>
+                </figcaption>
+                <svg class="trophee trophee--ldc banner-coupe__trophee" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>
+            </figure>
+
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title"
@@ -2843,6 +2938,17 @@
     <!-- CDF - COUPE DE FRANCE -->
     <div class="tab-content cdf-content" id="cdf-content">
         <div class="container">
+            <figure class="banner-coupe banner-coupe--cdf">
+                <img src="tifo-peluches.webp" width="1536" height="1024" loading="lazy" decoding="async"
+                    alt="Tifo de peluches dans les tribunes">
+                <figcaption>
+                    <span class="banner-coupe__kicker">Coupe Charles-Simon · créée en 1917</span>
+                    <strong>3,2 kg d’argent ciselé</strong>
+                    <span>Sur socle de marbre blanc : la coupe des surprises et des petits qui renversent les grands.</span>
+                </figcaption>
+                <svg class="trophee trophee--cdf banner-coupe__trophee" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>
+            </figure>
+
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title"
@@ -3332,24 +3438,24 @@
         const initialLeagueData = {
             'l1': {
                 teams: {
-                    "Valenciennes FC": { "logo": "vafc.png", "description": "Les Guerriers du Nord." },
-                    "Toulours FC": { "logo": "tfc.png", "description": "La Fierté des Pingouins." },
-                    "Peluche FC": { "logo": "pfc.png", "description": "Les Titans de la Capitale." },
-                    "PSG Peluches": { "logo": "psg.png", "description": "L'Élégance Parisienne." },
-                    "Olympique Ours": { "logo": "oo.png", "description": "La Griffe Lyonnaise." },
-                    "AS Carrotes": { "logo": "ascl.png", "description": "Les Flèches Vertes." }
+                    "Valenciennes FC": { "logo": "vafc.png", "description": "Les Athéniens, fondés en 1913, au Stade du Hainaut." },
+                    "Toulours FC": { "logo": "tfc.png", "description": "Les pingouins du Toulours, club de 1937." },
+                    "Peluche FC": { "logo": "pfc.png", "description": "Le Paris FC : la capitale depuis 1969, au Stade Charléty." },
+                    "PSG Peluches": { "logo": "psg.png", "description": "Bleu et rouge depuis 1970, au Parc des Princes." },
+                    "Olympique Ours": { "logo": "oo.png", "description": "Les Gones de Lyon, club fondé en 1950." },
+                    "AS Carrotes": { "logo": "ascl.png", "description": "Oreilles hautes et carottes en tribune." }
                 },
                 seasons: [], active_season_id: null, fileId: null, filename: 'peluches_l1_data.json',
                 teamsGridId: 'l1-teams-grid', fixtureBodyId: 'l1-fixtures-body', standingsBodyId: 'l1-standings-body'
             },
             'l2': {
                 teams: {
-                    "AS Saint-Ettours": { "logo": "asset.png", "description": "Ferveur Légendaire." },
-                    "Patapouf FC": { "logo": "patapouf.png", "description": "Puissance Éléphantesque." },
-                    "Tours FC": { "logo": "tours.png", "description": "Les Rois du Château." },
-                    "USL Abeille": { "logo": "usla.png", "description": "Le Dard Offensif." },
-                    "Clermandala 63": { "logo": "clermandala.png", "description": "Magie Auvergnate." },
-                    "FC Poussins": { "logo": "fcp.png", "description": "L'Avenir en Marche." }
+                    "AS Saint-Ettours": { "logo": "asset.png", "description": "Les Verts : 1933, dix titres, le Chaudron." },
+                    "Patapouf FC": { "logo": "patapouf.png", "description": "La puissance éléphantesque." },
+                    "Tours FC": { "logo": "tours.png", "description": "Les Ciel et Noir, à la Vallée du Cher." },
+                    "USL Abeille": { "logo": "usla.png", "description": "Le dard offensif de la ruche." },
+                    "Clermandala 63": { "logo": "clermandala.png", "description": "Le Clermont Foot 63, né en 1990, à Gabriel-Montpied." },
+                    "FC Poussins": { "logo": "fcp.png", "description": "Les Canaris : jaune et vert depuis 1943." }
                 },
                 seasons: [], active_season_id: null, fileId: null, filename: 'peluches_l2_data.json',
                 teamsGridId: 'l2-teams-grid', fixtureBodyId: 'l2-fixtures-body', standingsBodyId: 'l2-standings-body'

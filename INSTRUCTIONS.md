@@ -71,8 +71,9 @@ node cdf_format_test.js
 
 Doit finir par **`RESULTAT: 122 reussis, 0 echecs`** (référence du 7 nov. 2026).
 À relancer après **toute** modification touchant CDF, LDC, classement, palmarès, saisons, logos ou le
-moteur de match. Le test charge `index.html` et l'exécute dans un contexte simulé : `googleAccessToken`
-reste `null`, donc **aucune écriture Drive** ne doit être déclenchée.
+moteur de match. Le test charge `index.html` et l'exécute dans un contexte simulé : il fournit
+`googleAccessToken = 'fake-token'` mais **aucun `fetch`**, donc les appels Drive échouent silencieusement
+et ne doivent jamais toucher le vrai Drive.
 
 Ne jamais « faire passer » un test en l'affaiblissant : si une assertion casse, c'est le code qu'on corrige.
 
@@ -109,7 +110,8 @@ Ne jamais « faire passer » un test en l'affaiblissant : si une assertion casse
   (`getSeasonTeamUniverse`), jamais sur l'effectif actuel.
 - Demie CDF = 1 match à **3 clubs** ; la finale se construit dès la saisie du 3e score.
 - CDF : 12 clubs réels, aucun BYE ; LDC : complétée à 32 avec BYE résolus automatiquement.
-- Drive : ne jamais déclencher d'écriture Drive pendant les tests (`googleAccessToken = null`).
+- Drive : le sandbox de test fournit `googleAccessToken = 'fake-token'` sans `fetch` : ne jamais compter
+  sur un succès Drive pendant les tests, et ne jamais déclencher d'écriture vers le vrai compte.
 - Un match à égalité en CDF/LDC est aujourd'hui départagé **aléatoirement** (idée 1 de la feuille de route).
 - Certaines cartes (`.cdf-match-card`, `.add-club-form`) ont des couleurs codées en dur (blanc, `#f8f9fa`,
   `#f1f3f5`) : à convertir avant, ou pendant, la mise en place du mode sombre.

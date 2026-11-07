@@ -2345,13 +2345,25 @@
             }
         }
     </style>
+    <style>
+        /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
+        @media (max-width: 768px) {
+            .cdf-bracket { gap: 10px; }
+            .table-container { -webkit-overflow-scrolling: touch; }
+            .classement-table { font-size: 0.78rem; }
+            .classement-table th,
+            .classement-table td { padding: 6px 4px; }
+            .modal-overlay { padding: 10px; }
+            .modal-content { padding: 18px; max-height: 88vh; overflow-y: auto; }
+        }
+    </style>
 </head>
 
 <body>
     <header>
         <div class="container header-container">
             <a href="#" data-tab-link="ligue1" class="logo nav-link">
-                <img src="https://ironworkout.github.io/paul.wallon.bts.sio/OIP.png"
+                <img src="OIP.png" loading="lazy" decoding="async"
                     alt="Logo Campeonato Peluches Élite">
                 <h1>Peluche Élite</h1>
             </a>
@@ -2396,7 +2408,7 @@
             <div class="carousel" id="accueil-section-l1">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/teddy-crowd.png"
+                        <img src="teddy-crowd.png" loading="lazy" decoding="async"
                             alt="Ambiance stade L1">
                         <div class="carousel-caption">
                             <h2>UNE AMBIANCE INCROYABLE EN TRIBUNES !</h2>
@@ -2405,7 +2417,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-celebration.png"
+                        <img src="peluches-celebration.png" loading="lazy" decoding="async"
                             alt="Célébration de but en L1">
                         <div class="carousel-caption">
                             <h2>BUTS ET ÉMOTIONS GARANTIS !</h2>
@@ -2414,7 +2426,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="https://ironworkout.github.io/paul.wallon.bts.sio/vafc.png"
+                        <img src="vafc.png" loading="lazy" decoding="async"
                             alt="Action de jeu Valenciennes FC">
                         <div class="carousel-caption" data-club="Valenciennes FC">
                             <h2>VALENCIENNES FC : LES GUERRIERS DU NORD !</h2>
@@ -2509,7 +2521,7 @@
             <div class="carousel" id="accueil-section-l2">
                 <div class="carousel-inner">
                     <div class="carousel-item active"><img
-                            src="https://ironworkout.github.io/paul.wallon.bts.sio/tifo-peluches.png" alt="Ambiance L2">
+                            src="tifo-peluches.png" alt="Ambiance L2" loading="lazy" decoding="async">
                         <div class="carousel-caption">
                             <h2>LIGUE 2 DES OURS : LA FORGE DES CHAMPIONS !</h2>
                             <p>Ici naissent les futures légendes du football rémunbourré.</p><a
@@ -2517,7 +2529,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"><img
-                            src="https://ironworkout.github.io/paul.wallon.bts.sio/peluches-bras-dessus-bras-dessous.png"
+                            src="peluches-bras-dessus-bras-dessous.png" loading="lazy" decoding="async"
                             alt="Equipes L2">
                         <div class="carousel-caption">
                             <h2>L'ESPRIT D'ÉQUIPE AVANT TOUT !</h2>
@@ -2526,7 +2538,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"><img
-                            src="https://ironworkout.github.io/paul.wallon.bts.sio/rabbit-goalkeeper.png"
+                            src="rabbit-goalkeeper.png" loading="lazy" decoding="async"
                             alt="Gardien Lapin en action">
                         <div class="carousel-caption">
                             <h2>DES ARRÊTS SPECTACULAIRES !</h2>
@@ -2769,7 +2781,7 @@
                     <h3><i class="fas fa-trophy"></i> Barrage LDC - 2e L2 vs 5e L1</h3>
                     <div class="barrage-teams">
                         <div class="barrage-team" id="barrage-team2-l2">
-                            <img src="https://ironworkout.github.io/paul.wallon.bts.sio/default_logo.png" alt="2e L2">
+                            <img src="default_logo.png" loading="lazy" decoding="async" alt="2e L2">
                             <span>2e L2</span>
                         </div>
                         <div class="barrage-score-section">
@@ -2791,7 +2803,7 @@
                             </div>
                         </div>
                         <div class="barrage-team" id="barrage-team5-l1">
-                            <img src="https://ironworkout.github.io/paul.wallon.bts.sio/default_logo.png" alt="5e L1">
+                            <img src="default_logo.png" loading="lazy" decoding="async" alt="5e L1">
                             <span>5e L1</span>
                         </div>
                     </div>
@@ -3047,13 +3059,39 @@
 
     <div id="message-area" class="message-area" role="status" aria-live="polite"></div>
 
-    <audio id="audio-l1" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue1.mp3" loop preload="auto"></audio>
-    <audio id="audio-l2" src="https://ironworkout.github.io/paul.wallon.bts.sio/ligue2.mp3" loop preload="auto"></audio>
+    <audio id="audio-l1" src="ligue1.mp3" loop preload="none"></audio>
+    <audio id="audio-l2" src="ligue2.mp3" loop preload="none"></audio>
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
         const GOOGLE_DRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file';
         const BASE_URL = "https://ironworkout.github.io/paul.wallon.bts.sio/";
+        // Journal Drive : silencieux par défaut, passer à true pour diagnostiquer.
+        const DRIVE_DEBUG = false;
+        function driveLog(...args) { if (DRIVE_DEBUG) console.log(...args); }
+
+        // --- Modales accessibles : dialogue ARIA, focus rendu à la fermeture, fermeture par Échap ---
+        let lastFocusedElement = null;
+        function openModalAccessible(modal) {
+            if (!modal) return;
+            lastFocusedElement = document.activeElement;
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.classList.add('active');
+            const focusable = modal.querySelector('button, input, select, textarea, a[href]');
+            if (focusable && typeof focusable.focus === 'function') focusable.focus();
+        }
+        function closeModalAccessible(modal) {
+            if (!modal) return;
+            modal.classList.remove('active');
+            if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+            lastFocusedElement = null;
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            const opened = document.querySelector('.modal-overlay.active');
+            if (opened) closeModalAccessible(opened);
+        });
         const GIS_CHECK_INTERVAL = 100;
         const GIS_MAX_RETRIES = 50;
 
@@ -3124,7 +3162,7 @@
         window.removeSelectedCatalogLogo = function (selectId) {
             const select = document.getElementById(selectId);
             if (!select || !select.value) {
-                alert("Selectionnez d'abord un logo dans la liste pour le retirer.");
+                showMessage("Sélectionnez d'abord un logo dans la liste pour le retirer.", 3500, true);
                 return;
             }
             const removed = getRemovedCatalogLogos();
@@ -3397,15 +3435,15 @@
                 const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
                 if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
                 const searchData = await searchRes.json();
-                if (searchData.files && searchData.files.length > 0) { console.log(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
-                console.log(`Fichier Drive '${filename}' non trouvé. Création...`);
+                if (searchData.files && searchData.files.length > 0) { driveLog(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
+                driveLog(`Fichier Drive '${filename}' non trouvé. Création...`);
                 const createUrl = `https://www.googleapis.com/drive/v3/files`;
                 const metadata = { name: filename, mimeType: mimeType };
                 const createRes = await fetch(createUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
                 if (!createRes.ok) { console.error(`Erreur ${createRes.status} lors de la création du fichier ${filename}.`); return null; }
                 const createData = await createRes.json();
                 const newFileId = createData.id;
-                console.log(`Fichier Drive '${filename}' créé avec ID: ${newFileId}.`);
+                driveLog(`Fichier Drive '${filename}' créé avec ID: ${newFileId}.`);
                 const writeSuccess = await updateFileContent(newFileId, defaultContentStr);
                 return writeSuccess ? newFileId : null;
             } catch (error) { console.error(`Exception dans findOrCreateFile pour ${filename}:`, error); showMessage(`Erreur Drive gestion fichier ${filename}.`, 5000, true); return null; }
@@ -3416,8 +3454,8 @@
             const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!response.ok) { if (response.status === 404) { console.log(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
-                console.log(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
+                if (!response.ok) { if (response.status === 404) { driveLog(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
+                driveLog(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
             } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
         }
 
@@ -3435,7 +3473,7 @@
             try {
                 const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
                 if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
-                else { console.log(`Écriture réussie ID ${fileId}.`); success = true; }
+                else { driveLog(`Écriture réussie ID ${fileId}.`); success = true; }
             } catch (error) { console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error); showMessage(`Erreur sauvegarde Drive.`, 5000, true); if (driveStatusElement && driveStatusTextElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; } }
             finally { isSavingDriveData = false; if (driveStatusElement && driveStatusTextElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success'; } updateAuthUI(!!googleAccessToken); }
             return success;
@@ -3448,7 +3486,7 @@
             for (const leagueId of ['l1', 'l2', 'l3']) {
                 const ref = leagueDataStore[leagueId];
                 if (!ref) continue;
-                console.log(`Chargement ${leagueId.toUpperCase()} depuis Drive...`);
+                driveLog(`Chargement ${leagueId.toUpperCase()} depuis Drive...`);
                 ref.fileId = await findOrCreateFile(ref.filename, JSON.stringify(initialLeagueData[leagueId]));
                 if (ref.fileId) {
                     const content = await readFileContent(ref.fileId);
@@ -3457,7 +3495,7 @@
                             const parsedData = JSON.parse(content);
                             if (parsedData) {
                                 leagueDataStore[leagueId] = parsedData;
-                                console.log(`Données ${leagueId.toUpperCase()} chargées.`);
+                                driveLog(`Données ${leagueId.toUpperCase()} chargées.`);
                             }
                         } catch (e) {
                             console.error(`Erreur parsing ${leagueId}:`, e);
@@ -3562,7 +3600,7 @@
                 await saveBarragesToDrive();
             }
 
-            console.log("Toutes les données chargées depuis Drive.");
+            driveLog("Toutes les données chargées depuis Drive.");
         }
 
         async function saveDataToDrive(leagueId) {
@@ -4653,7 +4691,7 @@
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     // Un match n'est saisissable que si les 2 équipes sont connues et qu'aucune n'est un BYE (déjà tranché au tirage)
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but</div>` : '';
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-cdf-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})</div>` : '';
                     html += `
                         <div class="cdf-match-card">
                             <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
@@ -4693,7 +4731,7 @@
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(championCDF)}" alt="${championCDF}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
                             <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${championCDF} remporte la Coupe de France !</h3>
-                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
             }
@@ -4761,6 +4799,21 @@
         }
 
         // Demies (1 match à 3 clubs) : les 2 clubs avec le plus de buts vont en finale
+        function simulatePenaltyShootout(teamA, teamB) {
+            // Séance de tirs au but : 5 tirs par équipe, puis mort subite.
+            let scoreA = 0, scoreB = 0;
+            const marque = () => Math.random() < 0.75;
+            for (let i = 0; i < 5; i++) {
+                if (marque()) scoreA++;
+                if (marque()) scoreB++;
+            }
+            while (scoreA === scoreB) {
+                if (marque()) scoreA++;
+                if (marque()) scoreB++;
+            }
+            return { winner: scoreA > scoreB ? teamA : teamB, score1: scoreA, score2: scoreB };
+        }
+
         function resolveCDFDemies() {
             const demie = cdfData.rounds[2] && cdfData.rounds[2][0];
             if (!demie || !demie.team3) return;
@@ -4774,8 +4827,8 @@
                 { t: demie.team2, g: demie.score2 },
                 { t: demie.team3, g: demie.score3 }
             ];
-            // Tri par buts marqués (décroissant), départage aléatoire en cas d'égalité
-            const ranked = entries.sort((a, b) => b.g - a.g || Math.random() - 0.5).map(e => e.t);
+            // Tri par buts marqués (décroissant) ; égalité parfaite = ordre du tirage conservé (pas de hasard)
+            const ranked = entries.sort((a, b) => b.g - a.g).map(e => e.t);
             if (ranked.length < 2) return;
 
             demie.finalists = [ranked[0], ranked[1]];
@@ -4811,11 +4864,14 @@
                 else if (match.score1 > match.score2) winner = match.team1;
                 else if (match.score2 > match.score1) winner = match.team2;
                 else {
-                    // Égalité : séance de tirs au but pour départager
-                    winner = Math.random() < 0.5 ? match.team1 : match.team2;
+                    // Égalité : séance de tirs au but simulée (5 tirs par équipe puis mort subite)
+                    const seance = simulatePenaltyShootout(match.team1, match.team2);
+                    winner = seance.winner;
                     match.penaltyWinner = winner;
                     match.penaltyShootout = true;
-                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${winner} l'emporte aux tirs au but !`, 3500);
+                    match.penaltyScore1 = seance.score1;
+                    match.penaltyScore2 = seance.score2;
+                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${resolveCurrentClubName(winner)} l'emporte ${seance.score1}-${seance.score2} aux tirs au but !`, 4000);
                 }
 
                 match.winner = winner;
@@ -5105,7 +5161,7 @@
                     const team1Class = match.winner === match.team1 ? ' winner' : '';
                     const team2Class = match.winner === match.team2 ? ' winner' : '';
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
-                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but</div>` : '';
+                    const penaltyNote = match.penaltyShootout ? `<div style="font-size:0.7rem; color:var(--nav-ldc-color); font-weight:bold;">⚽ ${resolveCurrentClubName(match.penaltyWinner)} aux tirs au but (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})</div>` : '';
                     html += `
                         <div class="cdf-match-card" style="border-color: var(--nav-ldc-color);">
                             <div class="cdf-team${team1Class}"><img src="${logo1}" alt="${dTeam1 || '?'}"><span>${dTeam1 || '?'}</span></div>
@@ -5148,7 +5204,7 @@
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(ldcData.champion)}" alt="${ldcData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
                             <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${ldcData.champion} remporte la Ligue des Champions des Peluches !</h3>
-                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
             }
@@ -5205,10 +5261,14 @@
                 else if (match.score1 > match.score2) winner = match.team1;
                 else if (match.score2 > match.score1) winner = match.team2;
                 else {
-                    winner = Math.random() < 0.5 ? match.team1 : match.team2;
+                    // Égalité : séance de tirs au but simulée (5 tirs par équipe puis mort subite)
+                    const seance = simulatePenaltyShootout(match.team1, match.team2);
+                    winner = seance.winner;
                     match.penaltyWinner = winner;
                     match.penaltyShootout = true;
-                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${winner} l'emporte aux tirs au but !`, 3500);
+                    match.penaltyScore1 = seance.score1;
+                    match.penaltyScore2 = seance.score2;
+                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${resolveCurrentClubName(winner)} l'emporte ${seance.score1}-${seance.score2} aux tirs au but !`, 4000);
                 }
                 match.winner = winner;
                 advanceLDCWinner(round, matchIdx, winner);
@@ -5703,7 +5763,7 @@
             document.getElementById('swap-league-select').value = leagueId;
             populateGithubLogoSelect('swap-club-logo-catalog', 'swap-logo-preview');
             onSwapLeagueChange();
-            modal.classList.add('active');
+            openModalAccessible(modal);
         }
         window.openSwapClubModal = openSwapClubModal;
 
@@ -6438,6 +6498,28 @@
         // ==================== NAVIGATION ====================
         const allNavLinks = document.querySelectorAll('header nav ul li a');
         const tabContents = document.querySelectorAll('.tab-content');
+
+        // --- Accessibilité des onglets : rôles ARIA + navigation au clavier ---
+        const tabLinks = [...allNavLinks].filter(l => l.hasAttribute('data-tab-link'));
+        tabLinks.forEach(l => {
+            l.setAttribute('role', 'tab');
+            l.setAttribute('aria-selected', l.classList.contains('tab-active') ? 'true' : 'false');
+            l.tabIndex = l.classList.contains('tab-active') ? 0 : -1;
+        });
+        tabContents.forEach(c => {
+            c.setAttribute('role', 'tabpanel');
+            c.setAttribute('aria-hidden', c.classList.contains('active') ? 'false' : 'true');
+        });
+        tabLinks.forEach((link, idx) => {
+            link.addEventListener('keydown', (e) => {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                e.preventDefault();
+                const step = e.key === 'ArrowRight' ? 1 : -1;
+                const next = tabLinks[(idx + step + tabLinks.length) % tabLinks.length];
+                next.focus();
+                setActiveTab(next.dataset.tabLink);
+            });
+        });
         const observer = new IntersectionObserver((entries, obs) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; obs.unobserve(entry.target); } }); }, { threshold: 0.05 });
 
         function observeActiveTabSections() {
@@ -6450,12 +6532,18 @@
                 if (l.dataset.tabLink === tabId) {
                     l.classList.add('active-nav-link', 'tab-active');
                 }
+                if (l.hasAttribute('data-tab-link')) {
+                    const selected = l.dataset.tabLink === tabId;
+                    l.setAttribute('aria-selected', selected ? 'true' : 'false');
+                    l.tabIndex = selected ? 0 : -1;
+                }
             });
 
-            tabContents.forEach(c => c.classList.remove('active'));
+            tabContents.forEach(c => { c.classList.remove('active'); c.setAttribute('aria-hidden', 'true'); });
             const targetContent = document.getElementById(`${tabId}-content`);
             if (targetContent) {
                 targetContent.classList.add('active');
+                targetContent.setAttribute('aria-hidden', 'false');
             }
 
             observeActiveTabSections();
@@ -6696,7 +6784,7 @@
                 }
                 populateGithubLogoSelect('modal-github-logo-select', 'modal-logo-preview');
                 if (modalLogoPreview) { modalLogoPreview.style.display = 'none'; modalLogoPreview.src = ''; }
-                if (logoModal) logoModal.classList.add('active');
+                if (logoModal) openModalAccessible(logoModal);
             }
             window.openLogoModal = openLogoModal;
 
@@ -6778,7 +6866,7 @@
             const signInBtn = document.getElementById('signin-button');
             if (signInBtn) signInBtn.addEventListener('click', handleAuthClick);
 
-            console.log("Championnat Peluches Élite V3 Initialisé.");
+            driveLog("Championnat Peluches Élite V3 Initialisé.");
         });
     </script>
 </body>

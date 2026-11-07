@@ -14,9 +14,11 @@ Une case ne se coche que si l'idée est réellement implémentée **et** vérifi
 Actuellement, un match à égalité est départagé par tirs au but *aléatoires*.
 - **Idée** : ajouter un mini-écran « Prolongations + Tirs au but » avec des boutons (ex. tir de chaque équipe, penalty raté/réussi).
 - **Effort** : moyen · **Impact** : ⭐⭐⭐⭐⭐ (le suspense du jeu !)
-- [ ] **Statut (7 nov. 2026)** : non fait. L'égalité est encore tranchée par `Math.random()` (CDF et LDC) ;
-  seule la compétition est enregistrée (`match.penaltyShootout` / `match.penaltyWinner`). Les barrages
-  affichent déjà « Égalité ! Ajoutez les prolongations. » : c'est le modèle à généraliser.
+- [ ] **Statut (7 nov. 2026)** : partiel. Le pile ou face est remplacé par une **séance de tirs au but simulée**
+  (`simulatePenaltyShootout` : 5 tirs par équipe puis mort subite), avec un score réel enregistré
+  (`penaltyScore1` / `penaltyScore2`) et affiché sur la carte (« aux tirs au but (4-3) »).
+  La demie CDF à 3 clubs n'est plus départagée au hasard non plus (ordre du tirage conservé à égalité parfaite).
+  Reste à faire : le mini-écran interactif « tir par tir » (le modèle existe dans les barrages).
 
 ### 2. Statistiques de saison par club (meilleur buteur, passeurs)
 - **Idée** : pour chaque match saisi, demander les buteurs et ajouter un classement des buteurs dans chaque ligue (comme un Soulier d'Or des Peluches).
@@ -73,8 +75,9 @@ Il y a des hymnes pour L1 et L2 (`ligue1.mp3`, `ligue2.mp3`) ; l'hymne L3 a ét�
 
 ### 12. Page mobile : défilement horizontal du tableau CDF
 Vérifier que le bracket CDF/LDC (qui utilise `overflow-x: auto`) soit bien utilisable sur téléphone (déjà stylé, à tester).
-- [ ] **Statut (7 nov. 2026)** : aucun code à écrire, `overflow-x: auto` est bien présent sur les
-  conteneurs de bracket ; il reste seulement à vérifier le rendu sur un vrai téléphone.
+- [ ] **Statut (7 nov. 2026)** : des ajustements mobiles ont été ajoutés (bloc `@media (max-width: 768px)` :
+  bracket plus compact, tableaux de classement en 0,78 rem, modales scrollables à 88 vh) ;
+  il reste à valider le rendu sur un vrai tél.
 
 ---
 

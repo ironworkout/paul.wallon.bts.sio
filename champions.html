@@ -394,6 +394,81 @@
     </style>
 </head>
 <body>
+    <!-- ===== Sprite : trophées réels (LDC = coupe aux grandes oreilles 73,5 cm ; CDF = coupe Charles-Simon 3,2 kg) ===== -->
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+        <defs>
+            <linearGradient id="troph-argent" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6e7b88"/><stop offset="14%" stop-color="#dbe4ec"/>
+                <stop offset="30%" stop-color="#ffffff"/><stop offset="48%" stop-color="#aebbc7"/>
+                <stop offset="66%" stop-color="#f4f8fb"/><stop offset="86%" stop-color="#b3c0cb"/>
+                <stop offset="100%" stop-color="#6a7683"/>
+            </linearGradient>
+            <linearGradient id="troph-argent-v" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/><stop offset="35%" stop-color="#cfd9e2"/>
+                <stop offset="70%" stop-color="#9dabb8"/><stop offset="100%" stop-color="#77848f"/>
+            </linearGradient>
+            <linearGradient id="troph-creux" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#39434d"/><stop offset="55%" stop-color="#66727e"/>
+                <stop offset="100%" stop-color="#a8b5c0"/>
+            </linearGradient>
+            <linearGradient id="troph-marbre" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#cfcdc6"/><stop offset="22%" stop-color="#fbfaf6"/>
+                <stop offset="46%" stop-color="#e4e2da"/><stop offset="68%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#c9c6bd"/>
+            </linearGradient>
+            <linearGradient id="troph-socle" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#3a434d"/><stop offset="45%" stop-color="#222a32"/>
+                <stop offset="100%" stop-color="#12171c"/>
+            </linearGradient>
+        </defs>
+
+        <!-- LIGUE DES CHAMPIONS : argent massif, 73,5 cm, anses en « grandes oreilles », pied et socle -->
+        <symbol id="trophee-ldc" viewBox="4 46 112 151">
+            <path d="M33 60C18 58 5 72 5 94C5 117 20 134 48 136L48 127C26 125 14 112 14 94C14 78 23 69 35 70Z" fill="url(#troph-argent)"/>
+            <path d="M87 60C102 58 115 72 115 94C115 117 100 134 72 136L72 127C94 125 106 112 106 94C106 78 97 69 85 70Z" fill="url(#troph-argent)"/>
+            <path d="M34 54C30 76 33 98 44 112C50 120 50 138 46 150C43 160 44 170 50 174L70 174C76 170 77 160 74 150C70 138 70 120 76 112C87 98 90 76 86 54Z" fill="url(#troph-argent)"/>
+            <ellipse cx="60" cy="54" rx="26" ry="7" fill="url(#troph-argent-v)" stroke="#5f6c78" stroke-width="1.1"/>
+            <ellipse cx="60" cy="53" rx="21" ry="4.6" fill="url(#troph-creux)"/>
+            <ellipse cx="50" cy="104" rx="5" ry="30" fill="#ffffff" opacity="0.32"/>
+            <path d="M44 86a16 16 0 0 1 32 0" fill="none" stroke="#5f6c78" stroke-width="0.8" opacity="0.45"/>
+            <path d="M49 176h22l-3 16a4 4 0 0 1-4 3H56a4 4 0 0 1-4-3Z" fill="url(#troph-socle)"/>
+            <rect x="47" y="172" width="26" height="4" rx="1" fill="url(#troph-argent)"/>
+        </symbol>
+
+        <!-- COUPE DE FRANCE : coupe Charles-Simon, argent ciselé sur socle de marbre blanc des Pyrénées -->
+        <symbol id="trophee-cdf" viewBox="2 85 116 113">
+            <path d="M16 92C5 92 1 102 3 111C5 120 12 124 22 124L22 116C15 116 11 112 11 106C11 100 14 98 17 98Z" fill="url(#troph-argent)"/>
+            <path d="M104 92C115 92 119 102 117 111C115 120 108 124 98 124L98 116C105 116 109 112 109 106C109 100 106 98 103 98Z" fill="url(#troph-argent)"/>
+            <path d="M16 96C16 130 34 152 60 152C86 152 104 130 104 96Z" fill="url(#troph-argent)"/>
+            <ellipse cx="60" cy="96" rx="44" ry="10" fill="url(#troph-argent-v)" stroke="#5f6c78" stroke-width="1.1"/>
+            <ellipse cx="60" cy="95" rx="38" ry="7" fill="url(#troph-creux)"/>
+            <ellipse cx="44" cy="118" rx="6" ry="18" fill="#ffffff" opacity="0.28"/>
+            <path d="M52 152C50 160 48 166 48 170L72 170C72 166 70 160 68 152Z" fill="url(#troph-argent)"/>
+            <rect x="42" y="166" width="36" height="6" rx="2" fill="url(#troph-argent)"/>
+            <path d="M40 174h40l-4 20a4 4 0 0 1-4 3H48a4 4 0 0 1-4-3Z" fill="url(#troph-marbre)"/>
+            <path d="M44 181h32M46 187h28" stroke="#b9b5aa" stroke-width="0.9" opacity="0.75"/>
+        </symbol>
+    </svg>
+    <style>
+        /* ===== Trophées réels (SVG partagé, remplace les icônes cartoon) ===== */
+        .trophee {
+            --t: 1.6em;
+            display: inline-block;
+            height: var(--t);
+            width: calc(var(--t) * var(--r));
+            vertical-align: -0.4em;
+            flex: none;
+        }
+
+        .trophee--ldc { --r: 0.742; filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.55)); }
+        .trophee--cdf { --r: 1.027; filter: drop-shadow(0 0 3px rgba(199, 36, 177, 0.45)); }
+        .nav-link .trophee { --t: 1.3em; vertical-align: -0.3em; }
+        .section-title .trophee { --t: 1.5em; vertical-align: -0.38em; margin-right: 2px; }
+        .palmares-table th .trophee,
+        .classement-table th .trophee { --t: 1.55em; vertical-align: -0.42em; margin-left: 4px; }
+        .cdf-final-badge .trophee { --t: 1.25em; vertical-align: -0.28em; margin-right: 5px; }
+        .trophee--grand { --t: 3.6em; margin-right: 8px; }
+    </style>
     <header>
         <div class="container header-container">
             <a href="index.html" class="logo"> 
@@ -453,7 +528,7 @@
             </div>
             
             <div class="section" id="ldc-winner-section" style="text-align: center; display:none;">
-                 <h2 class="section-title">🏆 CHAMPION LDC 🏆</h2>
+                 <h2 class="section-title"><svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> CHAMPION LDC <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg></h2>
                  <div id="ldc-winner-display" style="font-size: 2.5rem; color: var(--current-accent-gold); margin-top: 20px;">
                  </div>
             </div>
@@ -1062,7 +1137,7 @@
             // Colonne Finale
             if (pe.finale && pe.finale.length > 0) {
                 columns.final = document.createElement('div'); columns.final.className = 'bracket-centerpiece-visual';
-                columns.final.innerHTML = '<i class="fas fa-trophy trophy-icon"></i>';
+                columns.final.innerHTML = '<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>';
                 if (pe.finale[0]) {
                     const finalMatchDiv = document.createElement('div');
                     finalMatchDiv.className = 'final-match-placeholder';
@@ -1205,7 +1280,7 @@
             if (activeSeason && activeSeason.vainqueur && activeSeason.vainqueur !== "BYE") {
                 const winnerTeamData = ldcDataStore.teams[activeSeason.vainqueur];
                 const logoHtml = winnerTeamData ? `<img src="${BASE_URL}${winnerTeamData.logo}" alt="${activeSeason.vainqueur}" class="team-logo" style="width:50px; height:50px; margin-right:15px; border-radius:50%; background:rgba(255,255,255,0.1); padding:3px;">` : '';
-                winnerDisplay.innerHTML = `<i class="fas fa-trophy trophy-ldc" style="font-size: 3em; margin-right: 15px; color: var(--ldc-gold);"></i> ${logoHtml} ${activeSeason.vainqueur}`;
+                winnerDisplay.innerHTML = `<svg class="trophee trophee--ldc" style="--t:3.2em;margin-right:15px;vertical-align:-0.4em" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> ${logoHtml} ${activeSeason.vainqueur}`;
                 winnerSection.style.display = 'block';
             } else winnerSection.style.display = 'none';
         }

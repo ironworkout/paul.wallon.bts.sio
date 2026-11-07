@@ -2382,6 +2382,24 @@
         .cdf-content .section-title::after {
             background: linear-gradient(90deg, var(--nav-cdf-accent), transparent);
         }
+        /* ===== Trophées réels (SVG partagé, remplace les icônes cartoon) ===== */
+        .trophee {
+            --t: 1.6em;
+            display: inline-block;
+            height: var(--t);
+            width: calc(var(--t) * var(--r));
+            vertical-align: -0.4em;
+            flex: none;
+        }
+
+        .trophee--ldc { --r: 0.742; filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.55)); }
+        .trophee--cdf { --r: 1.027; filter: drop-shadow(0 0 3px rgba(199, 36, 177, 0.45)); }
+        .nav-link .trophee { --t: 1.3em; vertical-align: -0.3em; }
+        .section-title .trophee { --t: 1.5em; vertical-align: -0.38em; margin-right: 2px; }
+        .palmares-table th .trophee,
+        .classement-table th .trophee { --t: 1.55em; vertical-align: -0.42em; margin-left: 4px; }
+        .cdf-final-badge .trophee { --t: 1.25em; vertical-align: -0.28em; margin-right: 5px; }
+        .trophee--grand { --t: 3.6em; margin-right: 8px; }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
             .cdf-bracket { gap: 10px; }
@@ -2396,6 +2414,61 @@
 </head>
 
 <body>
+    <!-- ===== Sprite : trophées réels (LDC = coupe aux grandes oreilles 73,5 cm ; CDF = coupe Charles-Simon 3,2 kg) ===== -->
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+        <defs>
+            <linearGradient id="troph-argent" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6e7b88"/><stop offset="14%" stop-color="#dbe4ec"/>
+                <stop offset="30%" stop-color="#ffffff"/><stop offset="48%" stop-color="#aebbc7"/>
+                <stop offset="66%" stop-color="#f4f8fb"/><stop offset="86%" stop-color="#b3c0cb"/>
+                <stop offset="100%" stop-color="#6a7683"/>
+            </linearGradient>
+            <linearGradient id="troph-argent-v" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/><stop offset="35%" stop-color="#cfd9e2"/>
+                <stop offset="70%" stop-color="#9dabb8"/><stop offset="100%" stop-color="#77848f"/>
+            </linearGradient>
+            <linearGradient id="troph-creux" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#39434d"/><stop offset="55%" stop-color="#66727e"/>
+                <stop offset="100%" stop-color="#a8b5c0"/>
+            </linearGradient>
+            <linearGradient id="troph-marbre" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#cfcdc6"/><stop offset="22%" stop-color="#fbfaf6"/>
+                <stop offset="46%" stop-color="#e4e2da"/><stop offset="68%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#c9c6bd"/>
+            </linearGradient>
+            <linearGradient id="troph-socle" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#3a434d"/><stop offset="45%" stop-color="#222a32"/>
+                <stop offset="100%" stop-color="#12171c"/>
+            </linearGradient>
+        </defs>
+
+        <!-- LIGUE DES CHAMPIONS : argent massif, 73,5 cm, anses en « grandes oreilles », pied et socle -->
+        <symbol id="trophee-ldc" viewBox="4 46 112 151">
+            <path d="M33 60C18 58 5 72 5 94C5 117 20 134 48 136L48 127C26 125 14 112 14 94C14 78 23 69 35 70Z" fill="url(#troph-argent)"/>
+            <path d="M87 60C102 58 115 72 115 94C115 117 100 134 72 136L72 127C94 125 106 112 106 94C106 78 97 69 85 70Z" fill="url(#troph-argent)"/>
+            <path d="M34 54C30 76 33 98 44 112C50 120 50 138 46 150C43 160 44 170 50 174L70 174C76 170 77 160 74 150C70 138 70 120 76 112C87 98 90 76 86 54Z" fill="url(#troph-argent)"/>
+            <ellipse cx="60" cy="54" rx="26" ry="7" fill="url(#troph-argent-v)" stroke="#5f6c78" stroke-width="1.1"/>
+            <ellipse cx="60" cy="53" rx="21" ry="4.6" fill="url(#troph-creux)"/>
+            <ellipse cx="50" cy="104" rx="5" ry="30" fill="#ffffff" opacity="0.32"/>
+            <path d="M44 86a16 16 0 0 1 32 0" fill="none" stroke="#5f6c78" stroke-width="0.8" opacity="0.45"/>
+            <path d="M49 176h22l-3 16a4 4 0 0 1-4 3H56a4 4 0 0 1-4-3Z" fill="url(#troph-socle)"/>
+            <rect x="47" y="172" width="26" height="4" rx="1" fill="url(#troph-argent)"/>
+        </symbol>
+
+        <!-- COUPE DE FRANCE : coupe Charles-Simon, argent ciselé sur socle de marbre blanc des Pyrénées -->
+        <symbol id="trophee-cdf" viewBox="2 85 116 113">
+            <path d="M16 92C5 92 1 102 3 111C5 120 12 124 22 124L22 116C15 116 11 112 11 106C11 100 14 98 17 98Z" fill="url(#troph-argent)"/>
+            <path d="M104 92C115 92 119 102 117 111C115 120 108 124 98 124L98 116C105 116 109 112 109 106C109 100 106 98 103 98Z" fill="url(#troph-argent)"/>
+            <path d="M16 96C16 130 34 152 60 152C86 152 104 130 104 96Z" fill="url(#troph-argent)"/>
+            <ellipse cx="60" cy="96" rx="44" ry="10" fill="url(#troph-argent-v)" stroke="#5f6c78" stroke-width="1.1"/>
+            <ellipse cx="60" cy="95" rx="38" ry="7" fill="url(#troph-creux)"/>
+            <ellipse cx="44" cy="118" rx="6" ry="18" fill="#ffffff" opacity="0.28"/>
+            <path d="M52 152C50 160 48 166 48 170L72 170C72 166 70 160 68 152Z" fill="url(#troph-argent)"/>
+            <rect x="42" y="166" width="36" height="6" rx="2" fill="url(#troph-argent)"/>
+            <path d="M40 174h40l-4 20a4 4 0 0 1-4 3H48a4 4 0 0 1-4-3Z" fill="url(#troph-marbre)"/>
+            <path d="M44 181h32M46 187h28" stroke="#b9b5aa" stroke-width="0.9" opacity="0.75"/>
+        </symbol>
+    </svg>
     <header>
         <div class="container header-container">
             <a href="#" data-tab-link="ligue1" class="logo nav-link">
@@ -2411,8 +2484,8 @@
                     </li>
                     <li><a href="#" class="nav-link" data-tab-link="ligue3"><i class="fas fa-arrow-down"></i> L3</a>
                     </li>
-                    <li><a href="#" class="nav-link" data-tab-link="ldc"><i class="fas fa-trophy"></i> LDC</a></li>
-                    <li><a href="#" class="nav-link" data-tab-link="cdf"><i class="fas fa-khanda"></i> CDF</a></li>
+                    <li><a href="#" class="nav-link" data-tab-link="ldc"><svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> LDC</a></li>
+                    <li><a href="#" class="nav-link" data-tab-link="cdf"><svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> CDF</a></li>
                     <li><a href="#" class="nav-link" data-tab-link="barrages"><i class="fas fa-bolt"></i> Barrages</a>
                     </li>
                     <li><a href="#" class="nav-link" data-tab-link="palmares"><i class="fas fa-medal"></i> Palmarès</a>
@@ -2735,7 +2808,7 @@
                 <div class="section-header">
                     <h2 class="section-title"
                         style="color: var(--nav-ldc-color); text-shadow: 0 0 10px rgba(212,175,55,0.5);">
-                        <i class="fas fa-trophy"></i> Ligue des Champions des Peluches
+                        <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> Ligue des Champions des Peluches
                     </h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                         <div class="season-selector-container">
@@ -2774,7 +2847,7 @@
                 <div class="section-header">
                     <h2 class="section-title"
                         style="color: var(--nav-cdf-color); text-shadow: 0 0 10px rgba(199,36,177,0.4);">
-                        <i class="fas fa-khanda"></i> Coupe de France des Peluches
+                        <svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> Coupe de France des Peluches
                     </h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                         <div class="season-selector-container">
@@ -2868,8 +2941,8 @@
                                 <th>Club</th>
                                 <th>Ligue 1 <i class="fas fa-trophy trophy-l1"></i></th>
                                 <th>Ligue 2 <i class="fas fa-medal trophy-l2"></i></th>
-                                <th>CDF <i class="fas fa-trophy trophy-cdf"></i></th>
-                                <th>LDC <i class="fas fa-shield-alt trophy-ldc"></i></th>
+                                <th>CDF <svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg></th>
+                                <th>LDC <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg></th>
                             </tr>
                         </thead>
                         <tbody id="palmares-table-body"></tbody>
@@ -2900,9 +2973,9 @@
                                 <tr>
                                     <th title="Tri officiel (JO)" onclick="sortClassementBy('official')" style="cursor: pointer;">Pos <i class="fas fa-sort"></i></th>
                                     <th onclick="sortClassementBy('name')" style="cursor: pointer;">Club <i class="fas fa-sort"></i></th>
-                                    <th title="Cliquer pour trier" onclick="sortClassementBy('LDC')" style="cursor: pointer;">LDC <i class="fas fa-shield-alt trophy-ldc"></i> <i class="fas fa-sort"></i></th>
+                                    <th title="Cliquer pour trier" onclick="sortClassementBy('LDC')" style="cursor: pointer;">LDC <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 1')" style="cursor: pointer;">Ligue 1 <i class="fas fa-trophy trophy-l1"></i> <i class="fas fa-sort"></i></th>
-                                    <th title="Cliquer pour trier" onclick="sortClassementBy('CDF')" style="cursor: pointer;">CDF <i class="fas fa-trophy trophy-cdf"></i> <i class="fas fa-sort"></i></th>
+                                    <th title="Cliquer pour trier" onclick="sortClassementBy('CDF')" style="cursor: pointer;">CDF <svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 2')" style="cursor: pointer;">Ligue 2 <i class="fas fa-medal trophy-l2"></i> <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('total')" style="cursor: pointer;">Total <i class="fas fa-sort"></i></th>
                                 </tr>
@@ -4749,7 +4822,7 @@
             if (cdfData.rounds[finalRoundIdx] && cdfData.rounds[finalRoundIdx][0] && cdfData.rounds[finalRoundIdx][0].winner) {
                 cdfData.champion = cdfData.rounds[finalRoundIdx][0].winner;
                 const championCDF = resolveCurrentClubName(cdfData.champion);
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;">🏆 Champion CDF : ${championCDF}</span></div>`;
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem;"><svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> Champion CDF : ${championCDF}</span></div>`;
                 // Auto-ajouter le trophée CDF au palmarès (une seule fois par saison)
                 if (!palmaresData[championCDF]) palmaresData[championCDF] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!cdfData._trophyAwarded) {
@@ -4766,7 +4839,7 @@
                     celebrationDiv.innerHTML = `
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(championCDF)}" alt="${championCDF}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
-                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${championCDF} remporte la Coupe de France !</h3>
+                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);"><svg class="trophee trophee--cdf" style="--t:3.4em;vertical-align:-0.45em" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> ${championCDF} remporte la Coupe de France !</h3>
                             <img src="${BASE_URL}peluches-celebration.webp" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
@@ -5223,7 +5296,7 @@
             if (finalWinner && !isByeTeam(finalWinner)) {
                 ldcData.champion = ldcData.rounds[finalRoundIdx][0].winner;
                 const championDisplay = resolveCurrentClubName(ldcData.champion);
-                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;">🏆 Champion LDC : ${championDisplay}</span></div>`;
+                html += `<div style="text-align:center; margin: 20px;"><span class="cdf-final-badge" style="font-size: 1.3rem; background: var(--nav-ldc-color); color: white;"><svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> Champion LDC : ${championDisplay}</span></div>`;
                 if (!palmaresData[championDisplay]) palmaresData[championDisplay] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
                 if (!ldcData._trophyAwarded) {
                     palmaresData[championDisplay]['LDC']++;
@@ -5239,7 +5312,7 @@
                     celebrationDiv.innerHTML = `
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(ldcData.champion)}" alt="${ldcData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
-                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${ldcData.champion} remporte la Ligue des Champions des Peluches !</h3>
+                            <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);"><svg class="trophee trophee--ldc" style="--t:3.4em;vertical-align:-0.45em" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> ${ldcData.champion} remporte la Ligue des Champions des Peluches !</h3>
                             <img src="${BASE_URL}peluches-celebration.webp" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
@@ -6288,8 +6361,8 @@
 
                 let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('');
                 let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
-                let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<i class="fas fa-shield-alt trophy-ldc"></i>').join('');
-                let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<i class="fas fa-trophy trophy-cdf"></i>').join('');
+                let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>').join('');
+                let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>').join('');
 
                 row.innerHTML = `
                     <td class="team-info text-left">
@@ -6388,9 +6461,9 @@
         // LDC > Ligue 1 > CDF > Ligue 2
         const CLASSEMENT_TROPHY_ORDER = ['LDC', 'Ligue 1', 'CDF', 'Ligue 2'];
         const CLASSEMENT_TROPHY_ICONS = {
-            'LDC': '<i class="fas fa-shield-alt trophy-ldc"></i>',
+            'LDC': '<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>',
             'Ligue 1': '<i class="fas fa-trophy trophy-l1"></i>',
-            'CDF': '<i class="fas fa-trophy trophy-cdf"></i>',
+            'CDF': '<svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>',
             'Ligue 2': '<i class="fas fa-medal trophy-l2"></i>'
         };
         const CLASSEMENT_RANK_MEDALS = ['🥇', '🥈', '🥉'];

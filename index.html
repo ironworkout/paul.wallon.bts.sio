@@ -19,7 +19,7 @@
             --secondary-color: #007bff;
             --accent-gold: #ffc107;
             --accent-silver: #c0c0c0;
-            --accent-ldc: #663399;
+            --accent-ldc: #101c3a;
             --text-color-light: #ffffff;
             --text-color-dark: #212529;
             --card-bg: #ffffff;
@@ -29,8 +29,10 @@
             --nav-l2-color: #28a745;
             --nav-l3-color: #dc3545;
             --nav-palmares-color: #4a0e62;
-            --nav-ldc-color: #663399;
-            --nav-cdf-color: #17a2b8;
+            --nav-ldc-color: #101c3a; /* LDC : noir bleute (identite premium) */
+            --nav-ldc-accent: #d4af37; /* LDC : or */
+            --nav-cdf-color: #5b2a86; /* CDF : violet */
+            --nav-cdf-accent: #c724b1; /* CDF : magenta */
             --nav-barrages-color: #fd7e14;
             --nav-base-color: #6c757d;
             --nav-classement-color: #b8860b;
@@ -1501,7 +1503,7 @@
 
         /* LDC : panneau de configuration avant tirage (clubs internationaux + choix nationaux) */
         .ldc-setup-panel {
-            background: rgba(102, 51, 153, 0.08);
+            background: rgba(212, 175, 55, 0.08);
             border: 1px solid var(--border-color);
             border-left: 4px solid var(--nav-ldc-color);
             border-radius: 10px;
@@ -1542,15 +1544,15 @@
             align-items: center;
             margin-bottom: 14px;
             padding: 12px;
-            background: linear-gradient(135deg, rgba(102, 51, 153, 0.10), rgba(102, 51, 153, 0.04));
-            border: 1px dashed rgba(102, 51, 153, 0.4);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.10), rgba(212, 175, 55, 0.04));
+            border: 1px dashed rgba(212, 175, 55, 0.4);
             border-radius: 10px;
         }
         .ldc-intl-form-title {
             width: 100%;
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--nav-ldc-color, #663399);
+            color: var(--nav-ldc-color, #101c3a);
             letter-spacing: 0.3px;
             margin-bottom: 2px;
         }
@@ -1571,8 +1573,8 @@
         }
         .ldc-intl-form input:focus, .ldc-intl-form select:focus {
             outline: none;
-            border-color: var(--nav-ldc-color, #663399);
-            box-shadow: 0 0 0 3px rgba(102, 51, 153, 0.18);
+            border-color: var(--nav-ldc-color, #101c3a);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
         }
         .ldc-intl-form input {
             min-width: 180px;
@@ -2346,6 +2348,40 @@
         }
     </style>
     <style>
+        /* ==================== IDENTITES LDC (noir/or) ET CDF (violet/magenta) ==================== */
+        .ldc-content .section {
+            border-color: var(--nav-ldc-accent);
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.28), 0 12px 34px rgba(16, 28, 58, 0.12);
+        }
+        .ldc-content .section-header {
+            border-bottom: 2px solid var(--nav-ldc-accent);
+            background: linear-gradient(90deg, rgba(16, 28, 58, 0.07), transparent 72%);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+        .ldc-content .section-title { letter-spacing: 2px; }
+        .cdf-content .section {
+            border-color: var(--nav-cdf-color);
+            box-shadow: 0 0 0 1px rgba(199, 36, 177, 0.22), 0 12px 34px rgba(91, 42, 134, 0.12);
+        }
+        .cdf-content .section-header {
+            border-bottom: 2px solid var(--nav-cdf-accent);
+            background: linear-gradient(90deg, rgba(199, 36, 177, 0.08), transparent 72%);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+        .ldc-content .section-title::after,
+        .cdf-content .section-title::after {
+            content: "";
+            display: block;
+            height: 3px;
+            margin-top: 8px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--nav-ldc-accent), transparent);
+        }
+        .cdf-content .section-title::after {
+            background: linear-gradient(90deg, var(--nav-cdf-accent), transparent);
+        }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
             .cdf-bracket { gap: 10px; }
@@ -2408,7 +2444,7 @@
             <div class="carousel" id="accueil-section-l1">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="teddy-crowd.png" loading="lazy" decoding="async"
+                        <img src="teddy-crowd.webp" loading="lazy" decoding="async"
                             alt="Ambiance stade L1">
                         <div class="carousel-caption">
                             <h2>UNE AMBIANCE INCROYABLE EN TRIBUNES !</h2>
@@ -2417,7 +2453,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="peluches-celebration.png" loading="lazy" decoding="async"
+                        <img src="peluches-celebration.webp" loading="lazy" decoding="async"
                             alt="Célébration de but en L1">
                         <div class="carousel-caption">
                             <h2>BUTS ET ÉMOTIONS GARANTIS !</h2>
@@ -2521,7 +2557,7 @@
             <div class="carousel" id="accueil-section-l2">
                 <div class="carousel-inner">
                     <div class="carousel-item active"><img
-                            src="tifo-peluches.png" alt="Ambiance L2" loading="lazy" decoding="async">
+                            src="tifo-peluches.webp" alt="Ambiance L2" loading="lazy" decoding="async">
                         <div class="carousel-caption">
                             <h2>LIGUE 2 DES OURS : LA FORGE DES CHAMPIONS !</h2>
                             <p>Ici naissent les futures légendes du football rémunbourré.</p><a
@@ -2529,7 +2565,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"><img
-                            src="peluches-bras-dessus-bras-dessous.png" loading="lazy" decoding="async"
+                            src="peluches-bras-dessus-bras-dessous.webp" loading="lazy" decoding="async"
                             alt="Equipes L2">
                         <div class="carousel-caption">
                             <h2>L'ESPRIT D'ÉQUIPE AVANT TOUT !</h2>
@@ -2538,7 +2574,7 @@
                         </div>
                     </div>
                     <div class="carousel-item"><img
-                            src="rabbit-goalkeeper.png" loading="lazy" decoding="async"
+                            src="rabbit-goalkeeper.webp" loading="lazy" decoding="async"
                             alt="Gardien Lapin en action">
                         <div class="carousel-caption">
                             <h2>DES ARRÊTS SPECTACULAIRES !</h2>
@@ -2698,7 +2734,7 @@
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title"
-                        style="color: var(--nav-ldc-color); text-shadow: 0 0 10px rgba(102,51,153,0.3);">
+                        style="color: var(--nav-ldc-color); text-shadow: 0 0 10px rgba(212,175,55,0.5);">
                         <i class="fas fa-trophy"></i> Ligue des Champions des Peluches
                     </h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -2737,7 +2773,7 @@
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title"
-                        style="color: var(--nav-cdf-color); text-shadow: 0 0 10px rgba(23,162,184,0.3);">
+                        style="color: var(--nav-cdf-color); text-shadow: 0 0 10px rgba(199,36,177,0.4);">
                         <i class="fas fa-khanda"></i> Coupe de France des Peluches
                     </h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -3113,13 +3149,13 @@
             { filename: 'fcd.png', name: 'FC Doudou (fcd.png)' },
             { filename: 'ofc.png', name: 'Oursons FC (ofc.png)' },
             { filename: 'nsc.png', name: 'Nounours SC (nsc.png)' },
-            { filename: 'rabbit-goalkeeper.png', name: 'Lapin Gardien (rabbit-goalkeeper.png)' },
-            { filename: 'teddy-crowd.png', name: 'Supporters Ours (teddy-crowd.png)' },
+            { filename: 'rabbit-goalkeeper.webp', name: 'Lapin Gardien (rabbit-goalkeeper.webp)' },
+            { filename: 'teddy-crowd.webp', name: 'Supporters Ours (teddy-crowd.webp)' },
             { filename: 'teddy-shooting.png', name: 'Tir Ours (teddy-shooting.png)' },
-            { filename: 'tifo-peluches.png', name: 'Tifo Peluches (tifo-peluches.png)' },
-            { filename: 'peluches-celebration.png', name: 'Célébration (peluches-celebration.png)' },
-            { filename: 'peluches-bras-dessus-bras-dessous.png', name: 'Bras Dessus (peluches-bras-dessus-bras-dessous.png)' },
-            { filename: 'valenciennes-supporters.png', name: 'Supporters VAFC (valenciennes-supporters.png)' },
+            { filename: 'tifo-peluches.webp', name: 'Tifo Peluches (tifo-peluches.webp)' },
+            { filename: 'peluches-celebration.webp', name: 'Célébration (peluches-celebration.webp)' },
+            { filename: 'peluches-bras-dessus-bras-dessous.webp', name: 'Bras Dessus (peluches-bras-dessus-bras-dessous.webp)' },
+            { filename: 'valenciennes-supporters.webp', name: 'Supporters VAFC (valenciennes-supporters.webp)' },
             { filename: 'l2.png', name: 'Logo Ligue 2 (l2.png)' },
             { filename: 'OIP.png', name: 'OIP (OIP.png)' },
             { filename: 'default_logo.png', name: 'Logo par défaut (default_logo.png)' }
@@ -4731,7 +4767,7 @@
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(championCDF)}" alt="${championCDF}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
                             <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${championCDF} remporte la Coupe de France !</h3>
-                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                            <img src="${BASE_URL}peluches-celebration.webp" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
             }
@@ -5204,7 +5240,7 @@
                         <div style="text-align:center; margin-top: 20px;">
                             <img src="${getClubLogo(ldcData.champion)}" alt="${ldcData.champion}" style="width: 90px; height: 90px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 0 25px rgba(255,193,7,0.6); display: block; margin: 0 auto 10px;">
                             <h3 style="color: var(--accent-gold); text-shadow: 0 0 15px rgba(255,193,7,0.5);">🏆 ${ldcData.champion} remporte la Ligue des Champions des Peluches !</h3>
-                            <img src="${BASE_URL}peluches-celebration.png" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                            <img src="${BASE_URL}peluches-celebration.webp" alt="Célébration" loading="lazy" decoding="async" style="max-width: 100%; border-radius: 12px; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
                         </div>`;
                 }
             }

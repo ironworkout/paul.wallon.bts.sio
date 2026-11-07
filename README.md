@@ -58,8 +58,9 @@ index.html            # TOUT le site : HTML + CSS + JS (325 Ko, ~6 800 lignes)
 cdf_format_test.js    # Suite de tests Node (122 assertions)
 AMELIORATIONS.md      # Feuille de route : 20 idées, cases cochées quand c'est fait
 INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données, vérifications
+VISUELS.md            # Direction artistique LDC/CDF et prompts des visuels à produire
 .github/workflows/    # CI : tests à chaque push
-*.png                 # Logos des clubs + illustrations
+*.png / *.webp        # Logos des clubs (PNG) et illustrations (WebP)
 *.mp3                 # Hymnes (ligue1.mp3, ligue2.mp3, ldc.mp3)
 ```
 
@@ -91,5 +92,6 @@ les consignes de travail (modèle de données, pièges, protocole de vérificati
 
 ## Poids du dépôt
 
-Les médias (31 PNG, 4 MP3) représentent ~22 Mo, soit la quasi-totalité du dépôt. Toute nouvelle image
-doit être compressée avant d'être ajoutée.
+Les médias pèsent ~6,9 Mo : WebP pour les illustrations, PNG pour les logos, MP3 pour les hymnes.
+Les 6 illustrations ont été converties en WebP le 7 novembre 2026 (11,8 Mo → 0,7 Mo, −94 %).
+Toute nouvelle image doit arriver en WebP compressé (`cwebp -q 80`), jamais en PNG de plusieurs Mo.

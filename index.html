@@ -3114,6 +3114,21 @@
             border-bottom: 2px solid rgba(212, 175, 55, 0.55);
         }
 
+        /* Un <td> en flex casse la hauteur de rangée : on rétablit la cellule tableau */
+        .classement-table td.team-info,
+        .palmares-table td.team-info {
+            display: table-cell;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .classement-table td.team-info img,
+        .palmares-table td.team-info img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
         .classement-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.022); }
 
         .classement-table tbody tr.is-podium td { background: rgba(212, 175, 55, 0.06); }

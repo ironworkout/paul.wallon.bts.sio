@@ -6283,11 +6283,6 @@
             });
         }
 
-        window.scrollBracketRound = function (kind, roundIndex) {
-            const container = document.getElementById(`${kind}-bracket-container`);
-            if (container) scrollBracketRound(container, roundIndex);
-        };
-
         function toggleBracketFocus(container, teamName) {
             const shell = getBracketShell(container);
             if (!shell) return;

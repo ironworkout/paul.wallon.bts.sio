@@ -2925,6 +2925,87 @@
             .bracket-hint { font-size: 0.7rem; }
         }
 
+        /* ---------- Actu live Canal Plours (au-dessus de l'arbre LDC) ---------- */
+        .live-banner {
+            margin: 0 0 18px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: radial-gradient(120% 140% at 50% 0%, #16203a 0%, #0a0f1c 62%);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: 0 18px 40px rgba(11, 17, 32, 0.3);
+            color: #eef3ff;
+        }
+
+        .live-banner__head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            background: linear-gradient(100deg, #0a1020, #1c2745);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .live-banner__mark { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: var(--accent-gold); color: #0a0f1c; font-weight: 700; font-size: 0.62rem; letter-spacing: 0; }
+        .live-banner__brand { color: var(--accent-gold); font-weight: 600; }
+        .live-banner__live { display: inline-flex; align-items: center; gap: 5px; color: #ffd9d9; }
+        .live-banner__live i { width: 7px; height: 7px; border-radius: 50%; background: #ff2d55; animation: scorebugLive 1.9s ease-out infinite; }
+        .live-banner__round { margin-left: auto; color: rgba(255, 255, 255, 0.75); letter-spacing: 0.1em; }
+
+        .live-banner__body { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 10px; padding: 12px; }
+        .live-banner__side { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+        .live-banner__media { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; background: #070b16; border: 1px solid rgba(255, 255, 255, 0.12); }
+        .live-banner__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .live-banner__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 11, 22, 0) 45%, rgba(7, 11, 22, 0.72)); }
+        .live-banner__logo-wrap { display: grid; place-items: center; height: 100%; background: radial-gradient(circle at 50% 45%, rgba(212, 175, 55, 0.16), #070b16 70%); }
+        .live-banner__logo-wrap img { width: 38%; height: auto; object-fit: contain; }
+
+        .live-banner__team { display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .live-banner__badge { flex: 0 0 auto; width: 28px; height: 28px; object-fit: contain; }
+        .live-banner__name { font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .live-banner__side--right .live-banner__team { flex-direction: row-reverse; text-align: right; }
+
+        .live-banner__vs { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0 6px; font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.12em; color: var(--accent-gold); }
+        .live-banner__vs strong { font-size: 1.2rem; }
+        .live-banner__vs span { font-size: 0.62rem; color: rgba(255, 255, 255, 0.6); letter-spacing: 0.14em; }
+
+        /* ---------- Places restantes LDC ---------- */
+        .ldc-selection-summary {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid rgba(16, 26, 60, 0.12);
+            box-shadow: 0 8px 20px rgba(16, 26, 60, 0.07);
+        }
+
+        .ldc-selection-summary__count { font-family: 'Oswald', sans-serif; font-size: 1.7rem; font-weight: 600; line-height: 1; color: #16203a; white-space: nowrap; }
+        .ldc-selection-summary__total { font-size: 1rem; font-weight: 400; color: #6b7690; }
+        .ldc-selection-summary__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+        .ldc-selection-summary__label { font-size: 0.84rem; color: #3d4a68; }
+        .ldc-selection-summary__bar { height: 8px; border-radius: 999px; background: rgba(16, 26, 60, 0.1); overflow: hidden; }
+        .ldc-selection-summary__bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #c9a227, #f0d26a); transition: width 0.25s ease; }
+        .ldc-selection-summary.is-full { border-color: rgba(43, 160, 90, 0.4); }
+        .ldc-selection-summary.is-full .ldc-selection-summary__bar span { background: linear-gradient(90deg, #2ba05a, #7be0a3); }
+        .ldc-selection-summary.is-over { border-color: rgba(200, 40, 60, 0.4); }
+        .ldc-selection-summary.is-over .ldc-selection-summary__bar span { background: linear-gradient(90deg, #c8283c, #ff7a88); }
+
+        @media (max-width: 640px) {
+            .live-banner__body { gap: 6px; padding: 8px; }
+            .live-banner__name { font-size: 0.82rem; }
+            .live-banner__badge { width: 22px; height: 22px; }
+            .live-banner__round { display: none; }
+            .ldc-selection-summary { gap: 10px; padding: 10px 12px; }
+            .ldc-selection-summary__count { font-size: 1.35rem; }
+        }
+
         /* Bandeau champion */
         .cdf-final-badge {
             display: inline-flex;
@@ -6314,15 +6395,108 @@
             return { round: round - 1, match: matchIdx * 2 + (slot - 1) };
         }
 
+        // ---- Actu live Canal Plours : le prochain match à jouer, stade contre stade ----
+        function findLDCLiveMatch() {
+            const rounds = (typeof ldcData !== 'undefined' && ldcData.rounds) ? ldcData.rounds : {};
+            for (let r = 0; r < LDC_ROUND_NAMES.length; r++) {
+                const matches = rounds[r];
+                if (!matches || matches.filter(Boolean).length === 0) break;
+                for (let i = 0; i < matches.length; i++) {
+                    const match = matches[i];
+                    if (!match || !match.team1 || !match.team2) continue;
+                    if (isByeTeam(match.team1) || isByeTeam(match.team2)) continue;
+                    if (match.winner) continue;
+                    return { round: r, index: i, match };
+                }
+            }
+            return null;
+        }
+
+        function buildBracketLiveBanner() {
+            const spot = findLDCLiveMatch();
+            if (!spot) return '';
+            const name1 = resolveCurrentClubName(spot.match.team1);
+            const name2 = resolveCurrentClubName(spot.match.team2);
+            if (!name1 || !name2) return '';
+
+            const side = (name, mirrored) => {
+                const shot = getClubTribune(name);
+                const media = shot
+                    ? `<img src="${shot.card}" width="760" height="428" loading="lazy" decoding="async" alt="Tribune de ${bracketAttr(name)}">`
+                    : `<div class="live-banner__logo-wrap"><img src="${getClubLogo(name)}" alt="Écusson de ${bracketAttr(name)}" loading="lazy" decoding="async"></div>`;
+                return `<div class="live-banner__side${mirrored ? ' live-banner__side--right' : ''}">
+                    <div class="live-banner__media">${media}</div>
+                    <div class="live-banner__team">
+                        <img class="live-banner__badge" src="${getClubLogo(name)}" alt="" loading="lazy" decoding="async">
+                        <span class="live-banner__name">${bracketAttr(name)}</span>
+                    </div>
+                </div>`;
+            };
+
+            return `<section class="live-banner" aria-label="Actu live Canal Plours">
+                <div class="live-banner__head">
+                    <span class="live-banner__mark" aria-hidden="true">+</span>
+                    <span class="live-banner__brand">Canal Plours</span>
+                    <span class="live-banner__live"><i aria-hidden="true"></i>En direct</span>
+                    <span class="live-banner__round">${LDC_ROUND_NAMES[spot.round]} · Match ${spot.index + 1}</span>
+                </div>
+                <div class="live-banner__body">
+                    ${side(name1, false)}
+                    <div class="live-banner__vs"><strong>VS</strong><span>À suivre</span></div>
+                    ${side(name2, true)}
+                </div>
+            </section>`;
+        }
+
+        // ---- Places restantes avant le tirage (32 clubs) ----
+        function ldcSelectedTeams() {
+            const seen = new Set();
+            const list = [];
+            Object.keys(ldcClubsData.clubs || {}).forEach(name => {
+                if (name && !seen.has(name)) { seen.add(name); list.push(name); }
+            });
+            [['l1', ldcNationalSelection.l1 || []], ['l2', ldcNationalSelection.l2 || []], ['l3', ldcNationalSelection.l3 || []]].forEach(([leagueId, selection]) => {
+                const teams = ldcLeagueTeams(leagueId);
+                selection.forEach(name => {
+                    if (teams[name] && !seen.has(name)) { seen.add(name); list.push(name); }
+                });
+            });
+            return list;
+        }
+
+        function renderLDCSelectionSummary() {
+            const box = document.getElementById('ldc-selection-summary');
+            if (!box) return;
+            const selected = ldcSelectedTeams().length;
+            const target = LDC_TARGET_CLUBS;
+            const remaining = Math.max(0, target - selected);
+            const extra = Math.max(0, selected - target);
+            const ratio = Math.min(100, Math.round((selected / target) * 100));
+            box.className = `ldc-selection-summary${remaining === 0 && extra === 0 ? ' is-full' : ''}${extra > 0 ? ' is-over' : ''}`;
+            const message = extra > 0
+                ? `${extra} club${extra > 1 ? 's' : ''} en trop : seuls ${target} participeront au tirage.`
+                : remaining === 0
+                    ? 'Complet : les 32 clubs sont prêts pour le tirage.'
+                    : `${remaining} place${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''} avant le tirage (complétées par des BYE).`;
+            box.innerHTML = `
+                <div class="ldc-selection-summary__count">${selected}<span class="ldc-selection-summary__total"> / ${target}</span></div>
+                <div class="ldc-selection-summary__info">
+                    <div class="ldc-selection-summary__label">${message}</div>
+                    <div class="ldc-selection-summary__bar"><span style="width:${ratio}%"></span></div>
+                </div>`;
+        }
+
         function buildBracketShellOpen(kind, names, rounds) {
             let lastRound = 0;
             for (let r = 0; r < names.length; r++) {
                 if (rounds[r] && rounds[r].filter(Boolean).length > 0) lastRound = r;
             }
+            const liveBanner = kind === 'ldc' ? buildBracketLiveBanner() : '';
             const chips = names.slice(0, lastRound + 1).map((name, i) =>
                 `<button type="button" class="bracket-nav__btn${i === 0 ? ' is-active' : ''}" data-bracket-round="${i}">${name}</button>`
             ).join('');
             return `<div class="bracket-shell bracket-shell--${kind}" data-kind="${kind}">
+                ${liveBanner}
                 <div class="bracket-toolbar">
                     <div class="bracket-nav" role="tablist" aria-label="Tours de la compétition">${chips}</div>
                     <p class="bracket-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i> Cliquez sur un club pour surligner son parcours jusqu'à la finale.</p>
@@ -6808,8 +6982,11 @@
             const clubs = ldcClubsData.clubs || {};
             const names = Object.keys(clubs).sort((a, b) => a.localeCompare(b));
 
+            // ---- Places restantes (32 clubs au total) ----
+            let html = '<div class="ldc-selection-summary" id="ldc-selection-summary"></div>';
+
             // ---- Clubs internationaux ----
-            let html = '<h4>🌍 Clubs internationaux <span style="font-size:0.8rem; font-weight:normal; opacity:0.8;">(aucune stat, non sélectionnables en L1/L2/L3)</span></h4>';
+            html += '<h4>🌍 Clubs internationaux <span style="font-size:0.8rem; font-weight:normal; opacity:0.8;">(aucune stat, non sélectionnables en L1/L2/L3)</span></h4>';
             html += '<div class="ldc-intl-list">';
             if (names.length === 0) html += '<p style="opacity:0.75; font-size:0.9rem;">Aucun club international pour l\'instant — ajoutez-en ci-dessous.</p>';
             names.forEach(name => {
@@ -6844,6 +7021,7 @@
             html += '<div class="ldc-nat-section" id="ldc-nat-panel"></div>';
             panel.innerHTML = html;
             renderLDCNationalPanel();
+            renderLDCSelectionSummary();
         }
 
         function renderLDCNationalPanel() {
@@ -6865,6 +7043,7 @@
                 html += '</div></div>';
             });
             natPanel.innerHTML = html;
+            renderLDCSelectionSummary();
         }
 
         function fillLDCIntlForm(name, country, logo) {

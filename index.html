@@ -1527,8 +1527,10 @@
         }
         .ldc-intl-item {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             gap: 8px;
+            max-width: 100%;
             background: var(--card-bg, #1e1e2e);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -3004,6 +3006,14 @@
             .live-banner__round { display: none; }
             .ldc-selection-summary { gap: 10px; padding: 10px 12px; }
             .ldc-selection-summary__count { font-size: 1.35rem; }
+        }
+
+        /* Sur téléphone, les deux visuels passent l'un sous l'autre, face à face. */
+        @media (max-width: 520px) {
+            .live-banner__body { grid-template-columns: 1fr; gap: 8px; }
+            .live-banner__vs { flex-direction: row; align-items: center; gap: 8px; padding: 2px 0; }
+            .live-banner__vs strong { font-size: 1rem; }
+            .live-banner__side--right .live-banner__team { flex-direction: row; text-align: left; }
         }
 
         /* Bandeau champion */

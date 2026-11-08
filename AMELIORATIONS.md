@@ -73,9 +73,10 @@ Il y a des hymnes pour L1 et L2 (`ligue1.mp3`, `ligue2.mp3`) ; l'hymne L3 a ét�
 - [x] **Statut (7 nov. 2026)** : `ldc.mp3` (1 Mo) est désormais **joué par l'onglet LDC** — bouton « Hymne LDC »
   (`data-league-audio="ldc"`) et `<audio id="audio-ldc" src="ldc.mp3" loop preload="none">`, sur le modèle de L1 et L2.
   `champions.html` garde son propre lecteur.
-- [x] **Statut (8 nov. 2026)** : hymne CDF composé et intégré — `hymne-cdf.mp3` (47 s, 736 Ko, fanfare
-  cuivres/timbales), bouton « Hymne CDF » dans l'onglet CDF (`data-league-audio="cdf"`) et
-  `<audio id="audio-cdf">`. Lecture uniquement au clic, comme les autres hymnes.
+- [x] **Statut (8 nov. 2026)** : bouton « Hymne CDF » dans l'onglet CDF (`data-league-audio="cdf"`)
+  et `<audio id="audio-cdf">` branchés, lecture uniquement au clic. **Le fichier `hymne-cdf.mp3`
+  reste à fournir** : l'hymne officiel de la Coupe de France est une œuvre protégée, il faut déposer
+  l'enregistrement dont tu as les droits à la racine du site (aucune fanfare générée n'est livrée).
 
 ### 12. Page mobile : défilement horizontal du tableau CDF
 Vérifier que le bracket CDF/LDC (qui utilise `overflow-x: auto`) soit bien utilisable sur téléphone (déjà stylé, à tester).

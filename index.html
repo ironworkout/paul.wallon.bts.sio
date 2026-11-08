@@ -4069,6 +4069,7 @@
         <div class="container">
             <div class="section action-buttons">
                 <button class="league-music-btn" data-league-audio="cdf"
+                    title="Dépose le fichier hymne-cdf.mp3 (hymne officiel de la Coupe de France) à la racine du site"
                     aria-label="Jouer/Mettre en pause l'hymne de la Coupe de France">
                     <i class="fas fa-play"></i> Hymne CDF
                 </button>
@@ -8232,7 +8233,10 @@
                 if (audioToPlay) {
                     if (audioToPlay.paused || audioToPlay.ended) {
                         stopAllLeagueMusic();
-                        audioToPlay.play().catch(e => console.warn("Erreur lecture audio:", league, e));
+                        audioToPlay.play().catch(e => {
+                            console.warn("Erreur lecture audio:", league, e);
+                            if (league === 'cdf') showMessage("Hymne CDF absent : dépose le fichier hymne-cdf.mp3 (hymne officiel) à la racine du site.", 6000, true);
+                        });
                         currentPlayingAudio = audioToPlay;
                         icon.classList.remove('fa-play');
                         icon.classList.add('fa-pause');

@@ -61,7 +61,7 @@ INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données,
 VISUELS.md            # Direction artistique LDC/CDF et prompts des visuels à produire
 .github/workflows/    # CI : tests à chaque push
 *.png / *.webp        # Logos des clubs (PNG) et illustrations (WebP)
-*.mp3                 # Hymnes (ligue1.mp3, ligue2.mp3, ldc.mp3, hymne-cdf.mp3)
+*.mp3                 # Hymnes (ligue1.mp3, ligue2.mp3, ldc.mp3, + hymne-cdf.mp3 à fournir)
 ```
 
 Deux pages annexes subsistent, non liées depuis `index.html` : `champions.html` (page historique) et

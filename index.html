@@ -1404,88 +1404,6 @@
             color: var(--accent-gold);
         }
 
-        /* ==================== ROULETTE L3 ==================== */
-        .roulette-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            padding: 30px 0;
-        }
-
-        .roulette-canvas-container {
-            position: relative;
-            width: 420px;
-            height: 420px;
-        }
-
-        #roulette-canvas {
-            border-radius: 50%;
-            box-shadow: 0 0 40px rgba(0,200,150,0.3), 0 0 80px rgba(0,0,0,0.5);
-            display: block;
-        }
-
-        .roulette-pointer-arrow {
-            position: absolute;
-            top: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-top: 36px solid var(--accent-gold);
-            z-index: 10;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
-        }
-
-        .roulette-center-hub {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #fff 0%, #ccc 100%);
-            box-shadow: 0 0 15px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
-            z-index: 5;
-        }
-
-        .roulette-controls {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .roulette-result {
-            font-size: 1.4rem;
-            font-family: 'Oswald', sans-serif;
-            font-weight: bold;
-            color: var(--neon-green);
-            text-shadow: 0 0 12px var(--neon-green);
-            min-height: 44px;
-            text-align: center;
-            padding: 8px 20px;
-            border-radius: 10px;
-            background: rgba(0,200,150,0.08);
-            border: 1px solid rgba(0,200,150,0.2);
-        }
-
-        .roulette-result.winner {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-            text-shadow: 0 0 15px var(--accent-gold);
-            animation: pulseWinner 0.6s ease-in-out 3;
-        }
-
-        @keyframes pulseWinner {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-        }
 
         /* Modal Ajouter Club L3 */
         #add-club-l3-modal .modal-body {
@@ -2158,20 +2076,6 @@
             .season-selector-container select {
                 width: 100%;
                 margin-bottom: 10px;
-            }
-
-            .roulette-wheel {
-                width: 300px;
-                height: 300px;
-            }
-
-            .roulette-club img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .roulette-club span {
-                font-size: 0.55rem;
             }
 
             .barrage-teams {
@@ -3049,90 +2953,389 @@
         /* ---------- 3. Ligue 3 ---------- */
         .l3-content .section-title .fa-dharmachakra { filter: drop-shadow(0 0 8px rgba(0, 200, 150, 0.45)); }
 
+        /* ==================== ROULETTE L3 — habillage broadcast ==================== */
         .roulette-wrapper {
-            position: relative;
-            padding: 34px 22px 30px;
-            border-radius: 22px;
-            border: 1px solid rgba(0, 200, 150, 0.22);
-            background:
-                radial-gradient(90% 70% at 50% 0%, rgba(0, 200, 150, 0.14), transparent 62%),
-                linear-gradient(180deg, #0a1120, #070b14);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 50px rgba(4, 8, 16, 0.35);
-            overflow: hidden;
-            gap: 26px;
+            display: flex;
+            justify-content: center;
+            padding: 0;
         }
 
-        .roulette-wrapper::before {
-            content: "";
+        .roulette-stage {
+            position: relative;
+            isolation: isolate;
+            width: 100%;
+            max-width: 820px;
+            padding: 18px 24px 26px;
+            border-radius: 24px;
+            overflow: hidden;
+            background:
+                radial-gradient(120% 90% at 50% -10%, rgba(0, 200, 150, 0.16), transparent 55%),
+                radial-gradient(80% 60% at 50% 115%, rgba(212, 175, 55, 0.12), transparent 60%),
+                linear-gradient(180deg, #070e1b 0%, #04070e 72%);
+            border: 1px solid rgba(120, 200, 255, 0.14);
+            box-shadow: 0 34px 70px rgba(2, 5, 12, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .roulette-stage__beam {
             position: absolute;
-            top: -55%;
+            z-index: 0;
+            top: -60%;
             left: 50%;
-            width: 620px;
-            height: 620px;
-            transform: translateX(-50%);
-            background: conic-gradient(from 90deg, transparent 0deg, rgba(0, 200, 150, 0.16) 90deg, transparent 200deg, rgba(212, 175, 55, 0.14) 300deg, transparent 360deg);
-            animation: l3Sweep 18s linear infinite;
+            width: 760px;
+            height: 760px;
+            transform: translateX(-50%) rotate(0deg);
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 200, 150, 0.16) 42deg, transparent 96deg, transparent 200deg, rgba(212, 175, 55, 0.12) 250deg, transparent 300deg);
+            animation: rouletteBeam 26s linear infinite;
             pointer-events: none;
         }
 
-        @keyframes l3Sweep { to { transform: translateX(-50%) rotate(360deg); } }
+        @keyframes rouletteBeam {
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
 
-        .roulette-canvas-container {
+        .roulette-stage__head {
+            position: relative;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 2px 2px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .roulette-stage__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #8df3c7, #1fbf7b);
+            color: #04231a;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .roulette-stage__badge i {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            padding: 10px;
-            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.09), rgba(6, 10, 18, 0.6));
-            box-shadow: 0 0 0 1px rgba(0, 200, 150, 0.35), 0 0 45px rgba(0, 200, 150, 0.22), inset 0 0 30px rgba(0, 0, 0, 0.5);
+            background: #04231a;
+            animation: roulettePulse 1.6s ease-in-out infinite;
         }
 
-        #roulette-canvas { border-radius: 50%; box-shadow: none; }
-
-        .roulette-pointer-arrow {
-            top: -14px;
-            border-left-width: 16px;
-            border-right-width: 16px;
-            border-top-width: 32px;
-            border-top-color: var(--accent-gold);
-            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+        @keyframes roulettePulse {
+            50% { opacity: 0.25; }
         }
 
-        .roulette-center-hub {
-            width: 62px;
-            height: 62px;
+        .roulette-stage__title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.02rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #eaf2ff;
+        }
+
+        .roulette-stage__title span {
+            margin: 0 7px;
+            color: var(--accent-gold);
+        }
+
+        .roulette-stage__count {
+            margin-left: auto;
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(196, 216, 246, 0.55);
+            white-space: nowrap;
+        }
+
+        .roulette-wheel-area {
+            position: relative;
+            z-index: 1;
             display: grid;
             place-items: center;
-            font-size: 1.5rem;
-            color: #2b2200;
-            background: radial-gradient(circle at 35% 28%, #fff6d0, #d4af37 58%, #8a6d1f 100%);
-            box-shadow: 0 0 0 4px rgba(10, 16, 30, 0.85), 0 0 22px rgba(212, 175, 55, 0.55), inset 0 2px 5px rgba(255, 255, 255, 0.7);
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+            width: min(100%, 520px);
+            margin: 30px auto 24px;
+            aspect-ratio: 1 / 1;
         }
 
-        .roulette-center-hub::after { content: "★"; line-height: 1; }
+        .roulette-wheel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
 
-        .roulette-controls { z-index: 1; }
+        .roulette-wheel::after {
+            content: "";
+            position: absolute;
+            inset: 2%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        #roulette-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transition: filter 0.12s linear;
+        }
+
+        .roulette-stage.is-spinning #roulette-canvas {
+            will-change: filter;
+        }
+
+        .roulette-pointer {
+            position: absolute;
+            z-index: 4;
+            top: -10px;
+            left: 50%;
+            width: 36px;
+            height: 52px;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.6));
+        }
+
+        .roulette-pointer::before {
+            content: "";
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            transform: translateX(-50%);
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 32px solid #f7d774;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.55));
+        }
+
+        .roulette-pointer::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 22px;
+            height: 22px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 34% 28%, #fff6d2, #d4af37 58%, #7d611c);
+            box-shadow: 0 0 14px rgba(212, 175, 55, 0.6);
+        }
+
+        .roulette-hub {
+            position: absolute;
+            z-index: 3;
+            top: 50%;
+            left: 50%;
+            display: grid;
+            place-items: center;
+            width: 124px;
+            height: 124px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid rgba(212, 175, 55, 0.72);
+            background: radial-gradient(circle at 38% 30%, #1c2c4c, #0a1222 62%, #05080f);
+            box-shadow: 0 0 0 9px rgba(5, 9, 17, 0.92), 0 0 34px rgba(212, 175, 55, 0.3), inset 0 0 26px rgba(0, 0, 0, 0.8);
+        }
+
+        .roulette-hub span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #f4d67a;
+            text-shadow: 0 0 16px rgba(212, 175, 55, 0.5);
+        }
+
+        .roulette-controls {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .roulette-spin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 38px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #04241a;
+            background: linear-gradient(135deg, #9bf6d1, #1fbf7b 72%);
+            box-shadow: 0 16px 32px rgba(31, 191, 123, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        .roulette-spin:hover:not([disabled]) {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 38px rgba(31, 191, 123, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        }
+
+        .roulette-spin:active:not([disabled]) {
+            transform: translateY(0);
+        }
+
+        .roulette-spin[disabled] {
+            cursor: not-allowed;
+            filter: grayscale(0.65) brightness(0.85);
+        }
 
         .roulette-result {
+            position: relative;
             z-index: 1;
-            min-height: 48px;
-            min-width: 280px;
-            padding: 12px 24px;
-            font-size: 1.05rem;
-            letter-spacing: 0.03em;
-            color: #cfe9ff;
-            background: rgba(10, 20, 38, 0.72);
-            border: 1px solid rgba(120, 200, 255, 0.22);
-            border-radius: 999px;
-            text-shadow: none;
-            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 100%;
+            max-width: 540px;
+            margin: 22px auto 0;
+            padding: 0;
+            overflow: hidden;
+            text-align: left;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid rgba(212, 175, 55, 0.85);
+            background: linear-gradient(90deg, rgba(10, 17, 32, 0.97), rgba(10, 17, 32, 0.7));
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
+        }
+
+        .roulette-result__kicker {
+            padding: 13px 18px 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #8fe8c2;
+        }
+
+        .roulette-result__name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 18px 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: #f6f9ff;
+        }
+
+        .roulette-result__logo {
+            flex: 0 0 auto;
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .roulette-result__meta {
+            padding: 3px 18px 14px;
+            font-size: 0.72rem;
+            color: rgba(198, 214, 240, 0.6);
+        }
+
+        .roulette-result.is-spinning {
+            border-left-color: rgba(143, 232, 194, 0.7);
+        }
+
+        .roulette-result.is-spinning .roulette-result__kicker {
+            color: #f4d67a;
         }
 
         .roulette-result.winner {
-            color: #0b1224;
-            background: linear-gradient(135deg, #ffe9a3, #d4af37);
-            border-color: rgba(255, 255, 255, 0.5);
-            text-shadow: none;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+            border-left-color: #8df3c7;
+            animation: rouletteReveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes rouletteReveal {
+            from { opacity: 0; transform: translateX(-16px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @media (max-width: 640px) {
+            .roulette-stage {
+                padding: 14px 14px 20px;
+                border-radius: 18px;
+            }
+
+            .roulette-stage__head {
+                flex-wrap: wrap;
+                gap: 9px;
+            }
+
+            .roulette-stage__title {
+                font-size: 0.88rem;
+            }
+
+            .roulette-stage__count {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .roulette-wheel-area {
+                width: min(100%, 330px);
+                margin: 20px auto 18px;
+            }
+
+            .roulette-hub {
+                width: 82px;
+                height: 82px;
+            }
+
+            .roulette-hub span {
+                font-size: 1.1rem;
+            }
+
+            .roulette-pointer {
+                width: 26px;
+                height: 40px;
+            }
+
+            .roulette-pointer::before {
+                border-left-width: 10px;
+                border-right-width: 10px;
+                border-top-width: 24px;
+            }
+
+            .roulette-pointer::after {
+                width: 18px;
+                height: 18px;
+            }
+
+            .roulette-spin {
+                width: 100%;
+                padding: 14px 18px;
+            }
+
+            .roulette-result__name {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .roulette-stage__beam,
+            .roulette-stage__badge i {
+                animation: none;
+            }
+
+            .roulette-result.winner {
+                animation: none;
+            }
         }
 
         /* ---------- 4. Classement général ---------- */
@@ -3378,10 +3581,6 @@
         /* ---------- 6. Adaptations mobiles ---------- */
         @media (max-width: 768px) {
             .teams-grid { grid-template-columns: 1fr; }
-            .roulette-wrapper { padding: 24px 12px; }
-            .roulette-canvas-container { width: 320px; height: 320px; }
-            #roulette-canvas { width: 300px; height: 300px; }
-            .roulette-result { min-width: 0; width: 100%; font-size: 0.95rem; }
             .barrage-match { padding: 20px 16px; }
             .barrage-teams { gap: 12px; }
             .barrage-team { min-width: 120px; }
@@ -3980,18 +4179,31 @@
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title"><i class="fas fa-dharmachakra" style="color:var(--nav-l3-color);"></i> Ligue 3 – Tirage Montée</h2>
-                    <button class="btn btn-success" id="lancer-roulette-btn"><i class="fas fa-redo-alt"></i> Réinitialiser Roulette</button>
+                    <button class="btn btn-success" id="lancer-roulette-btn"><i class="fas fa-redo-alt"></i> Réinitialiser</button>
                 </div>
                 <div class="roulette-wrapper">
-                    <div class="roulette-canvas-container">
-                        <div class="roulette-pointer-arrow"></div>
-                        <canvas id="roulette-canvas" width="420" height="420"></canvas>
-                        <div class="roulette-center-hub"></div>
+                    <div class="roulette-stage" id="roulette-stage">
+                        <div class="roulette-stage__beam" aria-hidden="true"></div>
+                        <div class="roulette-stage__head">
+                            <span class="roulette-stage__badge"><i aria-hidden="true"></i> Tirage officiel</span>
+                            <span class="roulette-stage__title">Ligue 3 <span aria-hidden="true">→</span> Ligue 2</span>
+                            <span class="roulette-stage__count" id="roulette-count">0 club</span>
+                        </div>
+
+                        <div class="roulette-wheel-area">
+                            <div class="roulette-wheel">
+                                <canvas id="roulette-canvas" width="760" height="760" role="img" aria-label="Roue du tirage de montée en Ligue 2"></canvas>
+                            </div>
+                            <div class="roulette-pointer" aria-hidden="true"></div>
+                            <div class="roulette-hub" aria-hidden="true"><span>L3</span></div>
+                        </div>
+
+                        <div class="roulette-controls">
+                            <button class="roulette-spin" id="spin-roulette-btn"><i class="fas fa-play" aria-hidden="true"></i> Lancer le tirage</button>
+                        </div>
+
+                        <div class="roulette-result" id="roulette-result" aria-live="polite"></div>
                     </div>
-                    <div class="roulette-controls">
-                        <button class="btn btn-warning" id="spin-roulette-btn"><i class="fas fa-sync-alt"></i> Lancer la Roulette</button>
-                    </div>
-                    <div class="roulette-result" id="roulette-result">Ajoutez des clubs et cliquez sur « Lancer »</div>
                 </div>
             </div>
 
@@ -5871,210 +6083,338 @@
         // ==================== ROULETTE L3 (CANVAS) ====================
         let rouletteCurrentRotation = 0;
         let rouletteIsSpinning = false;
+        let rouletteImageCache = {};
+        let rouletteAnimFrame = null;
 
-        const ROULETTE_COLORS = [
-            '#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6',
-            '#1abc9c','#e67e22','#34495e','#e91e63','#00bcd4',
-            '#8bc34a','#ff5722','#673ab7','#009688','#ff9800'
-        ];
+        const ROULETTE_WHEEL_UNITS = 1000;
+        const ROULETTE_WHEEL_RADIUS = 396;
+
+        function rouletteLogoSrc(name) {
+            const logo = (leagueDataStore.l3.clubs[name] || {}).logo;
+            if (!logo) return `${BASE_URL}default_logo.png`;
+            return (logo.startsWith('data:') || logo.startsWith('http')) ? logo : `${BASE_URL}${logo}`;
+        }
+
+        function preloadRouletteLogos() {
+            rouletteClubs.forEach(name => {
+                const src = rouletteLogoSrc(name);
+                if (Object.prototype.hasOwnProperty.call(rouletteImageCache, src)) return;
+                const img = new Image();
+                img.decoding = 'async';
+                img.onload = () => {
+                    rouletteImageCache[src] = img;
+                    if (!rouletteIsSpinning) drawRouletteCanvas();
+                };
+                img.onerror = () => { rouletteImageCache[src] = null; };
+                img.src = src;
+            });
+        }
 
         function drawRouletteCanvas() {
             const canvas = document.getElementById('roulette-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const W = canvas.width;
-            const H = canvas.height;
-            const cx = W / 2;
-            const cy = H / 2;
-            const radius = W / 2 - 4;
+            if (!ctx) return;
 
-            ctx.clearRect(0, 0, W, H);
+            // Le canvas est rendu à la résolution réelle de l'écran pour rester net.
+            const cssSize = canvas.clientWidth || 520;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const pixelSize = Math.max(240, Math.round(cssSize * dpr));
+            if (canvas.width !== pixelSize || canvas.height !== pixelSize) {
+                canvas.width = pixelSize;
+                canvas.height = pixelSize;
+            }
 
-            if (!rouletteClubs || rouletteClubs.length === 0) {
-                ctx.fillStyle = '#1a1a2e';
+            const S = ROULETTE_WHEEL_UNITS;
+            const scale = pixelSize / S;
+            ctx.setTransform(scale, 0, 0, scale, 0, 0);
+            ctx.clearRect(0, 0, S, S);
+
+            const cx = S / 2;
+            const cy = S / 2;
+            const R = ROULETTE_WHEEL_RADIUS;
+            const n = rouletteClubs ? rouletteClubs.length : 0;
+
+            if (n === 0) {
                 ctx.beginPath();
-                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.arc(cx, cy, R, 0, Math.PI * 2);
+                ctx.fillStyle = '#0a1322';
                 ctx.fill();
-                ctx.fillStyle = '#aaa';
-                ctx.font = 'bold 16px Inter';
+                ctx.fillStyle = 'rgba(210, 226, 250, 0.7)';
                 ctx.textAlign = 'center';
-                ctx.fillText('Aucun club en L3', cx, cy - 10);
-                ctx.fillText('Ajoutez des clubs pour jouer', cx, cy + 15);
+                ctx.textBaseline = 'middle';
+                ctx.font = '600 30px Oswald, Inter, sans-serif';
+                ctx.fillText('Aucun club en Ligue 3', cx, cy - 16);
+                ctx.font = '400 20px Inter, sans-serif';
+                ctx.fillText('Ajoutez des clubs pour lancer le tirage', cx, cy + 24);
                 return;
             }
 
-            const n = rouletteClubs.length;
-            const sliceAngle = (2 * Math.PI) / n;
-            const clubs = leagueDataStore.l3.clubs;
+            const slice = (Math.PI * 2) / n;
+            const rimGradient = ctx.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+            rimGradient.addColorStop(0, '#f9edb6');
+            rimGradient.addColorStop(0.32, '#c9a227');
+            rimGradient.addColorStop(0.58, '#7f6419');
+            rimGradient.addColorStop(1, '#f4d67a');
 
-            // Save context then rotate all drawing
             ctx.save();
             ctx.translate(cx, cy);
+
+            // Jante dorée
+            ctx.beginPath();
+            ctx.arc(0, 0, R + 14, 0, Math.PI * 2);
+            ctx.lineWidth = 26;
+            ctx.strokeStyle = rimGradient;
+            ctx.stroke();
+
+            // Graduations de la jante
+            for (let i = 0; i < 72; i++) {
+                const angle = (i / 72) * Math.PI * 2;
+                const long = i % 6 === 0;
+                ctx.beginPath();
+                ctx.moveTo(Math.cos(angle) * (R + 2), Math.sin(angle) * (R + 2));
+                ctx.lineTo(Math.cos(angle) * (R - (long ? 16 : 8)), Math.sin(angle) * (R - (long ? 16 : 8)));
+                ctx.strokeStyle = long ? 'rgba(255, 246, 210, 0.55)' : 'rgba(255, 246, 210, 0.2)';
+                ctx.lineWidth = long ? 5 : 3;
+                ctx.stroke();
+            }
+
+            // Disque tournant
+            ctx.save();
             ctx.rotate((rouletteCurrentRotation * Math.PI) / 180);
 
             for (let i = 0; i < n; i++) {
-                const startAngle = i * sliceAngle - Math.PI / 2;
-                const endAngle = startAngle + sliceAngle;
-
-                // Segment
+                const start = i * slice - Math.PI / 2;
+                const end = start + slice;
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
-                ctx.arc(0, 0, radius, startAngle, endAngle);
+                ctx.arc(0, 0, R, start, end);
                 ctx.closePath();
-                ctx.fillStyle = ROULETTE_COLORS[i % ROULETTE_COLORS.length];
+                ctx.fillStyle = i % 2 === 0 ? '#0d1729' : '#15223b';
                 ctx.fill();
-                ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
                 ctx.lineWidth = 2;
                 ctx.stroke();
+            }
 
-                // Label
+            ctx.beginPath();
+            ctx.arc(0, 0, R - 2, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Noms de clubs et logos
+            const fontSize = n <= 8 ? 52 : n <= 12 ? 44 : n <= 18 ? 36 : n <= 26 ? 30 : 25;
+            for (let i = 0; i < n; i++) {
+                const start = i * slice - Math.PI / 2;
+                const mid = start + slice / 2;
+                const name = rouletteClubs[i] || '';
+
                 ctx.save();
-                const midAngle = startAngle + sliceAngle / 2;
-                ctx.rotate(midAngle);
-                const textRadius = radius * 0.65;
-                ctx.fillStyle = '#fff';
-                ctx.font = `bold ${n > 10 ? 10 : 13}px Inter`;
-                ctx.textAlign = 'center';
+                ctx.rotate(mid);
+                ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                // Wrap long names
-                const name = rouletteClubs[i];
-                const shortName = name.length > 12 ? name.slice(0, 11) + '…' : name;
-                ctx.fillText(shortName, textRadius, 0);
+                ctx.fillStyle = '#eef4ff';
+                ctx.font = `700 ${fontSize}px Oswald, Inter, sans-serif`;
 
-                // Logo image if available
-                const logoSrc = clubs[name]?.logo;
-                if (logoSrc) {
-                    const img = new Image();
-                    img.onload = () => {
-                        // Re-draw after image loads — mark for repaint
-                        if (!rouletteIsSpinning) drawRouletteCanvas();
-                    };
-                    const src = (logoSrc.startsWith('data:') || logoSrc.startsWith('http')) ? logoSrc : `${BASE_URL}${logoSrc}`;
-                    if (rouletteImageCache[src]) {
-                        const cachedImg = rouletteImageCache[src];
-                        ctx.drawImage(cachedImg, textRadius + 12, -12, 22, 22);
-                    } else {
-                        img.src = src;
-                        img.onload = () => { rouletteImageCache[src] = img; drawRouletteCanvas(); };
+                const upper = name.toUpperCase();
+                let label = upper;
+                const maxWidth = R * 0.62;
+                while (label.length > 2 && ctx.measureText(label).width > maxWidth) {
+                    label = label.slice(0, -1);
+                }
+                if (label !== upper) label = `${label.trim()}…`;
+                ctx.fillText(label, R * 0.88, 0);
+
+                if (n <= 20) {
+                    const img = rouletteImageCache[rouletteLogoSrc(name)];
+                    if (img) {
+                        const chipRadius = Math.max(20, R * 0.075);
+                        ctx.save();
+                        ctx.translate(R * 0.4, 0);
+                        ctx.rotate(-mid);
+                        ctx.beginPath();
+                        ctx.arc(0, 0, chipRadius + 6, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.arc(0, 0, chipRadius, 0, Math.PI * 2);
+                        ctx.save();
+                        ctx.clip();
+                        ctx.drawImage(img, -chipRadius, -chipRadius, chipRadius * 2, chipRadius * 2);
+                        ctx.restore();
+                        ctx.restore();
                     }
                 }
                 ctx.restore();
             }
 
-            // Outer ring
+            // Voile radial pour la profondeur
+            const shade = ctx.createRadialGradient(0, 0, R * 0.18, 0, 0, R);
+            shade.addColorStop(0, 'rgba(0, 0, 0, 0.3)');
+            shade.addColorStop(0.72, 'rgba(0, 0, 0, 0.04)');
+            shade.addColorStop(1, 'rgba(0, 0, 0, 0.34)');
             ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-            ctx.lineWidth = 3;
-            ctx.stroke();
+            ctx.arc(0, 0, R, 0, Math.PI * 2);
+            ctx.fillStyle = shade;
+            ctx.fill();
 
+            ctx.restore();
             ctx.restore();
         }
 
-        let rouletteImageCache = {};
-
         function initRoulette() {
-            const clubs = leagueDataStore.l3.clubs;
-            rouletteClubs = Object.keys(clubs || {});
+            const clubs = (leagueDataStore.l3 && leagueDataStore.l3.clubs) || {};
+            rouletteClubs = Object.keys(clubs);
             rouletteCurrentRotation = 0;
             rouletteWinner = null;
             rouletteIsSpinning = false;
             rouletteImageCache = {};
+            if (rouletteAnimFrame) {
+                cancelAnimationFrame(rouletteAnimFrame);
+                rouletteAnimFrame = null;
+            }
+
+            const stage = document.getElementById('roulette-stage');
+            if (stage) stage.classList.remove('is-spinning');
+
+            const countEl = document.getElementById('roulette-count');
+            if (countEl) countEl.textContent = `${rouletteClubs.length} club${rouletteClubs.length > 1 ? 's' : ''}`;
+
+            const button = document.getElementById('spin-roulette-btn');
+            if (button) button.disabled = rouletteClubs.length < 2;
 
             const resultEl = document.getElementById('roulette-result');
             if (resultEl) {
                 resultEl.className = 'roulette-result';
-                resultEl.textContent = rouletteClubs.length < 2
-                    ? 'Ajoutez au moins 2 clubs en L3 pour le tirage !'
-                    : 'Cliquez sur « Lancer » pour démarrer le tirage';
+                resultEl.innerHTML = rouletteClubs.length < 2
+                    ? `<span class="roulette-result__kicker">Tirage Ligue 3</span><span class="roulette-result__name">En attente de clubs</span><span class="roulette-result__meta">Il faut au moins 2 clubs en Ligue 3 pour lancer la roue.</span>`
+                    : `<span class="roulette-result__kicker">Prêt pour le tirage</span><span class="roulette-result__name">${rouletteClubs.length} clubs en lice</span><span class="roulette-result__meta">Cliquez sur « Lancer le tirage » pour désigner le club promu en Ligue 2.</span>`;
             }
+
+            preloadRouletteLogos();
             drawRouletteCanvas();
         }
 
-        document.getElementById('spin-roulette-btn')?.addEventListener('click', () => {
+        function secureRouletteIndex(max) {
+            try {
+                const buffer = new Uint32Array(1);
+                crypto.getRandomValues(buffer);
+                return buffer[0] % max;
+            } catch (e) {
+                return Math.floor(Math.random() * max);
+            }
+        }
+
+        function spinRoulette() {
             if (rouletteIsSpinning) return;
-            if (rouletteClubs.length < 2) {
-                showMessage("Il faut au moins 2 clubs en L3 !", 3000, true);
+            if (!rouletteClubs || rouletteClubs.length < 2) {
+                showMessage('Il faut au moins 2 clubs en L3 !', 3000, true);
                 return;
             }
+
+            const n = rouletteClubs.length;
+            const sliceDeg = 360 / n;
+            const winnerIndex = secureRouletteIndex(n);
+            const currentMod = ((rouletteCurrentRotation % 360) + 360) % 360;
+            const targetMod = ((-((winnerIndex + 0.5) * sliceDeg)) % 360 + 360) % 360;
+            const turns = 7 + secureRouletteIndex(3);
+            const delta = turns * 360 + ((targetMod - currentMod + 360) % 360);
+
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const duration = reduceMotion ? 700 : 6400;
+            const startRot = rouletteCurrentRotation;
+            const startTime = performance.now();
+            const canvas = document.getElementById('roulette-canvas');
             const resultEl = document.getElementById('roulette-result');
-            if (resultEl) { resultEl.className = 'roulette-result'; resultEl.textContent = '⏳ Tirage en cours...'; }
+            const button = document.getElementById('spin-roulette-btn');
+            const stage = document.getElementById('roulette-stage');
 
             rouletteIsSpinning = true;
-            const spinDuration = 4500;
-            const extraSpins = 6 + Math.random() * 4;
-            const randomStopAngle = Math.random() * 360;
-            const totalDelta = extraSpins * 360 + randomStopAngle;
-            const targetRotation = rouletteCurrentRotation + totalDelta;
-
-            const startTime = performance.now();
-            const startRot = rouletteCurrentRotation;
-
-            function easeOut(t) {
-                return 1 - Math.pow(1 - t, 4);
+            rouletteWinner = null;
+            if (stage) stage.classList.add('is-spinning');
+            if (button) button.disabled = true;
+            if (resultEl) {
+                resultEl.className = 'roulette-result is-spinning';
+                resultEl.innerHTML = `<span class="roulette-result__kicker">Tirage en cours</span><span class="roulette-result__name">La roue tourne…</span><span class="roulette-result__meta">Ligue 3 · ${n} clubs en lice</span>`;
             }
 
-            function animate(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / spinDuration, 1);
-                rouletteCurrentRotation = startRot + totalDelta * easeOut(progress);
+            let previousRotation = startRot;
+
+            const frame = (now) => {
+                const t = Math.min((now - startTime) / duration, 1);
+                const eased = t < 0.16
+                    ? 0.05 * Math.pow(t / 0.16, 2)
+                    : 0.05 + 0.95 * (1 - Math.pow(1 - (t - 0.16) / 0.84, 4.6));
+                rouletteCurrentRotation = startRot + delta * eased;
                 drawRouletteCanvas();
 
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    rouletteCurrentRotation = targetRotation % 360;
-                    rouletteIsSpinning = false;
-                    drawRouletteCanvas();
-
-                    // Calculer le gagnant : le pointeur est en haut (270° dans le repère standard = -90°)
-                    // La roue tourne de `rouletteCurrentRotation` degrés
-                    // Le segment sous le pointeur est celui dont la position angulaire après rotation == 270°
-                    const n = rouletteClubs.length;
-                    const sliceDeg = 360 / n;
-                    // Chaque segment i commence à (i * sliceDeg - 90) deg AVANT rotation
-                    // Après rotation de R deg, il est à (i * sliceDeg - 90 + R) deg
-                    // On cherche i tel que le milieu du segment (i * sliceDeg + sliceDeg/2 - 90 + R) % 360 soit le plus proche de 270
-                    // Equivalent : pointer est à -R deg sur la roue non-tournée = (360 - R%360) % 360
-                    const pointerOnWheel = (360 - (rouletteCurrentRotation % 360) + 270) % 360;
-                    // Le segment qui contient cet angle (les segments commencent à -90 = 270 deg)
-                    // Segment i couvre [(i*sliceDeg + 270) % 360, ((i+1)*sliceDeg + 270) % 360]
-                    // Normaliser: angle dans [0,360) relatif au début (270 deg)
-                    const normalizedAngle = (pointerOnWheel - 270 + 360) % 360;
-                    const winnerIndex = Math.floor(normalizedAngle / sliceDeg) % n;
-                    rouletteWinner = rouletteClubs[winnerIndex];
-
-                    if (resultEl) {
-                        resultEl.className = 'roulette-result winner';
-                        resultEl.innerHTML = `<i class="fas fa-trophy"></i> Le club montant est : <strong>${rouletteWinner}</strong> !`;
-                    }
-
-                    // Proposer la montée vers L2 (uniquement si connecté)
-                    setTimeout(() => {
-                        if (googleAccessToken && confirm(`Confirmer la montée de ${rouletteWinner} en Ligue 2 ?`)) {
-                            const clubData = leagueDataStore.l3.clubs[rouletteWinner];
-                            if (clubData) {
-                                leagueDataStore.l2.teams[rouletteWinner] = clubData;
-                                delete leagueDataStore.l3.clubs[rouletteWinner];
-                                saveDataToDrive('l2');
-                                saveDataToDrive('l3');
-                                populateAllLeaguesUI();
-                                initRoulette();
-                                showMessage(`🎉 ${rouletteWinner} monte en L2 !`, 3500);
-                            }
-                        } else if (!googleAccessToken) {
-                            showMessage(`🏆 ${rouletteWinner} est le club tiré ! (Connexion requise pour valider la montée)`, 4000);
-                        }
-                    }, 300);
+                if (canvas) {
+                    const speed = Math.abs(rouletteCurrentRotation - previousRotation);
+                    canvas.style.filter = speed > 1.2 ? `blur(${Math.min(2.8, speed / 5).toFixed(2)}px)` : '';
                 }
+                previousRotation = rouletteCurrentRotation;
+
+                if (t < 1) {
+                    rouletteAnimFrame = requestAnimationFrame(frame);
+                    return;
+                }
+                finishRouletteSpin(winnerIndex);
+            };
+
+            rouletteAnimFrame = requestAnimationFrame(frame);
+        }
+
+        function finishRouletteSpin(winnerIndex) {
+            rouletteAnimFrame = null;
+            rouletteCurrentRotation = ((rouletteCurrentRotation % 360) + 360) % 360;
+            rouletteIsSpinning = false;
+            rouletteWinner = rouletteClubs[winnerIndex];
+
+            const canvas = document.getElementById('roulette-canvas');
+            if (canvas) canvas.style.filter = '';
+            const stage = document.getElementById('roulette-stage');
+            if (stage) stage.classList.remove('is-spinning');
+            const button = document.getElementById('spin-roulette-btn');
+            if (button) button.disabled = rouletteClubs.length < 2;
+
+            drawRouletteCanvas();
+
+            const resultEl = document.getElementById('roulette-result');
+            if (resultEl) {
+                const logo = rouletteLogoSrc(rouletteWinner);
+                const date = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+                resultEl.className = 'roulette-result winner';
+                resultEl.innerHTML = `
+                    <span class="roulette-result__kicker">Promu en Ligue 2</span>
+                    <span class="roulette-result__name"><img class="roulette-result__logo" src="${logo}" alt="">${rouletteWinner}</span>
+                    <span class="roulette-result__meta">Tirage Ligue 3 · ${date}</span>`;
             }
 
-            requestAnimationFrame(animate);
-        });
+            // Proposer la montée vers L2 (uniquement si connecté)
+            setTimeout(() => {
+                if (googleAccessToken && confirm(`Confirmer la montée de ${rouletteWinner} en Ligue 2 ?`)) {
+                    const clubData = leagueDataStore.l3.clubs[rouletteWinner];
+                    if (clubData) {
+                        leagueDataStore.l2.teams[rouletteWinner] = clubData;
+                        delete leagueDataStore.l3.clubs[rouletteWinner];
+                        saveDataToDrive('l2');
+                        saveDataToDrive('l3');
+                        populateAllLeaguesUI();
+                        initRoulette();
+                        showMessage(`🎉 ${rouletteWinner} monte en L2 !`, 3500);
+                    }
+                } else if (!googleAccessToken) {
+                    showMessage(`🏆 ${rouletteWinner} est le club tiré ! (Connexion requise pour valider la montée)`, 4000);
+                }
+            }, 450);
+        }
+
+        document.getElementById('spin-roulette-btn')?.addEventListener('click', spinRoulette);
 
         document.getElementById('lancer-roulette-btn')?.addEventListener('click', () => {
             initRoulette();
-            showMessage("Roulette réinitialisée !", 1500);
+            showMessage('Roulette réinitialisée !', 1500);
         });
 
         // Modal Ajouter Club L3

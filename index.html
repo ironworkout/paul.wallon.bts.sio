@@ -4309,10 +4309,7 @@
                         <i class="fas fa-info-circle"></i> Avant le tirage : gérez les <strong>clubs internationaux</strong> (aucune stat, non sélectionnables en L1/L2/L3) et choisissez les <strong>clubs nationaux</strong> qui participeront aux 32èmes de finale.
                     </p>
                 </div>
-                <div class="cdf-draw-container" id="ldc-draw-section" style="display: none;">
-                    <p style="font-size: 1.2rem; margin-bottom: 15px;">Le tirage au sort est automatique : cliquez sur « Nouveau Tirage LDC » pour mélanger les clubs internationaux et les clubs nationaux choisis.</p>
-                    <div id="ldc-draw-results" style="margin-top: 20px;"></div>
-                </div>
+                <div class="cdf-draw-container" id="ldc-draw-section" style="display: none;"></div>
                 <div id="ldc-bracket-container"></div>
                 <div id="ldc-champion-celebration" style="display:none;"></div>
             </div>
@@ -4370,11 +4367,7 @@
                             Sauvegarder</button>
                     </div>
                 </div>
-                <div class="cdf-draw-container" id="cdf-draw-section" style="display: none;">
-                    <p style="font-size: 1.2rem; margin-bottom: 15px;">Le tirage au sort est automatique : cliquez sur «
-                        Nouveau Tirage CDF » pour mélanger les clubs de L1 et L2.</p>
-                    <div id="cdf-draw-results" style="margin-top: 20px;"></div>
-                </div>
+                <div class="cdf-draw-container" id="cdf-draw-section" style="display: none;"></div>
                 <div id="cdf-bracket-container"></div>
                 <div id="cdf-champion-celebration" style="display:none;"></div>
             </div>
@@ -6601,8 +6594,6 @@
             const isLdc = compId === 'ldc';
             const drawSection = document.getElementById(isLdc ? 'ldc-draw-section' : 'cdf-draw-section');
             if (drawSection) drawSection.style.display = 'none';
-            const drawResults = document.getElementById(isLdc ? 'ldc-draw-results' : 'cdf-draw-results');
-            if (drawResults) drawResults.innerHTML = '';
             const bracket = document.getElementById(isLdc ? 'ldc-bracket-container' : 'cdf-bracket-container');
             if (bracket) bracket.innerHTML = '';
             const celebration = document.getElementById(isLdc ? 'ldc-champion-celebration' : 'cdf-champion-celebration');
@@ -6651,8 +6642,6 @@
 
         function startCDFDraw() {
             const drawSection = document.getElementById('cdf-draw-section');
-            const resultsDiv = document.getElementById('cdf-draw-results');
-
             if (!drawSection) return;
 
             // S'assurer qu'une saison active existe avant de tirer
@@ -6696,8 +6685,6 @@
             const shuffled = [...cdfData.participants].sort(() => Math.random() - 0.5);
             cdfData.rounds[0] = [];
 
-            let drawHtml = '<p style="text-align:center; color: var(--nav-cdf-color); font-weight:bold;">Tirage au sort automatique des 8èmes :</p>';
-
             for (let i = 0; i < shuffled.length; i += 2) {
                 const matchIdx = cdfData.rounds[0].length;
                 const team1 = shuffled[i];
@@ -6708,21 +6695,15 @@
                 // BYE : qualification automatique de l'équipe réelle
                 if (isByeTeam(team1) && !isByeTeam(team2)) {
                     advanceCDFWinner(0, matchIdx, team2);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team2)}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team2) && !isByeTeam(team1)) {
                     advanceCDFWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team1) && isByeTeam(team2)) {
                     advanceCDFWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> qualifié(e) (double BYE)</p>`;
                 } else {
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${resolveCurrentClubName(team1)}</strong> vs <strong>${resolveCurrentClubName(team2)}</strong></p>`;
                 }
             }
 
-            drawHtml += '<p style="margin-top:15px; font-weight:bold; color: var(--neon-green);">Tirage terminé ! Les 8èmes de finale sont définis.</p>';
-            resultsDiv.innerHTML = drawHtml;
-            drawSection.style.display = 'flex';
+            drawSection.style.display = 'none';
 
             populateCompSeasonSelector('cdf');
             saveCDFToDrive();
@@ -7468,7 +7449,6 @@
 
         function startLDCDraw() {
             const drawSection = document.getElementById('ldc-draw-section');
-            const resultsDiv = document.getElementById('ldc-draw-results');
             if (!drawSection) return;
 
             ensureCompActiveSeason('ldc');
@@ -7514,7 +7494,6 @@
             const shuffled = [...ldcData.participants].sort(() => Math.random() - 0.5);
             ldcData.rounds[0] = [];
 
-            let drawHtml = '<p style="text-align:center; color: var(--nav-ldc-color); font-weight:bold;">Tirage au sort automatique des 32èmes de finale :</p>';
             for (let i = 0; i < shuffled.length; i += 2) {
                 const matchIdx = ldcData.rounds[0].length;
                 const team1 = shuffled[i];
@@ -7524,21 +7503,15 @@
 
                 if (isByeTeam(team1) && !isByeTeam(team2)) {
                     advanceLDCWinner(0, matchIdx, team2);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team2}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team2) && !isByeTeam(team1)) {
                     advanceLDCWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (BYE)</p>`;
                 } else if (isByeTeam(team1) && isByeTeam(team2)) {
                     advanceLDCWinner(0, matchIdx, team1);
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> qualifié(e) (double BYE)</p>`;
                 } else {
-                    drawHtml += `<p style="margin: 5px 0;">Match ${matchNum}: <strong>${team1}</strong> vs <strong>${team2}</strong></p>`;
                 }
             }
 
-            drawHtml += '<p style="margin-top:15px; font-weight:bold; color: var(--neon-green);">Tirage terminé ! Les 32èmes de finale sont définis.</p>';
-            resultsDiv.innerHTML = drawHtml;
-            drawSection.style.display = 'flex';
+            drawSection.style.display = 'none';
 
             populateCompSeasonSelector('ldc');
             saveLDCToDrive();

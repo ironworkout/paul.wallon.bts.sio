@@ -2770,7 +2770,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .bracket-canvas { position: relative; display: flex; align-items: stretch; gap: 56px; min-width: max-content; padding: 2px 2px 4px; }
+        .bracket-canvas { position: relative; display: flex; align-items: stretch; gap: 44px; min-width: max-content; padding: 2px 2px 4px; }
         .bracket-lines { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; z-index: 0; }
         .bracket-line { fill: none; stroke: rgba(120, 136, 175, 0.55); stroke-width: 2; stroke-linejoin: round; }
         .bracket-line.is-won { stroke: var(--bk-accent-line); stroke-width: 2.5; }
@@ -2781,9 +2781,11 @@
             position: relative;
             z-index: 1;
             display: flex;
+            flex: 0 0 266px;
             flex-direction: column;
             gap: 12px;
-            min-width: 266px;
+            width: 266px;
+            min-width: 0;
             scroll-snap-align: start;
         }
 
@@ -2802,6 +2804,9 @@
         .bracket-round__name {
             font-family: 'Oswald', sans-serif;
             font-size: 0.92rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-weight: 600;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -2912,8 +2917,8 @@
         .bracket-focus-label { margin: 8px 2px 0; font-size: 0.78rem; font-weight: 600; color: #16203a; }
 
         @media (max-width: 768px) {
-            .bracket-canvas { gap: 38px; }
-            .bracket-round { min-width: 236px; }
+            .bracket-canvas { gap: 34px; }
+            .bracket-round { flex-basis: 236px; width: 236px; }
             .bracket-row { grid-template-columns: 24px minmax(0, 1fr) 38px 14px; padding: 7px 8px; }
             .bracket-row__name { font-size: 0.88rem; }
             .bracket-row__score { width: 38px; font-size: 1rem; }

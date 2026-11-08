@@ -3425,15 +3425,21 @@
         .fixtures-table tbody td:last-child { border-radius: 0 12px 12px 0; }
 
         .fixtures-table .fixture-match {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-            align-items: center;
-            gap: 10px;
-            padding: 8px 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px 11px 6px;
             border: 1px solid #e4eaf3;
             border-radius: 12px;
             background: linear-gradient(180deg, #f8fafd, #eef2f8);
             transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .fixtures-table .fixture-line {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            gap: 10px;
         }
 
         .fixtures-table .fixture-match:hover {
@@ -3483,6 +3489,35 @@
             background: linear-gradient(180deg, #17416f, #0b2440);
         }
 
+        /* L1 en or, L2 en bleu glacier : deux calendriers bien distincts */
+        .l1-content .fixtures-table thead th { color: #f4d98a !important; }
+        .l2-content .fixtures-table thead th,
+        .l3-content .fixtures-table thead th { color: #c4e5ff !important; }
+
+        .l1-content .fixtures-table tbody td:first-child {
+            box-shadow: inset 3px 0 0 var(--accent-gold), inset -1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .l1-content .fixtures-table .fixture-match {
+            background: linear-gradient(180deg, #fdfaf1, #f5efe0);
+            border-color: #e8dfc9;
+        }
+
+        .l1-content .fixtures-table .fixture-score-inputs input {
+            background: linear-gradient(180deg, #23386f, #101a3a);
+            color: #f6d97e;
+        }
+
+        .l2-content .fixtures-table .fixture-match {
+            background: linear-gradient(180deg, #f6fbff, #eaf3fc);
+            border-color: #d7e6f5;
+        }
+
+        .l2-content .fixtures-table .fixture-score-inputs input {
+            background: linear-gradient(180deg, #0f4b7a, #062437);
+            color: #e8f6ff;
+        }
+
         .fixtures-table .fixture-score-inputs input:focus {
             outline: 2px solid var(--accent-gold);
             outline-offset: 1px;
@@ -3501,6 +3536,61 @@
         }
 
         .fixtures-table .vs-separator { color: #93a0b5; font-weight: 700; }
+
+        /* Statut du match : bandeau façon bePeluche Sports pour le direct */
+        .fixtures-table .fixture-status {
+            align-self: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 1px 9px;
+            border-radius: 999px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.64rem;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            line-height: 1.65;
+            white-space: nowrap;
+        }
+
+        .fixtures-table .fixture-status--live {
+            color: #ffe9fb;
+            background: linear-gradient(180deg, #57104b, #2a0a26);
+            border: 1px solid rgba(199, 36, 177, 0.8);
+            box-shadow: 0 0 16px -6px rgba(199, 36, 177, 0.9);
+        }
+
+        .fixtures-table .fixture-status__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff5ad9;
+            box-shadow: 0 0 8px #ff5ad9;
+            animation: fixture-live-pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes fixture-live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.8); }
+        }
+
+        .fixtures-table .fixture-status--upcoming {
+            color: #5d6d85;
+            background: #eef3fa;
+            border: 1px solid #dbe4f0;
+        }
+
+        .fixtures-table .fixture-status--done {
+            color: #0c6b4a;
+            background: #e7f7ef;
+            border: 1px solid #c4ead8;
+        }
+
+        .fixtures-table tbody tr.is-active-round td:first-child {
+            box-shadow: inset 3px 0 0 #ff5ad9, inset -1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .fixtures-table td.fixture-empty { color: #b9c3d2; }
 
         #drive-status { cursor: pointer; }
         #drive-status:hover { border-color: var(--accent-gold); }
@@ -5166,22 +5256,51 @@
             return getClubLogo(displayName);
         }
 
+        // Journée « en cours » : la première dont tous les résultats ne sont pas saisis.
+        function findActiveRound(fixturesData) {
+            const isEmpty = value => value === null || value === undefined || value === '';
+            const rounds = fixturesData || [];
+            for (let i = 0; i < rounds.length; i++) {
+                const pending = (rounds[i] || []).some(match => match && (isEmpty(match.scoreHome) || isEmpty(match.scoreAway)));
+                if (pending) return i;
+            }
+            return Math.max(0, rounds.length - 1);
+        }
+
+        function getFixtureStatus(match, roundIndex, activeRound) {
+            const isEmpty = value => value === null || value === undefined || value === '';
+            if (!isEmpty(match.scoreHome) && !isEmpty(match.scoreAway)) return 'done';
+            return roundIndex === activeRound ? 'live' : 'upcoming';
+        }
+
+        function buildFixtureStatusHTML(status) {
+            if (status === 'live') return '<span class="fixture-status fixture-status--live"><span class="fixture-status__dot" aria-hidden="true"></span>En cours</span>';
+            if (status === 'done') return '<span class="fixture-status fixture-status--done">Terminé</span>';
+            return '<span class="fixture-status fixture-status--upcoming">À venir</span>';
+        }
+
         function populateFixturesDOM(fixturesBodyId, fixturesData, teamsInfo, leagueId, seasonLogos) {
             const fixturesBody = document.getElementById(fixturesBodyId); if (!fixturesBody) return; fixturesBody.innerHTML = '';
             const matchesPerDay = (teamsInfo && Math.floor(Object.keys(teamsInfo).length / 2)) || 3;
+            const activeRound = findActiveRound(fixturesData);
             (fixturesData || []).forEach((round, index) => {
-                const row = document.createElement('tr'); let roundHtml = `<td>J.${index + 1}</td>`;
+                const row = document.createElement('tr');
+                row.className = index === activeRound ? 'is-active-round' : '';
+                let roundHtml = `<td><span class="fixture-day">J.${index + 1}</span></td>`;
                 (round || []).forEach((match, matchIdx) => {
-                    if (!match) { roundHtml += '<td>-</td>'; return; }
+                    if (!match) { roundHtml += '<td class="fixture-empty">-</td>'; return; }
                     const scoreHomeInputId = `${leagueId}-r${index}-m${matchIdx}-h`; const scoreAwayInputId = `${leagueId}-r${index}-m${matchIdx}-a`;
                     const scoreHomeVal = match.scoreHome !== null ? match.scoreHome : ''; const scoreAwayVal = match.scoreAway !== null ? match.scoreAway : '';
                     // Resolution d'identite : les fixtures stockent le nom de l'epoque ; on affiche
                     // le nom actuel du club via le registre (anciens noms -> nom courant).
                     const displayHome = resolveCurrentClubName(match.home);
                     const displayAway = resolveCurrentClubName(match.away);
-                    roundHtml += `<td><div class="fixture-match"><div class="fixture-team home"><span>${displayHome}</span><img src="${resolveSeasonLogo(seasonLogos, match.home, displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${resolveSeasonLogo(seasonLogos, match.away, displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div></td>`;
+                    const status = getFixtureStatus(match, index, activeRound);
+                    const homeShot = leagueId === 'ldc' ? getClubTribune(displayHome) : null;
+                    const shotAttr = homeShot ? ` style="--fixture-shot:url('${homeShot.card}')"` : '';
+                    roundHtml += `<td><div class="fixture-match${homeShot ? ' fixture-match--shot' : ''}"${shotAttr}><div class="fixture-line"><div class="fixture-team home"><span>${displayHome}</span><img src="${resolveSeasonLogo(seasonLogos, match.home, displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${resolveSeasonLogo(seasonLogos, match.away, displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div>${buildFixtureStatusHTML(status)}</div></td>`;
                 });
-                for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td>-</td>';
+                for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td class="fixture-empty">-</td>';
                 row.innerHTML = roundHtml; fixturesBody.appendChild(row);
             });
             document.querySelectorAll(`#${fixturesBodyId} .fixture-score-input`).forEach(input => input.addEventListener('change', handleScoreChange));

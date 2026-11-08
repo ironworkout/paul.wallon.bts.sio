@@ -2999,23 +2999,6 @@
             box-shadow: 0 34px 70px rgba(2, 5, 12, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
 
-        .roulette-stage__beam {
-            position: absolute;
-            z-index: 0;
-            top: -60%;
-            left: 50%;
-            width: 760px;
-            height: 760px;
-            transform: translateX(-50%) rotate(0deg);
-            background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 200, 150, 0.16) 42deg, transparent 96deg, transparent 200deg, rgba(212, 175, 55, 0.12) 250deg, transparent 300deg);
-            animation: rouletteBeam 26s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes rouletteBeam {
-            to { transform: translateX(-50%) rotate(360deg); }
-        }
-
         .roulette-stage__head {
             position: relative;
             z-index: 1;
@@ -3351,7 +3334,6 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .roulette-stage__beam,
             .roulette-stage__badge i {
                 animation: none;
             }
@@ -4206,7 +4188,6 @@
                 </div>
                 <div class="roulette-wrapper">
                     <div class="roulette-stage" id="roulette-stage">
-                        <div class="roulette-stage__beam" aria-hidden="true"></div>
                         <div class="roulette-stage__head">
                             <span class="roulette-stage__badge"><i aria-hidden="true"></i> Tirage officiel</span>
                             <span class="roulette-stage__title">Ligue 3 <span aria-hidden="true">→</span> Ligue 2</span>
@@ -6150,6 +6131,7 @@
             const cy = S / 2;
             const R = ROULETTE_WHEEL_RADIUS;
             const n = rouletteClubs ? rouletteClubs.length : 0;
+            if (n > 0) canvas.setAttribute('aria-label', `Roue du tirage de montée en Ligue 2 : ${rouletteClubs.join(', ')}`);
 
             if (n === 0) {
                 ctx.beginPath();
@@ -6219,48 +6201,48 @@
             ctx.lineWidth = 4;
             ctx.stroke();
 
-            // Noms de clubs et logos
-            const fontSize = n <= 8 ? 52 : n <= 12 ? 44 : n <= 18 ? 36 : n <= 26 ? 30 : 25;
+            // Logos des clubs, poses a plat sur chaque part (aucun nom dans la roue)
+            const chipRadius = n <= 8 ? 46 : n <= 12 ? 39 : n <= 18 ? 32 : n <= 26 ? 26 : 21;
+            const chipDistance = R * 0.66;
             for (let i = 0; i < n; i++) {
-                const start = i * slice - Math.PI / 2;
-                const mid = start + slice / 2;
+                const mid = i * slice - Math.PI / 2 + slice / 2;
                 const name = rouletteClubs[i] || '';
+                const px = Math.cos(mid) * chipDistance;
+                const py = Math.sin(mid) * chipDistance;
+                const img = n <= 32 ? rouletteImageCache[rouletteLogoSrc(name)] : null;
 
                 ctx.save();
-                ctx.rotate(mid);
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#eef4ff';
-                ctx.font = `700 ${fontSize}px Oswald, Inter, sans-serif`;
+                ctx.beginPath();
+                ctx.arc(px, py, chipRadius + 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(3, 7, 14, 0.55)';
+                ctx.fill();
 
-                const upper = name.toUpperCase();
-                let label = upper;
-                const maxWidth = R * 0.62;
-                while (label.length > 2 && ctx.measureText(label).width > maxWidth) {
-                    label = label.slice(0, -1);
-                }
-                if (label !== upper) label = `${label.trim()}…`;
-                ctx.fillText(label, R * 0.88, 0);
+                ctx.beginPath();
+                ctx.arc(px, py, chipRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#f7fbff';
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+                ctx.stroke();
 
-                if (n <= 20) {
-                    const img = rouletteImageCache[rouletteLogoSrc(name)];
-                    if (img) {
-                        const chipRadius = Math.max(20, R * 0.075);
-                        ctx.save();
-                        ctx.translate(R * 0.4, 0);
-                        ctx.rotate(-mid);
-                        ctx.beginPath();
-                        ctx.arc(0, 0, chipRadius + 6, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
-                        ctx.fill();
-                        ctx.beginPath();
-                        ctx.arc(0, 0, chipRadius, 0, Math.PI * 2);
-                        ctx.save();
-                        ctx.clip();
-                        ctx.drawImage(img, -chipRadius, -chipRadius, chipRadius * 2, chipRadius * 2);
-                        ctx.restore();
-                        ctx.restore();
-                    }
+                if (img) {
+                    const box = chipRadius * 1.62;
+                    const ratio = (img.width || 1) / (img.height || 1);
+                    const w = ratio >= 1 ? box : box * ratio;
+                    const h = ratio >= 1 ? box / ratio : box;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(px, py, chipRadius - 3, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, px - w / 2, py - h / 2, w, h);
+                    ctx.restore();
+                } else {
+                    const initials = (name.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 2) || '?').toUpperCase();
+                    ctx.fillStyle = '#0b1526';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = `700 ${Math.round(chipRadius * 0.82)}px Oswald, Inter, sans-serif`;
+                    ctx.fillText(initials, px, py + 1);
                 }
                 ctx.restore();
             }

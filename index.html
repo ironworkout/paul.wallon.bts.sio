@@ -3359,7 +3359,161 @@
             .modal-overlay { padding: 10px; }
             .modal-content { padding: 18px; max-height: 88vh; overflow-y: auto; }
         }
-    </style>
+    
+        /* ---------- Calendrier L1 / L2 : lecture « multiplex » ---------- */
+        .fixtures-table {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            min-width: 660px;
+            margin-top: 6px;
+        }
+
+        .fixtures-table thead th {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.78rem;
+            padding: 12px 10px;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .l1-content .fixtures-table thead th {
+            background: linear-gradient(180deg, #22346e, #101b3f) !important;
+            border-bottom: 3px solid var(--accent-gold) !important;
+        }
+
+        .l2-content .fixtures-table thead th,
+        .l3-content .fixtures-table thead th {
+            background: linear-gradient(180deg, #15426f, #0a2138) !important;
+            border-bottom: 3px solid #4aa3ff !important;
+        }
+
+        .fixtures-table tbody tr {
+            background: #ffffff;
+            box-shadow: 0 1px 0 rgba(16, 26, 60, 0.07), 0 14px 24px -20px rgba(16, 26, 60, 0.6);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .fixtures-table tbody tr:hover {
+            background: #fbfcff;
+            box-shadow: 0 1px 0 rgba(16, 26, 60, 0.07), 0 18px 30px -18px rgba(16, 26, 60, 0.55);
+        }
+
+        .fixtures-table tbody td {
+            border-bottom: none;
+            padding: 9px 10px;
+        }
+
+        .fixtures-table tbody td:first-child {
+            width: 76px;
+            border-radius: 12px 0 0 12px;
+            background: linear-gradient(160deg, #22346e, #0d1734);
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            font-size: 0.92rem;
+            box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .l2-content .fixtures-table tbody td:first-child,
+        .l3-content .fixtures-table tbody td:first-child {
+            background: linear-gradient(160deg, #15426f, #08182c);
+        }
+
+        .fixtures-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+
+        .fixtures-table .fixture-match {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            gap: 10px;
+            padding: 8px 11px;
+            border: 1px solid #e4eaf3;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #f8fafd, #eef2f8);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .fixtures-table .fixture-match:hover {
+            border-color: #cdd8e8;
+            box-shadow: 0 12px 22px -16px rgba(15, 26, 60, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .fixtures-table .fixture-team { gap: 0; }
+
+        .fixtures-table .fixture-team span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+            color: #16233f;
+            margin: 0;
+            white-space: normal;
+            line-height: 1.15;
+            max-height: 2.4em;
+        }
+
+        .fixtures-table .fixture-team.home span { text-align: right; }
+
+        .fixtures-table .fixture-team img.team-logo {
+            width: 26px;
+            height: 26px;
+            margin: 0 7px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+        }
+
+        .fixtures-table .fixture-score-inputs { gap: 6px; }
+
+        .fixtures-table .fixture-score-inputs input {
+            width: 34px;
+            padding: 7px 2px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(180deg, #22346e, #131f44);
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .l2-content .fixtures-table .fixture-score-inputs input,
+        .l3-content .fixtures-table .fixture-score-inputs input {
+            background: linear-gradient(180deg, #17416f, #0b2440);
+        }
+
+        .fixtures-table .fixture-score-inputs input:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 1px;
+            box-shadow: none;
+        }
+
+        .fixtures-table .fixture-score-input {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .fixtures-table .fixture-score-input::-webkit-outer-spin-button,
+        .fixtures-table .fixture-score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .fixtures-table .vs-separator { color: #93a0b5; font-weight: 700; }
+
+        #drive-status { cursor: pointer; }
+        #drive-status:hover { border-color: var(--accent-gold); }
+
+        @media (max-width: 768px) {
+            .fixtures-table { min-width: 540px; border-spacing: 0 7px; }
+            .fixtures-table .fixture-match { gap: 6px; padding: 7px 8px; }
+            .fixtures-table .fixture-team span { font-size: 0.8rem; }
+            .fixtures-table .fixture-team img.team-logo { width: 22px; height: 22px; margin: 0 4px; }
+            .fixtures-table .fixture-score-inputs input { width: 32px; padding: 6px 1px; font-size: 0.85rem; }
+            .fixtures-table tbody td:first-child { width: 62px; font-size: 0.82rem; }
+        }
+</style>
 </head>
 
 <body>
@@ -3493,8 +3647,8 @@
                         <img src="valenciennes-supporters.webp" width="1536" height="1024" loading="lazy" decoding="async"
                             alt="Supporters de Valenciennes en feutrine dans les tribunes">
                         <div class="carousel-caption" data-club="Valenciennes FC">
-                            <h2>VALENCIENNES FC : LES ATHÉNIENS !</h2>
-                            <p>Fondé en 1913, le club du Hainaut et ses supporters en feutrine.</p><a href="#l1-teams-section"
+                            <h2>VALENCIENNES FC : LE STADE DU HAINAUT</h2>
+                            <p>Le club fondé en 1913 et ses supporters en feutrine.</p><a href="#l1-teams-section"
                                 class="btn">Découvrir les Équipes</a>
                         </div>
                     </div>
@@ -3823,6 +3977,12 @@
     <!-- CDF - COUPE DE FRANCE -->
     <div class="tab-content cdf-content" id="cdf-content">
         <div class="container">
+            <div class="section action-buttons">
+                <button class="league-music-btn" data-league-audio="cdf"
+                    aria-label="Jouer/Mettre en pause l'hymne de la Coupe de France">
+                    <i class="fas fa-play"></i> Hymne CDF
+                </button>
+            </div>
             <figure class="banner-coupe banner-coupe--cdf">
                 <span class="banner-coupe__grain" aria-hidden="true"></span>
                 <div class="banner-coupe__brand">
@@ -4170,6 +4330,7 @@
     <audio id="audio-l1" src="ligue1.mp3" loop preload="none"></audio>
     <audio id="audio-l2" src="ligue2.mp3" loop preload="none"></audio>
     <audio id="audio-ldc" src="ldc.mp3" loop preload="none"></audio>
+    <audio id="audio-cdf" src="hymne-cdf.mp3" loop preload="none"></audio>
 
     <script>
         const GOOGLE_CLIENT_ID = "731283926358-viam3ulpgna14flfdeb9m92l8s620hoi.apps.googleusercontent.com";
@@ -4178,6 +4339,87 @@
         // Journal Drive : silencieux par défaut, passer à true pour diagnostiquer.
         const DRIVE_DEBUG = false;
         function driveLog(...args) { if (DRIVE_DEBUG) console.log(...args); }
+
+        // ---- Session Drive mémorisée : le lien Google survit au rechargement de la page ----
+        const DRIVE_SESSION_KEY = 'peluches_drive_session';
+        const DRIVE_REMEMBER_KEY = 'peluches_drive_remember';
+        let driveRefreshTimer = null;
+
+        function readDriveSession() {
+            try {
+                const raw = localStorage.getItem(DRIVE_SESSION_KEY);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed || !parsed.token || !parsed.expiresAt) return null;
+                if (parsed.expiresAt <= Date.now() + 60000) return null;
+                return parsed;
+            } catch (e) { return null; }
+        }
+
+        function writeDriveSession(tokenResponse) {
+            try {
+                const ttl = Math.max(300, (tokenResponse.expires_in || 3600) - 120);
+                localStorage.setItem(DRIVE_SESSION_KEY, JSON.stringify({ token: tokenResponse.access_token, expiresAt: Date.now() + ttl * 1000 }));
+                localStorage.setItem(DRIVE_REMEMBER_KEY, '1');
+            } catch (e) {}
+        }
+
+        function clearDriveSession() {
+            try { localStorage.removeItem(DRIVE_SESSION_KEY); } catch (e) {}
+            if (driveRefreshTimer) { clearTimeout(driveRefreshTimer); driveRefreshTimer = null; }
+        }
+
+        function scheduleDriveRefresh() {
+            if (driveRefreshTimer) clearTimeout(driveRefreshTimer);
+            const session = readDriveSession();
+            if (!session) return;
+            const delay = Math.max(30000, session.expiresAt - Date.now() - 120000);
+            driveRefreshTimer = setTimeout(() => {
+                if (tokenClient) tokenClient.requestAccessToken({ prompt: '' });
+            }, delay);
+        }
+
+        function refreshDriveStatusLabel(text, stateClass) {
+            const status = document.getElementById('drive-status');
+            const statusText = document.getElementById('drive-status-text');
+            if (status && stateClass) { status.className = stateClass; status.style.display = 'inline-flex'; }
+            if (statusText && text) statusText.textContent = text;
+        }
+
+        async function restoreDriveSession() {
+            const session = readDriveSession();
+            if (!session || googleAccessToken) return;
+            googleAccessToken = session.token;
+            updateAuthUI(true);
+            refreshDriveStatusLabel('Connecté', 'success');
+            try {
+                await loadAllDataFromDrive();
+                populateAllLeaguesUI(); populatePalmaresTable(); populateBaseClubs(); populateCDF(); populateLDC(); updateBarragesDisplay(); populateCarouselClubTrophies();
+                scheduleDriveRefresh();
+            } catch (e) {
+                console.warn('Reprise de session Drive impossible :', e);
+                googleAccessToken = null;
+                clearDriveSession();
+                updateAuthUI(false);
+            }
+        }
+
+        function setupDriveStatusClick() {
+            const status = document.getElementById('drive-status');
+            if (!status || status.dataset.logoutReady === '1') return;
+            status.dataset.logoutReady = '1';
+            status.title = 'Cliquer pour déconnecter Google Drive sur cet appareil';
+            status.addEventListener('click', () => {
+                if (!googleAccessToken) return;
+                if (!window.confirm('Déconnecter Google Drive sur cet appareil ?')) return;
+                try { if (window.google && google.accounts && google.accounts.oauth2 && google.accounts.oauth2.revoke) google.accounts.oauth2.revoke(googleAccessToken, () => {}); } catch (e) {}
+                googleAccessToken = null;
+                clearDriveSession();
+                try { localStorage.removeItem(DRIVE_REMEMBER_KEY); } catch (e) {}
+                updateAuthUI(false);
+                showMessage('Déconnecté de Google Drive.', 3000);
+            });
+        }
 
         // --- Modales accessibles : dialogue ARIA, focus rendu à la fermeture, fermeture par Échap ---
         let lastFocusedElement = null;
@@ -4374,8 +4616,36 @@
         let baseClubsData = { clubs: {}, fileId: null, filename: 'peluches_base_clubs.json' };
         let cdfData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_cdf_data.json' };
         let ldcData = { participants: [], currentRound: 0, rounds: {}, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null, fileId: null, filename: 'peluches_ldc_data.json' };
-        // Clubs internationaux de la LDC : pas de stats, non selectionnables pour L1/L2/L3
-        let ldcClubsData = { clubs: {}, fileId: null, filename: 'peluches_ldc_clubs.json' };
+        // Clubs internationaux de la LDC : pas de stats, non selectionnables pour L1/L2/L3.
+        // Ces quatre clubs sont la base fournie avec le site ; le Drive peut en ajouter d'autres.
+        const DEFAULT_LDC_CLUBS = {
+            'Real de Madrours': { logo: 'embleme-peluche.svg', country: 'Espagne' },
+            'Dourstmund': { logo: 'embleme-peluche.svg', country: 'Allemagne' },
+            'PopoGlimt': { logo: 'embleme-peluche.svg', country: 'Norvège' },
+            'Liverpours': { logo: 'embleme-peluche.svg', country: 'Angleterre' }
+        };
+
+        function isSameClubName(a, b) {
+            const ka = normaliseClubKey(a), kb = normaliseClubKey(b);
+            if (!ka || !kb) return false;
+            if (ka === kb) return true;
+            const ta = ka.split(' '), tb = kb.split(' ');
+            const shorter = ta.length <= tb.length ? ta : tb;
+            const longer = ta.length <= tb.length ? tb : ta;
+            return shorter.every(token => longer.includes(token));
+        }
+
+        // Ajoute les clubs fournis par le site sans écraser ceux déjà enregistrés dans le Drive.
+        function mergeDefaultLdcClubs(clubs) {
+            const merged = Object.assign({}, clubs || {});
+            Object.entries(DEFAULT_LDC_CLUBS).forEach(([name, info]) => {
+                const alreadyThere = Object.keys(merged).some(existing => isSameClubName(existing, name));
+                if (!alreadyThere) merged[name] = Object.assign({}, info);
+            });
+            return merged;
+        }
+
+        let ldcClubsData = { clubs: mergeDefaultLdcClubs({}), fileId: null, filename: 'peluches_ldc_clubs.json' };
         // Clubs nationaux (L1/L2/L3) selectionnes par l'utilisateur pour participer a la LDC
         let ldcNationalSelection = { l1: [], l2: [], l3: [] };
         let barragesData = { ldc: { team1: null, team2: null, goals1: { home: null, away: null }, goals2: { home: null, away: null }, winner: null }, fileId: null, filename: 'peluches_barrages_data.json' };
@@ -4446,7 +4716,7 @@
             if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
                 try {
                     tokenClient = google.accounts.oauth2.initTokenClient({ client_id: GOOGLE_CLIENT_ID, scope: GOOGLE_DRIVE_SCOPES, callback: tokenCallback, error_callback: handleTokenError });
-                    if (tokenClient) tokenClient.requestAccessToken({ prompt: '' });
+                    if (tokenClient && !googleAccessToken && !readDriveSession() && localStorage.getItem(DRIVE_REMEMBER_KEY) === '1') tokenClient.requestAccessToken({ prompt: '' });
                     const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = false;
                 } catch (error) { console.error("Erreur GIS initTokenClient:", error); showMessage("Erreur initialisation Google.", 5000, true); updateAuthUI(false); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
             } else { console.warn("API Google (GIS) non chargée."); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
@@ -4470,7 +4740,7 @@
             if (driveStatusElement) driveStatusElement.className = '';
             if (tokenResponse.error) { if (tokenResponse.error !== "popup_failed_to_open" && tokenResponse.error !== "popup_closed_by_user") handleTokenError(tokenResponse); else updateAuthUI(false); return; }
             if (tokenResponse && tokenResponse.access_token) {
-                googleAccessToken = tokenResponse.access_token; showMessage("Connecté ! Chargement des données...", 2500);
+                googleAccessToken = tokenResponse.access_token; writeDriveSession(tokenResponse); scheduleDriveRefresh(); showMessage("Connecté ! Chargement des données...", 2500);
                 if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
                 if (driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
                 try {
@@ -4542,7 +4812,7 @@
             const searchUrl = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(filename)}'+and+trashed=false&spaces=drive&fields=files(id,name)`;
             try {
                 const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
+                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
                 const searchData = await searchRes.json();
                 if (searchData.files && searchData.files.length > 0) { driveLog(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
                 driveLog(`Fichier Drive '${filename}' non trouvé. Création...`);
@@ -4563,7 +4833,7 @@
             const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!response.ok) { if (response.status === 404) { driveLog(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
+                if (!response.ok) { if (response.status === 404) { driveLog(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
                 driveLog(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
             } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
         }
@@ -4581,7 +4851,7 @@
             let success = false;
             try {
                 const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
-                if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
+                if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
                 else { driveLog(`Écriture réussie ID ${fileId}.`); success = true; }
             } catch (error) { console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error); showMessage(`Erreur sauvegarde Drive.`, 5000, true); if (driveStatusElement && driveStatusTextElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; } }
             finally { isSavingDriveData = false; if (driveStatusElement && driveStatusTextElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success'; } updateAuthUI(!!googleAccessToken); }
@@ -4642,11 +4912,11 @@
                 if (ldcClubsContent) {
                     try {
                         const parsed = JSON.parse(ldcClubsContent);
-                        ldcClubsData.clubs = parsed.clubs || {};
+                        ldcClubsData.clubs = mergeDefaultLdcClubs(parsed.clubs || {});
                         ldcClubsData.selection = parsed.selection || { l1: [], l2: [], l3: [] };
                         ldcNationalSelection = ldcClubsData.selection;
                         ldcClubsData.filename = 'peluches_ldc_clubs.json';
-                    } catch (e) { ldcClubsData.clubs = {}; }
+                    } catch (e) { ldcClubsData.clubs = mergeDefaultLdcClubs({}); }
                 }
             }
 
@@ -4953,6 +5223,10 @@
             'VAFC': 'stade-vafc',
             'Toulours FC': 'foule-toulours',
             'PSG Peluches': 'tifo-psg',
+            'PSG': 'tifo-psg',
+            'Paris SG': 'tifo-psg',
+            'Paris SG Peluches': 'tifo-psg',
+            'Paris Saint-Germain': 'tifo-psg',
             'Olympique Ours': 'foule-olympique-ours',
             "Olympique d'Ours": 'foule-olympique-ours',
             'AS Carrotes': 'foule-orange-blanc',
@@ -4966,12 +5240,34 @@
             'FC Doudou': 'tifo-doudou',
             'AS Doudou Club': 'tifo-doudou',
             'Real Madrours': 'stade-madrours',
+            'Real de Madrours': 'stade-madrours',
             'Dourstmund': 'tifo-dourstmund',
-            'PopoGlimt': 'tribune-popolglimt'
+            'PopoGlimt': 'tribune-popolglimt',
+            'Liverpours': 'tifo-peluches'
         };
 
+        // Clé de comparaison tolérante : accents, casse, ponctuation et mots de club ignorés.
+        function normaliseClubKey(name) {
+            return String(name || '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, ' ')
+                .replace(/\b(fc|cf|sc|as|us|club|football)\b/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        const CLUB_TRIBUNE_INDEX = (() => {
+            const index = {};
+            Object.entries(CLUB_TRIBUNE_SHOTS).forEach(([name, slug]) => {
+                const key = normaliseClubKey(name);
+                if (key && !index[key]) index[key] = slug;
+            });
+            return index;
+        })();
+
         function getClubTribune(clubName) {
-            const slug = CLUB_TRIBUNE_SHOTS[clubName];
+            const slug = CLUB_TRIBUNE_SHOTS[clubName] || CLUB_TRIBUNE_INDEX[normaliseClubKey(clubName)];
             return slug ? { card: `${slug}-card.webp`, full: `${slug}.webp` } : null;
         }
 
@@ -4997,7 +5293,7 @@
                     : `<figure class="team-card__shot team-card__shot--empty">
                             <img class="team-card__crest" src="${logoSrc}" alt="${teamName}" onerror="this.onerror=null;this.src='embleme-peluche.svg'">
                         </figure>`;
-                teamCard.innerHTML = `${shotHtml}<div class="team-card__body"><h4>${teamName}</h4>${getClubAliasBadgeHTML(teamName)}${getClubTrophiesHTML(teamName)}${teamData.description ? `<p>${teamData.description}</p>` : ''}</div>`;
+                teamCard.innerHTML = `${shotHtml}<div class="team-card__body"><h4>${teamName}</h4>${getClubAliasBadgeHTML(teamName)}${getClubTrophiesHTML(teamName)}</div>`;
                 
                 // Poubelle de suppression uniquement pour les clubs de L3
                 if (teamsGridId.includes('l3')) {
@@ -7794,6 +8090,7 @@
             if (leagueId === 'ligue1' && audioElements.l1) audioToPlay = audioElements.l1;
             else if (leagueId === 'ligue2' && audioElements.l2) audioToPlay = audioElements.l2;
             else if (leagueId === 'ldc' && audioElements.ldc) audioToPlay = audioElements.ldc;
+            else if (leagueId === 'cdf' && audioElements.cdf) audioToPlay = audioElements.cdf;
 
             if (audioToPlay) {
                 currentPlayingAudio = audioToPlay;
@@ -7923,7 +8220,9 @@
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
             messageArea = document.getElementById('message-area');
-            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2'), ldc: document.getElementById('audio-ldc') };
+            audioElements = { l1: document.getElementById('audio-l1'), l2: document.getElementById('audio-l2'), ldc: document.getElementById('audio-ldc'), cdf: document.getElementById('audio-cdf') };
+            setupDriveStatusClick();
+            restoreDriveSession();
 
             // Aucune musique ne doit demarrer sans un clic : pause forcee au chargement
             Object.values(audioElements).forEach(audio => {

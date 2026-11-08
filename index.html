@@ -3603,6 +3603,113 @@
             .fixtures-table .fixture-score-inputs input { width: 32px; padding: 6px 1px; font-size: 0.85rem; }
             .fixtures-table tbody td:first-child { width: 62px; font-size: 0.82rem; }
         }
+
+        /* ---------- Tableaux de qualification LDC / CDF : lisibilité ---------- */
+        .cdf-bracket {
+            gap: 30px;
+            padding: 28px 6px 36px;
+            align-items: flex-start;
+            scroll-snap-type: x proximity;
+        }
+
+        .cdf-round {
+            gap: 16px;
+            align-items: stretch;
+            min-width: 274px;
+            scroll-snap-align: start;
+        }
+
+        .cdf-round + .cdf-round {
+            border-left: 1px dashed rgba(16, 26, 60, 0.14);
+            padding-left: 26px;
+        }
+
+        .cdf-round-title {
+            align-self: center;
+            font-size: 0.88rem;
+            padding: 9px 18px;
+            letter-spacing: 0.16em;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+        }
+
+        .cdf-match-card.scorebug {
+            width: 274px;
+            min-width: 274px;
+            border-radius: 14px;
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.36);
+        }
+
+        .scorebug__bar {
+            gap: 9px;
+            padding: 8px 12px;
+            font-size: 0.68rem;
+            letter-spacing: 0.13em;
+        }
+
+        .scorebug__mark {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            font-size: 0.68rem;
+        }
+
+        .scorebug__live { font-size: 0.63rem; gap: 5px; }
+
+        .scorebug__shot { height: 58px; }
+
+        .scorebug__row {
+            grid-template-columns: 28px minmax(0, 1fr) 46px;
+            gap: 10px;
+            padding: 10px 12px;
+            color: #f2f6ff;
+        }
+
+        .scorebug__row img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .scorebug__club {
+            font-size: 0.96rem;
+            letter-spacing: 0.015em;
+        }
+
+        .scorebug__digit {
+            width: 46px;
+            padding: 4px 0;
+            border-radius: 6px;
+            font-size: 1.22rem;
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .scorebug__note {
+            padding: 8px 12px 9px;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            color: #cfd9ef;
+        }
+
+        .scorebug__qualify {
+            padding: 8px 12px 9px;
+            font-size: 0.72rem;
+        }
+
+        .scorebug--waiting { opacity: 0.94; }
+
+        .scorebug--waiting .scorebug__club {
+            color: #b9c4dc;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .cdf-bracket { flex-direction: column; gap: 20px; padding: 18px 0 26px; }
+            .cdf-round { width: 100%; min-width: 0; }
+            .cdf-round + .cdf-round { border-left: none; padding-left: 0; }
+            .cdf-match-card.scorebug { width: 100%; min-width: 0; }
+            .scorebug__club { font-size: 0.9rem; }
+            .scorebug__digit { width: 42px; font-size: 1.1rem; }
+        }
 </style>
 </head>
 

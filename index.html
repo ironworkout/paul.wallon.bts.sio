@@ -1670,30 +1670,6 @@
         }
 
         /* CDF Bracket */
-        .cdf-bracket {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-        }
-
-        .cdf-round {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .cdf-round-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1rem;
-            color: var(--nav-cdf-color);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
         .cdf-final-badge {
             background: var(--accent-gold);
             color: var(--primary-color);
@@ -2131,9 +2107,6 @@
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             }
 
-            .cdf-bracket {
-                flex-direction: column;
-            }
         }
 
         @media (max-width: 768px) {
@@ -2740,238 +2713,211 @@
         }
 
         /* ---------- 2. Tableaux de score ---------- */
-        .cdf-bracket {
-            align-items: flex-start;
-            gap: 26px;
-            padding: 26px 4px;
+        /* ==================== ARBRE DE QUALIFICATION (LDC / CDF) ==================== */
+        .bracket-shell {
+            --bk-accent: #ff2bd1;
+            --bk-accent-soft: rgba(255, 43, 209, 0.16);
+            --bk-accent-line: rgba(255, 90, 220, 0.65);
+            --bk-bar: linear-gradient(100deg, #3a0b52, #7b1e8b);
+            --bk-ink: #eef3ff;
+            --bk-muted: #a6b1cc;
+            --bk-card: linear-gradient(160deg, #120b1c, #0b0f1c 60%);
+            margin-top: 8px;
         }
 
-        .cdf-round {
-            gap: 14px;
+        .bracket-shell--ldc {
+            --bk-accent: var(--accent-gold);
+            --bk-accent-soft: rgba(212, 175, 55, 0.16);
+            --bk-accent-line: rgba(212, 175, 55, 0.7);
+            --bk-bar: linear-gradient(100deg, #0a1020, #1c2745);
+            --bk-card: linear-gradient(160deg, #0b1220, #070b16 65%);
         }
 
-        .cdf-round-title {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 14px;
+        .bracket-toolbar { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .bracket-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+
+        .bracket-nav__btn {
+            flex: 0 0 auto;
+            padding: 7px 15px;
             border-radius: 999px;
+            border: 1px solid rgba(16, 26, 60, 0.16);
+            background: #fff;
+            color: #28324d;
             font-family: 'Oswald', sans-serif;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+        }
+
+        .bracket-nav__btn:hover { border-color: var(--bk-accent); color: #111a30; }
+        .bracket-nav__btn.is-active {
+            background: linear-gradient(135deg, #111a30, #243154);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 8px 18px rgba(16, 26, 60, 0.22);
+        }
+
+        .bracket-hint { margin: 0; font-size: 0.76rem; color: #5c6884; display: flex; align-items: center; gap: 6px; }
+        .bracket-hint i { color: var(--bk-accent); }
+
+        .bracket-scroll {
+            overflow-x: auto;
+            padding: 6px 4px 14px;
+            scroll-snap-type: x proximity;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bracket-canvas { position: relative; display: flex; align-items: stretch; gap: 56px; min-width: max-content; padding: 2px 2px 4px; }
+        .bracket-lines { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; z-index: 0; }
+        .bracket-line { fill: none; stroke: rgba(120, 136, 175, 0.55); stroke-width: 2; stroke-linejoin: round; }
+        .bracket-line.is-won { stroke: var(--bk-accent-line); stroke-width: 2.5; }
+        .bracket-line.is-path { stroke: var(--bk-accent); stroke-width: 3.5; }
+        .bracket-shell.has-focus .bracket-line:not(.is-path) { opacity: 0.16; }
+
+        .bracket-round {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 266px;
+            scroll-snap-align: start;
+        }
+
+        .bracket-round__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid rgba(16, 26, 60, 0.1);
+            box-shadow: 0 6px 16px rgba(16, 26, 60, 0.07);
+        }
+
+        .bracket-round__name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.92rem;
             font-weight: 600;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: #f2f5ff;
-            background: rgba(8, 14, 28, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-            white-space: nowrap;
+            color: #16203a;
         }
 
-        .cdf-round-title--ldc {
-            color: var(--accent-gold);
-            border-color: rgba(212, 175, 55, 0.55);
-            background: linear-gradient(135deg, #0a1020, #131c33);
-        }
+        .bracket-round__count { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: #67728c; }
+        .bracket-round:first-child .bracket-round__head { border-color: var(--bk-accent); }
+        .bracket-round__body { flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: 12px; }
 
-        .cdf-round-title--cdf {
-            color: #ffd9f7;
-            border-color: rgba(199, 36, 177, 0.55);
-            background: linear-gradient(135deg, #2a0738, #470d57);
-        }
-
-        .cdf-match-card.scorebug {
-            width: 236px;
-            min-width: 236px;
-            padding: 0;
-            border-radius: 12px;
+        .bracket-match {
+            border-radius: 13px;
             overflow: hidden;
-            background: #070b16;
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+            background: var(--bk-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 14px 28px rgba(11, 17, 32, 0.28);
+            transition: opacity 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .scorebug__bar {
+        .bracket-match--three { border-color: rgba(255, 255, 255, 0.18); }
+
+        .bracket-match__bar {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 6px 10px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
+            background: var(--bk-bar);
+            border-bottom: 1px solid var(--bk-accent-line);
         }
 
-        .scorebug--ldc .scorebug__bar {
-            background: linear-gradient(90deg, #0a1020, #16203a);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.55);
-            color: var(--accent-gold);
-        }
-
-        .scorebug--cdf .scorebug__bar {
-            background: linear-gradient(90deg, #3a0b52, #7b1e8b);
-            border-bottom: 1px solid rgba(255, 90, 220, 0.5);
-            color: #ffd9f7;
-        }
-
-        .scorebug__mark {
+        .bracket-match__mark {
             display: grid;
             place-items: center;
-            width: 16px;
-            height: 16px;
+            width: 17px;
+            height: 17px;
             border-radius: 4px;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 700;
             letter-spacing: 0;
-            line-height: 1;
-            background: var(--accent-gold);
-            color: #070b16;
+            background: var(--bk-accent);
+            color: #0a0f1c;
         }
 
-        .scorebug--cdf .scorebug__mark { background: #ff2bd1; color: #17001a; }
+        .bracket-match__brand { flex: 1; font-family: 'Oswald', sans-serif; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+        .bracket-match--cdf .bracket-match__brand { color: #ffd9f7; }
+        .bracket-match--ldc .bracket-match__brand { color: var(--accent-gold); }
+        .bracket-match__meta { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
 
-        .scorebug__brand { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bracket-match__rows { display: flex; flex-direction: column; }
 
-        .scorebug__live {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.58rem;
-            opacity: 0.9;
-        }
-
-        .scorebug__live i {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ff2d55;
-            animation: scorebugLive 1.9s ease-out infinite;
-        }
-
-        @keyframes scorebugLive {
-            0% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0.65); }
-            70% { box-shadow: 0 0 0 6px rgba(255, 45, 85, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0); }
-        }
-
-        .scorebug__shot {
-            position: relative;
-            height: 52px;
-            overflow: hidden;
-            background: #0a1020;
-        }
-
-        .scorebug__shot img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .scorebug__shot::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(7, 11, 22, 0.1), rgba(7, 11, 22, 0.82));
-        }
-
-        .scorebug__row {
+        .bracket-row {
             display: grid;
-            grid-template-columns: 24px 1fr 34px;
+            grid-template-columns: 26px minmax(0, 1fr) 42px 16px;
             align-items: center;
             gap: 8px;
             padding: 8px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.055);
-            color: #e8eeff;
-            transition: background-color 0.2s ease;
+            color: var(--bk-ink);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.18s ease;
         }
 
-        .scorebug__row:last-of-type { border-bottom: none; }
+        .bracket-row:last-child { border-bottom: none; }
+        .bracket-row:hover, .bracket-row:focus-visible { background: rgba(255, 255, 255, 0.05); }
+        .bracket-row__logo { width: 26px; height: 26px; object-fit: contain; }
+        .bracket-row__name { font-family: 'Oswald', sans-serif; font-size: 0.94rem; letter-spacing: 0.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .scorebug__row img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-
-        .scorebug__club {
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.84rem;
-            letter-spacing: 0.01em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .scorebug__digit {
-            width: 34px;
+        .bracket-row__score {
+            width: 42px;
             padding: 3px 0;
             text-align: center;
             font-family: 'Roboto Mono', monospace;
-            font-size: 1.05rem;
+            font-size: 1.06rem;
             font-weight: 700;
             color: #fff;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 6px;
         }
 
-        .scorebug__digit:focus {
-            outline: none;
-            border-color: #fff;
-            background: rgba(255, 255, 255, 0.14);
-        }
+        .bracket-row__score:focus { outline: 2px solid var(--bk-accent); outline-offset: 1px; border-color: transparent; }
+        .bracket-row__score:disabled { color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.03); cursor: not-allowed; }
+        .bracket-row__tick { font-size: 0.85rem; color: var(--bk-accent); opacity: 0; text-align: center; }
+        .bracket-row.is-winner { background: linear-gradient(90deg, var(--bk-accent-soft), rgba(255, 255, 255, 0.02)); box-shadow: inset 3px 0 0 var(--bk-accent); }
+        .bracket-row.is-winner .bracket-row__name { color: var(--bk-accent); font-weight: 600; }
+        .bracket-row.is-winner .bracket-row__tick { opacity: 1; }
+        .bracket-row.is-waiting .bracket-row__name { color: var(--bk-muted); font-style: italic; }
+        .bracket-match.is-waiting { opacity: 0.9; }
 
-        .scorebug__digit:disabled { opacity: 0.45; }
-
-        .scorebug--ldc .scorebug__digit {
-            color: #f6da8b;
-            border-color: rgba(212, 175, 55, 0.35);
-            background: rgba(212, 175, 55, 0.09);
-        }
-
-        .scorebug--cdf .scorebug__digit {
-            color: #ff9df0;
-            border-color: rgba(255, 90, 220, 0.35);
-            background: rgba(255, 43, 209, 0.09);
-        }
-
-        .scorebug__row.is-winner {
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.02));
-            box-shadow: inset 3px 0 0 var(--accent-gold);
-        }
-
-        .scorebug--cdf .scorebug__row.is-winner {
-            background: linear-gradient(90deg, rgba(255, 43, 209, 0.22), rgba(255, 43, 209, 0.02));
-            box-shadow: inset 3px 0 0 #ff2bd1;
-        }
-
-        .scorebug__note {
-            margin: 0;
-            padding: 6px 10px;
+        .bracket-match__foot {
+            min-height: 22px;
+            padding: 5px 10px 6px;
             font-family: 'Oswald', sans-serif;
             font-size: 0.64rem;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
+            color: var(--bk-muted);
             border-top: 1px solid rgba(255, 255, 255, 0.07);
         }
 
-        .scorebug--ldc .scorebug__note { color: #f6da8b; }
-        .scorebug--cdf .scorebug__note { color: #ff9df0; }
+        .bracket-match__foot.is-empty { border-top: none; }
+        .bracket-match__qualify { padding: 5px 10px 0; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: #9dffbf; }
 
-        .scorebug--waiting .scorebug__row { opacity: 0.72; }
+        .bracket-shell.has-focus .bracket-match:not(.is-path) { opacity: 0.3; filter: saturate(0.55); }
+        .bracket-shell.has-focus .bracket-match.is-path { box-shadow: 0 0 0 2px var(--bk-accent-line), 0 18px 36px rgba(11, 17, 32, 0.35); }
+        .bracket-shell.has-focus .bracket-row:not(.is-path) { opacity: 0.45; }
+        .bracket-focus-label { margin: 8px 2px 0; font-size: 0.78rem; font-weight: 600; color: #16203a; }
 
-        .scorebug--demi .scorebug__row { grid-template-columns: 24px 1fr 44px; }
-
-        .scorebug__qualify {
-            padding: 6px 10px 8px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.66rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: #9dffbf;
-            border-top: 1px solid rgba(57, 255, 20, 0.25);
+        @media (max-width: 768px) {
+            .bracket-canvas { gap: 38px; }
+            .bracket-round { min-width: 236px; }
+            .bracket-row { grid-template-columns: 24px minmax(0, 1fr) 38px 14px; padding: 7px 8px; }
+            .bracket-row__name { font-size: 0.88rem; }
+            .bracket-row__score { width: 38px; font-size: 1rem; }
+            .bracket-hint { font-size: 0.7rem; }
         }
 
         /* Bandeau champion */
@@ -3332,8 +3278,6 @@
         /* ---------- 6. Adaptations mobiles ---------- */
         @media (max-width: 768px) {
             .teams-grid { grid-template-columns: 1fr; }
-            .cdf-match-card.scorebug { width: 100%; min-width: 190px; }
-            .cdf-bracket { gap: 14px; }
             .roulette-wrapper { padding: 24px 12px; }
             .roulette-canvas-container { width: 320px; height: 320px; }
             #roulette-canvas { width: 300px; height: 300px; }
@@ -3346,12 +3290,10 @@
         @media (prefers-reduced-motion: reduce) {
             .team-card .team-card__shot-img,
             .roulette-wrapper::before,
-            .scorebug__live i,
             .barrage-winner.show { animation: none !important; transition: none !important; }
         }
         /* ==================== AJUSTEMENTS MOBILES (≤ 768 px) ==================== */
         @media (max-width: 768px) {
-            .cdf-bracket { gap: 10px; }
             .table-container { -webkit-overflow-scrolling: touch; }
             .classement-table { font-size: 0.78rem; }
             .classement-table th,
@@ -3604,112 +3546,6 @@
             .fixtures-table tbody td:first-child { width: 62px; font-size: 0.82rem; }
         }
 
-        /* ---------- Tableaux de qualification LDC / CDF : lisibilité ---------- */
-        .cdf-bracket {
-            gap: 30px;
-            padding: 28px 6px 36px;
-            align-items: flex-start;
-            scroll-snap-type: x proximity;
-        }
-
-        .cdf-round {
-            gap: 16px;
-            align-items: stretch;
-            min-width: 274px;
-            scroll-snap-align: start;
-        }
-
-        .cdf-round + .cdf-round {
-            border-left: 1px dashed rgba(16, 26, 60, 0.14);
-            padding-left: 26px;
-        }
-
-        .cdf-round-title {
-            align-self: center;
-            font-size: 0.88rem;
-            padding: 9px 18px;
-            letter-spacing: 0.16em;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
-        }
-
-        .cdf-match-card.scorebug {
-            width: 274px;
-            min-width: 274px;
-            border-radius: 14px;
-            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.36);
-        }
-
-        .scorebug__bar {
-            gap: 9px;
-            padding: 8px 12px;
-            font-size: 0.68rem;
-            letter-spacing: 0.13em;
-        }
-
-        .scorebug__mark {
-            width: 18px;
-            height: 18px;
-            border-radius: 5px;
-            font-size: 0.68rem;
-        }
-
-        .scorebug__live { font-size: 0.63rem; gap: 5px; }
-
-        .scorebug__shot { height: 58px; }
-
-        .scorebug__row {
-            grid-template-columns: 28px minmax(0, 1fr) 46px;
-            gap: 10px;
-            padding: 10px 12px;
-            color: #f2f6ff;
-        }
-
-        .scorebug__row img {
-            width: 28px;
-            height: 28px;
-        }
-
-        .scorebug__club {
-            font-size: 0.96rem;
-            letter-spacing: 0.015em;
-        }
-
-        .scorebug__digit {
-            width: 46px;
-            padding: 4px 0;
-            border-radius: 6px;
-            font-size: 1.22rem;
-            background: rgba(255, 255, 255, 0.09);
-            border-color: rgba(255, 255, 255, 0.18);
-        }
-
-        .scorebug__note {
-            padding: 8px 12px 9px;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            color: #cfd9ef;
-        }
-
-        .scorebug__qualify {
-            padding: 8px 12px 9px;
-            font-size: 0.72rem;
-        }
-
-        .scorebug--waiting { opacity: 0.94; }
-
-        .scorebug--waiting .scorebug__club {
-            color: #b9c4dc;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            .cdf-bracket { flex-direction: column; gap: 20px; padding: 18px 0 26px; }
-            .cdf-round { width: 100%; min-width: 0; }
-            .cdf-round + .cdf-round { border-left: none; padding-left: 0; }
-            .cdf-match-card.scorebug { width: 100%; min-width: 0; }
-            .scorebug__club { font-size: 0.9rem; }
-            .scorebug__digit { width: 42px; font-size: 1.1rem; }
-        }
 </style>
 </head>
 
@@ -6320,35 +6156,220 @@
 
         const isByeTeam = (t) => typeof t === 'string' && t.startsWith('BYE');
 
-        // ==================== TABLEAUX DE SCORE (HABILLAGE TV) ====================
-        // Un seul gabarit pour les deux diffuseurs : Canal Plours pour la LDC,
-        // bePeluche Sports pour la CDF.
-        function buildScorebug(opts) {
+        // ==================== TABLEAUX DE QUALIFICATION (ARBRE) ====================
+        // Un seul rendu pour les deux diffuseurs : Canal Plours (LDC) et bePeluche Sports (CDF).
+        // Colonnes par tour, une carte par confrontation, traits de connexion dessinés en SVG.
+
+        function bracketAttr(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // D'où vient chaque équipe : permet de relier les cartes entre deux tours.
+        function bracketSourceFor(kind, round, matchIdx, slot) {
+            if (round === 0) return null;
+            if (kind === 'cdf' && round === 2) return { round: 1, match: slot - 1 };
+            if (kind === 'cdf' && round === 3) return { round: 2, match: 0 };
+            return { round: round - 1, match: matchIdx * 2 + (slot - 1) };
+        }
+
+        function buildBracketShellOpen(kind, names, rounds) {
+            let lastRound = 0;
+            for (let r = 0; r < names.length; r++) {
+                if (rounds[r] && rounds[r].filter(Boolean).length > 0) lastRound = r;
+            }
+            const chips = names.slice(0, lastRound + 1).map((name, i) =>
+                `<button type="button" class="bracket-nav__btn${i === 0 ? ' is-active' : ''}" data-bracket-round="${i}">${name}</button>`
+            ).join('');
+            return `<div class="bracket-shell bracket-shell--${kind}" data-kind="${kind}">
+                <div class="bracket-toolbar">
+                    <div class="bracket-nav" role="tablist" aria-label="Tours de la compétition">${chips}</div>
+                    <p class="bracket-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i> Cliquez sur un club pour surligner son parcours jusqu'à la finale.</p>
+                    <p class="bracket-focus-label" hidden></p>
+                </div>
+                <div class="bracket-scroll">
+                    <div class="bracket-canvas">
+                        <svg class="bracket-lines" aria-hidden="true" focusable="false"></svg>`;
+        }
+
+        function buildBracketMatch(opts) {
             const kind = opts.kind === 'ldc' ? 'ldc' : 'cdf';
-            const isLdc = kind === 'ldc';
             const rows = (opts.rows || []).filter(Boolean).map(row => {
-                const disabledAttr = row.ready ? '' : 'disabled title="En attente des équipes / BYE"';
-                const changeAttr = row.ready ? `onchange="${opts.handler}(${opts.round}, ${row.matchIdx}, ${row.num}, this.value)"` : '';
-                return `<div class="scorebug__row${row.winner ? ' is-winner' : ''}">
-                        <img src="${row.logo}" alt="">
-                        <span class="scorebug__club">${row.name || '?'}</span>
-                        <input class="scorebug__digit" type="number" min="0" value="${row.score ?? ''}" ${changeAttr} ${disabledAttr}>
-                    </div>`;
-            }).join('');
-            const shotTeam = (opts.clubs || []).find(n => n && getClubTribune(n));
-            const shot = shotTeam
-                ? `<div class="scorebug__shot"><img src="${getClubTribune(shotTeam).card}" width="760" height="428" loading="lazy" decoding="async" alt=""></div>`
-                : '';
-            const qualify = opts.qualify ? `<div class="scorebug__qualify">${opts.qualify}</div>` : '';
-            const note = opts.note ? `<div class="scorebug__note">${opts.note}</div>` : '';
-            return `<div class="cdf-match-card scorebug scorebug--${kind}${opts.demi ? ' scorebug--demi' : ''}${opts.waiting ? ' scorebug--waiting' : ''}">
-                    <div class="scorebug__bar">
-                        <span class="scorebug__mark" aria-hidden="true">${isLdc ? '+' : 'be'}</span>
-                        <span class="scorebug__brand">${isLdc ? 'Canal Plours' : 'bePeluche Sports'}</span>
-                        <span class="scorebug__live"><i aria-hidden="true"></i>Direct</span>
-                    </div>
-                    ${shot}${rows}${qualify}${note}
+                const ready = !!row.ready;
+                const name = row.name || 'En attente';
+                const src = row.src ? ` data-src-round="${row.src.round}" data-src-match="${row.src.match}"` : '';
+                const changeAttr = ready ? ` onchange="${opts.handler}(${opts.round}, ${row.matchIdx}, ${row.num}, this.value)"` : '';
+                const disabledAttr = ready ? '' : ' disabled title="En attente des équipes / BYE"';
+                return `<div class="bracket-row${row.winner ? ' is-winner' : ''}${ready ? '' : ' is-waiting'}" data-team="${bracketAttr(name)}" data-round="${opts.round}" data-match="${row.matchIdx}" data-slot="${row.num}"${src} tabindex="0">
+                    <img class="bracket-row__logo" src="${row.logo}" alt="" loading="lazy" decoding="async">
+                    <span class="bracket-row__name">${bracketAttr(name)}</span>
+                    <input class="bracket-row__score" type="number" min="0" inputmode="numeric" value="${row.score ?? ''}"${changeAttr}${disabledAttr} aria-label="Buts de ${bracketAttr(name)}">
+                    <span class="bracket-row__tick" aria-hidden="true">✓</span>
                 </div>`;
+            }).join('');
+            const foot = opts.foot
+                ? `<div class="bracket-match__foot">${opts.foot}</div>`
+                : '<div class="bracket-match__foot is-empty" aria-hidden="true"></div>';
+            const qualify = opts.qualify ? `<div class="bracket-match__qualify">${opts.qualify}</div>` : '';
+            return `<div class="bracket-match bracket-match--${kind}${opts.demi ? ' bracket-match--three' : ''}${opts.waiting ? ' is-waiting' : ''}" data-card="${opts.round}-${opts.matchIdx}">
+                <div class="bracket-match__bar">
+                    <span class="bracket-match__mark" aria-hidden="true">${kind === 'ldc' ? '+' : 'be'}</span>
+                    <span class="bracket-match__brand">${kind === 'ldc' ? 'Canal Plours' : 'bePeluche Sports'}</span>
+                    <span class="bracket-match__meta">${opts.meta || 'Match ' + (opts.matchIdx + 1)}</span>
+                </div>
+                <div class="bracket-match__rows">${rows}</div>
+                ${qualify}${foot}
+            </div>`;
+        }
+
+        function commitBracket(container, html) {
+            container.innerHTML = html;
+            bindBracketEvents(container);
+            drawBracketLines(container);
+            observeBracket(container);
+            if (typeof setTimeout === 'function') setTimeout(() => drawBracketLines(container), 260);
+        }
+
+        // Les polices et les écussons peuvent décaler la mise en page : on retrace quand la taille change.
+        function observeBracket(container) {
+            if (!container || container.dataset.bracketObserved === '1' || typeof ResizeObserver !== 'function') return;
+            const canvas = container.querySelector ? container.querySelector('.bracket-canvas') : null;
+            if (!canvas) return;
+            container.dataset.bracketObserved = '1';
+            const observer = new ResizeObserver(() => drawBracketLines(container));
+            observer.observe(canvas);
+            container._bracketObserver = observer;
+        }
+
+        function getBracketShell(container) {
+            return container && container.querySelector ? container.querySelector('.bracket-shell') : null;
+        }
+
+        function bindBracketEvents(container) {
+            if (!container || typeof container.addEventListener !== 'function' || container.dataset.bracketBound === '1') return;
+            container.dataset.bracketBound = '1';
+            container.addEventListener('click', event => {
+                const target = event.target;
+                if (!target || typeof target.closest !== 'function') return;
+                const chip = target.closest('[data-bracket-round]');
+                if (chip) { scrollBracketRound(container, parseInt(chip.dataset.bracketRound, 10)); return; }
+                if (target.closest('input, button')) return;
+                const row = target.closest('.bracket-row');
+                if (row) toggleBracketFocus(container, row.dataset.team);
+            });
+            container.addEventListener('keydown', event => {
+                if ((event.key === 'Enter' || event.key === ' ') && event.target && event.target.classList && event.target.classList.contains('bracket-row')) {
+                    event.preventDefault();
+                    toggleBracketFocus(container, event.target.dataset.team);
+                }
+            });
+        }
+
+        function scrollBracketRound(container, roundIndex) {
+            const shell = getBracketShell(container);
+            if (!shell) return;
+            const scroll = shell.querySelector('.bracket-scroll');
+            const column = shell.querySelector(`.bracket-round[data-round="${roundIndex}"]`);
+            if (!scroll || !column || typeof scroll.scrollTo !== 'function') return;
+            scroll.scrollTo({ left: Math.max(0, column.offsetLeft - 8), behavior: 'smooth' });
+            shell.querySelectorAll('.bracket-nav__btn').forEach(btn => {
+                btn.classList.toggle('is-active', parseInt(btn.dataset.bracketRound, 10) === roundIndex);
+            });
+        }
+
+        window.scrollBracketRound = function (kind, roundIndex) {
+            const container = document.getElementById(`${kind}-bracket-container`);
+            if (container) scrollBracketRound(container, roundIndex);
+        };
+
+        function toggleBracketFocus(container, teamName) {
+            const shell = getBracketShell(container);
+            if (!shell) return;
+            const key = String(teamName || '').trim();
+            const current = String(shell.dataset.focus || '').trim();
+            shell.dataset.focus = current.toLowerCase() === key.toLowerCase() ? '' : key;
+            applyBracketFocus(shell);
+        }
+
+        function applyBracketFocus(shell) {
+            if (!shell || !shell.dataset) return;
+            const key = String(shell.dataset.focus || '').trim().toLowerCase();
+            const same = value => String(value || '').trim().toLowerCase() === key;
+            shell.classList.toggle('has-focus', !!key);
+            shell.querySelectorAll('.bracket-row').forEach(row => row.classList.toggle('is-path', !!key && same(row.dataset.team)));
+            shell.querySelectorAll('.bracket-match').forEach(card => card.classList.toggle('is-path', !!key && !!card.querySelector('.bracket-row.is-path')));
+            shell.querySelectorAll('.bracket-line').forEach(line => line.classList.toggle('is-path', !!key && same(line.dataset.team)));
+            const label = shell.querySelector('.bracket-focus-label');
+            if (label) {
+                label.hidden = !key;
+                label.textContent = key ? `Parcours de ${shell.dataset.focus} — cliquez à nouveau sur le club pour tout réafficher` : '';
+            }
+        }
+
+        // Traits de connexion : depuis le bord droit de la carte source jusqu'à la ligne d'équipe du tour suivant.
+        function drawBracketLines(container) {
+            if (!container || typeof container.querySelector !== 'function') return;
+            const canvas = container.querySelector('.bracket-canvas');
+            const svg = container.querySelector('.bracket-lines');
+            if (!canvas || !svg || typeof canvas.getBoundingClientRect !== 'function') return;
+            const base = canvas.getBoundingClientRect();
+            if (!base || !base.width) return;
+
+            const cards = new Map();
+            canvas.querySelectorAll('.bracket-match').forEach(card => cards.set(card.dataset.card, card));
+
+            const paths = [];
+            canvas.querySelectorAll('.bracket-row[data-src-match]').forEach(row => {
+                const card = row.closest ? row.closest('.bracket-match') : null;
+                const source = cards.get(`${row.dataset.srcRound}-${row.dataset.srcMatch}`);
+                if (!card || !source) return;
+                const from = source.getBoundingClientRect();
+                const to = row.getBoundingClientRect();
+                if (!from.width || !to.width) return;
+                const x1 = from.right - base.left;
+                const y1 = from.top - base.top + from.height / 2;
+                const x2 = to.left - base.left;
+                const y2 = to.top - base.top + to.height / 2;
+                if (x2 <= x1) return;
+                const busX = x1 + Math.max(14, (x2 - x1) / 2);
+                const team = String(row.dataset.team || '');
+                const winner = source.querySelector('.bracket-row.is-winner');
+                const won = !!winner && String(winner.dataset.team || '').toLowerCase() === team.toLowerCase();
+                paths.push({ d: `M${x1} ${y1} H${busX} V${y2} H${x2}`, team, won });
+            });
+
+            const width = canvas.scrollWidth || canvas.offsetWidth || Math.round(base.width);
+            const height = canvas.scrollHeight || canvas.offsetHeight || Math.round(base.height);
+            const markup = paths.map(p => `<path class="bracket-line${p.won ? ' is-won' : ''}" data-team="${bracketAttr(p.team)}" d="${p.d}"/>`).join('');
+            const signature = `${width}x${height}:${markup.length}:${markup}`;
+            if (svg.dataset.signature !== signature) {
+                svg.dataset.signature = signature;
+                svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+                svg.setAttribute('width', width);
+                svg.setAttribute('height', height);
+                svg.innerHTML = markup;
+            }
+            applyBracketFocus(getBracketShell(container));
+        }
+
+        let bracketResizeTimer = null;
+        function redrawAllBrackets() {
+            ['cdf-bracket-container', 'ldc-bracket-container'].forEach(id => {
+                const container = document.getElementById(id);
+                if (container) drawBracketLines(container);
+            });
+        }
+
+        if (typeof window.addEventListener === 'function') {
+            window.addEventListener('resize', () => {
+                clearTimeout(bracketResizeTimer);
+                bracketResizeTimer = setTimeout(redrawAllBrackets, 150);
+            });
+        }
+
+        if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
+            document.fonts.ready.then(() => redrawAllBrackets());
         }
 
         function renderCDFBracket() {
@@ -6356,13 +6377,19 @@
             if (!container || !cdfData.rounds || !cdfData.rounds[0]) return;
 
             const roundNames = CDF_ROUND_NAMES;
-            let html = '<div class="cdf-bracket">';
+            let html = buildBracketShellOpen('cdf', roundNames, cdfData.rounds);
 
             for (let r = 0; r < roundNames.length; r++) {
                 const roundMatches = cdfData.rounds[r];
-                if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
+                const roundCount = roundMatches ? roundMatches.filter(Boolean).length : 0;
+                if (!roundMatches || roundCount === 0) break;
 
-                html += `<div class="cdf-round"><div class="cdf-round-title cdf-round-title--cdf">${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
+                html += `<div class="bracket-round" data-round="${r}">
+                    <div class="bracket-round__head">
+                        <span class="bracket-round__name">${roundNames[r] || 'Tour ' + (r + 1)}</span>
+                        <span class="bracket-round__count">${roundCount} match${roundCount > 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="bracket-round__body">`;
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
@@ -6370,52 +6397,51 @@
                     // --- DEMIES : 1 seul match avec les 3 clubs restants ---
                     if (match.team3 !== undefined) {
                         const f = match.finalists || [];
-                        const t1Class = f.includes(match.team1) ? ' winner' : '';
-                        const t2Class = f.includes(match.team2) ? ' winner' : '';
-                        const t3Class = f.includes(match.team3) ? ' winner' : '';
                         const matchReady = !!(match.team1 && match.team2 && match.team3 && !isByeTeam(match.team1) && !isByeTeam(match.team2) && !isByeTeam(match.team3));
                         const dT1 = resolveCurrentClubName(match.team1), dT2 = resolveCurrentClubName(match.team2), dT3 = resolveCurrentClubName(match.team3);
-                        html += buildScorebug({
-                        kind: 'cdf',
-                        handler: 'updateCDFScore',
-                        round: r,
-                        demi: true,
-                        waiting: !matchReady,
-                        qualify: match.finalists && match.finalists.length === 2 ? `Qualifiés en finale : ${match.finalists.map(resolveCurrentClubName).join(' & ')}` : '',
-                        clubs: [dT1, dT2, dT3],
-                        note: 'Match à 3 · le plus grand nombre de buts passe',
-                        rows: [
-                            { name: dT1, logo: getClubLogo(dT1), score: match.score1, winner: t1Class !== '', num: 1, matchIdx: i, ready: matchReady },
-                            { name: dT2, logo: getClubLogo(dT2), score: match.score2, winner: t2Class !== '', num: 2, matchIdx: i, ready: matchReady },
-                            { name: dT3, logo: getClubLogo(dT3), score: match.score3, winner: t3Class !== '', num: 3, matchIdx: i, ready: matchReady }
-                        ]
-                    });
+                        html += buildBracketMatch({
+                            kind: 'cdf',
+                            handler: 'updateCDFScore',
+                            round: r,
+                            matchIdx: i,
+                            demi: true,
+                            waiting: !matchReady,
+                            meta: `Match ${i + 1} · 3 clubs`,
+                            qualify: match.finalists && match.finalists.length === 2 ? `Qualifiés en finale : ${match.finalists.map(resolveCurrentClubName).join(' & ')}` : '',
+                            foot: 'Le plus grand nombre de buts passe',
+                            rows: [
+                                { name: dT1, logo: dT1 ? getClubLogo(dT1) : `${BASE_URL}default_logo.png`, score: match.score1, winner: f.includes(match.team1), num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 1) },
+                                { name: dT2, logo: dT2 ? getClubLogo(dT2) : `${BASE_URL}default_logo.png`, score: match.score2, winner: f.includes(match.team2), num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 2) },
+                                { name: dT3, logo: dT3 ? getClubLogo(dT3) : `${BASE_URL}default_logo.png`, score: match.score3, winner: f.includes(match.team3), num: 3, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 3) }
+                            ]
+                        });
                         return;
                     }
 
                     const dTeam1 = resolveCurrentClubName(match.team1), dTeam2 = resolveCurrentClubName(match.team2);
                     const logo1 = dTeam1 ? getClubLogo(dTeam1) : `${BASE_URL}default_logo.png`;
                     const logo2 = dTeam2 ? getClubLogo(dTeam2) : `${BASE_URL}default_logo.png`;
-                    const team1Class = match.winner === match.team1 ? ' winner' : '';
-                    const team2Class = match.winner === match.team2 ? ' winner' : '';
                     // Un match n'est saisissable que si les 2 équipes sont connues et qu'aucune n'est un BYE (déjà tranché au tirage)
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
                     const penaltyNote = match.penaltyShootout ? `Tirs au but · ${resolveCurrentClubName(match.penaltyWinner)} (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})` : '';
-                    html += buildScorebug({
+                    html += buildBracketMatch({
                         kind: 'cdf',
                         handler: 'updateCDFScore',
                         round: r,
+                        matchIdx: i,
                         waiting: !matchReady,
-                        clubs: [dTeam1, dTeam2],
-                        note: penaltyNote,
+                        meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
+                        foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
                         rows: [
-                            { name: dTeam1, logo: logo1, score: match.score1, winner: team1Class !== '', num: 1, matchIdx: i, ready: matchReady },
-                            { name: dTeam2, logo: logo2, score: match.score2, winner: team2Class !== '', num: 2, matchIdx: i, ready: matchReady }
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 1) },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 2) }
                         ]
                     });
                 });
-                html += '</div>';
+                html += '</div></div>';
             }
+
+            html += '</div></div>';
 
             // Afficher le champion si la finale est jouée et a un vainqueur
             const finalRoundIdx = roundNames.length - 1;
@@ -6446,7 +6472,7 @@
             }
 
             html += '</div>';
-            container.innerHTML = html;
+            commitBracket(container, html);
         }
 
         // Fait avancer un vainqueur vers le tour suivant (helper partagé CDF/BYE)
@@ -6856,38 +6882,45 @@
             if (!container || !ldcData.rounds || !ldcData.rounds[0]) return;
 
             const roundNames = LDC_ROUND_NAMES;
-            let html = '<div class="cdf-bracket">';
+            let html = buildBracketShellOpen('ldc', roundNames, ldcData.rounds);
 
             for (let r = 0; r < roundNames.length; r++) {
                 const roundMatches = ldcData.rounds[r];
-                if (!roundMatches || roundMatches.filter(Boolean).length === 0) break;
+                const roundCount = roundMatches ? roundMatches.filter(Boolean).length : 0;
+                if (!roundMatches || roundCount === 0) break;
 
-                html += `<div class="cdf-round"><div class="cdf-round-title cdf-round-title--ldc">${roundNames[r] || 'Tour ' + (r + 1)}</div>`;
+                html += `<div class="bracket-round" data-round="${r}">
+                    <div class="bracket-round__head">
+                        <span class="bracket-round__name">${roundNames[r] || 'Tour ' + (r + 1)}</span>
+                        <span class="bracket-round__count">${roundCount} match${roundCount > 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="bracket-round__body">`;
 
                 roundMatches.forEach((match, i) => {
                     if (!match) return;
                     const dTeam1 = resolveCurrentClubName(match.team1), dTeam2 = resolveCurrentClubName(match.team2);
                     const logo1 = dTeam1 ? getClubLogo(dTeam1) : `${BASE_URL}default_logo.png`;
                     const logo2 = dTeam2 ? getClubLogo(dTeam2) : `${BASE_URL}default_logo.png`;
-                    const team1Class = match.winner === match.team1 ? ' winner' : '';
-                    const team2Class = match.winner === match.team2 ? ' winner' : '';
                     const matchReady = !!(match.team1 && match.team2 && !isByeTeam(match.team1) && !isByeTeam(match.team2));
                     const penaltyNote = match.penaltyShootout ? `Tirs au but · ${resolveCurrentClubName(match.penaltyWinner)} (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'})` : '';
-                    html += buildScorebug({
+                    html += buildBracketMatch({
                         kind: 'ldc',
                         handler: 'updateLDCScore',
                         round: r,
+                        matchIdx: i,
                         waiting: !matchReady,
-                        clubs: [dTeam1, dTeam2],
-                        note: penaltyNote,
+                        meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
+                        foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
                         rows: [
-                            { name: dTeam1, logo: logo1, score: match.score1, winner: team1Class !== '', num: 1, matchIdx: i, ready: matchReady },
-                            { name: dTeam2, logo: logo2, score: match.score2, winner: team2Class !== '', num: 2, matchIdx: i, ready: matchReady }
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 1) },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 2) }
                         ]
                     });
                 });
-                html += '</div>';
+                html += '</div></div>';
             }
+
+            html += '</div></div>';
 
             // Champion LDC (jamais un BYE : si un BYE allait jusqu'au bout, pas de trophée)
             const finalRoundIdx = LDC_FINAL_ROUND;
@@ -6921,7 +6954,7 @@
             }
 
             html += '</div>';
-            container.innerHTML = html;
+            commitBracket(container, html);
         }
 
         // Fait avancer un vainqueur LDC vers le tour suivant (helper partagé LDC/BYE)
@@ -8256,6 +8289,12 @@
             if (targetContent) {
                 targetContent.classList.add('active');
                 targetContent.setAttribute('aria-hidden', 'false');
+            }
+
+            // Un tableau de qualifs masqué n'a aucune taille mesurable : ses traits de connexion
+            // sont retracés dès que son onglet devient visible.
+            if (document.getElementById(`${tabId}-bracket-container`)) {
+                setTimeout(() => redrawAllBrackets(), 60);
             }
 
             observeActiveTabSections();

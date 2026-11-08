@@ -578,6 +578,41 @@
         
         let ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
         let googleAccessToken = null, tokenClient = null;
+
+        // ---- Session Drive mémorisée : jeton + expiration, renouvellement sans interface ----
+        const LDC_SESSION_KEY = 'google_access_token_ldc';
+        let ldcSilentRefreshInFlight = false;
+
+        function readLdcSession(allowExpired = false) {
+            try {
+                const raw = localStorage.getItem(LDC_SESSION_KEY);
+                if (!raw) return null;
+                let parsed = null;
+                try { parsed = JSON.parse(raw); } catch (e) { return { token: raw, expiresAt: 0 }; }
+                if (!parsed || !parsed.token) return null;
+                if (!allowExpired && !(parsed.expiresAt > Date.now() + 60000)) return null;
+                return parsed;
+            } catch (e) { return null; }
+        }
+
+        function writeLdcSession(tokenResponse) {
+            try {
+                const ttl = Math.max(300, (tokenResponse.expires_in || 3600) - 120);
+                localStorage.setItem(LDC_SESSION_KEY, JSON.stringify({
+                    token: tokenResponse.access_token,
+                    expiresAt: Date.now() + ttl * 1000
+                }));
+            } catch (e) {}
+        }
+
+        // Google renvoie un jeton sans fenêtre tant que la session Google est active.
+        function requestLdcTokenSilently() {
+            if (googleAccessToken || !tokenClient || ldcSilentRefreshInFlight) return;
+            ldcSilentRefreshInFlight = true;
+            try { tokenClient.requestAccessToken({ prompt: '' }); }
+            catch (e) { ldcSilentRefreshInFlight = false; return; }
+            setTimeout(() => { ldcSilentRefreshInFlight = false; }, 12000);
+        }
         let isSavingDriveData = false; 
         let messageArea = null;
         let messageTimeoutId = null;
@@ -659,6 +694,9 @@
         }
         
         function handleTokenError(error) {
+            const wasSilent = ldcSilentRefreshInFlight;
+            ldcSilentRefreshInFlight = false;
+            if (wasSilent) { updateAuthUI(false); return; }
             console.error('Erreur de token:', error);
             showMessage(`Erreur d'authentification Google: ${error.message || error.details || 'Erreur inconnue'}`, 5000, true);
             googleAccessToken = null;
@@ -668,8 +706,9 @@
         async function tokenCallback(tokenResponse) {
             if (tokenResponse && tokenResponse.access_token) {
                 console.log("Token reçu.");
+                ldcSilentRefreshInFlight = false;
                 googleAccessToken = tokenResponse.access_token;
-                localStorage.setItem('google_access_token_ldc', googleAccessToken);
+                writeLdcSession(tokenResponse);
                 updateAuthUI(true); 
                 await loadLdcDataFromDrive(); 
                 populateLdcUI(); 
@@ -678,6 +717,7 @@
                 let errorMsg = "Erreur d'authentification Google.";
                 if (tokenResponse && tokenResponse.error) { errorMsg += ` (${tokenResponse.error})` }
                 showMessage(errorMsg, 5000, true);
+                ldcSilentRefreshInFlight = false;
                 googleAccessToken = null;
                 updateAuthUI(false);
             }
@@ -696,7 +736,8 @@
                 showMessage("Déconnecté de Google Drive.", 3000);
             } else { 
                 if (tokenClient) {
-                    tokenClient.requestAccessToken({ prompt: 'consent' });
+                    ldcSilentRefreshInFlight = false;
+                    tokenClient.requestAccessToken({ prompt: '' });
                 } else {
                     console.error("Client Token non initialisé.");
                     showMessage("Erreur d'initialisation Google. Veuillez réessayer.", 4000, true);
@@ -1402,15 +1443,19 @@
                 });
             }
             
-            const storedToken = localStorage.getItem('google_access_token_ldc');
-            if (storedToken) googleAccessToken = storedToken;
-            
-            await checkAndInitGis(); 
+            const storedSession = readLdcSession();
+            if (storedSession) googleAccessToken = storedSession.token;
 
-            if(googleAccessToken){ 
-                await loadLdcDataFromDrive(); 
+            await checkAndInitGis();
+
+            if (googleAccessToken) {
+                await loadLdcDataFromDrive();
+            } else if (readLdcSession(true)) {
+                // Jeton expiré : renouvellement muet, le chargement suit dans tokenCallback.
+                requestLdcTokenSilently();
+                updateAuthUI(false);
             } else {
-                updateAuthUI(false); 
+                updateAuthUI(false);
                 ldcDataStore = JSON.parse(JSON.stringify(initialLdcData));
             }
             

@@ -4380,17 +4380,28 @@
         function driveLog(...args) { if (DRIVE_DEBUG) console.log(...args); }
 
         // ---- Session Drive mémorisée : le lien Google survit au rechargement de la page ----
+        // Le jeton Google (1 h) est conservé avec sa date d'expiration. Tant que la session Google
+        // du navigateur est active, il est renouvelé sans aucune fenêtre (prompt: '').
         const DRIVE_SESSION_KEY = 'peluches_drive_session';
         const DRIVE_REMEMBER_KEY = 'peluches_drive_remember';
         let driveRefreshTimer = null;
+        let driveSilentRefreshInFlight = false;
+        let driveSilentRefreshTimer = null;
+        let driveRefreshWaiters = [];
+        let driveRestorePending = false;
 
-        function readDriveSession() {
+        function driveRemembered() {
+            try { return localStorage.getItem(DRIVE_REMEMBER_KEY) === '1'; } catch (e) { return false; }
+        }
+
+        // allowExpired=true sert à décider s'il faut tenter un renouvellement silencieux.
+        function readDriveSession(allowExpired = false) {
             try {
                 const raw = localStorage.getItem(DRIVE_SESSION_KEY);
                 if (!raw) return null;
                 const parsed = JSON.parse(raw);
                 if (!parsed || !parsed.token || !parsed.expiresAt) return null;
-                if (parsed.expiresAt <= Date.now() + 60000) return null;
+                if (!allowExpired && parsed.expiresAt <= Date.now() + 60000) return null;
                 return parsed;
             } catch (e) { return null; }
         }
@@ -4398,23 +4409,98 @@
         function writeDriveSession(tokenResponse) {
             try {
                 const ttl = Math.max(300, (tokenResponse.expires_in || 3600) - 120);
-                localStorage.setItem(DRIVE_SESSION_KEY, JSON.stringify({ token: tokenResponse.access_token, expiresAt: Date.now() + ttl * 1000 }));
+                localStorage.setItem(DRIVE_SESSION_KEY, JSON.stringify({
+                    token: tokenResponse.access_token,
+                    expiresAt: Date.now() + ttl * 1000
+                }));
                 localStorage.setItem(DRIVE_REMEMBER_KEY, '1');
             } catch (e) {}
+        }
+
+        function resolveDriveRefreshWaiters(success) {
+            const waiters = driveRefreshWaiters;
+            driveRefreshWaiters = [];
+            waiters.forEach(resolve => { try { resolve(!!success); } catch (e) {} });
         }
 
         function clearDriveSession() {
             try { localStorage.removeItem(DRIVE_SESSION_KEY); } catch (e) {}
             if (driveRefreshTimer) { clearTimeout(driveRefreshTimer); driveRefreshTimer = null; }
+            if (driveSilentRefreshTimer) { clearTimeout(driveSilentRefreshTimer); driveSilentRefreshTimer = null; }
+            driveSilentRefreshInFlight = false;
+            driveRestorePending = false;
+            resolveDriveRefreshWaiters(false);
+        }
+
+        // Renouvellement sans interface : Google répond directement si l'accès a déjà été accordé.
+        function requestDriveTokenSilently() {
+            if (googleAccessToken) return false;
+            if (!tokenClient) return false;
+            if (driveSilentRefreshInFlight) return true;
+            driveSilentRefreshInFlight = true;
+            try {
+                tokenClient.requestAccessToken({ prompt: '' });
+            } catch (e) {
+                driveSilentRefreshInFlight = false;
+                return false;
+            }
+            if (driveSilentRefreshTimer) clearTimeout(driveSilentRefreshTimer);
+            driveSilentRefreshTimer = setTimeout(() => {
+                driveSilentRefreshInFlight = false;
+                resolveDriveRefreshWaiters(false);
+            }, 12000);
+            return true;
+        }
+
+        function refreshDriveTokenAndWait() {
+            if (googleAccessToken && readDriveSession()) return Promise.resolve(true);
+            return new Promise(resolve => {
+                driveRefreshWaiters.push(resolve);
+                if (!requestDriveTokenSilently()) {
+                    driveRefreshWaiters = driveRefreshWaiters.filter(r => r !== resolve);
+                    resolve(false);
+                }
+            });
+        }
+
+        // Appelé quand Drive renvoie 401/403 : on renouvelle le jeton et on rejoue la requête.
+        async function handleDriveAuthExpiry() {
+            refreshDriveStatusLabel('Reconnexion…', 'loading');
+            const refreshed = await refreshDriveTokenAndWait();
+            if (!refreshed) {
+                googleAccessToken = null;
+                refreshDriveStatusLabel('Cliquez sur Drive', 'error');
+                showMessage('Google Drive demande une reconnexion : cliquez sur le bouton Drive.', 6000);
+            }
+            return refreshed;
+        }
+
+        // Toutes les requêtes Drive passent ici : le jeton est ajouté à la volée et la requête
+        // est rejouée une fois après un renouvellement silencieux.
+        async function driveFetch(url, options = {}) {
+            const withToken = () => Object.assign({}, options, {
+                headers: Object.assign({}, options.headers, { 'Authorization': `Bearer ${googleAccessToken}` })
+            });
+            let response = await fetch(url, withToken());
+            if (response.status === 401 || response.status === 403) {
+                const refreshed = await handleDriveAuthExpiry();
+                if (refreshed) response = await fetch(url, withToken());
+            }
+            return response;
         }
 
         function scheduleDriveRefresh() {
-            if (driveRefreshTimer) clearTimeout(driveRefreshTimer);
-            const session = readDriveSession();
-            if (!session) return;
-            const delay = Math.max(30000, session.expiresAt - Date.now() - 120000);
-            driveRefreshTimer = setTimeout(() => {
-                if (tokenClient) tokenClient.requestAccessToken({ prompt: '' });
+            if (driveRefreshTimer) { clearTimeout(driveRefreshTimer); driveRefreshTimer = null; }
+            const session = readDriveSession(true);
+            if (!session || !driveRemembered()) return;
+            // Renouvellement 5 minutes avant l'expiration, puis nouvelle programmation.
+            const delay = Math.max(30000, session.expiresAt - Date.now() - 300000);
+            driveRefreshTimer = setTimeout(async () => {
+                driveRefreshTimer = null;
+                if (googleAccessToken && readDriveSession()) { scheduleDriveRefresh(); return; }
+                const refreshed = await refreshDriveTokenAndWait();
+                if (refreshed) scheduleDriveRefresh();
+                else if (driveRemembered()) driveRefreshTimer = setTimeout(scheduleDriveRefresh, 120000);
             }, delay);
         }
 
@@ -4425,22 +4511,47 @@
             if (statusText && text) statusText.textContent = text;
         }
 
-        async function restoreDriveSession() {
-            const session = readDriveSession();
-            if (!session || googleAccessToken) return;
-            googleAccessToken = session.token;
-            updateAuthUI(true);
-            refreshDriveStatusLabel('Connecté', 'success');
-            try {
-                await loadAllDataFromDrive();
-                populateAllLeaguesUI(); populatePalmaresTable(); populateBaseClubs(); populateCDF(); populateLDC(); updateBarragesDisplay(); populateCarouselClubTrophies();
-                scheduleDriveRefresh();
-            } catch (e) {
-                console.warn('Reprise de session Drive impossible :', e);
-                googleAccessToken = null;
-                clearDriveSession();
+        function tryDriveRestoreSilently() {
+            if (!driveRestorePending || googleAccessToken || !tokenClient) return;
+            driveRestorePending = false;
+            if (!requestDriveTokenSilently()) {
+                refreshDriveStatusLabel('Cliquez sur Drive', 'error');
                 updateAuthUI(false);
             }
+        }
+
+        async function restoreDriveSession() {
+            if (googleAccessToken) return;
+            const session = readDriveSession();
+            if (session) {
+                googleAccessToken = session.token;
+                updateAuthUI(true);
+                refreshDriveStatusLabel('Connecté', 'success');
+                try {
+                    await loadAllDataFromDrive();
+                    populateAllLeaguesUI(); populatePalmaresTable(); populateBaseClubs(); populateCDF(); populateLDC(); updateBarragesDisplay(); populateCarouselClubTrophies();
+                    scheduleDriveRefresh();
+                } catch (e) {
+                    console.warn('Reprise de session Drive impossible :', e);
+                    handleDriveAuthExpiry();
+                }
+                return;
+            }
+            // Jeton expiré (ou absent) mais appareil déjà autorisé : on tente le renouvellement muet.
+            if (readDriveSession(true) || driveRemembered()) {
+                driveRestorePending = true;
+                refreshDriveStatusLabel('Reconnexion…', 'loading');
+                tryDriveRestoreSilently();
+            }
+        }
+
+        // Au retour sur l'onglet, on prolonge la session avant qu'elle n'expire.
+        if (typeof document.addEventListener === 'function') {
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden || !driveRemembered()) return;
+                const session = readDriveSession(true);
+                if (!googleAccessToken || !session || session.expiresAt - Date.now() < 300000) requestDriveTokenSilently();
+            });
         }
 
         function setupDriveStatusClick() {
@@ -4755,7 +4866,10 @@
             if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
                 try {
                     tokenClient = google.accounts.oauth2.initTokenClient({ client_id: GOOGLE_CLIENT_ID, scope: GOOGLE_DRIVE_SCOPES, callback: tokenCallback, error_callback: handleTokenError });
-                    if (tokenClient && !googleAccessToken && !readDriveSession() && localStorage.getItem(DRIVE_REMEMBER_KEY) === '1') tokenClient.requestAccessToken({ prompt: '' });
+                    if (tokenClient && !googleAccessToken && (readDriveSession() || driveRemembered())) {
+                        driveRestorePending = true;
+                        tryDriveRestoreSilently();
+                    }
                     const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = false;
                 } catch (error) { console.error("Erreur GIS initTokenClient:", error); showMessage("Erreur initialisation Google.", 5000, true); updateAuthUI(false); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
             } else { console.warn("API Google (GIS) non chargée."); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
@@ -4766,6 +4880,16 @@
             else { console.error("Échec détection API Google."); showMessage("Erreur critique: API Google non disponible.", 10000, true); const signInButton = document.getElementById('signin-button'); if (signInButton) signInButton.disabled = true; }
         }
         function handleTokenError(error) {
+            const wasSilent = driveSilentRefreshInFlight || driveRestorePending;
+            driveSilentRefreshInFlight = false;
+            driveRestorePending = false;
+            if (driveSilentRefreshTimer) { clearTimeout(driveSilentRefreshTimer); driveSilentRefreshTimer = null; }
+            resolveDriveRefreshWaiters(false);
+            if (wasSilent) {
+                refreshDriveStatusLabel('Cliquez sur Drive', 'error');
+                updateAuthUI(false);
+                return;
+            }
             let userMessage = `Erreur Auth Google: ${error.type || error.error || 'Inconnue'}`;
             if (error.type === 'popup_closed_by_user' || error.error === 'popup_closed_by_user') userMessage = "Fenêtre de connexion Google fermée.";
             else if (error.type === 'popup_failed_to_open') userMessage = "Impossible d'ouvrir la fenêtre de connexion.";
@@ -4776,10 +4900,19 @@
         }
         async function tokenCallback(tokenResponse) {
             const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
+            const isRenewal = !!googleAccessToken;
             if (driveStatusElement) driveStatusElement.className = '';
-            if (tokenResponse.error) { if (tokenResponse.error !== "popup_failed_to_open" && tokenResponse.error !== "popup_closed_by_user") handleTokenError(tokenResponse); else updateAuthUI(false); return; }
+            if (tokenResponse.error) { if (tokenResponse.error !== "popup_failed_to_open" && tokenResponse.error !== "popup_closed_by_user") handleTokenError(tokenResponse); else { driveSilentRefreshInFlight = false; driveRestorePending = false; resolveDriveRefreshWaiters(false); updateAuthUI(false); } return; }
             if (tokenResponse && tokenResponse.access_token) {
-                googleAccessToken = tokenResponse.access_token; writeDriveSession(tokenResponse); scheduleDriveRefresh(); showMessage("Connecté ! Chargement des données...", 2500);
+                driveSilentRefreshInFlight = false;
+                driveRestorePending = false;
+                if (driveSilentRefreshTimer) { clearTimeout(driveSilentRefreshTimer); driveSilentRefreshTimer = null; }
+                googleAccessToken = tokenResponse.access_token; writeDriveSession(tokenResponse); scheduleDriveRefresh();
+                resolveDriveRefreshWaiters(true);
+                updateAuthUI(true);
+                refreshDriveStatusLabel('Connecté', 'success');
+                if (isRenewal) { showMessage("Session Google Drive prolongée automatiquement.", 2500); return; }
+                showMessage("Connecté ! Chargement des données...", 2500);
                 if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
                 if (driveStatusTextElement) driveStatusTextElement.textContent = 'Chargement...';
                 try {
@@ -4800,7 +4933,9 @@
             const driveStatusElement = document.getElementById('drive-status'); const driveStatusTextElement = document.getElementById('drive-status-text');
             if (driveStatusElement) { driveStatusElement.classList.remove('error', 'success'); driveStatusElement.classList.add('loading'); driveStatusElement.style.display = 'inline-flex'; }
             if (driveStatusTextElement) driveStatusTextElement.textContent = 'Connexion...';
-            tokenClient.requestAccessToken({ prompt: 'consent' });
+            driveSilentRefreshInFlight = false;
+            driveRestorePending = false;
+            tokenClient.requestAccessToken({ prompt: '' });
         }
 
         function updateAuthUI(isLoggedIn) {
@@ -4850,14 +4985,14 @@
             if (!googleAccessToken) { console.warn("findOrCreateFile appelé sans token Google."); return null; }
             const searchUrl = `https://www.googleapis.com/drive/v3/files?q=name='${encodeURIComponent(filename)}'+and+trashed=false&spaces=drive&fields=files(id,name)`;
             try {
-                const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
+                const searchRes = await driveFetch(searchUrl);
+                if (!searchRes.ok) { if (searchRes.status === 401 || searchRes.status === 403) handleDriveAuthExpiry(); console.error(`Erreur ${searchRes.status} lors de la recherche du fichier ${filename}.`); return null; }
                 const searchData = await searchRes.json();
                 if (searchData.files && searchData.files.length > 0) { driveLog(`Fichier Drive '${filename}' trouvé avec ID: ${searchData.files[0].id}`); return searchData.files[0].id; }
                 driveLog(`Fichier Drive '${filename}' non trouvé. Création...`);
                 const createUrl = `https://www.googleapis.com/drive/v3/files`;
                 const metadata = { name: filename, mimeType: mimeType };
-                const createRes = await fetch(createUrl, { method: 'POST', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
+                const createRes = await driveFetch(createUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(metadata) });
                 if (!createRes.ok) { console.error(`Erreur ${createRes.status} lors de la création du fichier ${filename}.`); return null; }
                 const createData = await createRes.json();
                 const newFileId = createData.id;
@@ -4871,8 +5006,8 @@
             if (!googleAccessToken || !fileId) { console.warn("readFileContent appelé sans token ou fileId."); return null; }
             const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
             try {
-                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${googleAccessToken}` } });
-                if (!response.ok) { if (response.status === 404) { driveLog(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
+                const response = await driveFetch(url);
+                if (!response.ok) { if (response.status === 404) { driveLog(`Fichier ID ${fileId} non trouvé (erreur 404).`); return ""; } if (response.status === 401 || response.status === 403) handleDriveAuthExpiry(); console.error(`Erreur ${response.status} lors de la lecture du fichier ID ${fileId}.`); return null; }
                 driveLog(`Lecture réussie du fichier ID ${fileId}.`); return await response.text();
             } catch (error) { console.error(`Exception dans readFileContent pour ID ${fileId}:`, error); showMessage(`Erreur Drive lecture fichier.`, 5000, true); return null; }
         }
@@ -4889,8 +5024,8 @@
             const contentType = isJson ? 'application/json; charset=UTF-8' : 'text/plain; charset=UTF-8';
             let success = false;
             try {
-                const response = await fetch(url, { method: 'PATCH', headers: { 'Authorization': `Bearer ${googleAccessToken}`, 'Content-Type': contentType }, body: contentToSend });
-                if (!response.ok) { if (response.status === 401 || response.status === 403) { showMessage("Session Drive expirée.", 5000, true); googleAccessToken = null; clearDriveSession(); updateAuthUI(false); } console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
+                const response = await driveFetch(url, { method: 'PATCH', headers: { 'Content-Type': contentType }, body: contentToSend });
+                if (!response.ok) { if (response.status === 401 || response.status === 403) handleDriveAuthExpiry(); console.error(`Erreur ${response.status} écriture ID ${fileId}.`); throw new Error(`HTTP error ${response.status}`); }
                 else { driveLog(`Écriture réussie ID ${fileId}.`); success = true; }
             } catch (error) { console.error(`Exception dans updateFileContent pour ID ${fileId}:`, error); showMessage(`Erreur sauvegarde Drive.`, 5000, true); if (driveStatusElement && driveStatusTextElement) { driveStatusTextElement.textContent = 'Erreur Synchro'; driveStatusElement.className = 'error'; } }
             finally { isSavingDriveData = false; if (driveStatusElement && driveStatusTextElement && !driveStatusElement.classList.contains('error')) { driveStatusTextElement.textContent = 'Connecté'; driveStatusElement.className = 'success'; } updateAuthUI(!!googleAccessToken); }
@@ -8519,7 +8654,7 @@
 
             setActiveTab('ligue1');
             checkAndInitGis();
-            updateAuthUI(false);
+            updateAuthUI(!!googleAccessToken || driveRemembered() || !!readDriveSession(true));
             initRoulette();
 
             // Initialiser les dropdowns de logos GitHub

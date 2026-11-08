@@ -7137,8 +7137,8 @@
                         meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
                         foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
                         rows: [
-                            { name: dTeam1, logo: logo1, score: match.score1, winner: match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 1) },
-                            { name: dTeam2, logo: logo2, score: match.score2, winner: match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 2) }
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: !!match.winner && match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 1) },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: !!match.winner && match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 2) }
                         ]
                     });
                 });
@@ -7615,8 +7615,8 @@
                         meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
                         foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
                         rows: [
-                            { name: dTeam1, logo: logo1, score: match.score1, winner: match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 1) },
-                            { name: dTeam2, logo: logo2, score: match.score2, winner: match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 2) }
+                            { name: dTeam1, logo: logo1, score: match.score1, winner: !!match.winner && match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 1) },
+                            { name: dTeam2, logo: logo2, score: match.score2, winner: !!match.winner && match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 2) }
                         ]
                     });
                 });

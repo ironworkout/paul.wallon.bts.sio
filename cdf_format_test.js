@@ -67,7 +67,7 @@ js += `
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
-    computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, generatePlayerRosters,
+    computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, freezeMatchScorers, collectEditableMatches,
     createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
     GOALKEEPER_SHOTS_FACED_PER_MATCH,
     get playersData() { return playersData; }, set playersData(v) { playersData = v; },
@@ -646,6 +646,29 @@ assert(statsBye.every(p => p.matches === 0), 'Match avec BYE ignore');
 // Archivage doux
 T.archivePlayerRecord(attaquantA2.id);
 assert(T.playersData.players.find(p => p.id === attaquantA2.id).active === false, 'Archivage doux du joueur');
+
+// Buteurs saisis manuellement : 2 buts, 1 but, 0 but
+T.playersData = { players: [], clubs: {}, fileId: null, filename: 'peluches_joueurs.json' };
+T.leagueDataStore.l1.seasons = [{ season_id: 8, fixtures: [[ { home: 'ClubA', away: 'ClubB', scoreHome: 3, scoreAway: 2 } ]] }];
+T.leagueDataStore.l1.active_season_id = 8;
+T.cdfData.rounds = {}; T.ldcData.rounds = {};
+const clubA8 = T.resolvePlayerClubId('ClubA');
+const buteur1 = T.createPlayerRecord({ name: 'Buteur 1', number: 9, position: 'ATT', clubId: clubA8 });
+const buteur2 = T.createPlayerRecord({ name: 'Buteur 2', number: 10, position: 'ATT', clubId: clubA8 });
+const buteur3 = T.createPlayerRecord({ name: 'Buteur 3', number: 11, position: 'ATT', clubId: clubA8 });
+T.createPlayerRecord({ name: 'Gardien 8', number: 1, position: 'GB', clubId: clubA8 });
+T.leagueDataStore.l1.seasons[0].fixtures[0][0].scorers = { [buteur1.id]: 2, [buteur2.id]: 1 };
+T.playerStatsVersion++;
+const statsManuelles = T.computePlayerStats({ comp: 'l1', season: 8, club: clubA8 });
+const butsDe = id => statsManuelles.find(p => p.id === id).goals;
+assert(butsDe(buteur1.id) === 2 && butsDe(buteur2.id) === 1 && butsDe(buteur3.id) === 0, 'Buteurs manuels respectes (2 / 1 / 0)');
+assert(statsManuelles.find(p => p.id === buteur1.id).photoUrl.includes('embleme-peluche'), 'Photo par defaut du joueur');
+assert(statsManuelles.find(p => p.id === buteur1.id).assists === 0, 'Aucune passe inventee sans saisie');
+assert(statsManuelles.filter(p => p.clubId === clubA8).reduce((sum, p) => sum + p.goals, 0) === 3, 'Total des buts du club conserve (pas de double comptage)');
+const freshMatch = { home: 'ClubA', away: 'ClubB', scoreHome: 2, scoreAway: 0 };
+T.freezeMatchScorers('l1', freshMatch, 9, 0, 0);
+assert(freshMatch.scorers && Object.keys(freshMatch.scorers).length > 0, 'Buteurs figes a la saisie du score');
+assert(Object.values(freshMatch.scorers).reduce((sum, goals) => sum + goals, 0) === 2, 'Total des buteurs fige = score de l equipe');
 
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');

@@ -23,8 +23,8 @@ Actuellement, un match à égalité est départagé par tirs au but *aléatoires
 ### 2. Statistiques de saison par club (meilleur buteur, passeurs)
 - **Idée** : pour chaque match saisi, demander les buteurs et ajouter un classement des buteurs dans chaque ligue (comme un Soulier d'Or des Peluches).
 - **Effort** : moyen · **Impact** : ⭐⭐⭐⭐
-- [x] **Statut (11 nov. 2026)** : onglet **Joueurs** livré — effectifs générés par club, buts et passes
-  des attaquants répartis de façon déterministe, arrêts des gardiens calculés (`3,5 × matchs − buts encaissés`),
+- [x] **Statut (11 nov. 2026)** : onglet **Joueurs** livré — fiches joueurs avec photo, buteurs saisis match par match
+  (2 buts pour l’un, 1 pour un autre, 0 pour le troisième), arrêts des gardiens calculés (`3,5 × matchs − buts encaissés`),
   filtres compétition/saison/club, fiche joueur, export CSV, Soulier d'Or sous les classements L1/L2.
 
 ### 3. Calendrier complet en aller-retour
@@ -110,7 +110,7 @@ Les clubs sont définis dans plusieurs endroits (données initiales, base clubs,
 ### 16. Tests automatisés plus complets
 Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement. Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
 - **Effort** : faible · **Impact** : ⭐⭐⭐⭐
-- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **135 assertions**
+- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **141 assertions**
   (et non 26) et couvre la CDF, la LDC (tirage, BYE, vainqueurs, trophée), le Classement, le tri,
   les swap, le catalogue de logos et l'univers des saisons passées. Restent à couvrir : création,
   bascule, suppression et migration d'une saison.

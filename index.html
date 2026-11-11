@@ -3344,12 +3344,66 @@
         }
 
         /* ==================== ONGLET JOUEURS ==================== */
-        .joueurs-header {
+        .joueurs-content .container {
+            padding-top: 26px;
+        }
+
+        .joueurs-hero {
+            position: relative;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
-            gap: 16px;
+            gap: 24px;
             flex-wrap: wrap;
+            padding: 30px 34px;
+            margin-bottom: 22px;
+            border-radius: 22px;
+            overflow: hidden;
+            color: #f4f7ff;
+            background:
+                radial-gradient(120% 140% at 88% -20%, rgba(255, 193, 7, 0.22), transparent 55%),
+                radial-gradient(90% 120% at 8% 120%, rgba(0, 200, 255, 0.18), transparent 60%),
+                linear-gradient(120deg, #0b1230 0%, #1a237e 62%, #2b1b63 100%);
+            box-shadow: 0 24px 50px rgba(10, 16, 42, 0.28);
+        }
+
+        .joueurs-hero::after {
+            content: "";
+            position: absolute;
+            inset: auto 0 0 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        .joueurs-hero__kicker {
+            display: inline-block;
+            margin-bottom: 8px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #ffe6a3;
+        }
+
+        .joueurs-hero h2 {
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .joueurs-hero p {
+            max-width: 56ch;
+            margin: 10px 0 0;
+            color: rgba(232, 240, 255, 0.76);
+            font-size: 0.92rem;
+            line-height: 1.5;
         }
 
         .joueurs-actions {
@@ -3358,16 +3412,24 @@
             flex-wrap: wrap;
         }
 
-        .joueurs-actions .btn {
+        .joueurs-action {
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 11px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.82rem;
+            backdrop-filter: blur(8px);
+            transition: background 0.15s ease, transform 0.15s ease;
         }
 
-        .joueurs-note {
-            margin: 0 0 16px;
-            color: #5c6478;
-            font-size: 0.92rem;
+        .joueurs-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         .joueurs-filters {
@@ -3375,29 +3437,42 @@
             flex-wrap: wrap;
             gap: 12px;
             align-items: flex-end;
-            margin-bottom: 18px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+            border-radius: 18px;
+            border: 1px solid #e3e7f2;
+            background: #fff;
+            box-shadow: 0 10px 26px rgba(26, 35, 126, 0.06);
         }
 
         .joueurs-filters label {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            font-size: 0.72rem;
-            letter-spacing: 0.08em;
+            gap: 6px;
+            font-size: 0.66rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: #5c6478;
-            font-weight: 600;
+            color: #79829a;
+            font-weight: 700;
         }
 
         .joueurs-filters select,
         .joueurs-filters input {
-            padding: 9px 11px;
-            border-radius: 8px;
-            border: 1px solid #d7dce8;
-            background: #fff;
-            font-size: 0.9rem;
-            min-width: 160px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #dde2ee;
+            background: #f8f9fd;
+            font-size: 0.88rem;
+            min-width: 158px;
             color: #1f2a44;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .joueurs-filters select:focus,
+        .joueurs-filters input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.12);
         }
 
         .joueurs-search input {
@@ -3406,25 +3481,28 @@
 
         .joueurs-chips {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            padding: 4px;
+            border-radius: 12px;
+            background: #f1f3f9;
         }
 
         .joueurs-chip {
             padding: 9px 14px;
-            border-radius: 20px;
-            border: 1px solid #d7dce8;
-            background: #fff;
-            color: #4a5468;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: #5a6478;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             cursor: pointer;
-            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+            transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
         }
 
         .joueurs-chip.is-active {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-            color: #fff;
+            background: #fff;
+            color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(26, 35, 126, 0.12);
         }
 
         .joueurs-cards {
@@ -3438,36 +3516,58 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            padding: 18px 20px;
-            border-radius: 14px;
+            gap: 2px;
+            padding: 18px 20px 16px;
+            border-radius: 18px;
             background: #fff;
-            border: 1px solid #e4e8f0;
-            box-shadow: 0 6px 18px rgba(26, 35, 126, 0.06);
+            border: 1px solid #e3e7f2;
+            box-shadow: 0 10px 26px rgba(26, 35, 126, 0.05);
             overflow: hidden;
         }
 
-        .joueurs-card i {
+        .joueurs-card::before {
+            content: "";
             position: absolute;
-            right: 14px;
-            top: 14px;
-            color: rgba(26, 35, 126, 0.14);
-            font-size: 1.5rem;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent-gold), rgba(255, 193, 7, 0));
+        }
+
+        .joueurs-card__icon {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            margin-bottom: 10px;
+            border-radius: 11px;
+            background: rgba(26, 35, 126, 0.08);
+            color: var(--primary-color);
+            font-size: 0.95rem;
         }
 
         .joueurs-card__value {
             font-family: 'Oswald', sans-serif;
-            font-size: 1.9rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: #101a3d;
             line-height: 1;
         }
 
         .joueurs-card__label {
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: #6b7488;
+            color: #79829a;
+        }
+
+        .joueurs-card__label small {
+            display: block;
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            color: #a0a8bc;
+            text-transform: none;
         }
 
         .joueurs-podiums {
@@ -3478,23 +3578,44 @@
         }
 
         .joueurs-podium {
-            padding: 16px 18px;
-            border-radius: 14px;
-            border: 1px solid #e4e8f0;
-            background: linear-gradient(180deg, #fff, #f8f9fd);
-            box-shadow: 0 8px 22px rgba(26, 35, 126, 0.05);
+            padding: 18px 20px;
+            border-radius: 18px;
+            color: #eef3ff;
+            background:
+                radial-gradient(120% 120% at 100% 0%, rgba(212, 175, 55, 0.18), transparent 55%),
+                linear-gradient(150deg, #0d1533, #17204a 70%);
+            box-shadow: 0 16px 34px rgba(10, 16, 42, 0.22);
         }
 
-        .joueurs-podium__title {
+        .joueurs-podium__head {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 0 0 12px;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .joueurs-podium__icon {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 193, 7, 0.16);
+            color: var(--accent-gold);
+        }
+
+        .joueurs-podium__head h3 {
+            margin: 0;
             font-family: 'Oswald', sans-serif;
-            font-size: 0.95rem;
-            letter-spacing: 0.1em;
+            font-size: 0.98rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--primary-color);
+        }
+
+        .joueurs-podium__head p {
+            margin: 2px 0 0;
+            font-size: 0.7rem;
+            color: rgba(224, 233, 255, 0.6);
         }
 
         .joueurs-podium__list {
@@ -3509,85 +3630,111 @@
         .joueurs-podium__item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            border-radius: 10px;
-            background: #fff;
-            border: 1px solid #eceff6;
+            gap: 11px;
+            padding: 9px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
         }
 
         .joueurs-podium__item:hover {
-            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.11);
+            border-color: rgba(255, 193, 7, 0.45);
         }
 
         .joueurs-podium__rank {
             display: grid;
             place-items: center;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: var(--primary-color);
-            color: #fff;
-            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 0.72rem;
             font-weight: 700;
             flex: 0 0 auto;
         }
 
-        .joueurs-podium__item img {
-            width: 26px;
-            height: 26px;
-            object-fit: contain;
+        .joueurs-podium__rank--1 {
+            background: linear-gradient(135deg, #ffe9a8, #d4af37);
+            color: #3a2a00;
+        }
+
+        .joueurs-podium__rank--2 {
+            background: linear-gradient(135deg, #f0f3f8, #b8c2d4);
+            color: #2b3446;
+        }
+
+        .joueurs-podium__rank--3 {
+            background: linear-gradient(135deg, #e9b98a, #b5764a);
+            color: #331a08;
+        }
+
+        .joueurs-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.55);
+            flex: 0 0 auto;
+        }
+
+        .joueurs-table .joueurs-avatar {
+            width: 34px;
+            height: 34px;
+            border-color: #e3e7f2;
         }
 
         .joueurs-podium__name {
             display: flex;
             flex-direction: column;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            color: #1f2a44;
         }
 
         .joueurs-podium__name small {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 400;
-            color: #7b8396;
+            color: rgba(224, 233, 255, 0.6);
         }
 
         .joueurs-podium__value {
             display: flex;
             align-items: baseline;
-            gap: 3px;
+            gap: 4px;
             margin-left: auto;
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            color: var(--primary-color);
+            font-size: 1.1rem;
+            color: #ffe6a3;
         }
 
         .joueurs-podium__value small {
-            font-size: 0.62rem;
-            letter-spacing: 0.08em;
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #7b8396;
+            color: rgba(224, 233, 255, 0.55);
         }
 
         .joueurs-table-wrap {
             overflow-x: auto;
-            border-radius: 14px;
-            border: 1px solid #e4e8f0;
+            border-radius: 18px;
+            border: 1px solid #e3e7f2;
             background: #fff;
-            box-shadow: 0 8px 22px rgba(26, 35, 126, 0.05);
+            box-shadow: 0 12px 28px rgba(26, 35, 126, 0.06);
         }
 
         .joueurs-table {
             width: 100%;
-            min-width: 780px;
+            min-width: 820px;
             border-collapse: collapse;
         }
 
         .joueurs-table th,
         .joueurs-table td {
-            padding: 11px 12px;
+            padding: 12px 14px;
             text-align: center;
             border-bottom: 1px solid #eef1f7;
             font-size: 0.86rem;
@@ -3600,10 +3747,13 @@
         }
 
         .joueurs-table thead th {
-            background: #f6f7fb;
-            color: #5c6478;
-            font-size: 0.7rem;
-            letter-spacing: 0.08em;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #f7f8fc;
+            color: #79829a;
+            font-size: 0.66rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
@@ -3634,10 +3784,11 @@
 
         .joueurs-table tbody tr {
             cursor: pointer;
+            transition: background 0.12s ease;
         }
 
         .joueurs-table tbody tr:hover {
-            background: #f9fafd;
+            background: #f7f9ff;
         }
 
         .joueurs-table tbody tr:last-child td {
@@ -3647,21 +3798,21 @@
         .joueurs-name {
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 11px;
             font-weight: 600;
+            text-align: left;
         }
 
-        .joueurs-number {
-            display: grid;
-            place-items: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(26, 35, 126, 0.08);
-            color: var(--primary-color);
-            font-size: 0.7rem;
-            font-weight: 700;
-            flex: 0 0 auto;
+        .joueurs-name__text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .joueurs-name__text small {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: #98a1b6;
         }
 
         .joueurs-club {
@@ -3678,11 +3829,11 @@
 
         .joueurs-position {
             display: inline-block;
-            padding: 3px 9px;
-            border-radius: 20px;
-            font-size: 0.68rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.64rem;
             font-weight: 700;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
         }
 
@@ -3709,17 +3860,181 @@
             color: #7b8396;
         }
 
+        /* Feuilles de match */
+        .joueurs-matches-panel {
+            margin-top: 26px;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid #e3e7f2;
+            background: #fff;
+            box-shadow: 0 12px 28px rgba(26, 35, 126, 0.05);
+        }
+
+        .joueurs-matches-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .joueurs-matches-head h3 {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        .joueurs-matches-head p {
+            margin: 5px 0 0;
+            font-size: 0.8rem;
+            color: #79829a;
+        }
+
+        .joueurs-matches-count {
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(26, 35, 126, 0.08);
+            color: var(--primary-color);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .joueurs-matches {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .joueurs-match {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #eef1f7;
+            background: #fafbfe;
+            font-size: 0.84rem;
+            flex-wrap: wrap;
+        }
+
+        .joueurs-match__comp {
+            font-size: 0.64rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #79829a;
+            min-width: 108px;
+        }
+
+        .joueurs-match__teams {
+            font-weight: 600;
+            color: #1f2a44;
+            flex: 1 1 240px;
+        }
+
+        .joueurs-match__score {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .joueurs-match__badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(220, 53, 69, 0.1);
+            color: #b02a37;
+            font-size: 0.64rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .joueurs-match__badge.is-filled {
+            background: rgba(25, 135, 84, 0.12);
+            color: #146c43;
+        }
+
+        .joueurs-match__btn {
+            padding: 7px 14px;
+            border: none;
+            border-radius: 9px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .joueurs-match__btn:hover {
+            background: #2a35a0;
+        }
+
         /* Fiche joueur */
+        .player-modal-identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .player-modal-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e3e7f2;
+        }
+
+        .player-modal-identity b {
+            display: block;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.15rem;
+            letter-spacing: 0.04em;
+            color: #101a3d;
+        }
+
+        .player-modal-identity small {
+            display: block;
+            color: #79829a;
+            font-size: 0.76rem;
+        }
+
+        .player-modal-honour {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 193, 7, 0.16);
+            color: #7a5b00;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
         .player-modal-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .player-modal-stats div {
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #f6f7fb;
             text-align: center;
         }
@@ -3733,10 +4048,31 @@
         }
 
         .player-modal-stats small {
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #6b7488;
+        }
+
+        .player-form-photo {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .player-form-photo img {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 2px solid #e3e7f2;
+            background: #fff;
+            flex: 0 0 auto;
+        }
+
+        .player-form-photo > div {
+            flex: 1;
         }
 
         .player-form-row {
@@ -3751,20 +4087,6 @@
             color: #7b8396;
         }
 
-        .player-modal-honour {
-            margin: 0 0 14px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: rgba(255, 193, 7, 0.14);
-            color: #7a5b00;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-
-        .player-modal-honour:empty {
-            display: none;
-        }
-
         .player-modal-archived {
             margin: 0 0 14px;
             font-size: 0.78rem;
@@ -3773,8 +4095,79 @@
 
         .player-archive-btn {
             margin-right: auto;
-            background: #6b7488;
+            background: #5b6478;
             color: #fff;
+        }
+
+        /* Modale buteurs */
+        .scorer-side {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #e3e7f2;
+            margin-bottom: 12px;
+        }
+
+        .scorer-side header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .scorer-side header b {
+            color: #101a3d;
+        }
+
+        .scorer-side header span {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #79829a;
+        }
+
+        .scorer-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            border-top: 1px solid #f0f2f8;
+        }
+
+        .scorer-row span {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #2b3448;
+        }
+
+        .scorer-row span small {
+            font-size: 0.66rem;
+            font-weight: 400;
+            color: #98a1b6;
+        }
+
+        .scorer-row input {
+            width: 58px;
+            margin-left: auto;
+            padding: 7px 9px;
+            border-radius: 8px;
+            border: 1px solid #dde2ee;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .scorer-total {
+            margin: 8px 0 0;
+            font-size: 0.74rem;
+            color: #79829a;
+        }
+
+        .scorer-side.is-invalid .scorer-total {
+            color: #b02a37;
+            font-weight: 700;
         }
 
         /* Bloc buteurs sous les classements */
@@ -3782,7 +4175,7 @@
             margin-top: 20px;
             padding: 16px 18px;
             border-radius: 14px;
-            border: 1px solid #e4e8f0;
+            border: 1px solid #e3e7f2;
             background: #fff;
             box-shadow: 0 6px 18px rgba(26, 35, 126, 0.05);
         }
@@ -3809,13 +4202,20 @@
 
         .league-top-scorers__list li {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 10px;
             font-size: 0.86rem;
         }
 
+        .league-top-scorers__list .joueurs-avatar {
+            width: 26px;
+            height: 26px;
+            border-color: #e3e7f2;
+        }
+
         .league-top-scorers__list small {
-            font-size: 0.72rem;
+            display: block;
+            font-size: 0.7rem;
             color: #7b8396;
         }
 
@@ -3848,8 +4248,23 @@
         }
 
         @media (max-width: 640px) {
+            .joueurs-content .container {
+                padding-top: 16px;
+            }
+
+            .joueurs-hero {
+                padding: 22px;
+                border-radius: 18px;
+            }
+
+            .joueurs-actions,
+            .joueurs-actions .joueurs-action {
+                width: 100%;
+                justify-content: center;
+            }
+
             .joueurs-filters {
-                gap: 10px;
+                padding: 14px;
             }
 
             .joueurs-filters label,
@@ -3869,17 +4284,24 @@
                 text-align: center;
             }
 
-            .joueurs-actions {
-                width: 100%;
-            }
-
-            .joueurs-actions .btn {
-                flex: 1;
-                justify-content: center;
-            }
-
             .joueurs-table {
-                min-width: 700px;
+                min-width: 760px;
+            }
+
+            .joueurs-match__comp {
+                min-width: 0;
+            }
+
+            .joueurs-match__teams {
+                flex-basis: 100%;
+            }
+
+            .joueurs-match__btn {
+                margin-left: auto;
+            }
+
+            .player-form-row {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -5038,82 +5460,71 @@
     <!-- JOUEURS -->
     <div class="tab-content joueurs-content" id="joueurs-content">
         <div class="container">
-            <div class="section">
-                <div class="section-header joueurs-header">
-                    <h2 class="section-title"><i class="fas fa-users"></i> Joueurs</h2>
-                    <div class="joueurs-actions">
-                        <button class="btn" id="joueurs-generate-btn" type="button"
-                            title="Crée un gardien et trois attaquants pour chaque club sans effectif"><i
-                                class="fas fa-wand-magic-sparkles"></i> Générer les effectifs</button>
-                        <button class="btn" id="joueurs-add-btn" type="button"><i class="fas fa-plus"></i> Ajouter un
-                            joueur</button>
-                        <button class="btn" id="joueurs-export-btn" type="button"><i class="fas fa-file-csv"></i>
-                            Exporter CSV</button>
-                    </div>
+            <section class="joueurs-hero">
+                <div class="joueurs-hero__text">
+                    <span class="joueurs-hero__kicker">Statistiques individuelles</span>
+                    <h2>Joueurs</h2>
+                    <p>Buts, passes et arrêts calculés à partir des feuilles de match. Choisissez la photo de chaque joueur et saisissez les buteurs rencontre par rencontre.</p>
                 </div>
-                <div class="section-content">
-                    <p class="joueurs-note">Buts et passes des attaquants, arrêts des gardiens calculés à partir des
-                        buts encaissés de leur équipe — aucun score à ressaisir.</p>
+                <div class="joueurs-actions">
+                    <button class="btn joueurs-action" id="joueurs-add-btn" type="button"><i class="fas fa-plus"></i> Ajouter un joueur</button>
+                    <button class="btn joueurs-action" id="joueurs-export-btn" type="button"><i class="fas fa-file-csv"></i> Exporter CSV</button>
+                </div>
+            </section>
 
-                    <div class="joueurs-filters">
-                        <label>Compétition <select id="joueurs-comp-select"></select></label>
-                        <label>Saison <select id="joueurs-season-select"></select></label>
-                        <label>Club <select id="joueurs-club-select"></select></label>
-                        <label class="joueurs-search">Recherche <input type="search" id="joueurs-search-input"
-                                placeholder="Nom du joueur ou club..."></label>
-                        <div class="joueurs-chips" role="group" aria-label="Filtrer par poste">
-                            <button type="button" class="joueurs-chip is-active" data-position="all"
-                                aria-pressed="true">Tous</button>
-                            <button type="button" class="joueurs-chip" data-position="ATT"
-                                aria-pressed="false">Attaquants</button>
-                            <button type="button" class="joueurs-chip" data-position="GB"
-                                aria-pressed="false">Gardiens</button>
-                        </div>
-                    </div>
-
-                    <div class="joueurs-cards" id="joueurs-cards"></div>
-                    <div class="joueurs-podiums" id="joueurs-podiums"></div>
-
-                    <div class="joueurs-table-wrap">
-                        <table class="joueurs-table" id="joueurs-table">
-                            <caption class="sr-only">Statistiques individuelles des joueurs</caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="name">Joueur</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="club">Club</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="position">Poste</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="matches">MJ</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="goals">Buts</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="assists">Passes</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="saves">Arrêts</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="conceded">Enc.</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="saveRate">% arrêts</button></th>
-                                    <th scope="col"><button type="button" class="joueurs-sort"
-                                            data-sort="cleanSheets">CS</button></th>
-                                </tr>
-                            </thead>
-                            <tbody id="joueurs-table-body"></tbody>
-                        </table>
-                    </div>
-                    <p class="joueurs-legend">Arrêts estimés : 3,5 tirs cadrés subis par match, moins les buts
-                        encaissés. Cliquez sur un joueur pour ouvrir sa fiche.</p>
+            <div class="joueurs-filters">
+                <label>Compétition <select id="joueurs-comp-select"></select></label>
+                <label>Saison <select id="joueurs-season-select"></select></label>
+                <label>Club <select id="joueurs-club-select"></select></label>
+                <label class="joueurs-search">Recherche <input type="search" id="joueurs-search-input" placeholder="Nom du joueur ou du club..."></label>
+                <div class="joueurs-chips" role="group" aria-label="Filtrer par poste">
+                    <button type="button" class="joueurs-chip is-active" data-position="all" aria-pressed="true">Tous</button>
+                    <button type="button" class="joueurs-chip" data-position="ATT" aria-pressed="false">Attaquants</button>
+                    <button type="button" class="joueurs-chip" data-position="GB" aria-pressed="false">Gardiens</button>
                 </div>
             </div>
+
+            <div class="joueurs-cards" id="joueurs-cards"></div>
+            <div class="joueurs-podiums" id="joueurs-podiums"></div>
+
+            <div class="joueurs-table-wrap">
+                <table class="joueurs-table" id="joueurs-table">
+                    <caption class="sr-only">Statistiques individuelles des joueurs</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="name">Joueur</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="club">Club</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="position">Poste</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="matches">MJ</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="goals">Buts</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="assists">Passes</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="saves">Arrêts</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="conceded">Enc.</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="saveRate">% arrêts</button></th>
+                            <th scope="col"><button type="button" class="joueurs-sort" data-sort="cleanSheets">CS</button></th>
+                        </tr>
+                    </thead>
+                    <tbody id="joueurs-table-body"></tbody>
+                </table>
+            </div>
+            <p class="joueurs-legend">Arrêts estimés : 3,5 tirs cadrés subis par match, moins les buts encaissés. Cliquez sur un joueur pour ouvrir sa fiche.</p>
+
+            <section class="joueurs-matches-panel">
+                <header class="joueurs-matches-head">
+                    <div>
+                        <h3><i class="fas fa-clipboard-list" aria-hidden="true"></i> Feuilles de match</h3>
+                        <p>Saisissez les buteurs : un match peut se finir 2 buts pour l’un, 1 pour un autre, 0 pour le troisième.</p>
+                    </div>
+                    <span class="joueurs-matches-count" id="joueurs-matches-count"></span>
+                </header>
+                <div class="joueurs-matches" id="joueurs-matches"></div>
+            </section>
         </div>
     </div>
 
     <!-- MODAL FICHE JOUEUR -->
     <div class="modal-overlay" id="player-modal">
-        <div class="modal-content" style="max-width:520px;">
+        <div class="modal-content" style="max-width:560px;">
             <div class="modal-header">
                 <h3 class="modal-title" id="player-modal-title">Fiche joueur</h3>
                 <button class="modal-close" type="button" data-close-player-modal aria-label="Fermer">&times;</button>
@@ -5122,6 +5533,19 @@
             <div class="modal-footer" id="player-modal-footer"></div>
         </div>
     </div>
+
+    <!-- MODAL BUTEURS -->
+    <div class="modal-overlay" id="scorers-modal">
+        <div class="modal-content" style="max-width:640px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="scorers-modal-title">Buteurs du match</h3>
+                <button class="modal-close" type="button" data-close-scorers-modal aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body" id="scorers-modal-body"></div>
+            <div class="modal-footer" id="scorers-modal-footer"></div>
+        </div>
+    </div>
+
 
     <footer>
         <div class="container footer-container">
@@ -6480,6 +6904,7 @@
             if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
             activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
+            freezeMatchScorers(leagueId, activeSeason.fixtures[roundIndex][matchIndex], activeSeason.season_id, roundIndex, matchIndex);
             playerStatsVersion++;
             refreshPlayersTabIfVisible();
             if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams, activeSeason.logos || {}, leagueId, activeSeason.season_id);
@@ -9976,17 +10401,25 @@
             driveLog("Championnat Peluches Élite V3 Initialisé.");
         });
         // ==================== ONGLET JOUEURS ====================
-        // Buts et passes des attaquants, arrets des gardiens deduits des buts encaisses.
+        // Buts et passes saisis match par match, arrets des gardiens deduits des buts encaisses.
         const PLAYER_POSITION_LABELS = { ATT: 'Attaquant', GB: 'Gardien' };
         const GOALKEEPER_SHOTS_FACED_PER_MATCH = 3.5;
-        const PLAYER_FIRST_NAMES = ['Toudou', 'Câlin', 'Moustache', 'Gribouille', 'Pilou', 'Roudoudou', 'Bisou', 'Choupette', 'Ninou', 'Patapouf', 'Zigzag', 'Bidou', 'Filou', 'Cannelle', 'Réglisse', 'Guimauve', 'Mimi', 'Bourriquot', 'Pompon', 'Titou'];
-        const PLAYER_LAST_NAMES = ['du Duvet', 'de la Peluche', 'Ourson', 'de Coton', 'des Étoiles', 'du Grenier', 'Malicieux', 'Toutdoux', 'des Bois', 'de la Vitrine'];
+        const PLAYER_PHOTOS = [
+            { file: 'rabbit-goalkeeper.webp', name: 'Lapin gardien' },
+            { file: 'teddy-shooting.png', name: 'Tir de l’ours' },
+            { file: 'peluches-celebration.webp', name: 'Célébration' },
+            { file: 'peluches-bras-dessus-bras-dessous.webp', name: 'Bras dessus, bras dessous' },
+            { file: 'teddy-crowd.webp', name: 'Public de peluches' },
+            { file: 'embleme-peluche.svg', name: 'Emblème Peluche Élite' }
+        ];
 
         let playersData = { players: [], clubs: {}, fileId: null, filename: 'peluches_joueurs.json' };
         let playerStatsVersion = 0;
         let playerStatsCache = { key: '', stats: null };
         let playersUIState = { comp: 'all', season: 'all', club: 'all', position: 'all', search: '', sortKey: 'goals', sortDir: 'desc' };
         let playerModalId = null;
+        let scorerMatchKey = null;
+        let playerMatchRefs = {};
 
         function playerHashSeed(value) {
             const text = String(value || '');
@@ -10014,15 +10447,19 @@
             return base || 'joueur';
         }
 
+        function playerPhotoUrl(player) {
+            return resolveLogoUrl((player && player.photo) || 'embleme-peluche.svg');
+        }
+
         function normalisePlayersData(raw) {
             const source = raw && typeof raw === 'object' ? raw : {};
-            const players = Array.isArray(source.players) ? source.players : [];
-            playersData.players = players.filter(player => player && player.id && player.name).map(player => ({
+            playersData.players = (Array.isArray(source.players) ? source.players : []).filter(player => player && player.id && player.name).map(player => ({
                 id: String(player.id),
                 name: String(player.name),
                 number: Number.isFinite(Number(player.number)) && player.number !== '' && player.number !== null ? Number(player.number) : null,
                 position: player.position === 'GB' ? 'GB' : 'ATT',
                 clubId: String(player.clubId || ''),
+                photo: player.photo ? String(player.photo) : '',
                 active: player.active !== false,
                 createdAt: Number(player.createdAt) || Date.now()
             })).filter(player => player.clubId);
@@ -10107,6 +10544,7 @@
                 number: Number.isFinite(Number(input.number)) && input.number !== '' && input.number !== null ? Number(input.number) : null,
                 position: input.position === 'GB' ? 'GB' : 'ATT',
                 clubId,
+                photo: input.photo ? String(input.photo) : '',
                 active: true,
                 createdAt: Date.now()
             };
@@ -10134,60 +10572,36 @@
             return true;
         }
 
-        function generatePlayerRosters() {
-            let created = 0;
-            playersActiveClubs().forEach(club => {
-                const roster = playersData.players.filter(player => player.clubId === club.id);
-                const hasKeeper = roster.some(player => player.position === 'GB' && player.active !== false);
-                const hasAttacker = roster.some(player => player.position === 'ATT' && player.active !== false);
-                if (hasKeeper && hasAttacker) return;
-                const random = playerSeededRandom(playerHashSeed(club.id));
-                const usedNames = new Set(roster.map(player => player.name));
-                const usedNumbers = new Set(roster.map(player => Number(player.number)).filter(value => Number.isFinite(value)));
-                const nextNumber = preferred => {
-                    let value = preferred;
-                    while (usedNumbers.has(value)) value++;
-                    usedNumbers.add(value);
-                    return value;
-                };
-                const makeName = () => {
-                    for (let attempt = 0; attempt < 60; attempt++) {
-                        const candidate = `${PLAYER_FIRST_NAMES[Math.floor(random() * PLAYER_FIRST_NAMES.length)]} ${PLAYER_LAST_NAMES[Math.floor(random() * PLAYER_LAST_NAMES.length)]}`;
-                        if (!usedNames.has(candidate)) { usedNames.add(candidate); return candidate; }
-                    }
-                    return `${club.name} ${usedNames.size + 1}`;
-                };
-                if (!hasKeeper) {
-                    createPlayerRecord({ name: makeName(), number: nextNumber(1), position: 'GB', clubId: club.id });
-                    created++;
-                }
-                if (!hasAttacker) {
-                    [9, 10, 11].forEach(preferred => {
-                        createPlayerRecord({ name: makeName(), number: nextNumber(preferred), position: 'ATT', clubId: club.id });
-                        created++;
-                    });
-                }
-            });
-            return created;
-        }
-
+        // Repartition de secours, uniquement quand aucun buteur n a ete saisi pour un match.
         function distributeClubGoals(clubId, goals, matchKey) {
             const attackers = playersOfClub(clubId, 'ATT');
             const scorers = {};
-            const assists = {};
-            if (!attackers.length || !goals) return { scorers, assists };
+            if (!attackers.length || !goals) return { scorers };
             const random = playerSeededRandom(playerHashSeed(`${matchKey}|${clubId}`));
             for (let goal = 0; goal < goals; goal++) {
                 const scorer = attackers[Math.floor(random() * attackers.length)];
-                const scorerId = scorer.id;
-                scorers[scorerId] = (scorers[scorerId] || 0) + 1;
-                if (attackers.length > 1 && random() > 0.35) {
-                    let assistant = attackers[Math.floor(random() * attackers.length)];
-                    if (assistant.id === scorerId) assistant = attackers[(attackers.indexOf(scorer) + 1) % attackers.length];
-                    assists[assistant.id] = (assists[assistant.id] || 0) + 1;
-                }
+                scorers[scorer.id] = (scorers[scorer.id] || 0) + 1;
             }
-            return { scorers, assists };
+            return { scorers };
+        }
+
+        function freezeMatchScorers(comp, match, seasonId, round, matchIndex) {
+            if (!match || match.scorers) return;
+            const sides = (comp === 'l1' || comp === 'l2')
+                ? [{ name: match.home, goals: match.scoreHome }, { name: match.away, goals: match.scoreAway }]
+                : [{ name: match.team1, goals: match.score1 }, { name: match.team2, goals: match.score2 }, { name: match.team3, goals: match.score3 }];
+            const key = `${comp}|${seasonId}|${round}|${matchIndex}`;
+            const scorers = {};
+            let hasScorer = false;
+            sides.forEach(side => {
+                if (!side.name || !Number.isFinite(side.goals) || side.goals <= 0) return;
+                const distribution = distributeClubGoals(resolvePlayerClubId(side.name), side.goals, key);
+                Object.keys(distribution.scorers).forEach(id => {
+                    scorers[id] = (scorers[id] || 0) + distribution.scorers[id];
+                    hasScorer = true;
+                });
+            });
+            if (hasScorer) match.scorers = scorers;
         }
 
         function collectPlayerMatchSheets() {
@@ -10198,14 +10612,13 @@
                 if (Array.isArray(rounds)) return rounds;
                 return Object.keys(rounds).sort((a, b) => Number(a) - Number(b)).map(key => rounds[key]);
             };
-            const addSheet = (comp, seasonId, round, matchIndex, clubName, opponentName, goalsFor, goalsAgainst, key) => {
+            const addSheet = (comp, seasonId, round, matchIndex, clubName, opponentName, goalsFor, goalsAgainst, key, match) => {
                 if (!clubName || (typeof isByeTeam === 'function' && isByeTeam(clubName))) return;
                 if (!opponentName || (typeof isByeTeam === 'function' && isByeTeam(opponentName))) return;
                 sheets.push({
                     comp, seasonId, round, matchIndex,
                     clubId: resolvePlayerClubId(clubName),
-                    goalsFor, goalsAgainst,
-                    matchKey: key
+                    goalsFor, goalsAgainst, matchKey: key, match
                 });
             };
             ['l1', 'l2'].forEach(comp => {
@@ -10215,8 +10628,8 @@
                         (round || []).forEach((match, matchIndex) => {
                             if (!match || !isNumber(match.scoreHome) || !isNumber(match.scoreAway)) return;
                             const key = `${comp}|${season.season_id}|${roundIndex}|${matchIndex}`;
-                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.home, match.away, match.scoreHome, match.scoreAway, key);
-                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.away, match.home, match.scoreAway, match.scoreHome, key);
+                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.home, match.away, match.scoreHome, match.scoreAway, key, match);
+                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.away, match.home, match.scoreAway, match.scoreHome, key, match);
                         });
                     });
                 });
@@ -10244,7 +10657,7 @@
                             entries.forEach(entryItem => {
                                 const others = entries.filter(other => other !== entryItem);
                                 const conceded = Math.round(others.reduce((sum, other) => sum + other.score, 0) / others.length);
-                                addSheet(comp, source.seasonId, roundIndex, matchIndex, entryItem.team, others[0].team, entryItem.score, conceded, key);
+                                addSheet(comp, source.seasonId, roundIndex, matchIndex, entryItem.team, others[0].team, entryItem.score, conceded, key, match);
                             });
                         });
                     });
@@ -10268,7 +10681,8 @@
                 if (!records.has(player.id)) {
                     records.set(player.id, {
                         id: player.id, name: player.name, number: player.number,
-                        position: player.position, clubId: player.clubId,
+                        position: player.position, clubId: player.clubId, photo: player.photo,
+                        photoUrl: playerPhotoUrl(player),
                         clubName: playersClubName(player.clubId), clubLogo: playersClubLogo(player.clubId),
                         matches: 0, goals: 0, assists: 0, conceded: 0, saves: 0, saveRate: 0, cleanSheets: 0
                     });
@@ -10285,17 +10699,25 @@
                     keeperRecord.conceded += sheet.goalsAgainst;
                     if (sheet.goalsAgainst === 0) keeperRecord.cleanSheets++;
                 }
-                const distribution = distributeClubGoals(sheet.clubId, sheet.goalsFor, sheet.matchKey);
-                Object.keys(distribution.scorers).forEach(id => {
-                    const record = records.get(id);
-                    if (record) record.goals += distribution.scorers[id];
-                });
-                Object.keys(distribution.assists).forEach(id => {
-                    const record = records.get(id);
-                    if (record) record.assists += distribution.assists[id];
-                });
+                const stored = sheet.match && sheet.match.scorers;
+                if (stored && typeof stored === 'object' && Object.keys(stored).length) {
+                    Object.keys(stored).forEach(id => {
+                        const record = records.get(id);
+                        if (record && record.clubId === sheet.clubId) record.goals += Number(stored[id]) || 0;
+                    });
+                    const storedAssists = sheet.match.assists && typeof sheet.match.assists === 'object' ? sheet.match.assists : {};
+                    Object.keys(storedAssists).forEach(id => {
+                        const record = records.get(id);
+                        if (record && record.clubId === sheet.clubId) record.assists += Number(storedAssists[id]) || 0;
+                    });
+                } else {
+                    const distribution = distributeClubGoals(sheet.clubId, sheet.goalsFor, sheet.matchKey);
+                    Object.keys(distribution.scorers).forEach(id => {
+                        const record = records.get(id);
+                        if (record) record.goals += distribution.scorers[id];
+                    });
+                }
             });
-            // Tous les joueurs actifs apparaissent, meme sans match joue (stats a zero).
             playersData.players.filter(player => player.active !== false).forEach(player => {
                 if (state.club !== 'all' && player.clubId !== state.club) return;
                 ensure(player);
@@ -10368,7 +10790,8 @@
             }
             if (clubSelect) {
                 const clubs = playersActiveClubs();
-                const options = [`<option value="all">Tous les clubs</option>`].concat(clubs.map(club => `<option value="${club.id}">${club.name}</option>`));
+                const withPlayers = new Set(playersData.players.filter(player => player.active !== false).map(player => player.clubId));
+                const options = [`<option value="all">Tous les clubs</option>`].concat(clubs.map(club => `<option value="${club.id}">${club.name}${withPlayers.has(club.id) ? '' : ' · sans joueur'}</option>`));
                 clubSelect.innerHTML = options.join('');
                 if (playersUIState.club !== 'all' && !clubs.some(club => club.id === playersUIState.club)) playersUIState.club = 'all';
                 clubSelect.value = playersUIState.club;
@@ -10405,11 +10828,11 @@
                 const assists = all.reduce((sum, player) => sum + player.assists, 0);
                 const saves = all.reduce((sum, player) => sum + player.saves, 0);
                 cards.innerHTML = [
-                    ['Joueurs suivis', all.length, 'fas fa-users'],
-                    ['Buts marqués', goals, 'fas fa-futbol'],
-                    ['Passes décisives', assists, 'fas fa-shoe-prints'],
-                    ['Arrêts réalisés', saves, 'fas fa-hand-paper']
-                ].map(card => `<div class="joueurs-card"><i class="${card[2]}" aria-hidden="true"></i><span class="joueurs-card__value">${card[1]}</span><span class="joueurs-card__label">${card[0]}</span></div>`).join('');
+                    ['Joueurs', all.length, 'fas fa-users', 'suivis'],
+                    ['Buts', goals, 'fas fa-futbol', 'marqués'],
+                    ['Passes', assists, 'fas fa-shoe-prints', 'décisives'],
+                    ['Arrêts', saves, 'fas fa-hand-paper', 'réalisés']
+                ].map(card => `<div class="joueurs-card"><span class="joueurs-card__icon"><i class="${card[2]}" aria-hidden="true"></i></span><span class="joueurs-card__value">${card[1]}</span><span class="joueurs-card__label">${card[0]} <small>${card[3]}</small></span></div>`).join('');
             }
 
             const podiums = document.getElementById('joueurs-podiums');
@@ -10418,19 +10841,22 @@
                     .sort((a, b) => b.goals - a.goals || b.assists - a.assists).slice(0, 3);
                 const keepers = all.filter(player => player.position === 'GB' && player.matches > 0)
                     .sort((a, b) => b.saves - a.saves || b.saveRate - a.saveRate).slice(0, 3);
-                const podium = (title, icon, list, valueOf, unit) => `
+                const podium = (title, subtitle, icon, list, valueOf, unit) => `
                     <div class="joueurs-podium">
-                        <h3 class="joueurs-podium__title"><i class="${icon}" aria-hidden="true"></i> ${title}</h3>
+                        <header class="joueurs-podium__head">
+                            <span class="joueurs-podium__icon"><i class="${icon}" aria-hidden="true"></i></span>
+                            <div><h3>${title}</h3><p>${subtitle}</p></div>
+                        </header>
                         ${list.length ? `<ol class="joueurs-podium__list">${list.map((player, index) => `
                             <li class="joueurs-podium__item" data-player-id="${player.id}">
-                                <span class="joueurs-podium__rank">${index + 1}</span>
-                                <img src="${player.clubLogo}" alt="" loading="lazy" decoding="async">
+                                <span class="joueurs-podium__rank joueurs-podium__rank--${index + 1}">${index + 1}</span>
+                                <img class="joueurs-avatar" src="${player.photoUrl}" alt="" loading="lazy" decoding="async">
                                 <span class="joueurs-podium__name">${player.name}<small>${player.clubName}</small></span>
                                 <span class="joueurs-podium__value">${valueOf(player)}<small>${unit}</small></span>
                             </li>`).join('')}</ol>` : '<p class="joueurs-empty">Aucune statistique pour le moment.</p>'}
                     </div>`;
-                podiums.innerHTML = podium('Soulier d’Or', 'fas fa-shoe-prints', attackers, player => player.goals, 'buts')
-                    + podium('Gant d’Or', 'fas fa-hand-paper', keepers, player => player.saves, 'arrêts');
+                podiums.innerHTML = podium('Soulier d’Or', 'Meilleurs buteurs', 'fas fa-shoe-prints', attackers, player => player.goals, 'buts')
+                    + podium('Gant d’Or', 'Meilleurs gardiens', 'fas fa-hand-paper', keepers, player => player.saves, 'arrêts');
             }
 
             const body = document.getElementById('joueurs-table-body');
@@ -10438,12 +10864,12 @@
                 if (!rows.length) {
                     const noPlayers = playersData.players.filter(player => player.active !== false).length === 0;
                     body.innerHTML = `<tr><td colspan="10" class="joueurs-empty">${noPlayers
-                        ? 'Aucun joueur enregistré. Utilisez « Générer les effectifs » pour créer un gardien et trois attaquants par club.'
+                        ? 'Aucun joueur enregistré. Ajoutez votre premier joueur avec le bouton « Ajouter un joueur ».'
                         : 'Aucun joueur ne correspond à ces filtres.'}</td></tr>`;
                 } else {
                     body.innerHTML = rows.map(player => `
                         <tr data-player-id="${player.id}" class="${player.position === 'GB' ? 'is-keeper' : 'is-attacker'}">
-                            <td class="joueurs-name"><span class="joueurs-number">${player.number != null ? player.number : '—'}</span>${player.name}</td>
+                            <td><div class="joueurs-name"><img class="joueurs-avatar" src="${player.photoUrl}" alt="" loading="lazy" decoding="async"><span class="joueurs-name__text"><b>${player.name}</b><small>N° ${player.number != null ? player.number : '—'}</small></span></div></td>
                             <td class="joueurs-club"><img src="${player.clubLogo}" alt="" loading="lazy" decoding="async">${player.clubName}</td>
                             <td><span class="joueurs-position joueurs-position--${player.position}">${PLAYER_POSITION_LABELS[player.position]}</span></td>
                             <td>${player.matches}</td>
@@ -10462,6 +10888,88 @@
                 if (th) th.setAttribute('aria-sort', active ? (playersUIState.sortDir === 'asc' ? 'ascending' : 'descending') : 'none');
                 button.classList.toggle('is-active', active);
             });
+            renderPlayerMatches();
+        }
+
+        function collectEditableMatches() {
+            const list = [];
+            const keep = (comp, seasonId, round, matchIndex, match, sides) => {
+                const key = `${comp}|${seasonId}|${round}|${matchIndex}`;
+                list.push({ key, comp, seasonId, round, matchIndex, match, sides });
+            };
+            ['l1', 'l2'].forEach(comp => {
+                const league = leagueDataStore[comp];
+                ((league && league.seasons) || []).forEach(season => {
+                    (season.fixtures || []).forEach((round, roundIndex) => {
+                        (round || []).forEach((match, matchIndex) => {
+                            if (!match || typeof match.scoreHome !== 'number' || typeof match.scoreAway !== 'number') return;
+                            if ((typeof isByeTeam === 'function' && isByeTeam(match.home)) || (typeof isByeTeam === 'function' && isByeTeam(match.away))) return;
+                            keep(comp, season.season_id, roundIndex, matchIndex, match, [{ name: match.home, goals: match.scoreHome }, { name: match.away, goals: match.scoreAway }]);
+                        });
+                    });
+                });
+            });
+            [['cdf', typeof cdfData !== 'undefined' ? cdfData : null], ['ldc', typeof ldcData !== 'undefined' ? ldcData : null]].forEach(entry => {
+                const comp = entry[0];
+                const data = entry[1];
+                if (!data) return;
+                const sources = (data.seasons || []).map(season => ({ seasonId: season.season_id, rounds: season.rounds || {} }));
+                const hasActiveSeason = sources.some(source => Number(source.seasonId) === Number(data.active_season_id));
+                if (!hasActiveSeason && data.rounds && Object.keys(data.rounds).length) sources.push({ seasonId: data.active_season_id != null ? data.active_season_id : 1, rounds: data.rounds });
+                sources.forEach(source => {
+                    const rounds = Array.isArray(source.rounds) ? source.rounds : Object.keys(source.rounds || {}).sort((a, b) => Number(a) - Number(b)).map(key => source.rounds[key]);
+                    rounds.forEach((round, roundIndex) => {
+                        (round || []).forEach((match, matchIndex) => {
+                            if (!match) return;
+                            const sides = [
+                                { name: match.team1, goals: match.score1 },
+                                { name: match.team2, goals: match.score2 },
+                                { name: match.team3, goals: match.score3 }
+                            ].filter(side => side.name && typeof side.goals === 'number' && !(typeof isByeTeam === 'function' && isByeTeam(side.name)));
+                            if (sides.length < 2) return;
+                            keep(comp, source.seasonId, roundIndex, matchIndex, match, sides);
+                        });
+                    });
+                });
+            });
+            return list;
+        }
+
+        function matchScorersFilled(match) {
+            return !!(match && match.scorers && Object.keys(match.scorers).length);
+        }
+
+        function renderPlayerMatches() {
+            const container = document.getElementById('joueurs-matches');
+            if (!container) return;
+            playerMatchRefs = {};
+            const search = playersUIState.search.trim().toLowerCase();
+            const matches = collectEditableMatches().filter(item => {
+                if (playersUIState.comp !== 'all' && item.comp !== playersUIState.comp) return false;
+                if (playersUIState.season !== 'all' && Number(item.seasonId) !== Number(playersUIState.season)) return false;
+                if (playersUIState.club !== 'all' && !item.sides.some(side => resolvePlayerClubId(side.name) === playersUIState.club)) return false;
+                if (search && !item.sides.some(side => side.name.toLowerCase().includes(search))) return false;
+                return true;
+            }).sort((a, b) => b.seasonId - a.seasonId || a.round - b.round);
+            const missing = matches.filter(item => !matchScorersFilled(item.match)).length;
+            const counter = document.getElementById('joueurs-matches-count');
+            if (counter) counter.textContent = `${matches.length} match${matches.length > 1 ? 's' : ''} · ${missing} à renseigner`;
+            if (!matches.length) {
+                container.innerHTML = '<p class="joueurs-empty">Aucun match terminé dans ce périmètre.</p>';
+                return;
+            }
+            container.innerHTML = matches.slice(0, 40).map(item => {
+                playerMatchRefs[item.key] = item;
+                const filled = matchScorersFilled(item.match);
+                const label = item.sides.map(side => side.name).join(' · ');
+                return `<div class="joueurs-match">
+                    <span class="joueurs-match__comp">${item.comp.toUpperCase()} · S${item.seasonId} · J.${item.round + 1}</span>
+                    <span class="joueurs-match__teams">${label}</span>
+                    <span class="joueurs-match__score">${item.sides.map(side => side.goals).join(' - ')}</span>
+                    <span class="joueurs-match__badge ${filled ? 'is-filled' : ''}">${filled ? 'Buteurs saisis' : 'À renseigner'}</span>
+                    <button type="button" class="joueurs-match__btn" data-match-key="${item.key}">${filled ? 'Modifier' : 'Saisir'}</button>
+                </div>`;
+            }).join('');
         }
 
         function playerHonourLabel(player) {
@@ -10473,9 +10981,16 @@
                 .filter(other => other.position === player.position && other.matches > 0)
                 .sort((a, b) => player.position === 'GB' ? (b.saves - a.saves) : (b.goals - a.goals));
             if (!leaders.length || leaders[0].id !== player.id) return '';
-            return player.position === 'GB'
-                ? `Meilleur gardien · Saison ${season}`
-                : `Meilleur buteur · Saison ${season}`;
+            return player.position === 'GB' ? `Meilleur gardien · Saison ${season}` : `Meilleur buteur · Saison ${season}`;
+        }
+
+        function updatePlayerPhotoPreview() {
+            const preview = document.getElementById('player-photo-preview');
+            const select = document.getElementById('player-form-photo');
+            const urlInput = document.getElementById('player-photo-url');
+            if (!preview) return;
+            const value = (urlInput && urlInput.value.trim()) || (select && select.value) || 'embleme-peluche.svg';
+            preview.src = resolveLogoUrl(value);
         }
 
         function openPlayerModal(playerId, mode) {
@@ -10486,48 +11001,65 @@
             const player = isNew ? null : findPlayerById(playerId);
             if (!isNew && !player) return;
             const title = document.getElementById('player-modal-title');
-            if (title) title.textContent = isNew ? 'Ajouter un joueur' : (player ? player.name : 'Fiche joueur');
+            if (title) title.textContent = isNew ? 'Ajouter un joueur' : (player ? 'Fiche joueur' : 'Joueur');
             const clubs = playersActiveClubs();
             const clubOptions = clubs.map(club => `<option value="${club.id}" ${player && player.clubId === club.id ? 'selected' : ''}>${club.name}</option>`).join('');
+            const stats = player ? playerStatsFor(player.id) : null;
             const statsBlock = player ? `
+                <div class="player-modal-identity">
+                    <img class="player-modal-avatar" src="${playerPhotoUrl(player)}" alt="">
+                    <div><b>${player.name}</b><small>${playersClubName(player.clubId)} · ${PLAYER_POSITION_LABELS[player.position]}</small>${playerHonourLabel(stats) ? `<span class="player-modal-honour">${playerHonourLabel(stats)}</span>` : ''}</div>
+                </div>
                 <div class="player-modal-stats">
                     ${player.position === 'ATT' ? `
-                        <div><span>${playerStatsFor(player.id).goals}</span><small>Buts</small></div>
-                        <div><span>${playerStatsFor(player.id).assists}</span><small>Passes</small></div>
-                        <div><span>${playerStatsFor(player.id).matches}</span><small>Matchs</small></div>`
+                        <div><span>${stats.goals}</span><small>Buts</small></div>
+                        <div><span>${stats.matches}</span><small>Matchs</small></div>
+                        <div><span>${stats.goals && stats.matches ? (stats.goals / stats.matches).toFixed(1) : '0.0'}</span><small>Buts / match</small></div>`
                         : `
-                        <div><span>${playerStatsFor(player.id).saves}</span><small>Arrêts</small></div>
-                        <div><span>${playerStatsFor(player.id).conceded}</span><small>Buts encaissés</small></div>
-                        <div><span>${playerStatsFor(player.id).saveRate}%</span><small>% d’arrêts</small></div>`}
+                        <div><span>${stats.saves}</span><small>Arrêts</small></div>
+                        <div><span>${stats.conceded}</span><small>Encaissés</small></div>
+                        <div><span>${stats.saveRate}%</span><small>% d’arrêts</small></div>`}
                 </div>
-                <p class="player-modal-honour">${playerHonourLabel(playerStatsFor(player.id))}</p>
-                ${player.active === false ? '<p class="player-modal-archived">Ce joueur est archivé : il reste dans l’historique mais ne reçoit plus de statistiques.</p>' : ''}
+                ${player.active === false ? '<p class="player-modal-archived">Joueur archivé : il reste dans l’historique mais ne reçoit plus de statistiques.</p>' : ''}
             ` : '';
+            const photoOptions = PLAYER_PHOTOS.map(item => `<option value="${item.file}" ${player && player.photo === item.file ? 'selected' : ''}>${item.name}</option>`).join('');
+            const customPhoto = player && player.photo && !PLAYER_PHOTOS.some(item => item.file === player.photo) ? player.photo : '';
             const body = document.getElementById('player-modal-body');
             if (body) {
                 body.innerHTML = `${statsBlock}
-                    <label class="form-label">Nom du joueur *</label>
-                    <input type="text" class="form-control" id="player-form-name" value="${player ? player.name.replace(/"/g, '&quot;') : ''}" placeholder="Ex : Toudou du Duvet">
+                    <div class="player-form-photo">
+                        <img id="player-photo-preview" src="${player ? playerPhotoUrl(player) : resolveLogoUrl('embleme-peluche.svg')}" alt="">
+                        <div>
+                            <label class="form-label">Photo du joueur</label>
+                            <select class="form-control" id="player-form-photo">${photoOptions}</select>
+                            <input type="text" class="form-control" id="player-photo-url" placeholder="ou URL d’une image" value="${customPhoto.replace(/"/g, '&quot;')}">
+                        </div>
+                    </div>
                     <div class="player-form-row">
+                        <div><label class="form-label">Nom du joueur *</label><input type="text" class="form-control" id="player-form-name" value="${player ? player.name.replace(/"/g, '&quot;') : ''}" placeholder="Ex : Toudou du Duvet"></div>
                         <div><label class="form-label">Numéro</label><input type="number" min="1" max="99" class="form-control" id="player-form-number" value="${player && player.number != null ? player.number : ''}"></div>
+                    </div>
+                    <div class="player-form-row">
                         <div><label class="form-label">Poste</label><select class="form-control" id="player-form-position">
                             <option value="ATT" ${!player || player.position === 'ATT' ? 'selected' : ''}>Attaquant</option>
                             <option value="GB" ${player && player.position === 'GB' ? 'selected' : ''}>Gardien</option>
                         </select></div>
-                    </div>
-                    <label class="form-label">Club</label>
-                    <select class="form-control" id="player-form-club">${clubOptions}</select>
-                    <p class="player-form-hint">Les buts et arrêts sont calculés automatiquement à partir des scores déjà saisis.</p>`;
+                        <div><label class="form-label">Club</label><select class="form-control" id="player-form-club">${clubOptions}</select></div>
+                    </div>`;
             }
             const footer = document.getElementById('player-modal-footer');
             if (footer) {
                 footer.innerHTML = `${player && player.active !== false ? '<button class="btn player-archive-btn" id="player-form-archive" type="button"><i class="fas fa-box-archive"></i> Archiver</button>' : ''}
-                    <button class="btn" id="player-form-cancel" type="button" style="background:#555;color:#fff;">Annuler</button>
+                    <button class="btn" id="player-form-cancel" type="button" style="background:#5b6478;color:#fff;">Annuler</button>
                     <button class="btn btn-success" id="player-form-save" type="button"><i class="fas fa-save"></i> Enregistrer</button>`;
             }
             modal.classList.add('active');
+            const photoSelect = document.getElementById('player-form-photo');
+            const photoUrl = document.getElementById('player-photo-url');
+            if (photoSelect) photoSelect.addEventListener('change', () => { if (photoUrl) photoUrl.value = ''; updatePlayerPhotoPreview(); });
+            if (photoUrl) photoUrl.addEventListener('input', updatePlayerPhotoPreview);
             const nameInput = document.getElementById('player-form-name');
-            if (nameInput) setTimeout(() => nameInput.focus(), 50);
+            if (nameInput) setTimeout(() => nameInput.focus(), 60);
         }
 
         function playerStatsFor(playerId) {
@@ -10546,11 +11078,14 @@
             const numberInput = document.getElementById('player-form-number');
             const positionInput = document.getElementById('player-form-position');
             const clubInput = document.getElementById('player-form-club');
+            const photoSelect = document.getElementById('player-form-photo');
+            const photoUrl = document.getElementById('player-photo-url');
             if (!nameInput || !clubInput) return;
             const name = nameInput.value.trim();
             const clubId = clubInput.value;
             const position = positionInput && positionInput.value === 'GB' ? 'GB' : 'ATT';
             const number = numberInput && numberInput.value !== '' ? Number(numberInput.value) : null;
+            const photo = (photoUrl && photoUrl.value.trim()) || (photoSelect && photoSelect.value) || '';
             if (!name) { showMessage('Le nom du joueur est obligatoire.', 2500, true); return; }
             if (!clubId) { showMessage('Choisissez un club.', 2500, true); return; }
             if (playersNumberIsTaken(clubId, number, playerModalId)) { showMessage('Ce numéro est déjà pris dans ce club.', 3000, true); return; }
@@ -10562,6 +11097,7 @@
                 player.number = number;
                 player.position = position;
                 player.clubId = clubId;
+                player.photo = photo;
                 if (previousClub !== clubId) {
                     const oldClub = playersData.clubs[previousClub];
                     if (oldClub && Array.isArray(oldClub.order)) oldClub.order = oldClub.order.filter(id => id !== player.id);
@@ -10570,17 +11106,15 @@
                     newClub.order = Array.isArray(newClub.order) ? newClub.order : [];
                     if (!newClub.order.includes(player.id)) newClub.order.push(player.id);
                 }
-                if (position === 'GB') {
-                    if (!playersData.clubs[clubId]) playersData.clubs[clubId] = { goalkeeperId: null, order: [] };
-                    if (!playersData.clubs[clubId].goalkeeperId) playersData.clubs[clubId].goalkeeperId = player.id;
-                }
+                if (!playersData.clubs[clubId]) playersData.clubs[clubId] = { goalkeeperId: null, order: [] };
+                if (!playersData.clubs[clubId].goalkeeperId) playersData.clubs[clubId].goalkeeperId = player.id;
                 playerStatsVersion++;
             } else {
-                const created = createPlayerRecord({ name, number, position, clubId });
+                const created = createPlayerRecord({ name, number, position, clubId, photo });
                 if (!created) return;
-                playerModalId = created.id;
             }
             closePlayerModal();
+            playerStatsCache = { key: '', stats: null };
             renderPlayersTab();
             savePlayersToDrive();
             showMessage('Joueur enregistré.', 2200);
@@ -10596,6 +11130,91 @@
             renderPlayersTab();
             savePlayersToDrive();
             showMessage(`${player.name} archivé.`, 2500);
+        }
+
+        function openScorersModal(matchKey) {
+            const item = playerMatchRefs[matchKey] || collectEditableMatches().find(entry => entry.key === matchKey);
+            if (!item) return;
+            scorerMatchKey = matchKey;
+            const modal = document.getElementById('scorers-modal');
+            const title = document.getElementById('scorers-modal-title');
+            if (title) title.textContent = `${item.comp.toUpperCase()} · Saison ${item.seasonId} · Journée ${item.round + 1}`;
+            const body = document.getElementById('scorers-modal-body');
+            if (!body) return;
+            body.innerHTML = item.sides.map(side => {
+                const clubId = resolvePlayerClubId(side.name);
+                const attackers = playersOfClub(clubId, 'ATT');
+                const stored = item.match.scorers || {};
+                const fallback = distributeClubGoals(clubId, side.goals, matchKey).scorers;
+                if (!attackers.length) {
+                    return `<section class="scorer-side"><header><b>${side.name}</b><span>${side.goals} but${side.goals > 1 ? 's' : ''}</span></header><p class="joueurs-empty">Aucun attaquant dans ce club. Ajoutez-en un depuis l’onglet Joueurs.</p></section>`;
+                }
+                const rows = attackers.map(player => {
+                    const value = stored[player.id] !== undefined ? Number(stored[player.id]) || 0 : (fallback[player.id] || 0);
+                    return `<label class="scorer-row">
+                        <img class="joueurs-avatar" src="${playerPhotoUrl(player)}" alt="">
+                        <span>${player.name}<small>N° ${player.number != null ? player.number : '—'}</small></span>
+                        <input type="number" min="0" max="${side.goals}" value="${value}" data-club-id="${clubId}" data-player-id="${player.id}">
+                    </label>`;
+                }).join('');
+                return `<section class="scorer-side" data-club-id="${clubId}" data-goals="${side.goals}">
+                    <header><b>${side.name}</b><span>${side.goals} but${side.goals > 1 ? 's' : ''}</span></header>
+                    ${rows}
+                    <p class="scorer-total">Total saisi : <b class="scorer-total__value">0</b> / ${side.goals}</p>
+                </section>`;
+            }).join('') + '<p class="player-form-hint">Chaque but doit être attribué à un attaquant. Les gardiens ne marquent pas ici.</p>';
+            const footer = document.getElementById('scorers-modal-footer');
+            if (footer) {
+                footer.innerHTML = `<button class="btn" type="button" id="scorers-cancel" style="background:#5b6478;color:#fff;">Annuler</button>
+                    <button class="btn btn-success" type="button" id="scorers-save"><i class="fas fa-save"></i> Enregistrer les buteurs</button>`;
+            }
+            modal.classList.add('active');
+            const refreshTotals = () => {
+                modal.querySelectorAll('.scorer-side').forEach(section => {
+                    const total = [...section.querySelectorAll('input')].reduce((sum, input) => sum + (Number(input.value) || 0), 0);
+                    const target = section.querySelector('.scorer-total__value');
+                    if (target) target.textContent = total;
+                    section.classList.toggle('is-invalid', total !== Number(section.dataset.goals));
+                });
+            };
+            modal.querySelectorAll('.scorer-side input').forEach(input => input.addEventListener('input', refreshTotals));
+            refreshTotals();
+        }
+
+        function closeScorersModal() {
+            const modal = document.getElementById('scorers-modal');
+            if (modal) modal.classList.remove('active');
+            scorerMatchKey = null;
+        }
+
+        function saveScorersFromModal() {
+            if (!scorerMatchKey) return;
+            const item = playerMatchRefs[scorerMatchKey] || collectEditableMatches().find(entry => entry.key === scorerMatchKey);
+            if (!item) return;
+            const modal = document.getElementById('scorers-modal');
+            const scorers = {};
+            let invalid = false;
+            modal.querySelectorAll('.scorer-side').forEach(section => {
+                const expected = Number(section.dataset.goals) || 0;
+                const inputs = [...section.querySelectorAll('input')];
+                const total = inputs.reduce((sum, input) => sum + (Number(input.value) || 0), 0);
+                if (total !== expected) invalid = true;
+                inputs.forEach(input => {
+                    const goals = Number(input.value) || 0;
+                    if (goals > 0) scorers[input.dataset.playerId] = (scorers[input.dataset.playerId] || 0) + goals;
+                });
+            });
+            if (invalid) { showMessage('Le total des buteurs doit égaler le score de chaque équipe.', 3200, true); return; }
+            item.match.scorers = scorers;
+            item.match.assists = item.match.assists || {};
+            playerStatsVersion++;
+            playerStatsCache = { key: '', stats: null };
+            closeScorersModal();
+            renderPlayersTab();
+            if (item.comp === 'l1' || item.comp === 'l2') saveDataToDrive(item.comp);
+            else if (item.comp === 'cdf') saveCDFToDrive();
+            else saveLDCToDrive();
+            showMessage('Buteurs enregistrés.', 2200);
         }
 
         function exportPlayersCsv() {
@@ -10658,7 +11277,7 @@
             if (!top.length) { panel.innerHTML = ''; panel.style.display = 'none'; return; }
             panel.style.display = '';
             panel.innerHTML = `<h3 class="league-top-scorers__title"><i class="fas fa-shoe-prints" aria-hidden="true"></i> Soulier d’Or ${leagueId.toUpperCase()}</h3>
-                <ol class="league-top-scorers__list">${top.map(player => `<li><span>${player.name}</span><small>${player.clubName}</small><b>${player.goals}</b></li>`).join('')}</ol>`;
+                <ol class="league-top-scorers__list">${top.map(player => `<li><img class="joueurs-avatar" src="${player.photoUrl}" alt=""><span>${player.name}<small>${player.clubName}</small></span><b>${player.goals}</b></li>`).join('')}</ol>`;
         }
 
         function initPlayersUI() {
@@ -10698,39 +11317,48 @@
                 const item = event.target.closest('[data-player-id]');
                 if (item) openPlayerModal(item.dataset.playerId);
             });
-            const generateBtn = document.getElementById('joueurs-generate-btn');
-            if (generateBtn) generateBtn.addEventListener('click', () => {
-                if (!confirm('Générer un gardien et trois attaquants pour chaque club sans effectif ?')) return;
-                const created = generatePlayerRosters();
-                renderPlayersTab();
-                savePlayersToDrive();
-                showMessage(created ? `${created} joueurs créés.` : 'Tous les clubs ont déjà un effectif.', 2600);
+            const matches = document.getElementById('joueurs-matches');
+            if (matches) matches.addEventListener('click', event => {
+                const button = event.target.closest('[data-match-key]');
+                if (button) openScorersModal(button.dataset.matchKey);
             });
             const addBtn = document.getElementById('joueurs-add-btn');
             if (addBtn) addBtn.addEventListener('click', () => openPlayerModal(null, 'new'));
             const exportBtn = document.getElementById('joueurs-export-btn');
             if (exportBtn) exportBtn.addEventListener('click', exportPlayersCsv);
-            const modal = document.getElementById('player-modal');
-            if (modal) {
-                modal.addEventListener('click', event => { if (event.target === modal) closePlayerModal(); });
-                modal.querySelectorAll('[data-close-player-modal]').forEach(button => button.addEventListener('click', closePlayerModal));
-                modal.addEventListener('click', event => {
-                    if (event.target.closest('#player-form-save')) savePlayerFromModal();
+            const playerModal = document.getElementById('player-modal');
+            if (playerModal) {
+                playerModal.addEventListener('click', event => { if (event.target === playerModal) closePlayerModal(); });
+                playerModal.addEventListener('click', event => {
+                    if (event.target.closest('[data-close-player-modal]')) closePlayerModal();
+                    else if (event.target.closest('#player-form-save')) savePlayerFromModal();
                     else if (event.target.closest('#player-form-cancel')) closePlayerModal();
                     else if (event.target.closest('#player-form-archive')) archivePlayerFromModal();
                 });
             }
+            const scorersModal = document.getElementById('scorers-modal');
+            if (scorersModal) {
+                scorersModal.addEventListener('click', event => { if (event.target === scorersModal) closeScorersModal(); });
+                scorersModal.addEventListener('click', event => {
+                    if (event.target.closest('[data-close-scorers-modal]')) closeScorersModal();
+                    else if (event.target.closest('#scorers-cancel')) closeScorersModal();
+                    else if (event.target.closest('#scorers-save')) saveScorersFromModal();
+                });
+            }
             document.addEventListener('keydown', event => {
-                if (event.key === 'Escape') closePlayerModal();
+                if (event.key === 'Escape') { closePlayerModal(); closeScorersModal(); }
             });
         }
 
-        // Les fonctions de score sont definies plus haut : on les enveloppe pour rafraichir l'onglet.
         ['updateCDFScore', 'updateLDCScore'].forEach(name => {
             const original = window[name];
             if (typeof original !== 'function') return;
-            window[name] = function () {
+            window[name] = function (round, matchIdx) {
                 const result = original.apply(this, arguments);
+                const comp = name === 'updateCDFScore' ? 'cdf' : 'ldc';
+                const data = comp === 'cdf' ? cdfData : ldcData;
+                const match = data && data.rounds && data.rounds[round] ? data.rounds[round][matchIdx] : null;
+                freezeMatchScorers(comp, match, data && data.active_season_id, round, matchIdx);
                 playerStatsVersion++;
                 playerStatsCache = { key: '', stats: null };
                 refreshPlayersTabIfVisible();
@@ -10738,7 +11366,6 @@
             };
         });
 
-        // Bloc « Soulier d'Or » sous les classements L1/L2.
         const originalPopulateStandingsDOM = populateStandingsDOM;
         populateStandingsDOM = function (standingsBodyId, calculatedStandings, teamsForLogos, seasonLogos, leagueId, seasonId) {
             const result = originalPopulateStandingsDOM.apply(this, arguments);
@@ -10747,6 +11374,7 @@
         };
 
         initPlayersUI();
+
 
     </script>
 </body>

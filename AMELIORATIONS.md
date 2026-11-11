@@ -25,7 +25,9 @@ Actuellement, un match à égalité est départagé par tirs au but *aléatoires
 - **Effort** : moyen · **Impact** : ⭐⭐⭐⭐
 - [x] **Statut (11 nov. 2026)** : onglet **Joueurs** livré — fiches joueurs avec photo, buteurs saisis match par match
   (2 buts pour l’un, 1 pour un autre, 0 pour le troisième), arrêts des gardiens calculés (`3,5 × matchs − buts encaissés`),
-  filtres compétition/saison/club, fiche joueur, export CSV, Soulier d'Or sous les classements L1/L2.
+  filtres compétition/saison/club, fiche joueur, Soulier d'Or sous les classements L1/L2.
+  Tout passe par Drive (aucun export fichier) : les feuilles de match sont regroupées par saison
+  avec un sélecteur de saison et un compteur de matchs à renseigner par saison.
   Ajout d'un **Mur de la honte** (Savate de Plomb, Gant de Beurre) et de **bandeaux d'actus aléatoires**
   avec statistiques commentées en Ligue 1 et Ligue 2.
 
@@ -112,7 +114,7 @@ Les clubs sont définis dans plusieurs endroits (données initiales, base clubs,
 ### 16. Tests automatisés plus complets
 Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement. Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
 - **Effort** : faible · **Impact** : ⭐⭐⭐⭐
-- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **143 assertions**
+- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **145 assertions**
   (et non 26) et couvre la CDF, la LDC (tirage, BYE, vainqueurs, trophée), le Classement, le tri,
   les swap, le catalogue de logos et l'univers des saisons passées. Restent à couvrir : création,
   bascule, suppression et migration d'une saison.

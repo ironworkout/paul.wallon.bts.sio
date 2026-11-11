@@ -3919,6 +3919,88 @@
             padding-right: 4px;
         }
 
+        .joueurs-matches-seasons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 0 0 14px;
+        }
+
+        .joueurs-season-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            border: 1px solid #dfe4f1;
+            background: #f7f9ff;
+            color: #4a5578;
+            font-family: inherit;
+            font-size: 0.74rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .joueurs-season-chip small {
+            font-size: 0.62rem;
+            padding: 1px 6px;
+            border-radius: 999px;
+            background: rgba(26, 35, 126, 0.08);
+        }
+
+        .joueurs-season-chip:hover {
+            border-color: var(--primary-color);
+        }
+
+        .joueurs-season-chip.is-active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .joueurs-season-chip.is-active small {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+        }
+
+        .joueurs-matches-season + .joueurs-matches-season {
+            margin-top: 16px;
+        }
+
+        .joueurs-matches-season h4 {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 8px;
+            padding: 6px 2px;
+            background: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        .joueurs-matches-season h4 small {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            text-transform: none;
+            color: #79829a;
+        }
+
+        .joueurs-matches-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
         .joueurs-match {
             display: flex;
             align-items: center;
@@ -5752,7 +5834,6 @@
                 </div>
                 <div class="joueurs-actions">
                     <button class="btn joueurs-action" id="joueurs-add-btn" type="button"><i class="fas fa-plus"></i> Ajouter un joueur</button>
-                    <button class="btn joueurs-action" id="joueurs-export-btn" type="button"><i class="fas fa-file-csv"></i> Exporter CSV</button>
                 </div>
             </section>
 
@@ -5802,6 +5883,7 @@
                     </div>
                     <span class="joueurs-matches-count" id="joueurs-matches-count"></span>
                 </header>
+                <div class="joueurs-matches-seasons" id="joueurs-matches-seasons" role="group" aria-label="Feuilles de match par saison"></div>
                 <div class="joueurs-matches" id="joueurs-matches"></div>
             </section>
         </div>
@@ -10703,7 +10785,7 @@
         let playersData = { players: [], clubs: {}, fileId: null, filename: 'peluches_joueurs.json' };
         let playerStatsVersion = 0;
         let playerStatsCache = { key: '', stats: null };
-        let playersUIState = { comp: 'all', season: 'all', club: 'all', position: 'all', search: '', sortKey: 'goals', sortDir: 'desc' };
+        let playersUIState = { comp: 'all', season: 'all', club: 'all', position: 'all', search: '', sortKey: 'goals', sortDir: 'desc', matchesSeason: 'auto' };
         let playerModalId = null;
         let scorerMatchKey = null;
         let playerMatchRefs = {};
@@ -11227,6 +11309,20 @@
             return !!(match && match.scorers && Object.keys(match.scorers).length);
         }
 
+        function groupMatchesBySeason(matches) {
+            const groups = [];
+            matches.forEach(item => {
+                let group = groups.find(entry => Number(entry.seasonId) === Number(item.seasonId));
+                if (!group) {
+                    group = { seasonId: Number(item.seasonId), matches: [], missing: 0 };
+                    groups.push(group);
+                }
+                group.matches.push(item);
+                if (!matchScorersFilled(item.match)) group.missing++;
+            });
+            return groups.sort((a, b) => b.seasonId - a.seasonId);
+        }
+
         function renderPlayerMatches() {
             const container = document.getElementById('joueurs-matches');
             if (!container) return;
@@ -11242,22 +11338,40 @@
             const missing = matches.filter(item => !matchScorersFilled(item.match)).length;
             const counter = document.getElementById('joueurs-matches-count');
             if (counter) counter.textContent = `${matches.length} match${matches.length > 1 ? 's' : ''} · ${missing} à renseigner`;
-            if (!matches.length) {
+            const groups = groupMatchesBySeason(matches);
+            if (!groups.length) {
+                const emptyChips = document.getElementById('joueurs-matches-seasons');
+                if (emptyChips) emptyChips.innerHTML = '';
                 container.innerHTML = '<p class="joueurs-empty">Aucun match terminé dans ce périmètre.</p>';
                 return;
             }
-            container.innerHTML = matches.slice(0, 40).map(item => {
-                playerMatchRefs[item.key] = item;
-                const filled = matchScorersFilled(item.match);
-                const label = item.sides.map(side => side.name).join(' · ');
-                return `<div class="joueurs-match">
-                    <span class="joueurs-match__comp">${item.comp.toUpperCase()} · S${item.seasonId} · J.${item.round + 1}</span>
-                    <span class="joueurs-match__teams">${label}</span>
-                    <span class="joueurs-match__score">${item.sides.map(side => side.goals).join(' - ')}</span>
-                    <span class="joueurs-match__badge ${filled ? 'is-filled' : ''}">${filled ? 'Buteurs saisis' : 'À renseigner'}</span>
-                    <button type="button" class="joueurs-match__btn" data-match-key="${item.key}">${filled ? 'Modifier' : 'Saisir'}</button>
-                </div>`;
-            }).join('');
+            if (playersUIState.matchesSeason !== 'all' && !groups.some(group => group.seasonId === Number(playersUIState.matchesSeason))) {
+                playersUIState.matchesSeason = groups[0].seasonId;
+            }
+            const chips = document.getElementById('joueurs-matches-seasons');
+            if (chips) {
+                chips.innerHTML = groups.map(group => {
+                    const active = Number(playersUIState.matchesSeason) === group.seasonId;
+                    return `<button type="button" class="joueurs-season-chip ${active ? 'is-active' : ''}" data-match-season="${group.seasonId}" aria-pressed="${active}">Saison ${group.seasonId}<small>${group.matches.length}</small></button>`;
+                }).join('') + `<button type="button" class="joueurs-season-chip ${playersUIState.matchesSeason === 'all' ? 'is-active' : ''}" data-match-season="all" aria-pressed="${playersUIState.matchesSeason === 'all'}">Toutes</button>`;
+            }
+            const visible = playersUIState.matchesSeason === 'all' ? groups : groups.filter(group => group.seasonId === Number(playersUIState.matchesSeason));
+            container.innerHTML = visible.map(group => `
+                <section class="joueurs-matches-season">
+                    <h4><span>Saison ${group.seasonId}</span><small>${group.matches.length} match${group.matches.length > 1 ? 's' : ''} · ${group.missing} à renseigner</small></h4>
+                    <div class="joueurs-matches-grid">${group.matches.map(item => {
+                        playerMatchRefs[item.key] = item;
+                        const filled = matchScorersFilled(item.match);
+                        const label = item.sides.map(side => side.name).join(' · ');
+                        return `<div class="joueurs-match">
+                            <span class="joueurs-match__comp">${item.comp.toUpperCase()} · S${item.seasonId} · J.${item.round + 1}</span>
+                            <span class="joueurs-match__teams">${label}</span>
+                            <span class="joueurs-match__score">${item.sides.map(side => side.goals).join(' - ')}</span>
+                            <span class="joueurs-match__badge ${filled ? 'is-filled' : ''}">${filled ? 'Buteurs saisis' : 'À renseigner'}</span>
+                            <button type="button" class="joueurs-match__btn" data-match-key="${item.key}">${filled ? 'Modifier' : 'Saisir'}</button>
+                        </div>`;
+                    }).join('')}</div>
+                </section>`).join('');
         }
 
         function playerHonourLabel(player) {
@@ -11505,31 +11619,6 @@
             showMessage('Buteurs enregistrés.', 2200);
         }
 
-        function exportPlayersCsv() {
-            const rows = [['Joueur', 'Club', 'Poste', 'Matchs', 'Buts', 'Passes', 'Arrets', 'Buts encaisses', '% arrets', 'Clean sheets']];
-            sortPlayerStats(filteredPlayerStats()).forEach(player => {
-                rows.push([
-                    player.name, player.clubName, PLAYER_POSITION_LABELS[player.position], player.matches,
-                    player.position === 'ATT' ? player.goals : '',
-                    player.position === 'ATT' ? player.assists : '',
-                    player.position === 'GB' ? player.saves : '',
-                    player.position === 'GB' ? player.conceded : '',
-                    player.position === 'GB' ? player.saveRate : '',
-                    player.position === 'GB' ? player.cleanSheets : ''
-                ]);
-            });
-            const csv = rows.map(row => row.map(value => `"${String(value == null ? '' : value).replace(/"/g, '""')}"`).join(';')).join('\n');
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'peluches_joueurs.csv';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }
-
         async function savePlayersToDrive() {
             if (!googleAccessToken) return;
             if (!playersData.fileId) {
@@ -11572,9 +11661,9 @@
             const content = document.getElementById('joueurs-content');
             if (!content) return;
             const compSelect = document.getElementById('joueurs-comp-select');
-            if (compSelect) compSelect.addEventListener('change', () => { playersUIState.comp = compSelect.value; playersUIState.season = 'all'; renderPlayersTab(); });
+            if (compSelect) compSelect.addEventListener('change', () => { playersUIState.comp = compSelect.value; playersUIState.season = 'all'; playersUIState.matchesSeason = 'auto'; renderPlayersTab(); });
             const seasonSelect = document.getElementById('joueurs-season-select');
-            if (seasonSelect) seasonSelect.addEventListener('change', () => { playersUIState.season = seasonSelect.value; renderPlayersTab(); });
+            if (seasonSelect) seasonSelect.addEventListener('change', () => { playersUIState.season = seasonSelect.value; playersUIState.matchesSeason = 'auto'; renderPlayersTab(); });
             const clubSelect = document.getElementById('joueurs-club-select');
             if (clubSelect) clubSelect.addEventListener('change', () => { playersUIState.club = clubSelect.value; renderPlayersTab(); });
             const searchInput = document.getElementById('joueurs-search-input');
@@ -11610,10 +11699,15 @@
                 const button = event.target.closest('[data-match-key]');
                 if (button) openScorersModal(button.dataset.matchKey);
             });
+            const matchSeasons = document.getElementById('joueurs-matches-seasons');
+            if (matchSeasons) matchSeasons.addEventListener('click', event => {
+                const chip = event.target.closest('[data-match-season]');
+                if (!chip) return;
+                playersUIState.matchesSeason = chip.dataset.matchSeason === 'all' ? 'all' : Number(chip.dataset.matchSeason);
+                renderPlayerMatches();
+            });
             const addBtn = document.getElementById('joueurs-add-btn');
             if (addBtn) addBtn.addEventListener('click', () => openPlayerModal(null, 'new'));
-            const exportBtn = document.getElementById('joueurs-export-btn');
-            if (exportBtn) exportBtn.addEventListener('click', exportPlayersCsv);
             const playerModal = document.getElementById('player-modal');
             if (playerModal) {
                 playerModal.addEventListener('click', event => { if (event.target === playerModal) closePlayerModal(); });

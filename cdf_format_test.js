@@ -70,6 +70,7 @@ js += `
     computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, freezeMatchScorers, collectEditableMatches,
     createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
     buildActuItems,
+    groupMatchesBySeason,
     GOALKEEPER_SHOTS_FACED_PER_MATCH,
     get playersData() { return playersData; }, set playersData(v) { playersData = v; },
     get playerStatsVersion() { return playerStatsVersion; }, set playerStatsVersion(v) { playerStatsVersion = v; },
@@ -675,6 +676,11 @@ assert(Object.values(freshMatch.scorers).reduce((sum, goals) => sum + goals, 0) 
 const actusL1 = T.buildActuItems('l1');
 assert(Array.isArray(actusL1) && actusL1.length > 0, 'Actus L1 generees');
 assert(actusL1.every(item => typeof item.title === 'string' && typeof item.text === 'string'), 'Actus L1 structurees (titre + texte)');
+
+// Feuilles de match par saison
+const saisonGroups = T.groupMatchesBySeason([{ seasonId: 1, match: {} }, { seasonId: 2, match: {} }, { seasonId: 2, match: {} }]);
+assert(saisonGroups.length === 2 && saisonGroups[0].seasonId === 2 && saisonGroups[0].matches.length === 2, 'Feuilles de match groupees et triees par saison');
+assert(saisonGroups.every(group => group.missing === group.matches.length), 'Compteur a renseigner par saison');
 
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');

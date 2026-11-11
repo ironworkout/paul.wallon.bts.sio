@@ -9616,6 +9616,12 @@
             if (targetContent) {
                 targetContent.classList.add('active');
                 targetContent.setAttribute('aria-hidden', 'false');
+                // Les sections masquees ne declenchent pas l observateur d apparition :
+                // on force leur etat final des que l onglet devient visible.
+                targetContent.querySelectorAll('.section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
             }
 
             // Un tableau de qualifs masqué n'a aucune taille mesurable : ses traits de connexion

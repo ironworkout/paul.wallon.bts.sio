@@ -11352,13 +11352,13 @@
             if (chips) {
                 chips.innerHTML = groups.map(group => {
                     const active = Number(playersUIState.matchesSeason) === group.seasonId;
-                    return `<button type="button" class="joueurs-season-chip ${active ? 'is-active' : ''}" data-match-season="${group.seasonId}" aria-pressed="${active}">Saison ${group.seasonId}<small>${group.matches.length}</small></button>`;
+                    return `<button type="button" class="joueurs-season-chip ${active ? 'is-active' : ''}" data-match-season="${group.seasonId}" aria-pressed="${active}">Saison ${group.seasonId} <small>${group.matches.length}</small></button>`;
                 }).join('') + `<button type="button" class="joueurs-season-chip ${playersUIState.matchesSeason === 'all' ? 'is-active' : ''}" data-match-season="all" aria-pressed="${playersUIState.matchesSeason === 'all'}">Toutes</button>`;
             }
             const visible = playersUIState.matchesSeason === 'all' ? groups : groups.filter(group => group.seasonId === Number(playersUIState.matchesSeason));
             container.innerHTML = visible.map(group => `
                 <section class="joueurs-matches-season">
-                    <h4><span>Saison ${group.seasonId}</span><small>${group.matches.length} match${group.matches.length > 1 ? 's' : ''} · ${group.missing} à renseigner</small></h4>
+                    <h4><span>Saison ${group.seasonId}</span> <small>${group.matches.length} match${group.matches.length > 1 ? 's' : ''} · ${group.missing} à renseigner</small></h4>
                     <div class="joueurs-matches-grid">${group.matches.map(item => {
                         playerMatchRefs[item.key] = item;
                         const filled = matchScorersFilled(item.match);

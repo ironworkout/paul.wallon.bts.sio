@@ -3343,6 +3343,546 @@
             }
         }
 
+        /* ==================== ONGLET JOUEURS ==================== */
+        .joueurs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .joueurs-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .joueurs-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .joueurs-note {
+            margin: 0 0 16px;
+            color: #5c6478;
+            font-size: 0.92rem;
+        }
+
+        .joueurs-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 18px;
+        }
+
+        .joueurs-filters label {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #5c6478;
+            font-weight: 600;
+        }
+
+        .joueurs-filters select,
+        .joueurs-filters input {
+            padding: 9px 11px;
+            border-radius: 8px;
+            border: 1px solid #d7dce8;
+            background: #fff;
+            font-size: 0.9rem;
+            min-width: 160px;
+            color: #1f2a44;
+        }
+
+        .joueurs-search input {
+            min-width: 210px;
+        }
+
+        .joueurs-chips {
+            display: flex;
+            gap: 8px;
+        }
+
+        .joueurs-chip {
+            padding: 9px 14px;
+            border-radius: 20px;
+            border: 1px solid #d7dce8;
+            background: #fff;
+            color: #4a5468;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .joueurs-chip.is-active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .joueurs-cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .joueurs-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: #fff;
+            border: 1px solid #e4e8f0;
+            box-shadow: 0 6px 18px rgba(26, 35, 126, 0.06);
+            overflow: hidden;
+        }
+
+        .joueurs-card i {
+            position: absolute;
+            right: 14px;
+            top: 14px;
+            color: rgba(26, 35, 126, 0.14);
+            font-size: 1.5rem;
+        }
+
+        .joueurs-card__value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .joueurs-card__label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6b7488;
+        }
+
+        .joueurs-podiums {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .joueurs-podium {
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid #e4e8f0;
+            background: linear-gradient(180deg, #fff, #f8f9fd);
+            box-shadow: 0 8px 22px rgba(26, 35, 126, 0.05);
+        }
+
+        .joueurs-podium__title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 12px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        .joueurs-podium__list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .joueurs-podium__item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #eceff6;
+            cursor: pointer;
+        }
+
+        .joueurs-podium__item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .joueurs-podium__rank {
+            display: grid;
+            place-items: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex: 0 0 auto;
+        }
+
+        .joueurs-podium__item img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .joueurs-podium__name {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1f2a44;
+        }
+
+        .joueurs-podium__name small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #7b8396;
+        }
+
+        .joueurs-podium__value {
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
+            margin-left: auto;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .joueurs-podium__value small {
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #7b8396;
+        }
+
+        .joueurs-table-wrap {
+            overflow-x: auto;
+            border-radius: 14px;
+            border: 1px solid #e4e8f0;
+            background: #fff;
+            box-shadow: 0 8px 22px rgba(26, 35, 126, 0.05);
+        }
+
+        .joueurs-table {
+            width: 100%;
+            min-width: 780px;
+            border-collapse: collapse;
+        }
+
+        .joueurs-table th,
+        .joueurs-table td {
+            padding: 11px 12px;
+            text-align: center;
+            border-bottom: 1px solid #eef1f7;
+            font-size: 0.86rem;
+            color: #2b3448;
+        }
+
+        .joueurs-table th:first-child,
+        .joueurs-table td:first-child {
+            text-align: left;
+        }
+
+        .joueurs-table thead th {
+            background: #f6f7fb;
+            color: #5c6478;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .joueurs-sort {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0;
+            border: none;
+            background: none;
+            font: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .joueurs-sort::after {
+            content: '\2195';
+            font-size: 0.8rem;
+            opacity: 0.35;
+        }
+
+        .joueurs-sort.is-active::after {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+
+        .joueurs-table tbody tr {
+            cursor: pointer;
+        }
+
+        .joueurs-table tbody tr:hover {
+            background: #f9fafd;
+        }
+
+        .joueurs-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .joueurs-name {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-weight: 600;
+        }
+
+        .joueurs-number {
+            display: grid;
+            place-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(26, 35, 126, 0.08);
+            color: var(--primary-color);
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex: 0 0 auto;
+        }
+
+        .joueurs-club {
+            white-space: nowrap;
+        }
+
+        .joueurs-club img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            vertical-align: middle;
+            margin-right: 7px;
+        }
+
+        .joueurs-position {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .joueurs-position--ATT {
+            background: rgba(220, 53, 69, 0.1);
+            color: #b02a37;
+        }
+
+        .joueurs-position--GB {
+            background: rgba(26, 35, 126, 0.1);
+            color: var(--primary-color);
+        }
+
+        .joueurs-empty {
+            padding: 22px;
+            text-align: center;
+            color: #7b8396;
+            font-size: 0.9rem;
+        }
+
+        .joueurs-legend {
+            margin: 12px 0 0;
+            font-size: 0.74rem;
+            color: #7b8396;
+        }
+
+        /* Fiche joueur */
+        .player-modal-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .player-modal-stats div {
+            padding: 12px;
+            border-radius: 10px;
+            background: #f6f7fb;
+            text-align: center;
+        }
+
+        .player-modal-stats span {
+            display: block;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .player-modal-stats small {
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6b7488;
+        }
+
+        .player-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .player-form-hint {
+            margin-top: 12px;
+            font-size: 0.76rem;
+            color: #7b8396;
+        }
+
+        .player-modal-honour {
+            margin: 0 0 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 193, 7, 0.14);
+            color: #7a5b00;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .player-modal-honour:empty {
+            display: none;
+        }
+
+        .player-modal-archived {
+            margin: 0 0 14px;
+            font-size: 0.78rem;
+            color: #b02a37;
+        }
+
+        .player-archive-btn {
+            margin-right: auto;
+            background: #6b7488;
+            color: #fff;
+        }
+
+        /* Bloc buteurs sous les classements */
+        .league-top-scorers {
+            margin-top: 20px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid #e4e8f0;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(26, 35, 126, 0.05);
+        }
+
+        .league-top-scorers__title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.86rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        .league-top-scorers__list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 6px;
+        }
+
+        .league-top-scorers__list li {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 0.86rem;
+        }
+
+        .league-top-scorers__list small {
+            font-size: 0.72rem;
+            color: #7b8396;
+        }
+
+        .league-top-scorers__list b {
+            margin-left: auto;
+            font-family: 'Oswald', sans-serif;
+            color: var(--primary-color);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 900px) {
+            .joueurs-cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .joueurs-podiums {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .joueurs-filters {
+                gap: 10px;
+            }
+
+            .joueurs-filters label,
+            .joueurs-filters select,
+            .joueurs-filters input,
+            .joueurs-search input {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .joueurs-chips {
+                width: 100%;
+            }
+
+            .joueurs-chip {
+                flex: 1;
+                text-align: center;
+            }
+
+            .joueurs-actions {
+                width: 100%;
+            }
+
+            .joueurs-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .joueurs-table {
+                min-width: 700px;
+            }
+        }
+
         /* ---------- 4. Classement général ---------- */
         .classement-content .table-container {
             border-radius: 16px;
@@ -3938,6 +4478,7 @@
                     </li>
                     <li><a href="#" class="nav-link" data-tab-link="classement"><i class="fas fa-ranking-star"></i> Classement</a>
                     </li>
+                    <li><a href="#" class="nav-link" data-tab-link="joueurs"><i class="fas fa-users"></i> Joueurs</a></li>
 
                 </ul>
             </nav>
@@ -4494,6 +5035,94 @@
 
 
 
+    <!-- JOUEURS -->
+    <div class="tab-content joueurs-content" id="joueurs-content">
+        <div class="container">
+            <div class="section">
+                <div class="section-header joueurs-header">
+                    <h2 class="section-title"><i class="fas fa-users"></i> Joueurs</h2>
+                    <div class="joueurs-actions">
+                        <button class="btn" id="joueurs-generate-btn" type="button"
+                            title="Crée un gardien et trois attaquants pour chaque club sans effectif"><i
+                                class="fas fa-wand-magic-sparkles"></i> Générer les effectifs</button>
+                        <button class="btn" id="joueurs-add-btn" type="button"><i class="fas fa-plus"></i> Ajouter un
+                            joueur</button>
+                        <button class="btn" id="joueurs-export-btn" type="button"><i class="fas fa-file-csv"></i>
+                            Exporter CSV</button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p class="joueurs-note">Buts et passes des attaquants, arrêts des gardiens calculés à partir des
+                        buts encaissés de leur équipe — aucun score à ressaisir.</p>
+
+                    <div class="joueurs-filters">
+                        <label>Compétition <select id="joueurs-comp-select"></select></label>
+                        <label>Saison <select id="joueurs-season-select"></select></label>
+                        <label>Club <select id="joueurs-club-select"></select></label>
+                        <label class="joueurs-search">Recherche <input type="search" id="joueurs-search-input"
+                                placeholder="Nom du joueur ou club..."></label>
+                        <div class="joueurs-chips" role="group" aria-label="Filtrer par poste">
+                            <button type="button" class="joueurs-chip is-active" data-position="all"
+                                aria-pressed="true">Tous</button>
+                            <button type="button" class="joueurs-chip" data-position="ATT"
+                                aria-pressed="false">Attaquants</button>
+                            <button type="button" class="joueurs-chip" data-position="GB"
+                                aria-pressed="false">Gardiens</button>
+                        </div>
+                    </div>
+
+                    <div class="joueurs-cards" id="joueurs-cards"></div>
+                    <div class="joueurs-podiums" id="joueurs-podiums"></div>
+
+                    <div class="joueurs-table-wrap">
+                        <table class="joueurs-table" id="joueurs-table">
+                            <caption class="sr-only">Statistiques individuelles des joueurs</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="name">Joueur</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="club">Club</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="position">Poste</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="matches">MJ</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="goals">Buts</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="assists">Passes</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="saves">Arrêts</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="conceded">Enc.</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="saveRate">% arrêts</button></th>
+                                    <th scope="col"><button type="button" class="joueurs-sort"
+                                            data-sort="cleanSheets">CS</button></th>
+                                </tr>
+                            </thead>
+                            <tbody id="joueurs-table-body"></tbody>
+                        </table>
+                    </div>
+                    <p class="joueurs-legend">Arrêts estimés : 3,5 tirs cadrés subis par match, moins les buts
+                        encaissés. Cliquez sur un joueur pour ouvrir sa fiche.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FICHE JOUEUR -->
+    <div class="modal-overlay" id="player-modal">
+        <div class="modal-content" style="max-width:520px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="player-modal-title">Fiche joueur</h3>
+                <button class="modal-close" type="button" data-close-player-modal aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body" id="player-modal-body"></div>
+            <div class="modal-footer" id="player-modal-footer"></div>
+        </div>
+    </div>
+
     <footer>
         <div class="container footer-container">
             <div class="footer-section">
@@ -4513,6 +5142,7 @@
                     <li><a href="#" data-tab-link-footer="ligue3">Ligue 3</a></li>
                     <li><a href="#" data-tab-link-footer="ldc">Ligue des Champions</a></li>
                     <li><a href="#" data-tab-link-footer="cdf">Coupe de France</a></li>
+                    <li><a href="#" data-tab-link-footer="joueurs">Joueurs</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -5436,6 +6066,15 @@
                 }
             }
 
+            // Charger les joueurs
+            playersData.fileId = await findOrCreateFile(playersData.filename, JSON.stringify({ players: [], clubs: {} }));
+            if (playersData.fileId) {
+                const playersContent = await readFileContent(playersData.fileId);
+                if (playersContent) {
+                    try { normalisePlayersData(JSON.parse(playersContent)); } catch (e) { normalisePlayersData({}); }
+                }
+            }
+
             // Identité unique des clubs : attribue un clubId stable à chaque club (migration) et
             // reconstruit le registre (nom actuel + anciens noms) pour tracer les entités renommées.
             const identityChanged = ensureClubIdentity();
@@ -5457,6 +6096,7 @@
                 await saveBarragesToDrive();
             }
 
+            refreshPlayersTabIfVisible();
             driveLog("Toutes les données chargées depuis Drive.");
         }
 
@@ -5840,6 +6480,8 @@
             if (score !== null && (isNaN(score) || score < 0)) { input.value = activeSeason.fixtures[roundIndex][matchIndex][teamType === 'home' ? 'scoreHome' : 'scoreAway'] || ''; return; }
             if (teamType === 'home') activeSeason.fixtures[roundIndex][matchIndex].scoreHome = score; else activeSeason.fixtures[roundIndex][matchIndex].scoreAway = score;
             activeSeason.standings = calculateStandings(getSeasonTeamUniverse(activeSeason), activeSeason.fixtures);
+            playerStatsVersion++;
+            refreshPlayersTabIfVisible();
             if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams, activeSeason.logos || {}, leagueId, activeSeason.season_id);
         }
 
@@ -8984,6 +9626,8 @@
 
             observeActiveTabSections();
 
+            if (tabId === 'joueurs') renderPlayersTab();
+
             document.querySelectorAll('.carousel').forEach(carousel => {
                 const ci = carousel.carouselInstance;
                 if (ci) carousel.closest('.tab-content.active') ? ci.startAutoSlide() : ci.stopAutoSlide();
@@ -9325,6 +9969,779 @@
 
             driveLog("Championnat Peluches Élite V3 Initialisé.");
         });
+        // ==================== ONGLET JOUEURS ====================
+        // Buts et passes des attaquants, arrets des gardiens deduits des buts encaisses.
+        const PLAYER_POSITION_LABELS = { ATT: 'Attaquant', GB: 'Gardien' };
+        const GOALKEEPER_SHOTS_FACED_PER_MATCH = 3.5;
+        const PLAYER_FIRST_NAMES = ['Toudou', 'Câlin', 'Moustache', 'Gribouille', 'Pilou', 'Roudoudou', 'Bisou', 'Choupette', 'Ninou', 'Patapouf', 'Zigzag', 'Bidou', 'Filou', 'Cannelle', 'Réglisse', 'Guimauve', 'Mimi', 'Bourriquot', 'Pompon', 'Titou'];
+        const PLAYER_LAST_NAMES = ['du Duvet', 'de la Peluche', 'Ourson', 'de Coton', 'des Étoiles', 'du Grenier', 'Malicieux', 'Toutdoux', 'des Bois', 'de la Vitrine'];
+
+        let playersData = { players: [], clubs: {}, fileId: null, filename: 'peluches_joueurs.json' };
+        let playerStatsVersion = 0;
+        let playerStatsCache = { key: '', stats: null };
+        let playersUIState = { comp: 'all', season: 'all', club: 'all', position: 'all', search: '', sortKey: 'goals', sortDir: 'desc' };
+        let playerModalId = null;
+
+        function playerHashSeed(value) {
+            const text = String(value || '');
+            let hash = 2166136261;
+            for (let i = 0; i < text.length; i++) {
+                hash ^= text.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return hash >>> 0;
+        }
+
+        function playerSeededRandom(seed) {
+            let state = seed >>> 0;
+            return function () {
+                state = (state + 0x6D2B79F5) >>> 0;
+                let t = state;
+                t = Math.imul(t ^ (t >>> 15), t | 1);
+                t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function playerSlug(value) {
+            const base = String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            return base || 'joueur';
+        }
+
+        function normalisePlayersData(raw) {
+            const source = raw && typeof raw === 'object' ? raw : {};
+            const players = Array.isArray(source.players) ? source.players : [];
+            playersData.players = players.filter(player => player && player.id && player.name).map(player => ({
+                id: String(player.id),
+                name: String(player.name),
+                number: Number.isFinite(Number(player.number)) && player.number !== '' && player.number !== null ? Number(player.number) : null,
+                position: player.position === 'GB' ? 'GB' : 'ATT',
+                clubId: String(player.clubId || ''),
+                active: player.active !== false,
+                createdAt: Number(player.createdAt) || Date.now()
+            })).filter(player => player.clubId);
+            playersData.clubs = source.clubs && typeof source.clubs === 'object' ? source.clubs : {};
+            playersData.fileId = source.fileId || playersData.fileId || null;
+            playersData.filename = source.filename || 'peluches_joueurs.json';
+            playerStatsVersion++;
+            playerStatsCache = { key: '', stats: null };
+        }
+
+        function playersClubName(clubId) {
+            const registry = window.clubRegistry && window.clubRegistry[clubId];
+            if (registry && registry.name) return registry.name;
+            if (typeof getAllRosterDicts === 'function') {
+                for (const entry of getAllRosterDicts()) {
+                    const dict = entry[1] || {};
+                    for (const name of Object.keys(dict)) {
+                        const club = dict[name];
+                        const id = String((club && club.id) || (typeof slugifyClubName === 'function' ? slugifyClubName(name) : ''));
+                        if (id === clubId) return name;
+                    }
+                }
+            }
+            return clubId || 'Club inconnu';
+        }
+
+        function playersClubLogo(clubId) {
+            try { return getClubLogo(playersClubName(clubId)); } catch (error) { return `${BASE_URL}default_logo.png`; }
+        }
+
+        function resolvePlayerClubId(name) {
+            if (!name) return '';
+            const current = typeof resolveCurrentClubName === 'function' ? resolveCurrentClubName(name) : name;
+            const id = typeof getClubId === 'function' ? getClubId(current) : null;
+            return String(id || (typeof slugifyClubName === 'function' ? slugifyClubName(current) : playerSlug(current)));
+        }
+
+        function playersActiveClubs() {
+            const out = [];
+            const seen = new Set();
+            const push = (name, club) => {
+                if (!name || (typeof isByeTeam === 'function' && isByeTeam(name))) return;
+                const current = typeof resolveCurrentClubName === 'function' ? resolveCurrentClubName(name) : name;
+                const id = String((club && club.id) || resolvePlayerClubId(current));
+                if (!id || seen.has(id)) return;
+                seen.add(id);
+                out.push({ id, name: current, logo: (club && club.logo) || 'default_logo.png' });
+            };
+            Object.entries((leagueDataStore.l1 && leagueDataStore.l1.teams) || {}).forEach(([name, club]) => push(name, club));
+            Object.entries((leagueDataStore.l2 && leagueDataStore.l2.teams) || {}).forEach(([name, club]) => push(name, club));
+            Object.entries((leagueDataStore.l3 && leagueDataStore.l3.clubs) || {}).forEach(([name, club]) => push(name, club));
+            Object.entries((typeof ldcClubsData !== 'undefined' && ldcClubsData.clubs) || {}).forEach(([name, club]) => push(name, club));
+            return out.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+        }
+
+        function playersOfClub(clubId, position) {
+            return playersData.players
+                .filter(player => player && player.active !== false && player.clubId === clubId && (!position || player.position === position))
+                .sort((a, b) => (Number(a.number) || 99) - (Number(b.number) || 99) || String(a.name).localeCompare(String(b.name), 'fr'));
+        }
+
+        function findPlayerById(id) {
+            return playersData.players.find(player => player.id === id) || null;
+        }
+
+        function playersNumberIsTaken(clubId, number, exceptId) {
+            if (number === null || number === undefined || number === '') return false;
+            return playersData.players.some(player => player.clubId === clubId && player.id !== exceptId && player.active !== false && Number(player.number) === Number(number));
+        }
+
+        function createPlayerRecord(input) {
+            const clubId = String((input && input.clubId) || '');
+            const name = String((input && input.name) || '').trim();
+            if (!clubId || !name) return null;
+            let base = `p_${playerSlug(name)}_${playerSlug(clubId)}`;
+            let id = base;
+            let index = 2;
+            while (playersData.players.some(player => player.id === id)) id = `${base}_${index++}`;
+            const player = {
+                id,
+                name,
+                number: Number.isFinite(Number(input.number)) && input.number !== '' && input.number !== null ? Number(input.number) : null,
+                position: input.position === 'GB' ? 'GB' : 'ATT',
+                clubId,
+                active: true,
+                createdAt: Date.now()
+            };
+            playersData.players.push(player);
+            if (!playersData.clubs[clubId]) playersData.clubs[clubId] = { goalkeeperId: null, order: [] };
+            const club = playersData.clubs[clubId];
+            club.order = Array.isArray(club.order) ? club.order : [];
+            club.order.push(player.id);
+            if (player.position === 'GB' && !club.goalkeeperId) club.goalkeeperId = player.id;
+            playerStatsVersion++;
+            return player;
+        }
+
+        function archivePlayerRecord(playerId) {
+            const player = findPlayerById(playerId);
+            if (!player) return false;
+            player.active = false;
+            const club = playersData.clubs[player.clubId];
+            if (club && Array.isArray(club.order)) club.order = club.order.filter(id => id !== playerId);
+            if (club && club.goalkeeperId === playerId) {
+                const nextKeeper = playersOfClub(player.clubId, 'GB').find(other => other.id !== playerId);
+                club.goalkeeperId = nextKeeper ? nextKeeper.id : null;
+            }
+            playerStatsVersion++;
+            return true;
+        }
+
+        function generatePlayerRosters() {
+            let created = 0;
+            playersActiveClubs().forEach(club => {
+                const roster = playersData.players.filter(player => player.clubId === club.id);
+                const hasKeeper = roster.some(player => player.position === 'GB' && player.active !== false);
+                const hasAttacker = roster.some(player => player.position === 'ATT' && player.active !== false);
+                if (hasKeeper && hasAttacker) return;
+                const random = playerSeededRandom(playerHashSeed(club.id));
+                const usedNames = new Set(roster.map(player => player.name));
+                const usedNumbers = new Set(roster.map(player => Number(player.number)).filter(value => Number.isFinite(value)));
+                const nextNumber = preferred => {
+                    let value = preferred;
+                    while (usedNumbers.has(value)) value++;
+                    usedNumbers.add(value);
+                    return value;
+                };
+                const makeName = () => {
+                    for (let attempt = 0; attempt < 60; attempt++) {
+                        const candidate = `${PLAYER_FIRST_NAMES[Math.floor(random() * PLAYER_FIRST_NAMES.length)]} ${PLAYER_LAST_NAMES[Math.floor(random() * PLAYER_LAST_NAMES.length)]}`;
+                        if (!usedNames.has(candidate)) { usedNames.add(candidate); return candidate; }
+                    }
+                    return `${club.name} ${usedNames.size + 1}`;
+                };
+                if (!hasKeeper) {
+                    createPlayerRecord({ name: makeName(), number: nextNumber(1), position: 'GB', clubId: club.id });
+                    created++;
+                }
+                if (!hasAttacker) {
+                    [9, 10, 11].forEach(preferred => {
+                        createPlayerRecord({ name: makeName(), number: nextNumber(preferred), position: 'ATT', clubId: club.id });
+                        created++;
+                    });
+                }
+            });
+            return created;
+        }
+
+        function distributeClubGoals(clubId, goals, matchKey) {
+            const attackers = playersOfClub(clubId, 'ATT');
+            const scorers = {};
+            const assists = {};
+            if (!attackers.length || !goals) return { scorers, assists };
+            const random = playerSeededRandom(playerHashSeed(`${matchKey}|${clubId}`));
+            for (let goal = 0; goal < goals; goal++) {
+                const scorer = attackers[Math.floor(random() * attackers.length)];
+                const scorerId = scorer.id;
+                scorers[scorerId] = (scorers[scorerId] || 0) + 1;
+                if (attackers.length > 1 && random() > 0.35) {
+                    let assistant = attackers[Math.floor(random() * attackers.length)];
+                    if (assistant.id === scorerId) assistant = attackers[(attackers.indexOf(scorer) + 1) % attackers.length];
+                    assists[assistant.id] = (assists[assistant.id] || 0) + 1;
+                }
+            }
+            return { scorers, assists };
+        }
+
+        function collectPlayerMatchSheets() {
+            const sheets = [];
+            const isNumber = value => typeof value === 'number' && Number.isFinite(value);
+            const roundsArray = rounds => {
+                if (!rounds) return [];
+                if (Array.isArray(rounds)) return rounds;
+                return Object.keys(rounds).sort((a, b) => Number(a) - Number(b)).map(key => rounds[key]);
+            };
+            const addSheet = (comp, seasonId, round, matchIndex, clubName, opponentName, goalsFor, goalsAgainst, key) => {
+                if (!clubName || (typeof isByeTeam === 'function' && isByeTeam(clubName))) return;
+                if (!opponentName || (typeof isByeTeam === 'function' && isByeTeam(opponentName))) return;
+                sheets.push({
+                    comp, seasonId, round, matchIndex,
+                    clubId: resolvePlayerClubId(clubName),
+                    goalsFor, goalsAgainst,
+                    matchKey: key
+                });
+            };
+            ['l1', 'l2'].forEach(comp => {
+                const league = leagueDataStore[comp];
+                ((league && league.seasons) || []).forEach(season => {
+                    (season.fixtures || []).forEach((round, roundIndex) => {
+                        (round || []).forEach((match, matchIndex) => {
+                            if (!match || !isNumber(match.scoreHome) || !isNumber(match.scoreAway)) return;
+                            const key = `${comp}|${season.season_id}|${roundIndex}|${matchIndex}`;
+                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.home, match.away, match.scoreHome, match.scoreAway, key);
+                            addSheet(comp, season.season_id, roundIndex, matchIndex, match.away, match.home, match.scoreAway, match.scoreHome, key);
+                        });
+                    });
+                });
+            });
+            [['cdf', typeof cdfData !== 'undefined' ? cdfData : null], ['ldc', typeof ldcData !== 'undefined' ? ldcData : null]].forEach(entry => {
+                const comp = entry[0];
+                const data = entry[1];
+                if (!data) return;
+                const sources = (data.seasons || []).map(season => ({ seasonId: season.season_id, rounds: season.rounds || {} }));
+                const hasActiveSeason = sources.some(source => Number(source.seasonId) === Number(data.active_season_id));
+                if (!hasActiveSeason && data.rounds && Object.keys(data.rounds).length) {
+                    sources.push({ seasonId: data.active_season_id != null ? data.active_season_id : 1, rounds: data.rounds });
+                }
+                sources.forEach(source => {
+                    roundsArray(source.rounds).forEach((round, roundIndex) => {
+                        (round || []).forEach((match, matchIndex) => {
+                            if (!match) return;
+                            const key = `${comp}|${source.seasonId}|${roundIndex}|${matchIndex}`;
+                            const entries = [
+                                { team: match.team1, score: match.score1 },
+                                { team: match.team2, score: match.score2 },
+                                { team: match.team3, score: match.score3 }
+                            ].filter(entryItem => entryItem.team && isNumber(entryItem.score) && !(typeof isByeTeam === 'function' && isByeTeam(entryItem.team)));
+                            if (entries.length < 2) return;
+                            entries.forEach(entryItem => {
+                                const others = entries.filter(other => other !== entryItem);
+                                const conceded = Math.round(others.reduce((sum, other) => sum + other.score, 0) / others.length);
+                                addSheet(comp, source.seasonId, roundIndex, matchIndex, entryItem.team, others[0].team, entryItem.score, conceded, key);
+                            });
+                        });
+                    });
+                });
+            });
+            return sheets;
+        }
+
+        function computePlayerStats(options) {
+            const state = Object.assign({}, playersUIState, options || {});
+            const cacheKey = JSON.stringify({ version: playerStatsVersion, comp: state.comp, season: state.season, club: state.club });
+            if (playerStatsCache.key === cacheKey && playerStatsCache.stats) return playerStatsCache.stats;
+            const sheets = collectPlayerMatchSheets().filter(sheet => {
+                if (state.comp !== 'all' && sheet.comp !== state.comp) return false;
+                if (state.season !== 'all' && Number(state.season) !== Number(sheet.seasonId)) return false;
+                if (state.club !== 'all' && sheet.clubId !== state.club) return false;
+                return true;
+            });
+            const records = new Map();
+            const ensure = player => {
+                if (!records.has(player.id)) {
+                    records.set(player.id, {
+                        id: player.id, name: player.name, number: player.number,
+                        position: player.position, clubId: player.clubId,
+                        clubName: playersClubName(player.clubId), clubLogo: playersClubLogo(player.clubId),
+                        matches: 0, goals: 0, assists: 0, conceded: 0, saves: 0, saveRate: 0, cleanSheets: 0
+                    });
+                }
+                return records.get(player.id);
+            };
+            sheets.forEach(sheet => {
+                playersOfClub(sheet.clubId, 'ATT').forEach(player => { ensure(player).matches++; });
+                const keepers = playersOfClub(sheet.clubId, 'GB');
+                if (keepers.length) {
+                    const keeper = keepers[(sheet.round + sheet.matchIndex) % keepers.length];
+                    const keeperRecord = ensure(keeper);
+                    keeperRecord.matches++;
+                    keeperRecord.conceded += sheet.goalsAgainst;
+                    if (sheet.goalsAgainst === 0) keeperRecord.cleanSheets++;
+                }
+                const distribution = distributeClubGoals(sheet.clubId, sheet.goalsFor, sheet.matchKey);
+                Object.keys(distribution.scorers).forEach(id => {
+                    const record = records.get(id);
+                    if (record) record.goals += distribution.scorers[id];
+                });
+                Object.keys(distribution.assists).forEach(id => {
+                    const record = records.get(id);
+                    if (record) record.assists += distribution.assists[id];
+                });
+            });
+            // Tous les joueurs actifs apparaissent, meme sans match joue (stats a zero).
+            playersData.players.filter(player => player.active !== false).forEach(player => {
+                if (state.club !== 'all' && player.clubId !== state.club) return;
+                ensure(player);
+            });
+            const stats = [...records.values()].map(record => {
+                if (record.position === 'GB') {
+                    record.saves = Math.max(0, Math.round(GOALKEEPER_SHOTS_FACED_PER_MATCH * record.matches) - record.conceded);
+                    const faced = record.saves + record.conceded;
+                    record.saveRate = faced > 0 ? Math.round((record.saves / faced) * 100) : 0;
+                }
+                return record;
+            });
+            playerStatsCache = { key: cacheKey, stats };
+            return stats;
+        }
+
+        function playerSeasonOptions(comp) {
+            const ids = new Set();
+            const add = seasons => (seasons || []).forEach(season => { if (season && season.season_id != null) ids.add(Number(season.season_id)); });
+            if (comp === 'all' || comp === 'l1') add(leagueDataStore.l1 && leagueDataStore.l1.seasons);
+            if (comp === 'all' || comp === 'l2') add(leagueDataStore.l2 && leagueDataStore.l2.seasons);
+            if (comp === 'all' || comp === 'cdf') add(typeof cdfData !== 'undefined' ? cdfData.seasons : []);
+            if (comp === 'all' || comp === 'ldc') add(typeof ldcData !== 'undefined' ? ldcData.seasons : []);
+            return [...ids].sort((a, b) => b - a);
+        }
+
+        function filteredPlayerStats() {
+            const search = playersUIState.search.trim().toLowerCase();
+            let list = computePlayerStats();
+            if (playersUIState.position !== 'all') list = list.filter(player => player.position === playersUIState.position);
+            if (playersUIState.club !== 'all') list = list.filter(player => player.clubId === playersUIState.club);
+            if (search) list = list.filter(player => player.name.toLowerCase().includes(search) || player.clubName.toLowerCase().includes(search));
+            return list;
+        }
+
+        function sortPlayerStats(list) {
+            const key = playersUIState.sortKey;
+            const direction = playersUIState.sortDir === 'asc' ? 1 : -1;
+            return [...list].sort((a, b) => {
+                let left = a[key];
+                let right = b[key];
+                if (key === 'name' || key === 'club' || key === 'position') {
+                    left = key === 'club' ? a.clubName : key === 'position' ? PLAYER_POSITION_LABELS[a.position] : a.name;
+                    right = key === 'club' ? b.clubName : key === 'position' ? PLAYER_POSITION_LABELS[b.position] : b.name;
+                    return String(left).localeCompare(String(right), 'fr') * direction;
+                }
+                left = Number(left) || 0;
+                right = Number(right) || 0;
+                if (left !== right) return (left - right) * direction;
+                return a.name.localeCompare(b.name, 'fr');
+            });
+        }
+
+        function renderPlayersFilters() {
+            const compSelect = document.getElementById('joueurs-comp-select');
+            const seasonSelect = document.getElementById('joueurs-season-select');
+            const clubSelect = document.getElementById('joueurs-club-select');
+            if (compSelect && !compSelect.dataset.filled) {
+                compSelect.innerHTML = [
+                    ['all', 'Toutes les compétitions'], ['l1', 'Ligue 1'], ['l2', 'Ligue 2'], ['ldc', 'Ligue des Champions'], ['cdf', 'Coupe de France']
+                ].map(option => `<option value="${option[0]}">${option[1]}</option>`).join('');
+                compSelect.dataset.filled = '1';
+            }
+            if (compSelect) compSelect.value = playersUIState.comp;
+            if (seasonSelect) {
+                const seasons = playerSeasonOptions(playersUIState.comp);
+                if (playersUIState.season !== 'all' && !seasons.includes(Number(playersUIState.season))) playersUIState.season = 'all';
+                seasonSelect.innerHTML = `<option value="all">Toutes les saisons</option>` + seasons.map(id => `<option value="${id}">Saison ${id}</option>`).join('');
+                seasonSelect.value = playersUIState.season;
+            }
+            if (clubSelect) {
+                const clubs = playersActiveClubs();
+                const options = [`<option value="all">Tous les clubs</option>`].concat(clubs.map(club => `<option value="${club.id}">${club.name}</option>`));
+                clubSelect.innerHTML = options.join('');
+                if (playersUIState.club !== 'all' && !clubs.some(club => club.id === playersUIState.club)) playersUIState.club = 'all';
+                clubSelect.value = playersUIState.club;
+            }
+            document.querySelectorAll('.joueurs-chip').forEach(chip => {
+                const active = chip.dataset.position === playersUIState.position;
+                chip.classList.toggle('is-active', active);
+                chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+            const searchInput = document.getElementById('joueurs-search-input');
+            if (searchInput && searchInput.value !== playersUIState.search) searchInput.value = playersUIState.search;
+        }
+
+        function playerStatCell(player, key) {
+            if (key === 'saves' || key === 'conceded' || key === 'saveRate' || key === 'cleanSheets') {
+                return player.position === 'GB' ? player[key] : '—';
+            }
+            if (key === 'goals' || key === 'assists') {
+                return player.position === 'ATT' ? player[key] : '—';
+            }
+            return player[key];
+        }
+
+        function renderPlayersTab() {
+            const container = document.getElementById('joueurs-content');
+            if (!container) return;
+            renderPlayersFilters();
+            const all = computePlayerStats();
+            const rows = sortPlayerStats(filteredPlayerStats());
+
+            const cards = document.getElementById('joueurs-cards');
+            if (cards) {
+                const goals = all.reduce((sum, player) => sum + player.goals, 0);
+                const assists = all.reduce((sum, player) => sum + player.assists, 0);
+                const saves = all.reduce((sum, player) => sum + player.saves, 0);
+                cards.innerHTML = [
+                    ['Joueurs suivis', all.length, 'fas fa-users'],
+                    ['Buts marqués', goals, 'fas fa-futbol'],
+                    ['Passes décisives', assists, 'fas fa-shoe-prints'],
+                    ['Arrêts réalisés', saves, 'fas fa-hand-paper']
+                ].map(card => `<div class="joueurs-card"><i class="${card[2]}" aria-hidden="true"></i><span class="joueurs-card__value">${card[1]}</span><span class="joueurs-card__label">${card[0]}</span></div>`).join('');
+            }
+
+            const podiums = document.getElementById('joueurs-podiums');
+            if (podiums) {
+                const attackers = all.filter(player => player.position === 'ATT' && player.goals > 0)
+                    .sort((a, b) => b.goals - a.goals || b.assists - a.assists).slice(0, 3);
+                const keepers = all.filter(player => player.position === 'GB' && player.matches > 0)
+                    .sort((a, b) => b.saves - a.saves || b.saveRate - a.saveRate).slice(0, 3);
+                const podium = (title, icon, list, valueOf, unit) => `
+                    <div class="joueurs-podium">
+                        <h3 class="joueurs-podium__title"><i class="${icon}" aria-hidden="true"></i> ${title}</h3>
+                        ${list.length ? `<ol class="joueurs-podium__list">${list.map((player, index) => `
+                            <li class="joueurs-podium__item" data-player-id="${player.id}">
+                                <span class="joueurs-podium__rank">${index + 1}</span>
+                                <img src="${player.clubLogo}" alt="" loading="lazy" decoding="async">
+                                <span class="joueurs-podium__name">${player.name}<small>${player.clubName}</small></span>
+                                <span class="joueurs-podium__value">${valueOf(player)}<small>${unit}</small></span>
+                            </li>`).join('')}</ol>` : '<p class="joueurs-empty">Aucune statistique pour le moment.</p>'}
+                    </div>`;
+                podiums.innerHTML = podium('Soulier d’Or', 'fas fa-shoe-prints', attackers, player => player.goals, 'buts')
+                    + podium('Gant d’Or', 'fas fa-hand-paper', keepers, player => player.saves, 'arrêts');
+            }
+
+            const body = document.getElementById('joueurs-table-body');
+            if (body) {
+                if (!rows.length) {
+                    const noPlayers = playersData.players.filter(player => player.active !== false).length === 0;
+                    body.innerHTML = `<tr><td colspan="10" class="joueurs-empty">${noPlayers
+                        ? 'Aucun joueur enregistré. Utilisez « Générer les effectifs » pour créer un gardien et trois attaquants par club.'
+                        : 'Aucun joueur ne correspond à ces filtres.'}</td></tr>`;
+                } else {
+                    body.innerHTML = rows.map(player => `
+                        <tr data-player-id="${player.id}" class="${player.position === 'GB' ? 'is-keeper' : 'is-attacker'}">
+                            <td class="joueurs-name"><span class="joueurs-number">${player.number != null ? player.number : '—'}</span>${player.name}</td>
+                            <td class="joueurs-club"><img src="${player.clubLogo}" alt="" loading="lazy" decoding="async">${player.clubName}</td>
+                            <td><span class="joueurs-position joueurs-position--${player.position}">${PLAYER_POSITION_LABELS[player.position]}</span></td>
+                            <td>${player.matches}</td>
+                            <td>${playerStatCell(player, 'goals')}</td>
+                            <td>${playerStatCell(player, 'assists')}</td>
+                            <td>${playerStatCell(player, 'saves')}</td>
+                            <td>${playerStatCell(player, 'conceded')}</td>
+                            <td>${playerStatCell(player, 'saveRate')}${player.position === 'GB' ? '%' : ''}</td>
+                            <td>${playerStatCell(player, 'cleanSheets')}</td>
+                        </tr>`).join('');
+                }
+            }
+            document.querySelectorAll('.joueurs-sort').forEach(button => {
+                const active = button.dataset.sort === playersUIState.sortKey;
+                const th = button.closest('th');
+                if (th) th.setAttribute('aria-sort', active ? (playersUIState.sortDir === 'asc' ? 'ascending' : 'descending') : 'none');
+                button.classList.toggle('is-active', active);
+            });
+        }
+
+        function playerHonourLabel(player) {
+            if (!player) return '';
+            const comp = playersUIState.comp;
+            const season = playersUIState.season;
+            if (comp === 'all' || season === 'all') return '';
+            const leaders = computePlayerStats({ comp, season, club: 'all' })
+                .filter(other => other.position === player.position && other.matches > 0)
+                .sort((a, b) => player.position === 'GB' ? (b.saves - a.saves) : (b.goals - a.goals));
+            if (!leaders.length || leaders[0].id !== player.id) return '';
+            return player.position === 'GB'
+                ? `Meilleur gardien · Saison ${season}`
+                : `Meilleur buteur · Saison ${season}`;
+        }
+
+        function openPlayerModal(playerId, mode) {
+            const modal = document.getElementById('player-modal');
+            if (!modal) return;
+            const isNew = mode === 'new';
+            playerModalId = isNew ? null : playerId;
+            const player = isNew ? null : findPlayerById(playerId);
+            if (!isNew && !player) return;
+            const title = document.getElementById('player-modal-title');
+            if (title) title.textContent = isNew ? 'Ajouter un joueur' : (player ? player.name : 'Fiche joueur');
+            const clubs = playersActiveClubs();
+            const clubOptions = clubs.map(club => `<option value="${club.id}" ${player && player.clubId === club.id ? 'selected' : ''}>${club.name}</option>`).join('');
+            const statsBlock = player ? `
+                <div class="player-modal-stats">
+                    ${player.position === 'ATT' ? `
+                        <div><span>${playerStatsFor(player.id).goals}</span><small>Buts</small></div>
+                        <div><span>${playerStatsFor(player.id).assists}</span><small>Passes</small></div>
+                        <div><span>${playerStatsFor(player.id).matches}</span><small>Matchs</small></div>`
+                        : `
+                        <div><span>${playerStatsFor(player.id).saves}</span><small>Arrêts</small></div>
+                        <div><span>${playerStatsFor(player.id).conceded}</span><small>Buts encaissés</small></div>
+                        <div><span>${playerStatsFor(player.id).saveRate}%</span><small>% d’arrêts</small></div>`}
+                </div>
+                <p class="player-modal-honour">${playerHonourLabel(playerStatsFor(player.id))}</p>
+                ${player.active === false ? '<p class="player-modal-archived">Ce joueur est archivé : il reste dans l’historique mais ne reçoit plus de statistiques.</p>' : ''}
+            ` : '';
+            const body = document.getElementById('player-modal-body');
+            if (body) {
+                body.innerHTML = `${statsBlock}
+                    <label class="form-label">Nom du joueur *</label>
+                    <input type="text" class="form-control" id="player-form-name" value="${player ? player.name.replace(/"/g, '&quot;') : ''}" placeholder="Ex : Toudou du Duvet">
+                    <div class="player-form-row">
+                        <div><label class="form-label">Numéro</label><input type="number" min="1" max="99" class="form-control" id="player-form-number" value="${player && player.number != null ? player.number : ''}"></div>
+                        <div><label class="form-label">Poste</label><select class="form-control" id="player-form-position">
+                            <option value="ATT" ${!player || player.position === 'ATT' ? 'selected' : ''}>Attaquant</option>
+                            <option value="GB" ${player && player.position === 'GB' ? 'selected' : ''}>Gardien</option>
+                        </select></div>
+                    </div>
+                    <label class="form-label">Club</label>
+                    <select class="form-control" id="player-form-club">${clubOptions}</select>
+                    <p class="player-form-hint">Les buts et arrêts sont calculés automatiquement à partir des scores déjà saisis.</p>`;
+            }
+            const footer = document.getElementById('player-modal-footer');
+            if (footer) {
+                footer.innerHTML = `${player && player.active !== false ? '<button class="btn player-archive-btn" id="player-form-archive" type="button"><i class="fas fa-box-archive"></i> Archiver</button>' : ''}
+                    <button class="btn" id="player-form-cancel" type="button" style="background:#555;color:#fff;">Annuler</button>
+                    <button class="btn btn-success" id="player-form-save" type="button"><i class="fas fa-save"></i> Enregistrer</button>`;
+            }
+            modal.classList.add('active');
+            const nameInput = document.getElementById('player-form-name');
+            if (nameInput) setTimeout(() => nameInput.focus(), 50);
+        }
+
+        function playerStatsFor(playerId) {
+            return computePlayerStats({ comp: 'all', season: 'all', club: 'all' }).find(player => player.id === playerId)
+                || { goals: 0, assists: 0, matches: 0, saves: 0, conceded: 0, saveRate: 0, cleanSheets: 0 };
+        }
+
+        function closePlayerModal() {
+            const modal = document.getElementById('player-modal');
+            if (modal) modal.classList.remove('active');
+            playerModalId = null;
+        }
+
+        function savePlayerFromModal() {
+            const nameInput = document.getElementById('player-form-name');
+            const numberInput = document.getElementById('player-form-number');
+            const positionInput = document.getElementById('player-form-position');
+            const clubInput = document.getElementById('player-form-club');
+            if (!nameInput || !clubInput) return;
+            const name = nameInput.value.trim();
+            const clubId = clubInput.value;
+            const position = positionInput && positionInput.value === 'GB' ? 'GB' : 'ATT';
+            const number = numberInput && numberInput.value !== '' ? Number(numberInput.value) : null;
+            if (!name) { showMessage('Le nom du joueur est obligatoire.', 2500, true); return; }
+            if (!clubId) { showMessage('Choisissez un club.', 2500, true); return; }
+            if (playersNumberIsTaken(clubId, number, playerModalId)) { showMessage('Ce numéro est déjà pris dans ce club.', 3000, true); return; }
+            if (playerModalId) {
+                const player = findPlayerById(playerModalId);
+                if (!player) return;
+                const previousClub = player.clubId;
+                player.name = name;
+                player.number = number;
+                player.position = position;
+                player.clubId = clubId;
+                if (previousClub !== clubId) {
+                    const oldClub = playersData.clubs[previousClub];
+                    if (oldClub && Array.isArray(oldClub.order)) oldClub.order = oldClub.order.filter(id => id !== player.id);
+                    if (!playersData.clubs[clubId]) playersData.clubs[clubId] = { goalkeeperId: null, order: [] };
+                    const newClub = playersData.clubs[clubId];
+                    newClub.order = Array.isArray(newClub.order) ? newClub.order : [];
+                    if (!newClub.order.includes(player.id)) newClub.order.push(player.id);
+                }
+                if (position === 'GB') {
+                    if (!playersData.clubs[clubId]) playersData.clubs[clubId] = { goalkeeperId: null, order: [] };
+                    if (!playersData.clubs[clubId].goalkeeperId) playersData.clubs[clubId].goalkeeperId = player.id;
+                }
+                playerStatsVersion++;
+            } else {
+                const created = createPlayerRecord({ name, number, position, clubId });
+                if (!created) return;
+                playerModalId = created.id;
+            }
+            closePlayerModal();
+            renderPlayersTab();
+            savePlayersToDrive();
+            showMessage('Joueur enregistré.', 2200);
+        }
+
+        function archivePlayerFromModal() {
+            if (!playerModalId) return;
+            const player = findPlayerById(playerModalId);
+            if (!player) return;
+            if (!confirm(`Archiver ${player.name} ? Il sort des effectifs actifs mais reste dans l’historique.`)) return;
+            archivePlayerRecord(player.id);
+            closePlayerModal();
+            renderPlayersTab();
+            savePlayersToDrive();
+            showMessage(`${player.name} archivé.`, 2500);
+        }
+
+        function exportPlayersCsv() {
+            const rows = [['Joueur', 'Club', 'Poste', 'Matchs', 'Buts', 'Passes', 'Arrets', 'Buts encaisses', '% arrets', 'Clean sheets']];
+            sortPlayerStats(filteredPlayerStats()).forEach(player => {
+                rows.push([
+                    player.name, player.clubName, PLAYER_POSITION_LABELS[player.position], player.matches,
+                    player.position === 'ATT' ? player.goals : '',
+                    player.position === 'ATT' ? player.assists : '',
+                    player.position === 'GB' ? player.saves : '',
+                    player.position === 'GB' ? player.conceded : '',
+                    player.position === 'GB' ? player.saveRate : '',
+                    player.position === 'GB' ? player.cleanSheets : ''
+                ]);
+            });
+            const csv = rows.map(row => row.map(value => `"${String(value == null ? '' : value).replace(/"/g, '""')}"`).join(';')).join('\n');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'peluches_joueurs.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        async function savePlayersToDrive() {
+            if (!googleAccessToken) return;
+            if (!playersData.fileId) {
+                playersData.fileId = await findOrCreateFile(playersData.filename, JSON.stringify({ players: [], clubs: {} }));
+            }
+            if (playersData.fileId) {
+                await updateFileContent(playersData.fileId, { players: playersData.players, clubs: playersData.clubs });
+            }
+        }
+
+        function refreshPlayersTabIfVisible() {
+            const content = document.getElementById('joueurs-content');
+            if (!content || !content.classList || !content.classList.contains('active')) return;
+            renderPlayersTab();
+        }
+
+        function renderLeagueTopScorers(standingsBodyId, leagueId, seasonId) {
+            if (leagueId !== 'l1' && leagueId !== 'l2') return;
+            const body = document.getElementById(standingsBodyId);
+            if (!body || typeof body.closest !== 'function') return;
+            const container = body.closest('.table-container');
+            if (!container || !container.parentNode) return;
+            const top = computePlayerStats({ comp: leagueId, season: seasonId != null ? seasonId : 'all', club: 'all' })
+                .filter(player => player.position === 'ATT' && player.goals > 0)
+                .sort((a, b) => b.goals - a.goals || b.assists - a.assists)
+                .slice(0, 5);
+            let panel = container.parentNode.querySelector('.league-top-scorers');
+            if (!panel) {
+                panel = document.createElement('div');
+                panel.className = 'league-top-scorers';
+                container.parentNode.appendChild(panel);
+            }
+            if (!top.length) { panel.innerHTML = ''; panel.style.display = 'none'; return; }
+            panel.style.display = '';
+            panel.innerHTML = `<h3 class="league-top-scorers__title"><i class="fas fa-shoe-prints" aria-hidden="true"></i> Soulier d’Or ${leagueId.toUpperCase()}</h3>
+                <ol class="league-top-scorers__list">${top.map(player => `<li><span>${player.name}</span><small>${player.clubName}</small><b>${player.goals}</b></li>`).join('')}</ol>`;
+        }
+
+        function initPlayersUI() {
+            const content = document.getElementById('joueurs-content');
+            if (!content) return;
+            const compSelect = document.getElementById('joueurs-comp-select');
+            if (compSelect) compSelect.addEventListener('change', () => { playersUIState.comp = compSelect.value; playersUIState.season = 'all'; renderPlayersTab(); });
+            const seasonSelect = document.getElementById('joueurs-season-select');
+            if (seasonSelect) seasonSelect.addEventListener('change', () => { playersUIState.season = seasonSelect.value; renderPlayersTab(); });
+            const clubSelect = document.getElementById('joueurs-club-select');
+            if (clubSelect) clubSelect.addEventListener('change', () => { playersUIState.club = clubSelect.value; renderPlayersTab(); });
+            const searchInput = document.getElementById('joueurs-search-input');
+            if (searchInput) {
+                let timer = null;
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => { playersUIState.search = searchInput.value; renderPlayersTab(); }, 150);
+                });
+            }
+            document.querySelectorAll('.joueurs-chip').forEach(chip => chip.addEventListener('click', () => {
+                playersUIState.position = chip.dataset.position || 'all';
+                renderPlayersTab();
+            }));
+            document.querySelectorAll('.joueurs-sort').forEach(button => button.addEventListener('click', () => {
+                const key = button.dataset.sort;
+                if (playersUIState.sortKey === key) playersUIState.sortDir = playersUIState.sortDir === 'asc' ? 'desc' : 'asc';
+                else { playersUIState.sortKey = key; playersUIState.sortDir = key === 'name' || key === 'club' ? 'asc' : 'desc'; }
+                renderPlayersTab();
+            }));
+            const tableBody = document.getElementById('joueurs-table-body');
+            if (tableBody) tableBody.addEventListener('click', event => {
+                const row = event.target.closest('tr[data-player-id]');
+                if (row) openPlayerModal(row.dataset.playerId);
+            });
+            const podiums = document.getElementById('joueurs-podiums');
+            if (podiums) podiums.addEventListener('click', event => {
+                const item = event.target.closest('[data-player-id]');
+                if (item) openPlayerModal(item.dataset.playerId);
+            });
+            const generateBtn = document.getElementById('joueurs-generate-btn');
+            if (generateBtn) generateBtn.addEventListener('click', () => {
+                if (!confirm('Générer un gardien et trois attaquants pour chaque club sans effectif ?')) return;
+                const created = generatePlayerRosters();
+                renderPlayersTab();
+                savePlayersToDrive();
+                showMessage(created ? `${created} joueurs créés.` : 'Tous les clubs ont déjà un effectif.', 2600);
+            });
+            const addBtn = document.getElementById('joueurs-add-btn');
+            if (addBtn) addBtn.addEventListener('click', () => openPlayerModal(null, 'new'));
+            const exportBtn = document.getElementById('joueurs-export-btn');
+            if (exportBtn) exportBtn.addEventListener('click', exportPlayersCsv);
+            const modal = document.getElementById('player-modal');
+            if (modal) {
+                modal.addEventListener('click', event => { if (event.target === modal) closePlayerModal(); });
+                modal.querySelectorAll('[data-close-player-modal]').forEach(button => button.addEventListener('click', closePlayerModal));
+                modal.addEventListener('click', event => {
+                    if (event.target.closest('#player-form-save')) savePlayerFromModal();
+                    else if (event.target.closest('#player-form-cancel')) closePlayerModal();
+                    else if (event.target.closest('#player-form-archive')) archivePlayerFromModal();
+                });
+            }
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape') closePlayerModal();
+            });
+        }
+
+        // Les fonctions de score sont definies plus haut : on les enveloppe pour rafraichir l'onglet.
+        ['updateCDFScore', 'updateLDCScore'].forEach(name => {
+            const original = window[name];
+            if (typeof original !== 'function') return;
+            window[name] = function () {
+                const result = original.apply(this, arguments);
+                playerStatsVersion++;
+                playerStatsCache = { key: '', stats: null };
+                refreshPlayersTabIfVisible();
+                return result;
+            };
+        });
+
+        // Bloc « Soulier d'Or » sous les classements L1/L2.
+        const originalPopulateStandingsDOM = populateStandingsDOM;
+        populateStandingsDOM = function (standingsBodyId, calculatedStandings, teamsForLogos, seasonLogos, leagueId, seasonId) {
+            const result = originalPopulateStandingsDOM.apply(this, arguments);
+            try { renderLeagueTopScorers(standingsBodyId, leagueId, seasonId); } catch (error) { driveLog('Buteurs indisponibles', error); }
+            return result;
+        };
+
+        initPlayersUI();
+
     </script>
 </body>
 

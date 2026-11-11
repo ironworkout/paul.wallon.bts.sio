@@ -19,6 +19,7 @@ Navigation par onglets, une page unique :
 | Barrages | Accession / maintien, avec échanges de places entre ligues |
 | Palmarès | Trophées par club (Ligue 1, Ligue 2, LDC, CDF) |
 | Classement | Classement général, triable (officiel, total, par compétition) |
+| Joueurs | Effectifs par club, buts des attaquants et arrêts des gardiens calculés depuis les scores |
 | Base | Base de clubs, logos et saisons archivées |
 
 Saisons séparées pour la CDF et la LDC (sélecteur de saison par compétition).
@@ -44,7 +45,7 @@ node cdf_format_test.js
 Le script charge `index.html`, extrait son JavaScript et l'exécute dans un contexte simulé, puis affiche :
 
 ```
-RESULTAT: 122 reussis, 0 echecs
+RESULTAT: 135 reussis, 0 echecs
 ```
 
 Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement en CI
@@ -55,7 +56,7 @@ Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement e
 
 ```
 index.html            # TOUT le site : HTML + CSS + JS (325 Ko, ~6 800 lignes)
-cdf_format_test.js    # Suite de tests Node (122 assertions)
+cdf_format_test.js    # Suite de tests Node (135 assertions)
 AMELIORATIONS.md      # Feuille de route : 20 idées, cases cochées quand c'est fait
 INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données, vérifications
 VISUELS.md            # Direction artistique LDC/CDF et prompts des visuels à produire

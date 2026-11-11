@@ -67,6 +67,11 @@ js += `
     get leagueDataStore() { return leagueDataStore; }, set leagueDataStore(v) { leagueDataStore = v; },
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
+    computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, generatePlayerRosters,
+    createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
+    GOALKEEPER_SHOTS_FACED_PER_MATCH,
+    get playersData() { return playersData; }, set playersData(v) { playersData = v; },
+    get playerStatsVersion() { return playerStatsVersion; }, set playerStatsVersion(v) { playerStatsVersion = v; },
     get BASE_URL() { return BASE_URL; }
 };
 ;initRoulette = () => {}; // stub canvas (roulette) pour les tests de suppression L3
@@ -587,6 +592,60 @@ T.ldcData.rounds[4][0].score1 = 1; T.ldcData.rounds[4][0].score2 = 0; T.ldcData.
 T.renderLDCBracket();
 assert(T.ldcData.champion === 'Team 1', 'Champion LDC = Team 1 (team1 gagne toujours)');
 assert(T.palmaresData['Team 1'] && T.palmaresData['Team 1']['LDC'] === 1, 'Trophee LDC attribue au palmares du champion');
+
+
+// ==================== JOUEURS : MOTEUR DE STATISTIQUES ====================
+T.playersData = { players: [], clubs: {}, fileId: null, filename: 'peluches_joueurs.json' };
+T.leagueDataStore.l1.seasons = [{ season_id: 7, fixtures: [[
+    { home: 'ClubA', away: 'ClubB', scoreHome: 3, scoreAway: 2 },
+    { home: 'ClubC', away: 'ClubD', scoreHome: null, scoreAway: null }
+]] }];
+T.leagueDataStore.l2.seasons = [];
+T.cdfData.rounds = {}; T.cdfData.seasons = []; T.cdfData.active_season_id = null;
+T.ldcData.rounds = {}; T.ldcData.seasons = []; T.ldcData.active_season_id = null;
+
+const clubA = T.resolvePlayerClubId('ClubA');
+const clubB = T.resolvePlayerClubId('ClubB');
+assert(!!clubA && !!clubB, 'Identifiants de clubs resolus pour les joueurs');
+const attaquantA1 = T.createPlayerRecord({ name: 'Attaquant A1', number: 9, position: 'ATT', clubId: clubA });
+const attaquantA2 = T.createPlayerRecord({ name: 'Attaquant A2', number: 10, position: 'ATT', clubId: clubA });
+const gardienA = T.createPlayerRecord({ name: 'Gardien A', number: 1, position: 'GB', clubId: clubA });
+T.createPlayerRecord({ name: 'Attaquant B1', number: 9, position: 'ATT', clubId: clubB });
+T.createPlayerRecord({ name: 'Gardien B', number: 1, position: 'GB', clubId: clubB });
+assert(T.playersNumberIsTaken(clubA, 9) && T.playersNumberIsTaken(clubA, 9, attaquantA1.id) === false, 'Numeros uniques par club');
+
+const statsL1 = T.computePlayerStats({ comp: 'l1', season: 7, club: 'all' });
+const butsA = statsL1.filter(p => p.clubId === clubA && p.position === 'ATT').reduce((sum, p) => sum + p.goals, 0);
+assert(butsA === 3, 'Buts des attaquants = buts marques par le club (3)');
+const gardienStats = statsL1.find(p => p.id === gardienA.id);
+assert(gardienStats.matches === 1 && gardienStats.conceded === 2, 'Gardien : 1 match, 2 buts encaisses');
+assert(gardienStats.saves === 2 && gardienStats.saveRate === 50, 'Arrets = 3,5 x matchs - encaisses (2) et 50 %');
+assert(gardienStats.cleanSheets === 0, 'Aucun clean sheet avec 2 buts encaisses');
+const signatureStats = stats => stats.map(p => p.id + ':' + p.goals + ':' + p.assists).sort().join('|');
+const statsL1Bis = T.computePlayerStats({ comp: 'l1', season: 7, club: 'all' });
+assert(signatureStats(statsL1Bis) === signatureStats(statsL1), 'Repartition des buteurs stable');
+T.playerStatsVersion++;
+const statsSaisonVide = T.computePlayerStats({ comp: 'l1', season: 99, club: 'all' });
+assert(statsSaisonVide.length === 5 && statsSaisonVide.every(p => p.matches === 0 && p.goals === 0), 'Filtre saison sans donnees : joueurs listes a zero');
+assert(T.collectPlayerMatchSheets().length === 2, 'Match incomplet exclu des feuilles de match');
+
+// Coupe a 3 clubs
+T.cdfData.rounds = { 3: [{ team1: 'ClubA', team2: 'ClubB', team3: 'ClubC', score1: 5, score2: 2, score3: 1 }] };
+T.playerStatsVersion++;
+const statsCDF = T.computePlayerStats({ comp: 'cdf', season: 'all', club: 'all' });
+assert(statsCDF.length > 0, 'Match CDF a 3 clubs pris en compte');
+const gardienCDF = statsCDF.find(p => p.id === gardienA.id);
+assert(gardienCDF && gardienCDF.conceded === 2, 'Buts encaisses CDF = moyenne des deux adversaires');
+
+// BYE ignore
+T.cdfData.rounds = { 0: [{ team1: 'ClubA', team2: 'BYE 1', score1: 3, score2: 0 }] };
+T.playerStatsVersion++;
+const statsBye = T.computePlayerStats({ comp: 'cdf', season: 'all', club: 'all' });
+assert(statsBye.every(p => p.matches === 0), 'Match avec BYE ignore');
+
+// Archivage doux
+T.archivePlayerRecord(attaquantA2.id);
+assert(T.playersData.players.find(p => p.id === attaquantA2.id).active === false, 'Archivage doux du joueur');
 
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');

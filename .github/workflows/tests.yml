@@ -1,6 +1,6 @@
 name: Tests
 
-# Garde-fou : les 122 assertions de cdf_format_test.js tournent à chaque push/PR.
+# Garde-fou : les 135 assertions de cdf_format_test.js tournent à chaque push/PR.
 # Le script sort en code 1 dès qu'une assertion échoue, donc un test cassé bloque la CI.
 on:
   push:

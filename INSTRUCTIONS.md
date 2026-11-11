@@ -14,7 +14,7 @@ Créé le **7 novembre 2026**, après une vérification complète du dépôt et 
 | Branches | `main` uniquement (branche par défaut) |
 | Tête de `main` | `c5dbd37` — « Merge remote-tracking branch 'origin/main' », 6 août 2026 11:52 UTC |
 | `index.html` | 325 192 octets, **6 786 lignes** (HTML + CSS + JS tout-en-un) |
-| Suite de tests | `cdf_format_test.js` → **141 réussis, 0 échec** |
+| Suite de tests | `cdf_format_test.js` → **143 réussis, 0 échec** |
 | Taille du dépôt | ~22 Mo |
 | Build | **aucun** (pas de bundler) ; Node ne sert qu'aux tests |
 
@@ -69,7 +69,7 @@ Contrôle d'intégrité du clone : `git hash-object index.html` doit renvoyer le
 node cdf_format_test.js
 ```
 
-Doit finir par **`RESULTAT: 141 reussis, 0 echecs`** (référence du 7 nov. 2026).
+Doit finir par **`RESULTAT: 143 reussis, 0 echecs`** (référence du 7 nov. 2026).
 À relancer après **toute** modification touchant CDF, LDC, classement, palmarès, saisons, logos ou le
 moteur de match. Le test charge `index.html` et l'exécute dans un contexte simulé : il fournit
 `googleAccessToken = 'fake-token'` mais **aucun `fetch`**, donc les appels Drive échouent silencieusement
@@ -100,7 +100,8 @@ Ne jamais « faire passer » un test en l'affaiblissant : si une assertion casse
   (`{home, away, scoreHome, scoreAway}`) et `standings`.
 - Joueurs : `playersData = { players: [{ id, name, number, position: 'ATT'|'GB', clubId, active, createdAt }], clubs }`,
   fichier Drive `peluches_joueurs.json`, champ `photo` ; buteurs stockés sur le match (`match.scorers`),
-  `computePlayerStats`, `collectPlayerMatchSheets`, `freezeMatchScorers`, `savePlayersToDrive` ; arrêts =
+  `computePlayerStats`, `collectPlayerMatchSheets`, `freezeMatchScorers`, `savePlayersToDrive`,
+  `renderPlayerFlops` (anti-trophées) et `buildActuItems` / `refreshActuTickers` (bandeaux L1-L2) ; arrêts =
   `max(0, round(3,5 × matchs) − buts encaissés)` (`GOALKEEPER_SHOTS_FACED_PER_MATCH`).
 - Utilitaires : `showMessage(msg, durée, estErreur)`, `resolveLogoUrl`, `BASE_URL`, `getClubLogo`,
   `getClubTrophiesHTML`, `getSeasonTeamUniverse`, `calculateStandings` ; Drive via `googleAccessToken`

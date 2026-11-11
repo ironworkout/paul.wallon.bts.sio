@@ -4306,6 +4306,271 @@
             }
         }
 
+        /* Trophées vectoriels des podiums */
+        .joueurs-podium__trophy {
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: 92px;
+            height: 92px;
+            margin: -8px 0 -8px -6px;
+            filter: drop-shadow(0 10px 18px rgba(212, 175, 55, 0.35));
+        }
+
+        .joueurs-podium__trophy .joueurs-trophy-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .joueurs-podium__head {
+            align-items: center;
+        }
+
+        /* Mur de la honte */
+        .joueurs-flops {
+            margin-bottom: 22px;
+        }
+
+        .flops-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .flops-head h3 {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #8a1f2d;
+        }
+
+        .flops-head p {
+            margin: 0;
+            font-size: 0.76rem;
+            color: #79829a;
+        }
+
+        .flops-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .flop-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas:
+                "tag tag tag"
+                "avatar id stat"
+                "quote quote quote";
+            align-items: center;
+            gap: 10px 12px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(138, 31, 45, 0.16);
+            background:
+                radial-gradient(120% 120% at 100% 0%, rgba(220, 53, 69, 0.12), transparent 60%),
+                #fff8f8;
+            box-shadow: 0 10px 24px rgba(138, 31, 45, 0.07);
+        }
+
+        .flop-card__tag {
+            grid-area: tag;
+            justify-self: start;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #8a1f2d;
+            color: #ffe9ec;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .flop-card--gb .flop-card__tag {
+            background: #6b4f0f;
+            color: #fff4c2;
+        }
+
+        .flop-card .joueurs-avatar {
+            grid-area: avatar;
+            border-color: rgba(138, 31, 45, 0.2);
+        }
+
+        .flop-card__id {
+            grid-area: id;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .flop-card__id b {
+            font-size: 0.92rem;
+            color: #2b1a1e;
+        }
+
+        .flop-card__id small {
+            font-size: 0.7rem;
+            color: #9a7d82;
+        }
+
+        .flop-card__stat {
+            grid-area: stat;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: #8a1f2d;
+            white-space: nowrap;
+        }
+
+        .flop-card p {
+            grid-area: quote;
+            margin: 2px 0 0;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: #7d5a60;
+            line-height: 1.4;
+        }
+
+        /* Bandeaux d'actus L1 / L2 */
+        .actu-ticker {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 18px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            overflow: hidden;
+            color: #eaf1ff;
+            background:
+                radial-gradient(120% 160% at 100% 0%, rgba(255, 193, 7, 0.18), transparent 55%),
+                linear-gradient(100deg, #0b1230, #1a237e 72%);
+            box-shadow: 0 12px 26px rgba(10, 16, 42, 0.18);
+        }
+
+        .actu-ticker::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+            transform: translateX(-100%);
+            animation: actuShine 7s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes actuShine {
+            0%, 55% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .actu-ticker__badge {
+            flex: 0 0 auto;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background: var(--accent-gold);
+            color: #2a2100;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .actu-ticker__logo {
+            width: 32px;
+            height: 32px;
+            padding: 3px;
+            border-radius: 50%;
+            background: #fff;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        .actu-ticker__body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .actu-ticker__title {
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #ffe6a3;
+        }
+
+        .actu-ticker__text {
+            font-size: 0.86rem;
+            color: rgba(234, 241, 255, 0.88);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .actu-ticker__dots {
+            margin-left: auto;
+            flex: 0 0 auto;
+            font-size: 0.64rem;
+            letter-spacing: 0.12em;
+            color: rgba(234, 241, 255, 0.5);
+        }
+
+        .actu-ticker.is-flashing .actu-ticker__body {
+            animation: actuIn 0.45s ease;
+        }
+
+        @keyframes actuIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @media (max-width: 900px) {
+            .flops-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .joueurs-podium__trophy {
+                width: 64px;
+                height: 64px;
+                margin: -4px 0 -4px 0;
+            }
+
+            .flop-card {
+                grid-template-columns: auto 1fr;
+                grid-template-areas:
+                    "tag tag"
+                    "avatar id"
+                    "stat stat"
+                    "quote quote";
+            }
+
+            .flop-card__stat {
+                white-space: normal;
+            }
+
+            .actu-ticker__text {
+                white-space: normal;
+            }
+
+            .actu-ticker__dots,
+            .actu-ticker__logo {
+                display: none;
+            }
+        }
+
         /* ---------- 4. Classement général ---------- */
         .classement-content .table-container {
             border-radius: 16px;
@@ -4918,6 +5183,15 @@
     <!-- LIGUE 1 -->
     <div class="tab-content active l1-content" id="ligue1-content">
         <div class="container">
+            <div class="actu-ticker" id="l1-actu-ticker" aria-label="Actualités L1">
+                <span class="actu-ticker__badge">Actu</span>
+                <img class="actu-ticker__logo" alt="" loading="lazy" decoding="async">
+                <div class="actu-ticker__body">
+                    <b class="actu-ticker__title">En bref</b>
+                    <span class="actu-ticker__text">Chargement des actualités…</span>
+                </div>
+                <span class="actu-ticker__dots" aria-hidden="true"></span>
+            </div>
             <div class="section action-buttons">
                 <button class="league-music-btn" data-league-audio="l1"
                     aria-label="Jouer/Mettre en pause l'hymne de la Ligue 1">
@@ -5031,6 +5305,15 @@
     <!-- LIGUE 2 -->
     <div class="tab-content l2-content" id="ligue2-content">
         <div class="container">
+            <div class="actu-ticker" id="l2-actu-ticker" aria-label="Actualités L2">
+                <span class="actu-ticker__badge">Actu</span>
+                <img class="actu-ticker__logo" alt="" loading="lazy" decoding="async">
+                <div class="actu-ticker__body">
+                    <b class="actu-ticker__title">En bref</b>
+                    <span class="actu-ticker__text">Chargement des actualités…</span>
+                </div>
+                <span class="actu-ticker__dots" aria-hidden="true"></span>
+            </div>
             <div class="section action-buttons">
                 <button class="league-music-btn" data-league-audio="l2"
                     aria-label="Jouer/Mettre en pause l'hymne de la Ligue 2">
@@ -5487,6 +5770,7 @@
 
             <div class="joueurs-cards" id="joueurs-cards"></div>
             <div class="joueurs-podiums" id="joueurs-podiums"></div>
+            <div class="joueurs-flops" id="joueurs-flops"></div>
 
             <div class="joueurs-table-wrap">
                 <table class="joueurs-table" id="joueurs-table">
@@ -6522,6 +6806,7 @@
             }
 
             refreshPlayersTabIfVisible();
+            refreshActuTickers();
             driveLog("Toutes les données chargées depuis Drive.");
         }
 
@@ -6908,6 +7193,7 @@
             freezeMatchScorers(leagueId, activeSeason.fixtures[roundIndex][matchIndex], activeSeason.season_id, roundIndex, matchIndex);
             playerStatsVersion++;
             refreshPlayersTabIfVisible();
+            refreshActuTickers();
             if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams, activeSeason.logos || {}, leagueId, activeSeason.season_id);
         }
 
@@ -10845,7 +11131,7 @@
                 const podium = (title, subtitle, icon, list, valueOf, unit) => `
                     <div class="joueurs-podium">
                         <header class="joueurs-podium__head">
-                            <span class="joueurs-podium__icon"><i class="${icon}" aria-hidden="true"></i></span>
+                            <span class="joueurs-podium__trophy">${icon}</span>
                             <div><h3>${title}</h3><p>${subtitle}</p></div>
                         </header>
                         ${list.length ? `<ol class="joueurs-podium__list">${list.map((player, index) => `
@@ -10856,8 +11142,8 @@
                                 <span class="joueurs-podium__value">${valueOf(player)}<small>${unit}</small></span>
                             </li>`).join('')}</ol>` : '<p class="joueurs-empty">Aucune statistique pour le moment.</p>'}
                     </div>`;
-                podiums.innerHTML = podium('Soulier d’Or', 'Meilleurs buteurs', 'fas fa-shoe-prints', attackers, player => player.goals, 'buts')
-                    + podium('Gant d’Or', 'Meilleurs gardiens', 'fas fa-hand-paper', keepers, player => player.saves, 'arrêts');
+                podiums.innerHTML = podium('Soulier d’Or', 'Meilleurs buteurs', TROPHY_BOOT_SVG, attackers, player => player.goals, 'buts')
+                    + podium('Gant d’Or', 'Meilleurs gardiens', TROPHY_GLOVE_SVG, keepers, player => player.saves, 'arrêts');
             }
 
             const body = document.getElementById('joueurs-table-body');
@@ -10890,6 +11176,7 @@
                 button.classList.toggle('is-active', active);
             });
             renderPlayerMatches();
+            renderPlayerFlops();
         }
 
         function collectEditableMatches() {
@@ -11363,6 +11650,7 @@
                 playerStatsVersion++;
                 playerStatsCache = { key: '', stats: null };
                 refreshPlayersTabIfVisible();
+                refreshActuTickers();
                 return result;
             };
         });
@@ -11374,7 +11662,193 @@
             return result;
         };
 
+        // ---- Trophées vectoriels (nets a toutes les resolutions) ----
+        const TROPHY_BOOT_SVG = `<svg class="joueurs-trophy-svg" viewBox="0 0 120 120" role="img" aria-label="Soulier d’Or">
+            <defs>
+                <linearGradient id="trophyBootGold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#fff6cf"/>
+                    <stop offset="0.45" stop-color="#e8c14a"/>
+                    <stop offset="1" stop-color="#8a6414"/>
+                </linearGradient>
+            </defs>
+            <ellipse cx="60" cy="104" rx="40" ry="7" fill="rgba(0,0,0,0.35)"/>
+            <path d="M22 60c1-9 8-15 17-16l17-3 8-15c2-5 7-8 12-8h6c5 0 9 4 9 9v11c0 4-2 7-5 9l-15 9 1 9c0 4-3 7-7 8l-26 6c-9 2-17-5-17-13Z" fill="url(#trophyBootGold)" stroke="#6b4f0f" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M45 44c5-2 10-1 13 3" stroke="#8a6414" stroke-width="2.5" fill="none" opacity="0.55"/>
+            <path d="M78 23c4-2 8 0 9 4" stroke="#fff8d6" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round"/>
+            <path d="M30 62l13-9" stroke="#fff8d6" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
+            <g fill="#6b4f0f">
+                <circle cx="38" cy="94" r="3"/>
+                <circle cx="48" cy="92" r="3"/>
+                <circle cx="58" cy="90" r="3"/>
+                <circle cx="68" cy="88" r="3"/>
+            </g>
+        </svg>`;
+
+        const TROPHY_GLOVE_SVG = `<svg class="joueurs-trophy-svg" viewBox="0 0 120 120" role="img" aria-label="Gant d’Or">
+            <defs>
+                <linearGradient id="trophyGloveGold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#fff6cf"/>
+                    <stop offset="0.45" stop-color="#e8c14a"/>
+                    <stop offset="1" stop-color="#8a6414"/>
+                </linearGradient>
+            </defs>
+            <ellipse cx="60" cy="106" rx="34" ry="6" fill="rgba(0,0,0,0.35)"/>
+            <path d="M40 38c0-6 5-9 10-6l6 4V18c0-6 9-6 9 0v14-16c0-6 9-6 9 0v18-13c0-6 9-6 9 0v17l4-2c6-3 11 2 9 8l-9 30c-2 7-8 11-15 11H56c-9 0-16-7-16-16V38Z" fill="url(#trophyGloveGold)" stroke="#6b4f0f" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M56 88v9c0 2-2 4-4 4H44" stroke="#6b4f0f" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M78 42c3 6 3 13 0 19" stroke="#fff8d6" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>
+            <path d="M52 30v18M61 28v18" stroke="#8a6414" stroke-width="1.5" opacity="0.45"/>
+        </svg>`;
+
+        // ---- Le Mur de la honte ----
+        const PLAYER_JABS = [
+            'Il cadre moins souvent qu’un rayon de soleil en novembre.',
+            'Son ombre a demandé un transfert.',
+            'Même le poteau commence à le connaître par son prénom.',
+            'Il vise la lune, mais la lune a fermé ses rideaux.',
+            'Ses tirs finissent plus souvent en tribune qu’au fond des filets.',
+            'Le gardien adverse lui envoie des cartes postales.',
+            'Il a touché plus de poteaux que de ballons cette saison.',
+            'Son entraîneur lui a offert des jumelles pour viser juste.',
+            'Les filets ont déposé une demande de protection.',
+            'Il chauffe le banc mieux que personne.',
+            'Il a demandé une carte de fidélité au poteau.',
+            'Son pied droit et son pied gauche ne se parlent plus.'
+        ];
+
+        const KEEPER_JABS = [
+            'Ses gants ont été déclarés zone sinistrée.',
+            'Il plonge avec l’élégance d’un coussin, mais un peu moins vite.',
+            'Le ballon lui demande maintenant une autorisation de passage.',
+            'Il compte les buts plutôt que les arrêts.',
+            'Son armoire à trophées est surtout remplie de pots de confiture.',
+            'Il a confondu la ligne de but avec une proposition de vacances.',
+            'Il regarde les buts avec le recul critique d’un cinéphile.',
+            'Ses coéquipiers lui offrent des mouchoirs à chaque match.',
+            'Il a essayé de négocier avec les poteaux, sans succès.'
+        ];
+
+        function renderPlayerFlops() {
+            const container = document.getElementById('joueurs-flops');
+            if (!container) return;
+            const stats = computePlayerStats({ comp: 'all', season: 'all', club: 'all' });
+            const attackers = stats.filter(player => player.position === 'ATT' && player.matches >= 2)
+                .sort((a, b) => a.goals - b.goals || b.matches - a.matches || a.assists - b.assists);
+            const keepers = stats.filter(player => player.position === 'GB' && player.matches >= 2)
+                .sort((a, b) => a.saveRate - b.saveRate || b.conceded - a.conceded);
+            const worstAttacker = attackers[0] || null;
+            const worstKeeper = keepers[0] || null;
+            if (!worstAttacker && !worstKeeper) { container.innerHTML = ''; return; }
+            const card = (kind, label, player, statLine, jab) => `
+                <article class="flop-card flop-card--${kind}">
+                    <span class="flop-card__tag">${label}</span>
+                    <img class="joueurs-avatar" src="${player.photoUrl}" alt="">
+                    <div class="flop-card__id"><b>${player.name}</b><small>${player.clubName}</small></div>
+                    <span class="flop-card__stat">${statLine}</span>
+                    <p>« ${jab} »</p>
+                </article>`;
+            container.innerHTML = `
+                <header class="flops-head">
+                    <h3><i class="fas fa-face-grin-tears" aria-hidden="true"></i> Le Mur de la honte</h3>
+                    <p>Les anti-trophées de la saison — avec toute la tendresse du monde.</p>
+                </header>
+                <div class="flops-grid">
+                    ${worstAttacker ? card('att', 'La Savate de Plomb', worstAttacker, `${worstAttacker.goals} but${worstAttacker.goals > 1 ? 's' : ''} en ${worstAttacker.matches} matchs`, PLAYER_JABS[playerHashSeed(worstAttacker.id) % PLAYER_JABS.length]) : ''}
+                    ${worstKeeper ? card('gb', 'Le Gant de Beurre', worstKeeper, `${worstKeeper.saveRate}% d’arrêts · ${worstKeeper.conceded} encaissés`, KEEPER_JABS[playerHashSeed(worstKeeper.id) % KEEPER_JABS.length]) : ''}
+                </div>`;
+        }
+
+        // ---- Actus aleatoires L1 / L2 ----
+        const ACTU_RANDOM_LINES = [
+            'Le marché des peluches s’agite : un doudou aurait été aperçu à l’entraînement.',
+            'La pelouse sent la lessive : les groundskeepers ont encore frappé.',
+            'Un supporter a promis de ne plus mordre son coussin après le prochain but.',
+            'Le kop a répété toute la nuit, les voisins portent plainte pour excès de câlins.',
+            'La buvette innove : chocolat chaud et guimauves à volonté.',
+            'Le club cherche un préparateur mental spécialiste des doudous vexés.',
+            'Un joueur a battu le record de sieste avant match : trois heures et douze minutes.',
+            'La VAR a demandé une pause : elle ne distinguait plus les oreilles.',
+            'Le stade sera plein, les peluches ont réservé leurs places en tribune.',
+            'Un maillot est ressorti de la machine à laver avec trois tailles de moins.',
+            'Le speaker a promis d’arrêter de confondre les ours et les lapins.',
+            'La mascotte réclame une augmentation, en guimauves évidemment.'
+        ];
+
+        const ACTU_TICKERS = { l1: null, l2: null };
+
+        function buildActuItems(leagueId) {
+            const stats = computePlayerStats({ comp: leagueId, season: 'all', club: 'all' });
+            const items = [];
+            const add = (title, text, logo) => items.push({ title, text, logo: logo || '' });
+            const attackers = stats.filter(player => player.position === 'ATT' && player.goals > 0)
+                .sort((a, b) => b.goals - a.goals || b.assists - a.assists);
+            const keepers = stats.filter(player => player.position === 'GB' && player.matches > 0)
+                .sort((a, b) => b.saves - a.saves || b.saveRate - a.saveRate);
+            if (attackers[0]) {
+                const top = attackers[0];
+                add(top.name, `${top.goals} but${top.goals > 1 ? 's' : ''} en ${top.matches} match${top.matches > 1 ? 's' : ''} avec ${top.clubName}. Le Soulier d’Or se précise.`, top.clubLogo);
+            }
+            if (attackers[1]) {
+                const second = attackers[1];
+                add(second.name, `Suit le rythme avec ${second.goals} but${second.goals > 1 ? 's' : ''} : la course au Soulier d’Or reste ouverte.`, second.clubLogo);
+            }
+            if (keepers[0]) {
+                const keeper = keepers[0];
+                add(keeper.name, `${keeper.saves} arrêts et ${keeper.saveRate}% de tirs repoussés. Le Gant d’Or a un favori.`, keeper.clubLogo);
+            }
+            const quiet = stats.filter(player => player.position === 'ATT' && player.matches >= 2 && player.goals === 0)
+                .sort((a, b) => b.matches - a.matches)[0];
+            if (quiet) {
+                add(quiet.name, `Toujours muet après ${quiet.matches} matchs : la Savate de Plomb lui tend les bras.`, quiet.clubLogo);
+            }
+            [...ACTU_RANDOM_LINES].sort(() => Math.random() - 0.5).slice(0, 3).forEach(line => add('En bref', line, ''));
+            return items.sort(() => Math.random() - 0.5).slice(0, 8);
+        }
+
+        function paintActuTicker(leagueId) {
+            const state = ACTU_TICKERS[leagueId];
+            const element = document.getElementById(`${leagueId}-actu-ticker`);
+            if (!state || !element || !state.items.length || typeof element.querySelector !== 'function') return;
+            const item = state.items[state.index % state.items.length];
+            const logo = element.querySelector('.actu-ticker__logo');
+            if (logo) {
+                if (item.logo) { logo.src = item.logo; logo.style.display = ''; } else { logo.style.display = 'none'; }
+            }
+            const title = element.querySelector('.actu-ticker__title');
+            const text = element.querySelector('.actu-ticker__text');
+            if (title) title.textContent = item.title;
+            if (text) text.textContent = item.text;
+            const dots = element.querySelector('.actu-ticker__dots');
+            if (dots) dots.textContent = `${state.index + 1} / ${state.items.length}`;
+            element.classList.remove('is-flashing');
+            void element.offsetWidth;
+            element.classList.add('is-flashing');
+        }
+
+        function startActuTicker(leagueId) {
+            if (!document.getElementById(`${leagueId}-actu-ticker`)) return;
+            const state = ACTU_TICKERS[leagueId] || (ACTU_TICKERS[leagueId] = { items: [], index: 0, timer: null });
+            if (state.timer) clearInterval(state.timer);
+            state.items = buildActuItems(leagueId);
+            state.index = 0;
+            paintActuTicker(leagueId);
+            state.timer = setInterval(() => {
+                if (!state.items.length) return;
+                const step = 1 + Math.floor(Math.random() * Math.max(1, state.items.length - 1));
+                state.index = (state.index + step) % state.items.length;
+                paintActuTicker(leagueId);
+            }, 7000);
+        }
+
+        function refreshActuTickers() {
+            ['l1', 'l2'].forEach(startActuTicker);
+        }
+
+        function initActuTickers() {
+            refreshActuTickers();
+        }
+
         initPlayersUI();
+        initActuTickers();
 
 
     </script>

@@ -69,6 +69,7 @@ js += `
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
     computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, freezeMatchScorers, collectEditableMatches,
     createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
+    buildActuItems,
     GOALKEEPER_SHOTS_FACED_PER_MATCH,
     get playersData() { return playersData; }, set playersData(v) { playersData = v; },
     get playerStatsVersion() { return playerStatsVersion; }, set playerStatsVersion(v) { playerStatsVersion = v; },
@@ -669,6 +670,11 @@ const freshMatch = { home: 'ClubA', away: 'ClubB', scoreHome: 2, scoreAway: 0 };
 T.freezeMatchScorers('l1', freshMatch, 9, 0, 0);
 assert(freshMatch.scorers && Object.keys(freshMatch.scorers).length > 0, 'Buteurs figes a la saisie du score');
 assert(Object.values(freshMatch.scorers).reduce((sum, goals) => sum + goals, 0) === 2, 'Total des buteurs fige = score de l equipe');
+
+// Actus de ligue
+const actusL1 = T.buildActuItems('l1');
+assert(Array.isArray(actusL1) && actusL1.length > 0, 'Actus L1 generees');
+assert(actusL1.every(item => typeof item.title === 'string' && typeof item.text === 'string'), 'Actus L1 structurees (titre + texte)');
 
 console.log('RESULTAT: ' + pass + ' reussis, ' + fail + ' echecs');
 console.log('========================================');

@@ -7544,6 +7544,30 @@
             'Liverpours': 'tifo-peluches'
         };
 
+        // Un club renommé garde son logo : la bannière doit suivre le logo, pas seulement le nom.
+        // Cela évite qu'un « Peluche SG » renommé depuis Olympique Ours récupère le tifo du PSG.
+        const CLUB_TRIBUNE_LOGO_SHOTS = {
+            'vafc.png': 'stade-vafc',
+            'tfc.png': 'foule-toulours',
+            'psg.png': 'tifo-psg',
+            'oo.png': 'foule-olympique-ours',
+            'ascl.png': 'foule-orange-blanc',
+            'asset.png': 'stade-saint-ettours',
+            'patapouf.png': 'tifo-patapouf',
+            'tours.png': 'foule-tours',
+            'clermandala.png': 'foule-clermandala',
+            'fcp.png': 'tifo-poussins',
+            'fcd.png': 'tifo-doudou',
+            'ofc.png': 'stade-oursons'
+        };
+        const CLUB_TRIBUNE_NAME_ALIASES = {
+            'Peluche SG': 'tifo-psg',
+            'Peluche PSG': 'tifo-psg',
+            'Peluche Paris SG': 'tifo-psg',
+            'Peluche Saint-Germain': 'tifo-psg',
+            'Peluche St-Germain': 'tifo-psg'
+        };
+
         // Clé de comparaison tolérante : accents, casse, ponctuation et mots de club ignorés.
         function normaliseClubKey(name) {
             return String(name || '')
@@ -7565,7 +7589,9 @@
         })();
 
         function getClubTribune(clubName) {
-            const slug = CLUB_TRIBUNE_SHOTS[clubName] || CLUB_TRIBUNE_INDEX[normaliseClubKey(clubName)];
+            const nameSlug = CLUB_TRIBUNE_SHOTS[clubName] || CLUB_TRIBUNE_INDEX[normaliseClubKey(clubName)];
+            const logoSlug = CLUB_TRIBUNE_LOGO_SHOTS[getClubRawLogo(clubName)];
+            const slug = nameSlug || logoSlug || CLUB_TRIBUNE_NAME_ALIASES[clubName];
             return slug ? { card: `${slug}-card.webp`, full: `${slug}.webp` } : null;
         }
 

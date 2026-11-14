@@ -147,6 +147,10 @@ l'image est rattachée au club, pas à une page.
 | Dourstmund | `tifo-dourstmund` | LDC |
 | PopoGlimt | `tribune-popolglimt` | LDC |
 
+Les bannières sont résolues par le nom du club, puis par son logo : un club renommé (par exemple
+« Peluche SG ») conserve ainsi le visuel de son logo, et les variantes Peluche SG/PSG sans logo connu
+retombent sur `tifo-psg`.
+
 Chaque visuel existe en deux tailles : `*.webp` (1600 × 900, ~120–260 Ko) et `*-card.webp`
 (760 px, ~40–75 Ko) servi via `srcset` pour les cartes. Les clubs sans photo gardent une carte
 sobre : écusson sur dégradé nuit.

@@ -49,7 +49,7 @@ vm.createContext(sandbox);
 js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
-    calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo,
+    calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo, getClubTribune,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
     populateSwapTargetClubs, onSwapSeasonChange, getClubRawLogo, getSeasonTeamUniverse, executeSwapOrChangeClub,
@@ -606,6 +606,13 @@ T.leagueDataStore.l1.seasons = [{ season_id: 7, fixtures: [[
 T.leagueDataStore.l2.seasons = [];
 T.cdfData.rounds = {}; T.cdfData.seasons = []; T.cdfData.active_season_id = null;
 T.ldcData.rounds = {}; T.ldcData.seasons = []; T.ldcData.active_season_id = null;
+
+assert(T.getClubTribune('Peluche SG') && T.getClubTribune('Peluche SG').card === 'tifo-psg-card.webp', 'Banniere Peluche SG associee a son tribune');
+const ancienLogoPelucheSG = T.baseClubsData.clubs['Peluche SG'];
+T.baseClubsData.clubs['Peluche SG'] = { logo: 'oo.png' };
+assert(T.getClubTribune('Peluche SG').card === 'foule-olympique-ours-card.webp', 'Banniere Peluche SG suit son logo apres un renommage');
+if (ancienLogoPelucheSG) T.baseClubsData.clubs['Peluche SG'] = ancienLogoPelucheSG;
+else delete T.baseClubsData.clubs['Peluche SG'];
 
 const clubA = T.resolvePlayerClubId('ClubA');
 const clubB = T.resolvePlayerClubId('ClubB');

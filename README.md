@@ -45,7 +45,7 @@ node cdf_format_test.js
 Le script charge `index.html`, extrait son JavaScript et l'exécute dans un contexte simulé, puis affiche :
 
 ```
-RESULTAT: 145 reussis, 0 echecs
+RESULTAT: 147 reussis, 0 echecs
 ```
 
 Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement en CI
@@ -56,13 +56,13 @@ Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement e
 
 ```
 index.html            # TOUT le site : HTML + CSS + JS (325 Ko, ~6 800 lignes)
-cdf_format_test.js    # Suite de tests Node (145 assertions)
+cdf_format_test.js    # Suite de tests Node (147 assertions)
 AMELIORATIONS.md      # Feuille de route : 20 idées, cases cochées quand c'est fait
 INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données, vérifications
 VISUELS.md            # Direction artistique LDC/CDF et prompts des visuels à produire
 .github/workflows/    # CI : tests à chaque push
 *.png / *.webp        # Logos des clubs (PNG) et illustrations (WebP)
-*.mp3                 # Hymnes (ligue1.mp3, ligue2.mp3, ldc.mp3, + hymne-cdf.mp3 à fournir)
+*.mp3                 # Hymnes (ligue1.mp3, ligue2.mp3, ldc.mp3, hymne-cdf.mp3)
 ```
 
 Deux pages annexes subsistent, non liées depuis `index.html` : `champions.html` (page historique) et

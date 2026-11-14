@@ -70,6 +70,7 @@ js += `
     computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, freezeMatchScorers, collectEditableMatches,
     createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
     buildActuItems,
+    buildPalmaresActuItems,
     groupMatchesBySeason,
     GOALKEEPER_SHOTS_FACED_PER_MATCH,
     get playersData() { return playersData; }, set playersData(v) { playersData = v; },
@@ -676,6 +677,12 @@ assert(Object.values(freshMatch.scorers).reduce((sum, goals) => sum + goals, 0) 
 const actusL1 = T.buildActuItems('l1');
 assert(Array.isArray(actusL1) && actusL1.length > 0, 'Actus L1 generees');
 assert(actusL1.every(item => typeof item.title === 'string' && typeof item.text === 'string'), 'Actus L1 structurees (titre + texte)');
+const palmaresActus = T.buildPalmaresActuItems('l1', {
+    'Peluche FC': { 'Ligue 1': 3, 'Ligue 2': 1, 'CDF': 2, 'LDC': 1 },
+    'Toulours FC': { 'Ligue 1': 0, 'Ligue 2': 2, 'CDF': 0, 'LDC': 0 }
+});
+assert(palmaresActus.some(item => item.text.includes('Peluche FC') && item.text.includes('plus titré en Ligue 1')), 'Actus palmares citent le club le plus titre en L1');
+assert(palmaresActus.some(item => item.text.includes('Coupe de France') && item.text.includes('Peluche FC')), 'Actus palmares citent le specialiste de la CDF');
 
 // Feuilles de match par saison
 const saisonGroups = T.groupMatchesBySeason([{ seasonId: 1, match: {} }, { seasonId: 2, match: {} }, { seasonId: 2, match: {} }]);

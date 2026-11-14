@@ -2229,10 +2229,12 @@
 
         .trophee--ldc { --r: 0.742; filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.55)); }
         .trophee--cdf { --r: 1.027; filter: drop-shadow(0 0 3px rgba(199, 36, 177, 0.45)); }
+        .trophee--l1 { --r: 0.625; filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.6)); }
+        .trophee--l2 { --r: 0.625; filter: drop-shadow(0 0 3px rgba(200, 210, 225, 0.55)); }
         .nav-link .trophee { --t: 1.3em; vertical-align: -0.3em; }
         .section-title .trophee { --t: 1.5em; vertical-align: -0.38em; margin-right: 2px; }
         .palmares-table th .trophee,
-        .classement-table th .trophee { --t: 1.55em; vertical-align: -0.42em; margin-left: 4px; }
+        .classement-table th .trophee { --t: 2.2em; vertical-align: -0.55em; margin-left: 6px; }
         .cdf-final-badge .trophee { --t: 1.25em; vertical-align: -0.28em; margin-right: 5px; }
         .trophee--grand { --t: 3.6em; margin-right: 8px; }
         /* ===== Habillage TV des coupes (esprit Canal+ / beIN, 100 % CSS, 0 octet réseau) ===== */
@@ -2417,9 +2419,34 @@
             margin-bottom: 4px;
         }
 
+        .banner-coupe__trophy {
+            position: relative;
+        }
+
+        .banner-coupe__trophy::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 178px;
+            height: 178px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(var(--accent-rgb), 0.16) 46%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .banner-coupe__trophy .trophee {
-            --t: 7.6em;
-            filter: drop-shadow(0 14px 26px rgba(var(--accent-rgb), 0.45));
+            --t: 128px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 14px 26px rgba(var(--accent-rgb), 0.45)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.18));
+        }
+
+        .banner-coupe__trophy span {
+            position: relative;
+            z-index: 1;
         }
 
         .banner-coupe__trophy span {
@@ -2486,7 +2513,8 @@
             .banner-coupe__content strong { font-size: 1.15rem; }
             .banner-coupe__kicker { font-size: 0.6rem; }
             .banner-coupe__meta { display: none; }
-            .banner-coupe__trophy .trophee { --t: 3.7em; }
+            .banner-coupe__trophy .trophee { --t: 72px; }
+            .banner-coupe__trophy::before { width: 104px; height: 104px; }
             .banner-coupe__trophy span { display: none; }
         }
         /* ===== Galerie des foules en feutrine ===== */
@@ -5281,6 +5309,36 @@
             <path d="M40 174h40l-4 20a4 4 0 0 1-4 3H48a4 4 0 0 1-4-3Z" fill="url(#troph-marbre)"/>
             <path d="M44 181h32M46 187h28" stroke="#b9b5aa" stroke-width="0.9" opacity="0.75"/>
         </symbol>
+
+        <!-- LIGUE 1 : trophée doré du champion, socle hexagonal, colonnes cannelées et sphère -->
+        <symbol id="trophee-l1" viewBox="0 0 100 160">
+            <path d="M24 132H76L84 144L50 155L16 144Z" fill="url(#troph-socle)" stroke="#8a6d1f" stroke-width="1"/>
+            <path d="M24 132H76L70 126H30Z" fill="url(#troph-or)"/>
+            <path d="M30 126H70L76 132H24Z" fill="#8a6d1f" opacity="0.55"/>
+            <path d="M35 126H46L44 78L38 72Z" fill="url(#troph-or)"/>
+            <path d="M54 126H65L62 72L56 78Z" fill="url(#troph-or)"/>
+            <path d="M46 126H54L52 64H48Z" fill="url(#troph-or)"/>
+            <path d="M39 121V82M42 121V80M58 121V82M61 121V80M49 121V72M51 121V72" stroke="#8a6d1f" stroke-width="1" opacity="0.5"/>
+            <path d="M44 67H56V60H44Z" fill="#8a6d1f" opacity="0.8"/>
+            <circle cx="50" cy="46" r="21" fill="url(#troph-or)"/>
+            <circle cx="42" cy="38" r="6.5" fill="#fff8d8" opacity="0.55"/>
+            <path d="M50 25a21 21 0 0 1 0 42" fill="none" stroke="#8a6d1f" stroke-width="1" opacity="0.35"/>
+        </symbol>
+
+        <!-- LIGUE 2 : trophée argenté, socle hexagonal et colonne facetée -->
+        <symbol id="trophee-l2" viewBox="0 0 100 160">
+            <path d="M24 132H76L84 144L50 155L16 144Z" fill="url(#troph-socle)" stroke="#5f6c78" stroke-width="1"/>
+            <path d="M24 132H76L70 126H30Z" fill="url(#troph-argent)"/>
+            <path d="M30 126H70L76 132H24Z" fill="#5f6c78" opacity="0.45"/>
+            <path d="M40 126H60L54 74H46Z" fill="url(#troph-argent)"/>
+            <path d="M46 74H54L53 66H47Z" fill="url(#troph-argent-v)"/>
+            <path d="M50 124V78" stroke="#fff" stroke-width="1.4" opacity="0.55"/>
+            <path d="M44 126L47 76M56 126L53 76" stroke="#5f6c78" stroke-width="1" opacity="0.5"/>
+            <path d="M43 74H57V68H43Z" fill="url(#troph-argent-v)"/>
+            <circle cx="50" cy="47" r="20" fill="url(#troph-argent)"/>
+            <circle cx="43" cy="40" r="6" fill="#fff" opacity="0.45"/>
+            <path d="M50 27a20 20 0 0 1 0 40" fill="none" stroke="#5f6c78" stroke-width="1" opacity="0.35"/>
+        </symbol>
     </svg>
     <header>
         <div class="container header-container">
@@ -5710,7 +5768,7 @@
         <div class="container">
             <div class="section action-buttons">
                 <button class="league-music-btn" data-league-audio="cdf"
-                    title="Dépose le fichier hymne-cdf.mp3 (hymne officiel de la Coupe de France) à la racine du site"
+                    title="Hymne de la Coupe de France"
                     aria-label="Jouer/Mettre en pause l'hymne de la Coupe de France">
                     <i class="fas fa-play"></i> Hymne CDF
                 </button>
@@ -5826,8 +5884,8 @@
                         <thead>
                             <tr>
                                 <th>Club</th>
-                                <th>Ligue 1 <i class="fas fa-trophy trophy-l1"></i></th>
-                                <th>Ligue 2 <i class="fas fa-medal trophy-l2"></i></th>
+                                <th>Ligue 1 <svg class="trophee trophee--l1" aria-hidden="true" focusable="false"><use href="#trophee-l1"/></svg></th>
+                                <th>Ligue 2 <svg class="trophee trophee--l2" aria-hidden="true" focusable="false"><use href="#trophee-l2"/></svg></th>
                                 <th>CDF <svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg></th>
                                 <th>LDC <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg></th>
                             </tr>
@@ -5861,9 +5919,9 @@
                                     <th title="Tri officiel (JO)" onclick="sortClassementBy('official')" style="cursor: pointer;">Pos <i class="fas fa-sort"></i></th>
                                     <th onclick="sortClassementBy('name')" style="cursor: pointer;">Club <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('LDC')" style="cursor: pointer;">LDC <svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg> <i class="fas fa-sort"></i></th>
-                                    <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 1')" style="cursor: pointer;">Ligue 1 <i class="fas fa-trophy trophy-l1"></i> <i class="fas fa-sort"></i></th>
+                                    <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 1')" style="cursor: pointer;">Ligue 1 <svg class="trophee trophee--l1" aria-hidden="true" focusable="false"><use href="#trophee-l1"/></svg> <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('CDF')" style="cursor: pointer;">CDF <svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg> <i class="fas fa-sort"></i></th>
-                                    <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 2')" style="cursor: pointer;">Ligue 2 <i class="fas fa-medal trophy-l2"></i> <i class="fas fa-sort"></i></th>
+                                    <th title="Cliquer pour trier" onclick="sortClassementBy('Ligue 2')" style="cursor: pointer;">Ligue 2 <svg class="trophee trophee--l2" aria-hidden="true" focusable="false"><use href="#trophee-l2"/></svg> <i class="fas fa-sort"></i></th>
                                     <th title="Cliquer pour trier" onclick="sortClassementBy('total')" style="cursor: pointer;">Total <i class="fas fa-sort"></i></th>
                                 </tr>
                             </thead>
@@ -10171,8 +10229,8 @@
                 const teamGlobalPalmares = palmaresData[displayName] || palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
                 const row = document.createElement('tr');
 
-                let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<i class="fas fa-trophy trophy-l1"></i>').join('');
-                let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<i class="fas fa-medal trophy-l2"></i>').join('');
+                let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<svg class=\"trophee trophee--l1\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#trophee-l1\"/></svg>').join('');
+                let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<svg class=\"trophee trophee--l2\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#trophee-l2\"/></svg>').join('');
                 let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>').join('');
                 let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>').join('');
 
@@ -10274,9 +10332,9 @@
         const CLASSEMENT_TROPHY_ORDER = ['LDC', 'Ligue 1', 'CDF', 'Ligue 2'];
         const CLASSEMENT_TROPHY_ICONS = {
             'LDC': '<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>',
-            'Ligue 1': '<i class="fas fa-trophy trophy-l1"></i>',
+            'Ligue 1': '<svg class="trophee trophee--l1" aria-hidden="true" focusable="false"><use href="#trophee-l1"/></svg>',
             'CDF': '<svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>',
-            'Ligue 2': '<i class="fas fa-medal trophy-l2"></i>'
+            'Ligue 2': '<svg class="trophee trophee--l2" aria-hidden="true" focusable="false"><use href="#trophee-l2"/></svg>'
         };
         const CLASSEMENT_RANK_MEDALS = ['🥇', '🥈', '🥉'];
         let classementSortKey = null;   // null = tri officiel (JO), sinon 'LDC'|'Ligue 1'|'CDF'|'Ligue 2'|'total'
@@ -10566,7 +10624,7 @@
                         stopAllLeagueMusic();
                         audioToPlay.play().catch(e => {
                             console.warn("Erreur lecture audio:", league, e);
-                            if (league === 'cdf') showMessage("Hymne CDF absent : dépose le fichier hymne-cdf.mp3 (hymne officiel) à la racine du site.", 6000, true);
+                            if (league === 'cdf') showMessage("Hymne CDF indisponible : vérifie le fichier hymne-cdf.mp3 à la racine du site.", 6000, true);
                         });
                         currentPlayingAudio = audioToPlay;
                         icon.classList.remove('fa-play');
@@ -12104,33 +12162,87 @@
 
         const ACTU_TICKERS = { l1: null, l2: null };
 
+        function buildPalmaresActuItems(leagueId, palmares = (typeof palmaresData !== 'undefined' && palmaresData) || {}) {
+            const items = [];
+            const leagueKey = leagueId === 'l2' ? 'Ligue 2' : 'Ligue 1';
+            const logoOf = name => {
+                try { return typeof getClubLogo === 'function' ? getClubLogo(name) : ''; } catch (error) { return ''; }
+            };
+            const entries = Object.keys(palmares || {}).map(name => {
+                const counts = palmares[name] || {};
+                const l1 = Number(counts['Ligue 1']) || 0;
+                const l2 = Number(counts['Ligue 2']) || 0;
+                const cdf = Number(counts.CDF) || 0;
+                const ldc = Number(counts.LDC) || 0;
+                return { name, l1, l2, cdf, ldc, total: l1 + l2 + cdf + ldc, league: leagueKey === 'Ligue 2' ? l2 : l1 };
+            }).filter(entry => entry.total > 0);
+            const push = (title, text, logo) => items.push({ title, text, logo: logo || '' });
+            const topLeague = entries.filter(entry => entry.league > 0)
+                .sort((a, b) => b.league - a.league || b.total - a.total)[0];
+            if (topLeague) {
+                push('Palmarès', `${topLeague.name} est le club le plus titré en ${leagueKey} avec ${topLeague.league} titre${topLeague.league > 1 ? 's' : ''}.`, logoOf(topLeague.name));
+            }
+            const topOverall = entries.slice().sort((a, b) => b.total - a.total || b.ldc - a.ldc)[0];
+            if (topOverall) {
+                push('Palmarès', `Avec ${topOverall.total} titre${topOverall.total > 1 ? 's' : ''} toutes compétitions confondues, ${topOverall.name} trône au sommet du palmarès.`, logoOf(topOverall.name));
+            }
+            const topCdf = entries.filter(entry => entry.cdf > 0).sort((a, b) => b.cdf - a.cdf)[0];
+            if (topCdf) {
+                push('Coupe de France', `${topCdf.name} a soulevé la Coupe de France ${topCdf.cdf} fois. Un habitué du marbre.`, logoOf(topCdf.name));
+            }
+            const topLdc = entries.filter(entry => entry.ldc > 0).sort((a, b) => b.ldc - a.ldc)[0];
+            if (topLdc) {
+                push('Ligue des Champions', `${topLdc.name} compte ${topLdc.ldc} Ligue${topLdc.ldc > 1 ? 's' : ''} des Champions au palmarès.`, logoOf(topLdc.name));
+            }
+            if (typeof leagueDataStore !== 'undefined' && leagueDataStore[leagueId] && leagueDataStore[leagueId].teams) {
+                const known = new Set(entries.map(entry => entry.name));
+                const blank = Object.keys(leagueDataStore[leagueId].teams).filter(name => name !== 'BYE' && !known.has(name))[0];
+                if (blank) {
+                    push('Palmarès', `${blank} n’a encore rien gagné, mais le vestiaire y croit très fort.`, logoOf(blank));
+                }
+            }
+            return items;
+        }
+
         function buildActuItems(leagueId) {
             const stats = computePlayerStats({ comp: leagueId, season: 'all', club: 'all' });
-            const items = [];
-            const add = (title, text, logo) => items.push({ title, text, logo: logo || '' });
+            const statsItems = [];
+            const add = (title, text, logo) => statsItems.push({ title, text, logo: logo || '' });
             const attackers = stats.filter(player => player.position === 'ATT' && player.goals > 0)
                 .sort((a, b) => b.goals - a.goals || b.assists - a.assists);
             const keepers = stats.filter(player => player.position === 'GB' && player.matches > 0)
                 .sort((a, b) => b.saves - a.saves || b.saveRate - a.saveRate);
+            const passers = stats.filter(player => player.position === 'ATT' && player.assists > 0)
+                .sort((a, b) => b.assists - a.assists || b.goals - a.goals);
             if (attackers[0]) {
                 const top = attackers[0];
-                add(top.name, `${top.goals} but${top.goals > 1 ? 's' : ''} en ${top.matches} match${top.matches > 1 ? 's' : ''} avec ${top.clubName}. Le Soulier d’Or se précise.`, top.clubLogo);
+                add(top.name, `${top.name} est élu meilleur joueur de la saison : ${top.goals} but${top.goals > 1 ? 's' : ''} en ${top.matches} match${top.matches > 1 ? 's' : ''} avec ${top.clubName}.`, top.clubLogo);
             }
             if (attackers[1]) {
                 const second = attackers[1];
-                add(second.name, `Suit le rythme avec ${second.goals} but${second.goals > 1 ? 's' : ''} : la course au Soulier d’Or reste ouverte.`, second.clubLogo);
+                add(second.name, `Le dauphin ${second.name} suit avec ${second.goals} but${second.goals > 1 ? 's' : ''} : la course au Soulier d’Or reste ouverte.`, second.clubLogo);
             }
             if (keepers[0]) {
                 const keeper = keepers[0];
-                add(keeper.name, `${keeper.saves} arrêts et ${keeper.saveRate}% de tirs repoussés. Le Gant d’Or a un favori.`, keeper.clubLogo);
+                add(keeper.name, `${keeper.name} est élu meilleur gardien de la saison : ${keeper.saves} arrêts et ${keeper.saveRate}% de tirs repoussés.`, keeper.clubLogo);
+            }
+            if (passers[0]) {
+                const passer = passers[0];
+                add(passer.name, `${passer.name} est le meilleur passeur avec ${passer.assists} passe${passer.assists > 1 ? 's' : ''} décisive${passer.assists > 1 ? 's' : ''}.`, passer.clubLogo);
             }
             const quiet = stats.filter(player => player.position === 'ATT' && player.matches >= 2 && player.goals === 0)
                 .sort((a, b) => b.matches - a.matches)[0];
             if (quiet) {
-                add(quiet.name, `Toujours muet après ${quiet.matches} matchs : la Savate de Plomb lui tend les bras.`, quiet.clubLogo);
+                add(quiet.name, `${quiet.name} est élu joueur le plus nase : toujours 0 but après ${quiet.matches} matchs.`, quiet.clubLogo);
             }
-            [...ACTU_RANDOM_LINES].sort(() => Math.random() - 0.5).slice(0, 3).forEach(line => add('En bref', line, ''));
-            return items.sort(() => Math.random() - 0.5).slice(0, 8);
+            const randomize = list => list.map(value => ({ value, order: Math.random() })).sort((a, b) => a.order - b.order).map(entry => entry.value);
+            const palmaresItems = buildPalmaresActuItems(leagueId);
+            const lines = ACTU_RANDOM_LINES.map(line => ({ title: 'En bref', text: line, logo: '' }));
+            return [
+                ...randomize(statsItems).slice(0, 4),
+                ...randomize(palmaresItems).slice(0, 2),
+                ...randomize(lines).slice(0, 2)
+            ].sort(() => Math.random() - 0.5);
         }
 
         function paintActuTicker(leagueId) {

@@ -68,7 +68,7 @@ js += `
     get palmaresData() { return palmaresData; }, set palmaresData(v) { palmaresData = v; },
     get baseClubsData() { return baseClubsData; }, set baseClubsData(v) { baseClubsData = v; },
     computePlayerStats, collectPlayerMatchSheets, distributeClubGoals, freezeMatchScorers, collectEditableMatches,
-    createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId,
+    createPlayerRecord, archivePlayerRecord, normalisePlayersData, playersNumberIsTaken, resolvePlayerClubId, playersSavePayload,
     buildActuItems,
     buildPalmaresActuItems,
     groupMatchesBySeason,
@@ -672,6 +672,12 @@ const freshMatch = { home: 'ClubA', away: 'ClubB', scoreHome: 2, scoreAway: 0 };
 T.freezeMatchScorers('l1', freshMatch, 9, 0, 0);
 assert(freshMatch.scorers && Object.keys(freshMatch.scorers).length > 0, 'Buteurs figes a la saisie du score');
 assert(Object.values(freshMatch.scorers).reduce((sum, goals) => sum + goals, 0) === 2, 'Total des buteurs fige = score de l equipe');
+
+// Sauvegarde de la liste des joueurs : le payload envoye a Drive contient bien tout
+const payloadJoueurs = T.playersSavePayload();
+assert(payloadJoueurs.players.length === 4 && payloadJoueurs.players.every(p => p.name && p.clubId), 'Payload de sauvegarde des joueurs complet');
+T.normalisePlayersData({ players: payloadJoueurs.players, clubs: payloadJoueurs.clubs });
+assert(T.playersData.players.length === 4 && T.playersData.players.every(p => p.id && p.name && p.clubId), 'Liste des joueurs rechargeable apres sauvegarde');
 
 // Actus de ligue
 const actusL1 = T.buildActuItems('l1');

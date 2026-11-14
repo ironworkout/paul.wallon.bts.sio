@@ -816,6 +816,7 @@
         }
 
         .palmares-content .palmares-table {
+            min-width: 720px;
             background-color: rgba(10, 20, 40, 0.4);
             border: 1px solid var(--palmares-border);
             border-radius: 10px;
@@ -836,19 +837,38 @@
         .palmares-content .palmares-table td {
             border-color: var(--palmares-border);
             color: var(--palmares-text-light);
-            padding: 15px 10px;
+            padding: 12px 10px;
             vertical-align: middle;
         }
 
         .palmares-content .palmares-table .team-info {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-color-light);
             font-family: 'Oswald', sans-serif;
         }
 
         .palmares-content .palmares-table .team-info img {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
+        }
+
+        .palmares-total {
+            margin-left: auto;
+            flex: none;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 193, 7, 0.24);
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--accent-gold);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .palmares-total.is-zero {
+            display: none;
         }
 
         .palmares-content .palmares-table .team-info .logo-wrap {
@@ -1081,12 +1101,48 @@
         }
 
         .palmares-table .trophy-cell {
+            display: table-cell;
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .trophy-cell__label {
+            display: none;
+        }
+
+        .trophy-cell__body {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 10px;
-            flex-wrap: wrap;
+        }
+
+        .trophy-cell__value {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trophy-cell__value .trophee {
+            --t: 1.75em;
+        }
+
+        .trophy-cell__count {
+            min-width: 1ch;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+        }
+
+        .trophy-cell__value.is-zero .trophee {
+            opacity: 0.28;
+            filter: none;
+        }
+
+        .trophy-cell__value.is-zero .trophy-cell__count {
+            color: rgba(255, 255, 255, 0.32);
         }
 
         .palmares-table .trophy-icon {
@@ -1121,22 +1177,24 @@
         }
 
         .palmares-table .action-cell {
-            text-align: center;
-            padding-left: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
             vertical-align: middle;
         }
 
         .palmares-table .action-cell button {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            width: 32px;
-            height: 32px;
-            line-height: 30px;
+            width: 30px;
+            height: 30px;
+            line-height: 28px;
             text-align: center;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1em;
-            margin: 2px 4px;
+            font-size: 0.9em;
+            margin: 0;
             color: var(--palmares-text-light);
             transition: all 0.2s ease;
             opacity: 0.8;
@@ -1166,6 +1224,161 @@
         .palmares-table .action-cell button.add-trophy:hover {
             background-color: rgba(165, 214, 167, 0.3);
             color: var(--neon-green);
+        }
+
+        /* Palmarès : cartes de club sur tablette (le tableau reste sur desktop) */
+        @media (max-width: 1024px) {
+            .palmares-content .section {
+                padding: 22px 20px;
+            }
+
+            .palmares-content .section-content.table-container {
+                overflow: visible;
+            }
+
+            .palmares-content .palmares-table {
+                display: block;
+                min-width: 0;
+                margin-top: 16px;
+                overflow: visible;
+                background: transparent;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .palmares-content .palmares-table thead {
+                display: none;
+            }
+
+            .palmares-content .palmares-table tbody {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 14px;
+            }
+
+            .palmares-content .palmares-table tr {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding: 14px;
+                border: 1px solid var(--palmares-border);
+                border-radius: 14px;
+                background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.18));
+                box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+            }
+
+            .palmares-content .palmares-table tbody tr:hover {
+                background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.16));
+            }
+
+            .palmares-content .palmares-table td {
+                display: block;
+                padding: 0;
+                border: 0;
+                white-space: normal;
+            }
+
+            .palmares-content .palmares-table td.team-info {
+                grid-column: 1 / -1;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 0 0 10px;
+                border-bottom: 1px solid var(--palmares-border);
+                font-size: 1.05rem;
+            }
+
+            .palmares-content .palmares-table .team-info .logo-wrap {
+                margin-right: 0;
+                flex: none;
+            }
+
+            .palmares-content .palmares-table .team-info img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .palmares-content .palmares-table .team-info > span:first-of-type {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .palmares-total {
+                margin-left: auto;
+                font-size: 0.68rem;
+                padding: 3px 7px;
+            }
+
+            .palmares-content .palmares-table .trophy-cell {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                padding: 9px 10px;
+                border: 1px solid rgba(255, 255, 255, 0.09);
+                border-radius: 10px;
+                background: rgba(0, 0, 0, 0.22);
+                text-align: left;
+            }
+
+            .trophy-cell__label {
+                display: block;
+                color: var(--accent-gold);
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.68rem;
+                font-weight: 600;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                opacity: 0.9;
+            }
+
+            .trophy-cell__body {
+                justify-content: space-between;
+                gap: 6px;
+            }
+
+            .trophy-cell__value .trophee {
+                --t: 1.45em;
+            }
+
+            .trophy-cell__count {
+                font-size: 1rem;
+            }
+
+            .palmares-content .palmares-table .action-cell button {
+                width: 28px;
+                height: 28px;
+                line-height: 26px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .palmares-content .section {
+                padding: 18px 14px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .palmares-content .palmares-table tr {
+                grid-template-columns: 1fr;
+            }
+
+            .palmares-content .palmares-table .trophy-cell {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .trophy-cell__label {
+                flex: 0 0 74px;
+            }
+
+            .trophy-cell__body {
+                flex: 1;
+            }
         }
 
         .action-buttons {
@@ -3461,6 +3674,28 @@
             transform: translateY(-1px);
         }
 
+        .joueurs-action--save {
+            background: rgba(141, 243, 199, 0.14);
+            border-color: rgba(141, 243, 199, 0.4);
+        }
+
+        .joueurs-action--save:hover {
+            background: rgba(141, 243, 199, 0.24);
+        }
+
+        .joueurs-save-status {
+            flex-basis: 100%;
+            min-height: 1.1em;
+            margin: 0;
+            color: rgba(232, 240, 255, 0.6);
+            font-size: 0.72rem;
+            line-height: 1.35;
+            text-align: right;
+        }
+
+        .joueurs-save-status.is-ok { color: #8df3c7; }
+        .joueurs-save-status.is-error { color: #ffb4b4; }
+
         .joueurs-filters {
             display: flex;
             flex-wrap: wrap;
@@ -4385,6 +4620,10 @@
             .joueurs-actions .joueurs-action {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .joueurs-save-status {
+                text-align: center;
             }
 
             .joueurs-filters {
@@ -5948,6 +6187,8 @@
                 </div>
                 <div class="joueurs-actions">
                     <button class="btn joueurs-action" id="joueurs-add-btn" type="button"><i class="fas fa-plus"></i> Ajouter un joueur</button>
+                    <button class="btn joueurs-action joueurs-action--save" id="joueurs-save-btn" type="button"><i class="fas fa-cloud-upload-alt"></i> Sauvegarder les joueurs</button>
+                    <p class="joueurs-save-status" id="joueurs-save-status" role="status" aria-live="polite"></p>
                 </div>
             </section>
 
@@ -6977,6 +7218,10 @@
                 const playersContent = await readFileContent(playersData.fileId);
                 if (playersContent) {
                     try { normalisePlayersData(JSON.parse(playersContent)); } catch (e) { normalisePlayersData({}); }
+                    const loadedPlayers = playersData.players.filter(player => player.active !== false).length;
+                    setPlayersSaveStatus(loadedPlayers
+                        ? `${loadedPlayers} joueur${loadedPlayers > 1 ? 's' : ''} chargé${loadedPlayers > 1 ? 's' : ''} depuis Drive.`
+                        : 'Aucun joueur enregistré sur Drive pour le moment.', 'ok');
                 }
             }
 
@@ -10215,6 +10460,14 @@
         function populatePalmaresTable() {
             const tableBody = document.getElementById('palmares-table-body');
             if (!tableBody) return;
+            const trophyColumns = [
+                { key: 'Ligue 1' },
+                { key: 'Ligue 2' },
+                { key: 'CDF' },
+                { key: 'LDC' }
+            ];
+            const escapeText = value => String(value == null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             tableBody.innerHTML = '';
             // Union des clubs actuels (ligues + base) ET de tous les clubs présents dans le palmarès
             // (y compris ceux d'anciennes saisons qui ne font plus partie des ligues actuelles)
@@ -10229,47 +10482,36 @@
                 const teamGlobalPalmares = palmaresData[displayName] || palmaresData[teamName] || { "Ligue 1": 0, "Ligue 2": 0, "LDC": 0, "CDF": 0 };
                 const row = document.createElement('tr');
 
-                let l1TrophiesHTML = Array(teamGlobalPalmares["Ligue 1"] || 0).fill('<svg class=\"trophee trophee--l1\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#trophee-l1\"/></svg>').join('');
-                let l2TrophiesHTML = Array(teamGlobalPalmares["Ligue 2"] || 0).fill('<svg class=\"trophee trophee--l2\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#trophee-l2\"/></svg>').join('');
-                let ldcTrophiesHTML = Array(teamGlobalPalmares["LDC"] || 0).fill('<svg class="trophee trophee--ldc" aria-hidden="true" focusable="false"><use href="#trophee-ldc"/></svg>').join('');
-                let cdfTrophiesHTML = Array(teamGlobalPalmares["CDF"] || 0).fill('<svg class="trophee trophee--cdf" aria-hidden="true" focusable="false"><use href="#trophee-cdf"/></svg>').join('');
+                const safeJsName = displayName.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const totalTitles = trophyColumns.reduce((sum, column) => sum + (Number(teamGlobalPalmares[column.key]) || 0), 0);
+                const trophyCells = trophyColumns.map(column => {
+                    const count = Number(teamGlobalPalmares[column.key]) || 0;
+                    return `
+                    <td class="trophy-cell" data-label="${column.key}">
+                        <span class="trophy-cell__label">${column.key}</span>
+                        <div class="trophy-cell__body">
+                            <span class="trophy-cell__value${count > 0 ? '' : ' is-zero'}">
+                                ${CLASSEMENT_TROPHY_ICONS[column.key]}
+                                <b class="trophy-cell__count">${count}</b>
+                            </span>
+                            <span class="action-cell">
+                                <button class="add-trophy" type="button" title="Ajouter un titre ${column.key}" aria-label="Ajouter un titre ${column.key} à ${escapeText(displayName)}" onclick="modifyPalmares('${safeJsName}', '${column.key}', true)"><i class="fas fa-plus" aria-hidden="true"></i></button>
+                                <button class="remove-trophy" type="button" title="Retirer un titre ${column.key}" aria-label="Retirer un titre ${column.key} à ${escapeText(displayName)}" onclick="modifyPalmares('${safeJsName}', '${column.key}', false)"><i class="fas fa-minus" aria-hidden="true"></i></button>
+                            </span>
+                        </div>
+                    </td>`;
+                }).join('');
 
                 row.innerHTML = `
                     <td class="team-info text-left">
                         <div class="logo-wrap">
-                            <img src="${getClubLogo(displayName)}" alt="${displayName}" class="team-logo">
-                            <button class="delete-club-palmares" title="Supprimer ${displayName} du palmarès" onclick="deletePalmaresClub('${displayName}')"><i class="fas fa-trash-alt"></i></button>
+                            <img src="${getClubLogo(displayName)}" alt="${escapeText(displayName)}" class="team-logo">
+                            <button class="delete-club-palmares" type="button" title="Supprimer ${escapeText(displayName)} du palmarès" aria-label="Supprimer ${escapeText(displayName)} du palmarès" onclick="deletePalmaresClub('${safeJsName}')"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
                         </div>
-                        <span>${displayName}</span>
+                        <span>${escapeText(displayName)}</span>
+                        <span class="palmares-total${totalTitles > 0 ? '' : ' is-zero'}">${totalTitles} titre${totalTitles > 1 ? 's' : ''}</span>
                     </td>
-                    <td class="trophy-cell">
-                        ${l1TrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 1', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 1', false)"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
-                    <td class="trophy-cell">
-                        ${l2TrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 2', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'Ligue 2', false)"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
-                    <td class="trophy-cell">
-                        ${cdfTrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'CDF', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'CDF', false)"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
-                    <td class="trophy-cell">
-                        ${ldcTrophiesHTML || '-'}
-                        <div class="action-cell">
-                            <button class="add-trophy" onclick="modifyPalmares('${displayName}', 'LDC', true)"><i class="fas fa-plus"></i></button>
-                            <button class="remove-trophy" onclick="modifyPalmares('${displayName}', 'LDC', false)"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </td>
+                    ${trophyCells}
                 `;
                 tableBody.appendChild(row);
             });
@@ -11589,7 +11831,7 @@
             playerModalId = null;
         }
 
-        function savePlayerFromModal() {
+        async function savePlayerFromModal() {
             const nameInput = document.getElementById('player-form-name');
             const numberInput = document.getElementById('player-form-number');
             const positionInput = document.getElementById('player-form-position');
@@ -11632,11 +11874,11 @@
             closePlayerModal();
             playerStatsCache = { key: '', stats: null };
             renderPlayersTab();
-            savePlayersToDrive();
-            showMessage('Joueur enregistré.', 2200);
+            const saved = await savePlayersToDrive();
+            showMessage(saved ? 'Joueur enregistré et sauvegardé sur Drive.' : 'Joueur enregistré. Connecte-toi à Google Drive pour le conserver.', saved ? 2400 : 4200, !saved);
         }
 
-        function archivePlayerFromModal() {
+        async function archivePlayerFromModal() {
             if (!playerModalId) return;
             const player = findPlayerById(playerModalId);
             if (!player) return;
@@ -11644,8 +11886,8 @@
             archivePlayerRecord(player.id);
             closePlayerModal();
             renderPlayersTab();
-            savePlayersToDrive();
-            showMessage(`${player.name} archivé.`, 2500);
+            const saved = await savePlayersToDrive();
+            showMessage(saved ? `${player.name} archivé et sauvegardé.` : `${player.name} archivé. Connecte-toi à Google Drive pour conserver ce changement.`, saved ? 2500 : 4200, !saved);
         }
 
         function openScorersModal(matchKey) {
@@ -11733,13 +11975,45 @@
             showMessage('Buteurs enregistrés.', 2200);
         }
 
-        async function savePlayersToDrive() {
-            if (!googleAccessToken) return;
-            if (!playersData.fileId) {
-                playersData.fileId = await findOrCreateFile(playersData.filename, JSON.stringify({ players: [], clubs: {} }));
+        function playersSavePayload() {
+            return {
+                players: playersData.players.map(player => ({ ...player })),
+                clubs: JSON.parse(JSON.stringify(playersData.clubs || {}))
+            };
+        }
+
+        function setPlayersSaveStatus(text, state) {
+            const element = document.getElementById('joueurs-save-status');
+            if (!element || !element.classList) return;
+            element.textContent = text || '';
+            element.classList.remove('is-ok', 'is-error');
+            if (state === 'ok') element.classList.add('is-ok');
+            else if (state === 'error') element.classList.add('is-error');
+        }
+
+        async function savePlayersToDrive(options = {}) {
+            const silent = !!(options && options.silent);
+            if (!googleAccessToken) {
+                if (!silent) setPlayersSaveStatus('Connexion Google Drive requise pour sauvegarder.', 'error');
+                return false;
             }
-            if (playersData.fileId) {
-                await updateFileContent(playersData.fileId, { players: playersData.players, clubs: playersData.clubs });
+            if (!silent) setPlayersSaveStatus('Sauvegarde en cours…', '');
+            try {
+                if (!playersData.fileId) {
+                    playersData.fileId = await findOrCreateFile(playersData.filename, JSON.stringify({ players: [], clubs: {} }));
+                }
+                if (!playersData.fileId) throw new Error('Fichier joueurs introuvable');
+                const saved = await updateFileContent(playersData.fileId, playersSavePayload());
+                if (!saved) throw new Error('Écriture Drive refusée');
+                if (!silent) {
+                    const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                    setPlayersSaveStatus(`Liste des joueurs sauvegardée à ${time}.`, 'ok');
+                }
+                return true;
+            } catch (error) {
+                driveLog('Sauvegarde des joueurs impossible', error);
+                if (!silent) setPlayersSaveStatus('Sauvegarde impossible. Vérifie la connexion Drive.', 'error');
+                return false;
             }
         }
 
@@ -11822,6 +12096,13 @@
             });
             const addBtn = document.getElementById('joueurs-add-btn');
             if (addBtn) addBtn.addEventListener('click', () => openPlayerModal(null, 'new'));
+            const savePlayersBtn = document.getElementById('joueurs-save-btn');
+            if (savePlayersBtn) savePlayersBtn.addEventListener('click', async () => {
+                savePlayersBtn.disabled = true;
+                const saved = await savePlayersToDrive();
+                savePlayersBtn.disabled = false;
+                if (saved) showMessage('Liste des joueurs sauvegardée sur Google Drive.', 2600);
+            });
             const playerModal = document.getElementById('player-modal');
             if (playerModal) {
                 playerModal.addEventListener('click', event => { if (event.target === playerModal) closePlayerModal(); });

@@ -114,7 +114,7 @@ Les clubs sont définis dans plusieurs endroits (données initiales, base clubs,
 ### 16. Tests automatisés plus complets
 Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement. Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
 - **Effort** : faible · **Impact** : ⭐⭐⭐⭐
-- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **147 assertions**
+- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **149 assertions**
   (et non 26) et couvre la CDF, la LDC (tirage, BYE, vainqueurs, trophée), le Classement, le tri,
   les swap, le catalogue de logos et l'univers des saisons passées. Restent à couvrir : création,
   bascule, suppression et migration d'une saison.

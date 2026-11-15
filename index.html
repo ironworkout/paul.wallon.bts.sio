@@ -608,6 +608,66 @@
             white-space: normal;
         }
 
+        .standings-table .rank-cell {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .rank-delta {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 0.7rem;
+            line-height: 1;
+            vertical-align: 0.08em;
+        }
+
+        .rank-delta.is-up { color: #1f9d55; }
+        .rank-delta.is-down { color: #d64545; }
+
+        .standings-table .form-cell {
+            min-width: 142px;
+            white-space: nowrap;
+        }
+
+        .form-guide {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .form-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 0.66rem;
+            font-weight: 800;
+            line-height: 1;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+        }
+
+        .form-pill--v { background: #1f9d55; }
+        .form-pill--n { background: #c58b13; }
+        .form-pill--d { background: #d64545; }
+
+        .form-streak {
+            margin-left: 4px;
+            font-size: 0.66rem;
+            font-weight: 800;
+            color: var(--text-color-dark);
+            opacity: 0.72;
+        }
+
+        .form-empty {
+            color: var(--text-color-dark);
+            opacity: 0.4;
+        }
+
         .team-info.text-left {
             text-align: left !important;
         }
@@ -1503,6 +1563,754 @@
 
         .cloture-saison-btn:hover:not(:disabled) {
             background-color: #7e22ce;
+        }
+
+        /* Tirs au but */
+        .penalty-modal {
+            max-width: 700px;
+        }
+
+        .penalty-board {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #101c3a, #192b50);
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .penalty-team {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .penalty-team--right { justify-content: flex-end; text-align: right; }
+
+        .penalty-team img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 50%;
+            padding: 3px;
+            flex: 0 0 38px;
+        }
+
+        .penalty-team span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        .penalty-board__score {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .penalty-board__round {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .penalty-stage {
+            padding: 16px;
+            border-radius: 12px;
+            background: radial-gradient(90% 120% at 50% 0%, #1e3b27, #0e1f16 72%);
+            color: #fff;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .penalty-stage__goal {
+            width: min(280px, 80%);
+            height: 86px;
+            margin: 0 auto 12px;
+            border: 5px solid #fff;
+            border-bottom: 0;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            background: repeating-linear-gradient(90deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 20px), repeating-linear-gradient(0deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 20px);
+            box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .penalty-stage__keeper {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            font-size: 2.3rem;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .penalty-stage__keeper.is-left { transform: translateX(-120%); }
+        .penalty-stage__keeper.is-right { transform: translateX(20%); }
+
+        .penalty-stage__message {
+            font-size: 1rem;
+            font-weight: 700;
+            min-height: 1.35em;
+        }
+
+        .penalty-stage__detail {
+            margin-top: 3px;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .penalty-history {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .penalty-history__line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .penalty-history__name {
+            width: 90px;
+            flex: 0 0 90px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .penalty-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .penalty-dot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: rgba(108, 117, 125, 0.18);
+            color: #6c757d;
+        }
+
+        .penalty-dot.is-goal { background: #1f9d55; color: #fff; }
+        .penalty-dot.is-miss { background: #d64545; color: #fff; }
+
+        .penalty-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: #f7f8fa;
+        }
+
+        .penalty-controls label {
+            display: grid;
+            gap: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #6c757d;
+        }
+
+        .penalty-controls select {
+            min-width: 180px;
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            font: inherit;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--text-color-dark);
+        }
+
+        .penalty-directions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-left: auto;
+        }
+
+        .penalty-directions .btn {
+            padding: 8px 12px;
+        }
+
+        .penalty-finished {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        .penalty-finished strong { font-size: 1rem; }
+
+        .bracket-penalty-btn {
+            margin-right: 6px;
+            padding: 3px 8px;
+            border: 1px solid currentColor;
+            border-radius: 999px;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .bracket-penalty-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+        @media (max-width: 620px) {
+            .penalty-board { padding: 12px; gap: 8px; }
+            .penalty-team img { width: 30px; height: 30px; flex-basis: 30px; }
+            .penalty-team span { font-size: 0.8rem; }
+            .penalty-board__score { font-size: 1.55rem; }
+            .penalty-controls { align-items: stretch; }
+            .penalty-controls select { min-width: 0; width: 100%; }
+            .penalty-directions { margin-left: 0; width: 100%; }
+            .penalty-directions .btn { flex: 1 1 30%; }
+            .penalty-history__name { width: 70px; flex-basis: 70px; }
+        }
+
+        /* Assistant de fin de saison */
+        .season-assistant {
+            max-width: 780px;
+            width: min(780px, calc(100vw - 32px));
+        }
+
+        .assistant-audit {
+            display: grid;
+            gap: 14px;
+        }
+
+        .assistant-block {
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .assistant-block h3 {
+            margin: 0 0 8px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+        }
+
+        .assistant-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .assistant-status--ok { background: rgba(46, 204, 113, 0.16); color: #8ff0b5; }
+        .assistant-status--warn { background: rgba(241, 196, 15, 0.16); color: #ffe08a; }
+        .assistant-status--bad { background: rgba(231, 76, 60, 0.16); color: #ff9f97; }
+
+        .assistant-list {
+            margin: 8px 0 0;
+            padding-left: 18px;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .assistant-moves {
+            display: grid;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .assistant-move {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+        }
+
+        .assistant-move__arrow { width: 20px; text-align: center; }
+        .assistant-move__arrow.up { color: #8ff0b5; }
+        .assistant-move__arrow.down { color: #ff9f97; }
+        .assistant-move__league { opacity: 0.7; font-size: 0.75rem; }
+
+        .assistant-trophy {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .assistant-cups {
+            display: grid;
+            gap: 6px;
+        }
+
+        .assistant-cup {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 0.86rem;
+        }
+
+        .assistant-cup strong { min-width: 140px; }
+
+        .assistant-options {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .assistant-options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.86rem;
+            line-height: 1.4;
+        }
+
+        .assistant-options input { margin-top: 3px; }
+
+        .assistant-hint {
+            margin: 8px 0 0;
+            font-size: 0.78rem;
+            opacity: 0.7;
+        }
+
+        .assistant-empty { margin: 4px 0; opacity: 0.7; font-size: 0.86rem; }
+
+        /* Récits des saisons */
+        .hall-of-fame__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .hall-of-fame__controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hall-of-fame__controls select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--palmares-text-light);
+            font: inherit;
+        }
+
+        .hall-of-fame__controls .btn {
+            padding: 8px 12px;
+        }
+
+        .season-stories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .season-story {
+            position: relative;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            color: var(--palmares-text-light);
+            overflow: hidden;
+        }
+
+        .season-story::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-gold), transparent);
+        }
+
+        .season-story__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .season-story__name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--accent-gold);
+        }
+
+        .season-story__comp {
+            padding: 2px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        .season-story__champion {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .season-story__champion img {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            padding: 3px;
+            border-radius: 50%;
+            background: #fff;
+            flex: 0 0 46px;
+        }
+
+        .season-story__champion small,
+        .season-story__fact small {
+            display: block;
+            font-size: 0.64rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.62;
+        }
+
+        .season-story__champion strong {
+            display: block;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .season-story__facts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .season-story__fact {
+            padding: 7px 8px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.16);
+            min-width: 0;
+        }
+
+        .season-story__fact strong {
+            display: block;
+            font-size: 0.82rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .season-story__moves {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.74rem;
+            line-height: 1.4;
+        }
+
+        .season-story__moves b {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .hall-of-fame__empty {
+            padding: 24px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 520px) {
+            .season-story__facts { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #hall-of-fame-section, #hall-of-fame-section * { visibility: visible; }
+            #hall-of-fame-section {
+                position: absolute;
+                inset: 0 auto auto 0;
+                width: 100%;
+                background: #fff;
+                color: #111;
+                padding: 0;
+            }
+            #hall-of-fame-section .section-title { color: #8a6d1d !important; text-shadow: none !important; }
+            #hall-of-fame-section .hall-of-fame__controls { display: none; }
+            .season-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+            .season-story { break-inside: avoid; background: #faf8f2; border-color: #d8c58a; color: #222; }
+            .season-story__champion strong { color: #111; }
+            .season-story__fact { background: #f1ece0; }
+            .season-story__moves { border-top-color: #ded4b8; }
+        }
+
+        /* Fiche club */
+        .club-profile {
+            max-width: 820px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .club-profile__header {
+            padding: 20px 24px 14px;
+            margin-bottom: 0;
+        }
+
+        .club-profile__body {
+            padding: 0;
+        }
+
+        .club-profile__hero {
+            position: relative;
+            min-height: 220px;
+            display: flex;
+            align-items: flex-end;
+            padding: 22px 24px;
+            background:
+                radial-gradient(90% 120% at 20% 0%, rgba(212, 175, 55, 0.2), transparent 60%),
+                radial-gradient(120% 120% at 80% 100%, #1b2a4a, #0a1020 70%);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .club-profile__hero.has-photo {
+            background-image: linear-gradient(180deg, rgba(5, 9, 18, 0.08) 20%, rgba(5, 9, 18, 0.82) 100%), var(--club-profile-shot);
+            background-size: cover, cover;
+            background-position: center, center;
+        }
+
+        .club-profile__identity {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+        }
+
+        .club-profile__crest {
+            width: 86px;
+            height: 86px;
+            flex: 0 0 86px;
+            object-fit: contain;
+            padding: 8px;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .club-profile__name {
+            margin: 0 0 4px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.7rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .club-profile__sub {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.86;
+        }
+
+        .club-profile__content {
+            padding: 20px 24px 24px;
+        }
+
+        .club-profile__stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .club-profile__stat {
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #f7f8fa;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .club-profile__stat b {
+            display: block;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .club-profile__stat small {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.68rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .club-profile__grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 22px;
+        }
+
+        .club-profile__block {
+            min-width: 0;
+        }
+
+        .club-profile__block h4 {
+            margin: 0 0 9px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-color);
+        }
+
+        .club-profile__trophies {
+            justify-content: flex-start;
+            margin-top: 2px;
+        }
+
+        .club-profile__matches {
+            display: grid;
+            gap: 6px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .club-profile__match {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 9px;
+            border-radius: 8px;
+            background: #f7f8fa;
+            border: 1px solid var(--border-color);
+            font-size: 0.82rem;
+        }
+
+        .club-profile__match-score {
+            margin-left: auto;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .club-profile__match-opponent {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .club-profile__scorer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(212, 175, 55, 0.04));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .club-profile__scorer img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .club-profile__scorer b {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .club-profile__scorer small {
+            color: #6c757d;
+        }
+
+        .club-profile__next {
+            margin: 0;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #f7f8fa;
+            border: 1px solid var(--border-color);
+            font-size: 0.84rem;
+        }
+
+        .club-profile__empty {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.84rem;
+        }
+
+        .club-profile__footer {
+            padding: 14px 24px 18px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .club-profile__grid { grid-template-columns: 1fr; }
+            .club-profile__hero { min-height: 180px; padding: 18px; }
+            .club-profile__crest { width: 68px; height: 68px; flex-basis: 68px; }
+            .club-profile__name { font-size: 1.35rem; }
+            .club-profile__content { padding: 18px; }
+            .club-profile__footer { padding: 12px 18px 16px; }
         }
 
         /* Modal Styles */
@@ -5731,6 +6539,7 @@
                                 <th>BP</th>
                                 <th>BC</th>
                                 <th>Diff</th>
+                                <th>Forme</th>
                             </tr>
                         </thead>
                         <tbody id="l1-standings-body"></tbody>
@@ -5852,6 +6661,7 @@
                                 <th>BP</th>
                                 <th>BC</th>
                                 <th>Diff</th>
+                                <th>Forme</th>
                             </tr>
                         </thead>
                         <tbody id="l2-standings-body"></tbody>
@@ -6144,6 +6954,23 @@
                     </table>
                 </div>
             </div>
+            <div class="section hall-of-fame-section" id="hall-of-fame-section">
+                <div class="section-header hall-of-fame__header">
+                    <h2 class="section-title" style="color: var(--accent-gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+                        <i class="fas fa-book-open"></i> Récits des saisons
+                    </h2>
+                    <div class="hall-of-fame__controls">
+                        <select id="hall-of-fame-comp" aria-label="Compétition des récits">
+                            <option value="l1">Ligue 1</option>
+                            <option value="l2">Ligue 2</option>
+                            <option value="cdf">Coupe de France</option>
+                            <option value="ldc">Ligue des Champions</option>
+                        </select>
+                        <button class="btn" type="button" id="hall-of-fame-print"><i class="fas fa-print"></i> Imprimer</button>
+                    </div>
+                </div>
+                <div class="section-content" id="hall-of-fame-content"></div>
+            </div>
         </div>
     </div>
 
@@ -6279,6 +7106,33 @@
         </div>
     </div>
 
+    <!-- MODAL FICHE CLUB -->
+    <div class="modal-overlay" id="club-profile-modal">
+        <div class="modal-content club-profile">
+            <div class="modal-header club-profile__header">
+                <h3 class="modal-title" id="club-profile-title">Fiche club</h3>
+                <button class="modal-close" type="button" data-close-club-profile aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body club-profile__body" id="club-profile-body"></div>
+            <div class="modal-footer club-profile__footer">
+                <button class="btn" type="button" id="club-profile-logo-btn"><i class="fas fa-image"></i> Changer le logo</button>
+                <button class="btn" type="button" id="club-profile-fixtures-btn"><i class="fas fa-calendar-alt"></i> Voir le calendrier</button>
+                <button class="btn" type="button" data-close-club-profile style="background:#5b6478;color:#fff;">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TIRS AU BUT -->
+    <div class="modal-overlay" id="penalty-modal">
+        <div class="modal-content penalty-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="penalty-title"><i class="fas fa-futbol"></i> Tirs au but</h3>
+                <button class="modal-close" type="button" data-close-penalty aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body" id="penalty-body"></div>
+        </div>
+    </div>
+
 
     <footer>
         <div class="container footer-container">
@@ -6336,6 +7190,21 @@
                 <button class="btn" id="cancel-promotion-btn" style="background-color: #6c757d;">Annuler</button>
                 <button class="btn btn-success" id="confirm-promotion-btn"><i class="fas fa-check"></i> Confirmer les
                     Changements</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSISTANT DE FIN DE SAISON -->
+    <div class="modal-overlay" id="season-assistant-modal">
+        <div class="modal-content season-assistant">
+            <div class="modal-header">
+                <h2><i class="fas fa-clipboard-check"></i> Assistant de fin de saison</h2>
+                <button class="modal-close" id="close-season-assistant-modal" aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body" id="season-assistant-body"></div>
+            <div class="modal-footer">
+                <button class="btn" id="cancel-season-assistant" style="background-color:#6c757d;">Annuler</button>
+                <button class="btn btn-success" id="confirm-season-assistant"><i class="fas fa-flag-checkered"></i> Archiver et créer la saison suivante</button>
             </div>
         </div>
     </div>
@@ -7436,6 +8305,107 @@
             return teamsInfo;
         }
 
+        // Tri commun des classements (points, différence, buts pour, puis nom).
+        function sortStandingsEntries(standings) {
+            return Object.entries(standings || {})
+                .filter(([name, data]) => name !== 'BYE' && data)
+                .sort(([nameA, a], [nameB, b]) => {
+                    if (b.points !== a.points) return b.points - a.points;
+                    if (b.diff !== a.diff) return b.diff - a.diff;
+                    if (b.bp !== a.bp) return b.bp - a.bp;
+                    return String(nameA).localeCompare(String(nameB), 'fr');
+                });
+        }
+
+        // Forme d'un club : matchs terminés dans l'ordre chronologique, 5 derniers conservés.
+        // Le résultat est V (victoire), N (nul) ou D (défaite) du point de vue du club.
+        function getTeamForm(season, teamName, limit = 5) {
+            const isScore = value => typeof value === 'number' && Number.isFinite(value);
+            const games = [];
+            (season?.fixtures || []).forEach((round, roundIndex) => {
+                (round || []).forEach((match, matchIndex) => {
+                    if (!match || !isScore(match.scoreHome) || !isScore(match.scoreAway)) return;
+                    if (match.home !== teamName && match.away !== teamName) return;
+                    const isHome = match.home === teamName;
+                    const goalsFor = isHome ? match.scoreHome : match.scoreAway;
+                    const goalsAgainst = isHome ? match.scoreAway : match.scoreHome;
+                    games.push({
+                        roundIndex, matchIndex, isHome,
+                        opponent: isHome ? match.away : match.home,
+                        goalsFor, goalsAgainst,
+                        result: goalsFor > goalsAgainst ? 'V' : (goalsFor < goalsAgainst ? 'D' : 'N')
+                    });
+                });
+            });
+            games.sort((a, b) => a.roundIndex - b.roundIndex || a.matchIndex - b.matchIndex);
+            let streak = 0;
+            let streakResult = null;
+            for (let i = games.length - 1; i >= 0; i--) {
+                if (streakResult === null) { streakResult = games[i].result; streak = 1; }
+                else if (games[i].result === streakResult) streak++;
+                else break;
+            }
+            return { games: games.slice(-Math.max(1, limit)), streak, streakResult };
+        }
+
+        // Classement courant + variation par rapport au début de la dernière journée jouée.
+        // Permet d'afficher les flèches même quand la journée en cours n'est pas terminée.
+        function getStandingsInsights(leagueId, seasonId) {
+            const league = leagueDataStore[leagueId];
+            const season = (league?.seasons || []).find(s => Number(s.season_id) === Number(seasonId));
+            if (!season) return null;
+            const fixtures = season.fixtures || [];
+            const universe = getSeasonTeamUniverse(season);
+            const current = sortStandingsEntries(calculateStandings(universe, fixtures));
+            const currentRanks = new Map(current.map(([name], index) => [name, index + 1]));
+
+            let lastRoundWithResult = -1;
+            for (let i = fixtures.length - 1; i >= 0; i--) {
+                const hasResult = (fixtures[i] || []).some(match => match &&
+                    typeof match.scoreHome === 'number' && typeof match.scoreAway === 'number');
+                if (hasResult) { lastRoundWithResult = i; break; }
+            }
+
+            const previousRanks = new Map();
+            if (lastRoundWithResult >= 0) {
+                const previousFixtures = fixtures.map((round, index) => index === lastRoundWithResult
+                    ? (round || []).map(match => match ? Object.assign({}, match, { scoreHome: null, scoreAway: null }) : match)
+                    : round);
+                sortStandingsEntries(calculateStandings(universe, previousFixtures))
+                    .forEach(([name], index) => previousRanks.set(name, index + 1));
+            }
+
+            const movement = {};
+            const form = {};
+            current.forEach(([name]) => {
+                const previous = previousRanks.get(name);
+                movement[name] = previous ? previous - currentRanks.get(name) : 0;
+                form[name] = getTeamForm(season, name, 5);
+            });
+            return { season, current, movement, form, lastRoundWithResult };
+        }
+
+        function escapeStandingsHTML(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function buildFormGuideHTML(formInfo) {
+            if (!formInfo || !Array.isArray(formInfo.games) || formInfo.games.length === 0) {
+                return '<span class="form-empty" aria-label="Aucun match joué">—</span>';
+            }
+            const labels = { V: 'Victoire', N: 'Nul', D: 'Défaite' };
+            const pills = formInfo.games.map(game => {
+                const title = `J${game.roundIndex + 1} · ${game.goalsFor}-${game.goalsAgainst} contre ${game.opponent}`;
+                return `<span class="form-pill form-pill--${game.result.toLowerCase()}" title="${escapeStandingsHTML(title)}" aria-label="${labels[game.result]} ${game.goalsFor}-${game.goalsAgainst} contre ${escapeStandingsHTML(game.opponent)}">${game.result}</span>`;
+            }).join('');
+            const streak = formInfo.streak >= 2
+                ? `<span class="form-streak" title="Série en cours">${formInfo.streak}${formInfo.streakResult}</span>`
+                : '';
+            return `<div class="form-guide">${pills}${streak}</div>`;
+        }
+
         // Logo d'un club dans le contexte d'une SAISON : priorité à l'override local de la saison
         // (season.logos, clé = nom stocké OU nom affiché), sinon logo global du club.
         function resolveSeasonLogo(seasonLogos, storedName, displayName) {
@@ -7498,14 +8468,19 @@
 
         function populateStandingsDOM(standingsBodyId, calculatedStandings, teamsForLogos, seasonLogos, leagueId, seasonId) {
             const standingsBody = document.getElementById(standingsBodyId); if (!standingsBody) return; standingsBody.innerHTML = '';
-            if (!calculatedStandings || Object.keys(calculatedStandings).length === 0) { standingsBody.innerHTML = '<tr><td colspan="7">Aucune donnée de classement.</td></tr>'; return; }
-            const sortedTeams = Object.entries(calculatedStandings).sort(([, a], [, b]) => { if (b.points !== a.points) return b.points - a.points; if (b.diff !== a.diff) return b.diff - a.diff; return b.bp - a.bp; });
+            if (!calculatedStandings || Object.keys(calculatedStandings).length === 0) { standingsBody.innerHTML = '<tr><td colspan="8">Aucune donnée de classement.</td></tr>'; return; }
+            const insights = leagueId && seasonId ? getStandingsInsights(leagueId, seasonId) : null;
+            const sortedTeams = sortStandingsEntries(calculatedStandings);
             sortedTeams.forEach(([teamName, teamData], index) => {
                 if (teamName === "BYE") return;
                 const displayName = resolveCurrentClubName(teamName);
                 const row = document.createElement('tr');
                 const logoSrc = resolveSeasonLogo(seasonLogos, teamName, displayName);
-                row.innerHTML = `<td>${index + 1}</td><td class="team-info"><img src="${logoSrc}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td>`;
+                const movement = insights?.movement?.[teamName] || 0;
+                const movementHTML = movement === 0 ? ''
+                    : `<span class="rank-delta ${movement > 0 ? 'is-up' : 'is-down'}" title="${movement > 0 ? '+' : ''}${movement} place${Math.abs(movement) > 1 ? 's' : ''} depuis la dernière journée" aria-label="${movement > 0 ? 'Gagne' : 'Perd'} ${Math.abs(movement)} place${Math.abs(movement) > 1 ? 's' : ''}">${movement > 0 ? '▲' : '▼'}</span>`;
+                const formHTML = buildFormGuideHTML(insights?.form?.[teamName]);
+                row.innerHTML = `<td class="rank-cell">${index + 1}${movementHTML}</td><td class="team-info"><img src="${logoSrc}" alt="${displayName}" class="team-logo"><span>${displayName}</span></td><td>${teamData.points}</td><td>${teamData.matchs}</td><td>${teamData.bp}</td><td>${teamData.bc}</td><td>${teamData.diff >= 0 ? '+' : ''}${teamData.diff}</td><td class="form-cell">${formHTML}</td>`;
                 // Clic droit sur un club du classement : changer son logo — si la saison affichée
                 // n'est pas la saison actuelle, la modification restera locale à CETTE saison.
                 if (leagueId) {
@@ -7647,14 +8622,24 @@
                     teamCard.appendChild(deleteBtn);
                 }
                 
+                const cardLeagueId = teamsGridId.includes('l2') ? 'l2' : (teamsGridId.includes('l3') ? 'l3' : 'l1');
                 teamCard.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
-                    let leagueId = 'l1';
-                    if (teamsGridId.includes('l2')) leagueId = 'l2';
-                    else if (teamsGridId.includes('l3')) leagueId = 'l3';
-                    openLogoModal(teamName, leagueId);
+                    openLogoModal(teamName, cardLeagueId);
                 });
-                
+                teamCard.addEventListener('click', (event) => {
+                    if (event.target.closest('.delete-club-btn')) return;
+                    openClubProfile(teamName, cardLeagueId);
+                });
+                teamCard.tabIndex = 0;
+                teamCard.setAttribute('role', 'button');
+                teamCard.setAttribute('aria-label', `Ouvrir la fiche de ${teamName}`);
+                teamCard.addEventListener('keydown', (event) => {
+                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                    event.preventDefault();
+                    openClubProfile(teamName, cardLeagueId);
+                });
+
                 teamsGrid.appendChild(teamCard);
             });
         }
@@ -7740,6 +8725,299 @@
         function populateAllLeaguesUI() {
             for (const leagueId in leagueDataStore) {
                 populateSingleLeagueUI(leagueId);
+            }
+        }
+
+        // ==================== ASSISTANT DE FIN DE SAISON ====================
+        let currentSeasonAssistantLeague = null;
+
+        function getActiveLeagueSeason(leagueId) {
+            const league = leagueDataStore[leagueId];
+            if (!league?.seasons?.length) return null;
+            return league.seasons.find(season => Number(season.season_id) === Number(league.active_season_id)) || null;
+        }
+
+        function getLeagueMissingScores(leagueId) {
+            const season = getActiveLeagueSeason(leagueId);
+            const missing = [];
+            (season?.fixtures || []).forEach((round, roundIndex) => {
+                (round || []).forEach((match, matchIndex) => {
+                    if (!match?.home || !match?.away) return;
+                    const hasHome = match.scoreHome !== null && match.scoreHome !== undefined && match.scoreHome !== '' && Number.isFinite(Number(match.scoreHome));
+                    const hasAway = match.scoreAway !== null && match.scoreAway !== undefined && match.scoreAway !== '' && Number.isFinite(Number(match.scoreAway));
+                    if (!hasHome || !hasAway) {
+                        missing.push({ round: roundIndex + 1, match: matchIndex + 1, home: match.home, away: match.away });
+                    }
+                });
+            });
+            return missing;
+        }
+
+        function getActiveLeagueStandings(leagueId) {
+            const season = getActiveLeagueSeason(leagueId);
+            if (!season) return [];
+            return sortStandingsEntries(calculateStandings(getSeasonTeamUniverse(season), season.fixtures))
+                .map(([name, stats]) => ({ name, ...stats }));
+        }
+
+        function getCupTrophyAudit(compId) {
+            const data = getCompData(compId);
+            if (!data) return { comp: compId, label: compId.toUpperCase(), champion: null, finalist: null, score: '', awarded: false, ready: false, missing: 0 };
+            const season = getActiveCompSeason(compId);
+            const source = season
+                ? { ...season, rounds: (data.rounds && Object.keys(data.rounds).length) ? data.rounds : season.rounds, champion: data.champion || season.champion }
+                : { rounds: data.rounds, champion: data.champion, _trophyAwarded: data._trophyAwarded };
+            const final = getCupFinalDetails(compId, source);
+            let missing = 0;
+            Object.values(source.rounds || {}).forEach(round => {
+                (round || []).forEach(match => {
+                    if (!match?.team1 || !match?.team2 || match.team3) return;
+                    const has1 = match.score1 !== null && match.score1 !== undefined && match.score1 !== '' && Number.isFinite(Number(match.score1));
+                    const has2 = match.score2 !== null && match.score2 !== undefined && match.score2 !== '' && Number.isFinite(Number(match.score2));
+                    if (!has1 || !has2) missing++;
+                });
+            });
+            return {
+                comp: compId,
+                label: compId === 'cdf' ? 'Coupe de France' : 'Ligue des Champions',
+                champion: final.champion || null,
+                finalist: final.finalist || null,
+                score: final.score || '',
+                penaltyNote: final.penaltyNote || '',
+                awarded: !!(data._trophyAwarded === true || season?._trophyAwarded === true),
+                ready: !!final.champion,
+                missing
+            };
+        }
+
+        function buildSeasonAssistantAudit(leagueId) {
+            const league = leagueDataStore[leagueId];
+            const season = getActiveLeagueSeason(leagueId);
+            if (!league || !season) return { leagueId, error: 'Aucune saison active à clôturer.' };
+            const standings = getActiveLeagueStandings(leagueId);
+            const missing = getLeagueMissingScores(leagueId);
+            const champion = standings[0]?.name || null;
+            const trophyAwarded = !!(season._trophyAwarded === true || (season.closed === true && season._trophyAwarded !== false));
+            const proposals = [];
+            let promotions = [];
+            let relegations = [];
+
+            if (leagueId === 'l1') {
+                const l2Top = getActiveLeagueStandings('l2').slice(0, 2);
+                const l1Bottom = standings.slice(-2);
+                promotions = l2Top.map(team => team.name);
+                relegations = l1Bottom.map(team => team.name);
+                l2Top.forEach(team => proposals.push({ club: team.name, from: 'l2', to: 'l1', direction: 'up' }));
+                l1Bottom.forEach(team => proposals.push({ club: team.name, from: 'l1', to: 'l2', direction: 'down' }));
+            } else if (leagueId === 'l2') {
+                const l2Top = standings.slice(0, 2);
+                const l2Bottom = standings.slice(-2);
+                const l1Bottom = getActiveLeagueStandings('l1').slice(-2);
+                promotions = l2Top.map(team => team.name);
+                relegations = l2Bottom.map(team => team.name);
+                l2Top.forEach(team => proposals.push({ club: team.name, from: 'l2', to: 'l1', direction: 'up' }));
+                l1Bottom.forEach(team => proposals.push({ club: team.name, from: 'l1', to: 'l2', direction: 'down' }));
+                l2Bottom.forEach(team => proposals.push({ club: team.name, from: 'l2', to: 'l3', direction: 'down' }));
+                if (rouletteWinner && leagueDataStore.l3?.clubs?.[rouletteWinner]) {
+                    proposals.push({ club: rouletteWinner, from: 'l3', to: 'l2', direction: 'up' });
+                }
+            }
+
+            const relatedMissing = leagueId === 'l1'
+                ? getLeagueMissingScores('l2')
+                : (leagueId === 'l2' ? getLeagueMissingScores('l1') : []);
+            return {
+                leagueId,
+                leagueLabel: leagueId === 'l1' ? 'Ligue 1' : 'Ligue 2',
+                season,
+                seasonName: season.nom_saison || `Saison ${season.season_id}`,
+                standings,
+                champion,
+                trophyAwarded,
+                missing,
+                relatedMissing,
+                canClose: missing.length === 0,
+                canApplyMoves: missing.length === 0 && relatedMissing.length === 0,
+                proposals,
+                promotions,
+                relegations,
+                cups: [getCupTrophyAudit('cdf'), getCupTrophyAudit('ldc')]
+            };
+        }
+
+        function renderSeasonAssistant(audit) {
+            const body = document.getElementById('season-assistant-body');
+            const confirmBtn = document.getElementById('confirm-season-assistant');
+            if (!body) return;
+            if (!audit || audit.error) {
+                body.innerHTML = `<p class="assistant-empty">${escapeStandingsHTML(audit?.error || 'Aucune saison active.')}</p>`;
+                if (confirmBtn) confirmBtn.disabled = true;
+                return;
+            }
+
+            const missingHTML = audit.missing.length
+                ? `<span class="assistant-status assistant-status--bad"><i class="fas fa-triangle-exclamation"></i> ${audit.missing.length} score${audit.missing.length > 1 ? 's' : ''} manquant${audit.missing.length > 1 ? 's' : ''}</span>
+                   <ul class="assistant-list">${audit.missing.slice(0, 10).map(m => `<li>J.${m.round} · ${escapeStandingsHTML(m.home)} — ${escapeStandingsHTML(m.away)}</li>`).join('')}${audit.missing.length > 10 ? `<li>… et ${audit.missing.length - 10} autre${audit.missing.length - 10 > 1 ? 's' : ''}</li>` : ''}</ul>`
+                : '<span class="assistant-status assistant-status--ok"><i class="fas fa-circle-check"></i> Tous les scores sont renseignés</span>';
+
+            const trophyHTML = audit.champion
+                ? `<div class="assistant-trophy"><strong>${escapeStandingsHTML(audit.champion)}</strong><span class="assistant-status ${audit.trophyAwarded ? 'assistant-status--ok' : 'assistant-status--warn'}">${audit.trophyAwarded ? 'Trophée déjà attribué' : 'Trophée à attribuer'}</span></div>`
+                : '<p class="assistant-empty">Aucun classement disponible.</p>';
+
+            const movesHTML = audit.proposals.length
+                ? `<div class="assistant-moves">${audit.proposals.map(move => `<div class="assistant-move">
+                    <span class="assistant-move__arrow ${move.direction === 'up' ? 'up' : 'down'}">${move.direction === 'up' ? '▲' : '▼'}</span>
+                    <span>${escapeStandingsHTML(move.club)}</span>
+                    <span class="assistant-move__league">${move.from.toUpperCase()} → ${move.to.toUpperCase()}</span>
+                </div>`).join('')}</div>`
+                : '<p class="assistant-empty">Aucun mouvement à proposer.</p>';
+
+            const cupsHTML = audit.cups.map(cup => {
+                const status = cup.awarded ? 'Trophée attribué' : (cup.ready ? 'Trophée à attribuer' : 'Finale non jouée');
+                const detail = cup.champion
+                    ? `${escapeStandingsHTML(cup.champion)}${cup.score ? ` · finale ${escapeStandingsHTML(cup.score + cup.penaltyNote)}` : ''}`
+                    : '';
+                return `<div class="assistant-cup"><strong>${escapeStandingsHTML(cup.label)}</strong><span>${detail}</span><span class="assistant-status ${cup.awarded ? 'assistant-status--ok' : (cup.ready ? 'assistant-status--warn' : 'assistant-status--bad')}">${status}</span></div>`;
+            }).join('');
+
+            const applyDisabled = !audit.canApplyMoves || audit.proposals.length === 0;
+            body.innerHTML = `<div class="assistant-audit">
+                <div class="assistant-block">
+                    <h3>1. Audit des scores — ${escapeStandingsHTML(audit.seasonName)}</h3>
+                    ${missingHTML}
+                    ${audit.relatedMissing.length ? `<p class="assistant-hint"><i class="fas fa-triangle-exclamation"></i> ${audit.relatedMissing.length} score(s) manquant(s) dans l'autre ligue : les mouvements sont désactivés tant que ce n'est pas complété.</p>` : ''}
+                </div>
+                <div class="assistant-block">
+                    <h3>2. Trophée ${escapeStandingsHTML(audit.leagueLabel)}</h3>
+                    ${trophyHTML}
+                </div>
+                <div class="assistant-block">
+                    <h3>3. Montées / descentes proposées</h3>
+                    ${movesHTML}
+                    <p class="assistant-hint">Les clubs de L3 peuvent compléter la L2 via le tirage de montée.</p>
+                </div>
+                <div class="assistant-block">
+                    <h3>4. Trophées des coupes</h3>
+                    <div class="assistant-cups">${cupsHTML}</div>
+                </div>
+                <div class="assistant-block">
+                    <h3>5. Archivage</h3>
+                    <div class="assistant-options">
+                        <label><input type="checkbox" id="assistant-apply-moves" ${applyDisabled ? 'disabled' : 'checked'}> Appliquer les mouvements proposés</label>
+                        <label><input type="checkbox" id="assistant-create-next" checked> Créer la saison suivante après archivage</label>
+                    </div>
+                    <p class="assistant-hint">La saison clôturée reste consultable dans l'historique et le Hall of Fame. Les logos, fixtures, scores et classements sont conservés.</p>
+                    ${!googleAccessToken ? '<p class="assistant-hint"><i class="fas fa-lock"></i> Connectez-vous à Google Drive pour valider l’archivage.</p>' : ''}
+                </div>
+            </div>`;
+            if (confirmBtn) {
+                confirmBtn.disabled = !audit.canClose || !googleAccessToken;
+                confirmBtn.innerHTML = '<i class="fas fa-flag-checkered"></i> Archiver et créer la saison suivante';
+            }
+        }
+
+        function openSeasonAssistant(leagueId) {
+            currentSeasonAssistantLeague = leagueId;
+            const audit = buildSeasonAssistantAudit(leagueId);
+            renderSeasonAssistant(audit);
+            document.getElementById('season-assistant-modal')?.classList.add('active');
+        }
+
+        function closeSeasonAssistant() {
+            document.getElementById('season-assistant-modal')?.classList.remove('active');
+            currentSeasonAssistantLeague = null;
+        }
+
+        function moveClubBetweenLeagues(clubName, fromId, toId) {
+            const source = fromId === 'l3' ? leagueDataStore.l3?.clubs : leagueDataStore[fromId]?.teams;
+            const target = toId === 'l3' ? leagueDataStore.l3?.clubs : leagueDataStore[toId]?.teams;
+            if (!source?.[clubName] || !target || target[clubName]) return false;
+            target[clubName] = source[clubName];
+            delete source[clubName];
+            return true;
+        }
+
+        function applySeasonAssistantMovements(audit) {
+            if (!audit?.canApplyMoves) return 0;
+            let moved = 0;
+            audit.proposals.forEach(move => {
+                if (moveClubBetweenLeagues(move.club, move.from, move.to)) moved++;
+            });
+            return moved;
+        }
+
+        function awardLeagueTrophyIfNeeded(audit) {
+            if (!audit?.champion) return false;
+            audit.season._trophyAwarded = true;
+            if (audit.trophyAwarded) return false;
+            const trophyType = audit.leagueId === 'l1' ? 'Ligue 1' : 'Ligue 2';
+            if (!palmaresData[audit.champion]) palmaresData[audit.champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+            palmaresData[audit.champion][trophyType]++;
+            launchConfetti(trophyType);
+            return true;
+        }
+
+        function awardCupTrophyIfNeeded(cup) {
+            if (!cup?.ready || cup.awarded || !cup.champion) return false;
+            const data = getCompData(cup.comp);
+            const season = getActiveCompSeason(cup.comp);
+            const trophyType = cup.comp === 'cdf' ? 'CDF' : 'LDC';
+            const champion = resolveCurrentClubName(cup.champion);
+            if (!palmaresData[champion]) palmaresData[champion] = { 'Ligue 1': 0, 'Ligue 2': 0, 'LDC': 0, 'CDF': 0 };
+            palmaresData[champion][trophyType]++;
+            data.champion = cup.champion;
+            data._trophyAwarded = true;
+            if (season) {
+                season.champion = cup.champion;
+                season._trophyAwarded = true;
+            }
+            syncActiveCompSeason(cup.comp);
+            launchConfetti(trophyType);
+            return true;
+        }
+
+        function archiveSeasonAssistant(audit, movesApplied) {
+            const season = audit.season;
+            season.closed = true;
+            season.closed_at = new Date().toISOString();
+            season.champion = audit.champion || season.champion || null;
+            season._trophyAwarded = true;
+            season.final_standings = audit.standings.map(team => ({ name: team.name, points: team.points, matchs: team.matchs, bp: team.bp, bc: team.bc, diff: team.diff }));
+            season.promotions = movesApplied ? audit.promotions.slice() : [];
+            season.relegations = movesApplied ? audit.relegations.slice() : [];
+        }
+
+        async function confirmSeasonAssistant() {
+            const audit = buildSeasonAssistantAudit(currentSeasonAssistantLeague);
+            if (!audit || audit.error || !audit.canClose) { showMessage("Complétez les scores manquants avant de clôturer la saison.", 3500, true); return; }
+            if (!googleAccessToken) { showMessage("Connectez-vous à Google Drive pour archiver la saison.", 3500, true); return; }
+            const confirmBtn = document.getElementById('confirm-season-assistant');
+            const applyMoves = !!document.getElementById('assistant-apply-moves')?.checked && audit.canApplyMoves;
+            const createNext = !!document.getElementById('assistant-create-next')?.checked;
+            if (confirmBtn) confirmBtn.disabled = true;
+            try {
+                const awardedLeague = awardLeagueTrophyIfNeeded(audit);
+                const awardedCups = audit.cups.filter(cup => awardCupTrophyIfNeeded(cup));
+                const moved = applyMoves ? applySeasonAssistantMovements(audit) : 0;
+                archiveSeasonAssistant(audit, applyMoves);
+                if (awardedLeague || awardedCups.length) await savePalmaresToDrive();
+                for (const cup of awardedCups) await saveCompToDrive(cup.comp);
+                await saveDataToDrive('l1');
+                await saveDataToDrive('l2');
+                await saveDataToDrive('l3');
+                if (createNext) createNewSeason(audit.leagueId);
+                populateAllLeaguesUI();
+                populatePalmaresTable();
+                populateCDF();
+                populateLDC();
+                populateHallOfFame();
+                closeSeasonAssistant();
+                const suffix = createNext ? ' La saison suivante a été créée.' : ' La saison suivante n’a pas été créée.';
+                showMessage(`Saison ${audit.seasonName} archivée${moved ? ` · ${moved} club(s) déplacé(s)` : ''}.${suffix}`, 5000);
+            } catch (error) {
+                console.error('Erreur assistant de fin de saison:', error);
+                showMessage("Erreur pendant l’archivage. Vérifiez Drive et réessayez.", 5000, true);
+                if (confirmBtn) confirmBtn.disabled = false;
             }
         }
 
@@ -7905,7 +9183,7 @@
         document.querySelectorAll('.cloture-saison-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const leagueId = btn.id.split('-')[btn.id.split('-').length - 1];
-                openPromotionModal(leagueId);
+                openSeasonAssistant(leagueId);
             });
         });
 
@@ -8949,7 +10227,7 @@
                         waiting: !matchReady,
                         live: currentRound === r,
                         meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
-                        foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
+                        foot: match.team3 !== undefined ? (penaltyNote || 'Le plus grand nombre de buts passe') : buildPenaltyFootHTML('cdf', match, r, i, penaltyNote || (matchReady ? '' : 'En attente des équipes')),
                         rows: [
                             { name: dTeam1, logo: logo1, score: match.score1, winner: !!match.winner && match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 1) },
                             { name: dTeam2, logo: logo2, score: match.score2, winner: !!match.winner && match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('cdf', r, i, 2) }
@@ -9067,6 +10345,206 @@
             return { winner: scoreA > scoreB ? teamA : teamB, score1: scoreA, score2: scoreB };
         }
 
+        // ==================== TIRS AU BUT INTERACTIFS ====================
+        let penaltyShootoutState = null;
+
+        function getPenaltyShooters(teamName) {
+            const clubId = resolvePlayerClubId(teamName);
+            let players = [];
+            try { players = playersOfClub(clubId, 'ATT').filter(player => player.active !== false); } catch (error) { players = []; }
+            if (players.length > 0) return players.map(player => ({ id: player.id, name: player.name }));
+            return [{ id: null, name: 'Tireur 1' }, { id: null, name: 'Tireur 2' }, { id: null, name: 'Tireur 3' }];
+        }
+
+        function clearPenaltyShootout(match) {
+            if (!match) return;
+            match.penaltyShootout = false;
+            match.penaltyWinner = null;
+            match.penaltyScore1 = null;
+            match.penaltyScore2 = null;
+            if (match.penaltyKicks) delete match.penaltyKicks;
+        }
+
+        function createPenaltyShootoutState(comp, round, matchIdx) {
+            const data = comp === 'cdf' ? cdfData : ldcData;
+            const match = data?.rounds?.[round]?.[matchIdx];
+            if (!match || !match.team1 || !match.team2) return null;
+            if (typeof match.score1 !== 'number' || typeof match.score2 !== 'number' || match.score1 !== match.score2) return null;
+            return {
+                comp, round, matchIdx,
+                team1: match.team1, team2: match.team2,
+                score1: 0, score2: 0,
+                kicks1: [], kicks2: [],
+                shooterIndex1: 0, shooterIndex2: 0,
+                shooters1: getPenaltyShooters(match.team1),
+                shooters2: getPenaltyShooters(match.team2),
+                turn: 1, suddenDeath: false, finished: false, winner: null,
+                message: 'À toi de jouer : choisis un tireur et une direction.',
+                detail: '', lastKick: null
+            };
+        }
+
+        function penaltyKicks(state) { return state.kicks1.length + state.kicks2.length; }
+
+        function isPenaltyShootoutDecided(state) {
+            if (!state) return false;
+            const taken1 = state.kicks1.length, taken2 = state.kicks2.length;
+            if (!state.suddenDeath) {
+                // Arrêt anticipé : si l'avance est supérieure aux tirs restants de l'adversaire.
+                const remaining1 = Math.max(0, 5 - taken1);
+                const remaining2 = Math.max(0, 5 - taken2);
+                if (state.score1 > state.score2 + remaining2) return true;
+                if (state.score2 > state.score1 + remaining1) return true;
+                if (taken1 >= 5 && taken2 >= 5) {
+                    if (state.score1 !== state.score2) return true;
+                    state.suddenDeath = true;
+                }
+                return false;
+            }
+            return taken1 === taken2 && taken1 >= 6 && state.score1 !== state.score2;
+        }
+
+        function renderPenaltyShootout() {
+            const state = penaltyShootoutState;
+            const modal = document.getElementById('penalty-modal');
+            if (!state || !modal) return;
+            const title = document.getElementById('penalty-title');
+            if (title) title.innerHTML = `<i class="fas fa-futbol"></i> ${escapeStandingsHTML(resolveCurrentClubName(state.team1))} - ${escapeStandingsHTML(resolveCurrentClubName(state.team2))}`;
+            const currentTeam = state.turn === 1 ? state.team1 : state.team2;
+            const currentShooters = state.turn === 1 ? state.shooters1 : state.shooters2;
+            const currentIndex = state.turn === 1 ? state.shooterIndex1 : state.shooterIndex2;
+            const historyLine = (team, kicks) => `<div class="penalty-history__line">
+                <span class="penalty-history__name">${escapeStandingsHTML(resolveCurrentClubName(team))}</span>
+                <span class="penalty-dots">${kicks.length ? kicks.map((kick, index) => `<span class="penalty-dot ${kick.scored ? 'is-goal' : 'is-miss'}" title="Tir ${index + 1} · ${escapeStandingsHTML(kick.shooter)} · ${kick.scored ? 'but' : 'arrêt'}">${kick.scored ? '●' : '×'}</span>`).join('') : '<span class="penalty-dot">—</span>'}</span>
+            </div>`;
+            const keeperClass = state.lastKick ? `is-${state.lastKick.keeperDive}` : '';
+            const finishedBlock = state.finished ? `<div class="penalty-finished">
+                <strong>${escapeStandingsHTML(resolveCurrentClubName(state.winner))} remporte la séance ${state.score1}-${state.score2}.</strong>
+                <button class="btn btn-success" type="button" onclick="validatePenaltyShootout()"><i class="fas fa-check"></i> Valider la séance</button>
+            </div>` : `<div class="penalty-controls">
+                <label>Tireur
+                    <select id="penalty-shooter">${currentShooters.map((player, index) => `<option value="${index}" ${index === currentIndex ? 'selected' : ''}>${escapeStandingsHTML(player.name)}</option>`).join('')}</select>
+                </label>
+                <div class="penalty-directions">
+                    <button class="btn" type="button" onclick="takePenaltyShot('gauche')"><i class="fas fa-arrow-left"></i> Gauche</button>
+                    <button class="btn" type="button" onclick="takePenaltyShot('centre')">Centre</button>
+                    <button class="btn" type="button" onclick="takePenaltyShot('droite')">Droite <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>`;
+            const body = document.getElementById('penalty-body');
+            if (body) {
+                body.innerHTML = `<div class="penalty-board">
+                    <div class="penalty-team"><img src="${getClubLogo(state.team1)}" alt=""><span>${escapeStandingsHTML(resolveCurrentClubName(state.team1))}</span></div>
+                    <div class="penalty-board__score">${state.score1} - ${state.score2}</div>
+                    <div class="penalty-team penalty-team--right"><span>${escapeStandingsHTML(resolveCurrentClubName(state.team2))}</span><img src="${getClubLogo(state.team2)}" alt=""></div>
+                    <div class="penalty-board__round">${state.suddenDeath ? 'Mort subite' : `Tirs ${Math.min(5, Math.max(state.kicks1.length, state.kicks2.length) + 1)} / 5`} · ${penaltyKicks(state)} tir${penaltyKicks(state) > 1 ? 's' : ''} tiré${penaltyKicks(state) > 1 ? 's' : ''}</div>
+                </div>
+                <div class="penalty-stage">
+                    <div class="penalty-stage__goal"><span class="penalty-stage__keeper ${keeperClass}">🧸</span></div>
+                    <div class="penalty-stage__message">${escapeStandingsHTML(state.message)}</div>
+                    <div class="penalty-stage__detail">${escapeStandingsHTML(state.detail)}</div>
+                </div>
+                <div class="penalty-history">
+                    ${historyLine(state.team1, state.kicks1)}
+                    ${historyLine(state.team2, state.kicks2)}
+                </div>
+                ${finishedBlock}`;
+            }
+            openModalAccessible(modal);
+        }
+
+        function openPenaltyShootout(comp, round, matchIdx) {
+            const state = createPenaltyShootoutState(comp, round, matchIdx);
+            const modal = document.getElementById('penalty-modal');
+            if (!state || !modal || typeof requestAnimationFrame !== 'function') {
+                // Environnement de test / modale absente : on garde l'ancien comportement automatique.
+                const data = comp === 'cdf' ? cdfData : ldcData;
+                const match = data?.rounds?.[round]?.[matchIdx];
+                if (!match) return false;
+                const seance = simulatePenaltyShootout(match.team1, match.team2);
+                applyPenaltyShootoutResult(comp, round, matchIdx, seance.winner, seance.score1, seance.score2, []);
+                return false;
+            }
+            penaltyShootoutState = state;
+            renderPenaltyShootout();
+            return true;
+        }
+        window.openPenaltyShootout = openPenaltyShootout;
+
+        function takePenaltyShot(direction) {
+            const state = penaltyShootoutState;
+            if (!state || state.finished) return;
+            const teamKey = state.turn;
+            const shooters = teamKey === 1 ? state.shooters1 : state.shooters2;
+            const select = document.getElementById('penalty-shooter');
+            const selectedIndex = select ? Math.max(0, Math.min(shooters.length - 1, parseInt(select.value, 10) || 0)) : 0;
+            const shooter = shooters[selectedIndex]?.name || 'Tireur';
+            if (teamKey === 1) state.shooterIndex1 = (selectedIndex + 1) % shooters.length;
+            else state.shooterIndex2 = (selectedIndex + 1) % shooters.length;
+
+            const directions = ['gauche', 'centre', 'droite'];
+            const keeperDive = directions[Math.floor(Math.random() * directions.length)];
+            const successChance = direction === keeperDive ? 0.42 : (direction === 'centre' ? 0.78 : 0.86);
+            const scored = Math.random() < successChance;
+            const kick = { team: teamKey, shooter, direction, keeperDive, scored };
+            if (teamKey === 1) { state.kicks1.push(kick); if (scored) state.score1++; }
+            else { state.kicks2.push(kick); if (scored) state.score2++; }
+            state.lastKick = kick;
+            state.message = scored ? `But de ${shooter} !` : `Arrêt du gardien sur ${shooter} !`;
+            state.detail = `Le gardien plonge à ${keeperDive}.`;
+            if (isPenaltyShootoutDecided(state)) {
+                state.finished = true;
+                state.winner = state.score1 > state.score2 ? state.team1 : state.team2;
+            } else {
+                state.turn = teamKey === 1 ? 2 : 1;
+            }
+            renderPenaltyShootout();
+        }
+        window.takePenaltyShot = takePenaltyShot;
+
+        function applyPenaltyShootoutResult(comp, round, matchIdx, winner, score1, score2, kicks) {
+            const data = comp === 'cdf' ? cdfData : ldcData;
+            const match = data?.rounds?.[round]?.[matchIdx];
+            if (!match) return;
+            match.penaltyShootout = true;
+            match.penaltyWinner = winner;
+            match.penaltyScore1 = score1;
+            match.penaltyScore2 = score2;
+            if (kicks && kicks.length) match.penaltyKicks = kicks;
+            match.winner = winner;
+            if (comp === 'cdf') { advanceCDFWinner(round, matchIdx, winner); saveCDFToDrive(); renderCDFBracket(); }
+            else { advanceLDCWinner(round, matchIdx, winner); saveLDCToDrive(); renderLDCBracket(); }
+            showMessage(`${resolveCurrentClubName(winner)} l'emporte ${score1}-${score2} aux tirs au but !`, 4000);
+        }
+
+        function validatePenaltyShootout() {
+            const state = penaltyShootoutState;
+            if (!state || !state.finished) return;
+            const data = state.comp === 'cdf' ? cdfData : ldcData;
+            const match = data?.rounds?.[state.round]?.[state.matchIdx];
+            if (!match) return;
+            applyPenaltyShootoutResult(state.comp, state.round, state.matchIdx, state.winner, state.score1, state.score2,
+                [...state.kicks1.map(kick => Object.assign({ team: state.team1 }, kick)), ...state.kicks2.map(kick => Object.assign({ team: state.team2 }, kick))]);
+            closePenaltyShootout();
+        }
+        window.validatePenaltyShootout = validatePenaltyShootout;
+
+        function closePenaltyShootout() {
+            penaltyShootoutState = null;
+            const modal = document.getElementById('penalty-modal');
+            if (modal) modal.classList.remove('active');
+        }
+        window.closePenaltyShootout = closePenaltyShootout;
+
+        function buildPenaltyFootHTML(comp, match, round, matchIdx, penaltyNote) {
+            if (!match) return penaltyNote || '';
+            const tied = typeof match.score1 === 'number' && typeof match.score2 === 'number' && match.score1 === match.score2;
+            const pending = tied && !match.winner && !match.penaltyShootout
+                ? `<button class="bracket-penalty-btn" type="button" onclick="openPenaltyShootout('${comp}', ${round}, ${matchIdx})">Tirs au but</button>`
+                : '';
+            return `${penaltyNote || ''}${pending}`;
+        }
+
         function resolveCDFDemies() {
             const demie = cdfData.rounds[2] && cdfData.rounds[2][0];
             if (!demie || !demie.team3) return;
@@ -9114,17 +10592,17 @@
                 let winner;
                 if (isByeTeam(match.team1)) winner = match.team2;
                 else if (isByeTeam(match.team2)) winner = match.team1;
-                else if (match.score1 > match.score2) winner = match.team1;
-                else if (match.score2 > match.score1) winner = match.team2;
+                else if (match.score1 > match.score2) { winner = match.team1; clearPenaltyShootout(match); }
+                else if (match.score2 > match.score1) { winner = match.team2; clearPenaltyShootout(match); }
                 else {
-                    // Égalité : séance de tirs au but simulée (5 tirs par équipe puis mort subite)
-                    const seance = simulatePenaltyShootout(match.team1, match.team2);
-                    winner = seance.winner;
-                    match.penaltyWinner = winner;
-                    match.penaltyShootout = true;
-                    match.penaltyScore1 = seance.score1;
-                    match.penaltyScore2 = seance.score2;
-                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${resolveCurrentClubName(winner)} l'emporte ${seance.score1}-${seance.score2} aux tirs au but !`, 4000);
+                    // Égalité : on ouvre la séance interactive. Le vainqueur ne sera fixé
+                    // qu'à la validation de la séance (ou par le bouton « Tirs au but »).
+                    clearPenaltyShootout(match);
+                    match.winner = null;
+                    openPenaltyShootout('cdf', round, matchIdx);
+                    saveCDFToDrive();
+                    renderCDFBracket();
+                    return;
                 }
 
                 match.winner = winner;
@@ -9427,7 +10905,7 @@
                         waiting: !matchReady,
                         live: currentRound === r,
                         meta: match.date ? bracketAttr(match.date) : `Match ${i + 1}`,
-                        foot: penaltyNote || (matchReady ? '' : 'En attente des équipes'),
+                        foot: buildPenaltyFootHTML('ldc', match, r, i, penaltyNote || (matchReady ? '' : 'En attente des équipes')),
                         rows: [
                             { name: dTeam1, logo: logo1, score: match.score1, winner: !!match.winner && match.winner === match.team1, num: 1, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 1) },
                             { name: dTeam2, logo: logo2, score: match.score2, winner: !!match.winner && match.winner === match.team2, num: 2, matchIdx: i, ready: matchReady, src: bracketSourceFor('ldc', r, i, 2) }
@@ -9519,17 +10997,16 @@
                 let winner;
                 if (isByeTeam(match.team1)) winner = match.team2;
                 else if (isByeTeam(match.team2)) winner = match.team1;
-                else if (match.score1 > match.score2) winner = match.team1;
-                else if (match.score2 > match.score1) winner = match.team2;
+                else if (match.score1 > match.score2) { winner = match.team1; clearPenaltyShootout(match); }
+                else if (match.score2 > match.score1) { winner = match.team2; clearPenaltyShootout(match); }
                 else {
-                    // Égalité : séance de tirs au but simulée (5 tirs par équipe puis mort subite)
-                    const seance = simulatePenaltyShootout(match.team1, match.team2);
-                    winner = seance.winner;
-                    match.penaltyWinner = winner;
-                    match.penaltyShootout = true;
-                    match.penaltyScore1 = seance.score1;
-                    match.penaltyScore2 = seance.score2;
-                    showMessage(`Égalité ${match.score1}-${match.score2} ! ${resolveCurrentClubName(winner)} l'emporte ${seance.score1}-${seance.score2} aux tirs au but !`, 4000);
+                    // Égalité : séance interactive ; le vainqueur est fixé à la validation.
+                    clearPenaltyShootout(match);
+                    match.winner = null;
+                    openPenaltyShootout('ldc', round, matchIdx);
+                    saveLDCToDrive();
+                    renderLDCBracket();
+                    return;
                 }
                 match.winner = winner;
                 advanceLDCWinner(round, matchIdx, winner);
@@ -10493,6 +11970,147 @@
             });
         }
 
+        // ==================== FICHE CLUB ====================
+        let clubProfileContext = null;
+
+        // Rassemble les données d'un club pour la fiche : saison, rang, forme, buteur, prochain match.
+        function getClubSeasonSnapshot(clubName, leagueId) {
+            const league = leagueDataStore[leagueId] || null;
+            const season = (league?.seasons || []).find(s => Number(s.season_id) === Number(league.active_season_id)) || null;
+            if (!league || !season) return { league, season: null, storedName: clubName, rank: null, teamData: null, form: null, movement: 0, scorer: null, nextMatch: null };
+            const insights = getStandingsInsights(leagueId, season.season_id);
+            const currentName = resolveCurrentClubName(clubName);
+            const storedName = (insights?.current || []).map(([name]) => name)
+                .find(name => name === clubName || resolveCurrentClubName(name) === currentName) || clubName;
+            const rowIndex = (insights?.current || []).findIndex(([name]) => name === storedName);
+            const teamData = rowIndex >= 0 ? insights.current[rowIndex][1] : null;
+            const form = insights?.form?.[storedName] || null;
+
+            let scorer = null;
+            try {
+                const stats = computePlayerStats({ comp: leagueId, season: season.season_id, club: resolvePlayerClubId(clubName) });
+                scorer = stats.filter(player => player.position === 'ATT').sort((a, b) =>
+                    (b.goals - a.goals) || (b.assists - a.assists) || (b.matches - a.matches)
+                )[0] || null;
+            } catch (error) { scorer = null; }
+
+            let nextMatch = null;
+            (season.fixtures || []).forEach((round, roundIndex) => {
+                (round || []).forEach((match, matchIndex) => {
+                    if (nextMatch || !match) return;
+                    if (match.home !== storedName && match.away !== storedName) return;
+                    if (match.scoreHome !== null && match.scoreHome !== undefined && match.scoreAway !== null && match.scoreAway !== undefined) return;
+                    nextMatch = { roundIndex, matchIndex, opponent: match.home === storedName ? match.away : match.home, home: match.home === storedName };
+                });
+            });
+
+            return {
+                league, season, storedName,
+                rank: rowIndex >= 0 ? rowIndex + 1 : null,
+                teamData, form,
+                movement: insights?.movement?.[storedName] || 0,
+                scorer, nextMatch
+            };
+        }
+
+        function renderClubProfileForm(formInfo) {
+            if (!formInfo || !formInfo.games?.length) return '<p class="club-profile__empty">Aucun match terminé pour l’instant.</p>';
+            const labels = { V: 'Victoire', N: 'Nul', D: 'Défaite' };
+            return `<div class="form-guide club-profile__form">${formInfo.games.slice().reverse().map(game =>
+                `<span class="form-pill form-pill--${game.result.toLowerCase()}" title="${escapeStandingsHTML(`J${game.roundIndex + 1} · ${game.goalsFor}-${game.goalsAgainst} contre ${game.opponent}`)}" aria-label="${labels[game.result]} ${game.goalsFor}-${game.goalsAgainst} contre ${escapeStandingsHTML(game.opponent)}">${game.result}</span>`
+            ).join('')}</div>`;
+        }
+
+        function renderClubProfileMatches(formInfo) {
+            if (!formInfo || !formInfo.games?.length) return '<p class="club-profile__empty">Aucun résultat à afficher.</p>';
+            return `<ul class="club-profile__matches">${formInfo.games.slice().reverse().map(game => `
+                <li class="club-profile__match">
+                    <span class="form-pill form-pill--${game.result.toLowerCase()}">${game.result}</span>
+                    <span class="club-profile__match-opponent">${game.isHome ? 'vs' : '@'} ${escapeStandingsHTML(resolveCurrentClubName(game.opponent))}</span>
+                    <span class="club-profile__match-score">${game.goalsFor}-${game.goalsAgainst}</span>
+                </li>`).join('')}</ul>`;
+        }
+
+        function openClubProfile(clubName, leagueId) {
+            const modal = document.getElementById('club-profile-modal');
+            if (!modal) return;
+            const displayName = resolveCurrentClubName(clubName);
+            const snapshot = getClubSeasonSnapshot(clubName, leagueId);
+            const tribune = getClubTribune(displayName);
+            const palmares = palmaresData[displayName] || palmaresData[clubName] || {};
+            const totalTitles = ['Ligue 1', 'Ligue 2', 'CDF', 'LDC'].reduce((sum, key) => sum + (Number(palmares[key]) || 0), 0);
+            const clubData = (leagueId === 'l3' ? leagueDataStore.l3?.clubs?.[clubName] : leagueDataStore[leagueId]?.teams?.[clubName])
+                || baseClubsData.clubs?.[clubName] || {};
+            const teamData = snapshot.teamData || {};
+            const rank = snapshot.rank;
+            const movement = snapshot.movement;
+            const movementLabel = movement === 0 ? '' : `${movement > 0 ? '▲ +' : '▼ '}${movement}`;
+            const scorer = snapshot.scorer;
+            const next = snapshot.nextMatch;
+            const formHTML = renderClubProfileForm(snapshot.form);
+            const matchesHTML = renderClubProfileMatches(snapshot.form);
+            const trophyHTML = getClubTrophiesHTML(displayName, 'team-trophies club-profile__trophies');
+            const heroClass = tribune ? 'club-profile__hero has-photo' : 'club-profile__hero';
+            const heroStyle = tribune ? ` style="--club-profile-shot: url('${tribune.full}')"` : '';
+            const title = document.getElementById('club-profile-title');
+            if (title) title.textContent = displayName;
+            const body = document.getElementById('club-profile-body');
+            if (body) {
+                body.innerHTML = `
+                    <div class="${heroClass}"${heroStyle}>
+                        <div class="club-profile__identity">
+                            <img class="club-profile__crest" src="${getClubLogo(displayName)}" alt="${escapeStandingsHTML(displayName)}">
+                            <div>
+                                <h4 class="club-profile__name">${escapeStandingsHTML(displayName)}</h4>
+                                <p class="club-profile__sub">${clubData.description ? escapeStandingsHTML(clubData.description) : (leagueId === 'l3' ? 'Ligue 3' : leagueId.toUpperCase())}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="club-profile__content">
+                        ${snapshot.season ? `
+                        <div class="club-profile__stats">
+                            <div class="club-profile__stat"><b>${rank ? '#' + rank : '—'}${movementLabel ? ` <span class="rank-delta ${movement > 0 ? 'is-up' : 'is-down'}">${movementLabel}</span>` : ''}</b><small>Classement</small></div>
+                            <div class="club-profile__stat"><b>${teamData.points ?? 0}</b><small>Points</small></div>
+                            <div class="club-profile__stat"><b>${teamData.matchs ?? 0}</b><small>Matchs</small></div>
+                            <div class="club-profile__stat"><b>${teamData.bp ?? 0}-${teamData.bc ?? 0}</b><small>Buts</small></div>
+                            <div class="club-profile__stat"><b>${teamData.diff > 0 ? '+' : ''}${teamData.diff ?? 0}</b><small>Différence</small></div>
+                            <div class="club-profile__stat"><b>${snapshot.form?.streak ? snapshot.form.streak + snapshot.form.streakResult : '—'}</b><small>Série</small></div>
+                        </div>` : '<p class="club-profile__empty">Aucune saison active pour ce club.</p>'}
+                        <div class="club-profile__grid">
+                            <div class="club-profile__block">
+                                <h4>Derniers matchs</h4>
+                                ${matchesHTML}
+                                <h4 style="margin-top:16px;">Forme récente</h4>
+                                ${formHTML}
+                            </div>
+                            <div class="club-profile__block">
+                                <h4>Palmarès</h4>
+                                ${totalTitles > 0 ? trophyHTML : '<p class="club-profile__empty">Aucun titre pour l’instant.</p>'}
+                                <h4 style="margin-top:16px;">Meilleur buteur</h4>
+                                ${scorer ? `<div class="club-profile__scorer">
+                                    <img src="${scorer.photoUrl || resolveLogoUrl('embleme-peluche.svg')}" alt="${escapeStandingsHTML(scorer.name)}">
+                                    <div><b>${escapeStandingsHTML(scorer.name)}</b><small>${scorer.goals} but${scorer.goals > 1 ? 's' : ''}${scorer.assists ? ` · ${scorer.assists} passe${scorer.assists > 1 ? 's' : ''} décisive${scorer.assists > 1 ? 's' : ''}` : ''}</small></div>
+                                </div>` : '<p class="club-profile__empty">Aucun buteur enregistré.</p>'}
+                                <h4 style="margin-top:16px;">Prochain match</h4>
+                                ${next ? `<p class="club-profile__next"><b>J${next.roundIndex + 1}</b> · ${next.home ? 'vs' : '@'} ${escapeStandingsHTML(resolveCurrentClubName(next.opponent))}</p>` : '<p class="club-profile__empty">Aucun match à venir.</p>'}
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            clubProfileContext = { club: clubName, displayName, leagueId, canShowFixtures: leagueId === 'l1' || leagueId === 'l2' };
+            const fixturesBtn = document.getElementById('club-profile-fixtures-btn');
+            if (fixturesBtn) fixturesBtn.style.display = clubProfileContext.canShowFixtures ? 'inline-flex' : 'none';
+            openModalAccessible(modal);
+        }
+        window.openClubProfile = openClubProfile;
+
+        function closeClubProfile() {
+            const modal = document.getElementById('club-profile-modal');
+            if (modal) modal.classList.remove('active');
+            clubProfileContext = null;
+        }
+        window.closeClubProfile = closeClubProfile;
+
         // ==================== PALMARES ====================
         function populatePalmaresTable() {
             const tableBody = document.getElementById('palmares-table-body');
@@ -10553,6 +12171,132 @@
                 tableBody.appendChild(row);
             });
             populateClassement();
+            populateHallOfFame();
+        }
+
+        // ==================== RÉCITS DES SAISONS / HALL OF FAME ====================
+        const HALL_OF_FAME_LABELS = { l1: 'Ligue 1', l2: 'Ligue 2', cdf: 'Coupe de France', ldc: 'Ligue des Champions' };
+
+        function getCupSeasonSources(compId) {
+            const data = getCompData(compId);
+            if (!data) return [];
+            const activeId = data.active_season_id != null ? data.active_season_id : 1;
+            const seasons = (Array.isArray(data.seasons) ? data.seasons.slice() : []).map(season =>
+                Number(season.season_id) === Number(activeId)
+                    ? { ...season, rounds: (data.rounds && Object.keys(data.rounds).length) ? data.rounds : season.rounds, champion: data.champion || season.champion }
+                    : season
+            );
+            if (!seasons.some(season => Number(season.season_id) === Number(activeId)) && data.rounds && Object.keys(data.rounds).length) {
+                seasons.push({
+                    season_id: activeId,
+                    nom_saison: `Saison ${activeId}`,
+                    participants: data.participants || [],
+                    rounds: data.rounds,
+                    champion: data.champion,
+                    _trophyAwarded: data._trophyAwarded
+                });
+            }
+            return seasons;
+        }
+
+        function getCupFinalDetails(compId, season) {
+            const finalRound = compId === 'ldc' ? LDC_FINAL_ROUND : CDF_FINAL_ROUND;
+            const round = season?.rounds?.[finalRound];
+            const match = Array.isArray(round) ? round[0] : null;
+            const winner = match?.winner || season?.champion || null;
+            if (!winner) return { champion: null, finalist: null, score: '', penaltyNote: '' };
+            const finalist = match ? (winner === match.team1 ? match.team2 : match.team1) : null;
+            const score = match && typeof match.score1 === 'number' && typeof match.score2 === 'number'
+                ? `${match.score1}-${match.score2}` : '';
+            const penaltyNote = match?.penaltyShootout
+                ? ` (${match.penaltyScore1 ?? '?'}-${match.penaltyScore2 ?? '?'} aux tirs au but)` : '';
+            return { champion: winner, finalist, score, penaltyNote, match };
+        }
+
+        function getSeasonTopScorer(compId, seasonId) {
+            try {
+                const stats = computePlayerStats({ comp: compId, season: seasonId, club: 'all' });
+                const best = stats.filter(player => player.goals > 0)
+                    .sort((a, b) => (b.goals - a.goals) || (b.assists - a.assists) || (b.matches - a.matches))[0];
+                return best ? { name: best.name, goals: best.goals, club: playersClubName(best.clubId) } : null;
+            } catch (error) { return null; }
+        }
+
+        function buildHallOfFameData(compId) {
+            const label = HALL_OF_FAME_LABELS[compId] || compId.toUpperCase();
+            if (compId === 'l1' || compId === 'l2') {
+                const league = leagueDataStore[compId];
+                return ((league?.seasons) || []).slice().sort((a, b) => b.season_id - a.season_id).map(season => {
+                    const standings = sortStandingsEntries(calculateStandings(getSeasonTeamUniverse(season), season.fixtures));
+                    const champion = resolveCurrentClubName(season.champion || standings[0]?.[0] || '');
+                    const podium = standings.slice(0, 3).map(([name]) => resolveCurrentClubName(name));
+                    return {
+                        comp: compId, compLabel: label, seasonId: season.season_id,
+                        name: season.nom_saison || `Saison ${season.season_id}`,
+                        champion: champion || null,
+                        podium,
+                        finalist: null, finalScore: '', penaltyNote: '',
+                        topScorer: getSeasonTopScorer(compId, season.season_id),
+                        promotions: season.promotions || [],
+                        relegations: season.relegations || [],
+                        closed: !!season.closed
+                    };
+                });
+            }
+            const sources = getCupSeasonSources(compId);
+            return sources.slice().sort((a, b) => b.season_id - a.season_id).map(season => {
+                const final = getCupFinalDetails(compId, season);
+                return {
+                    comp: compId, compLabel: label, seasonId: season.season_id,
+                    name: season.nom_saison || `Saison ${season.season_id}`,
+                    champion: final.champion ? resolveCurrentClubName(final.champion) : null,
+                    finalist: final.finalist ? resolveCurrentClubName(final.finalist) : null,
+                    finalScore: final.score,
+                    penaltyNote: final.penaltyNote,
+                    topScorer: getSeasonTopScorer(compId, season.season_id),
+                    promotions: [], relegations: [],
+                    closed: !!season.champion
+                };
+            });
+        }
+
+        function renderHallOfFameCard(story) {
+            const champion = story.champion ? `<div class="season-story__champion">
+                <img src="${getClubLogo(story.champion)}" alt="" onerror="this.onerror=null;this.src='embleme-peluche.svg'">
+                <div><small>Champion</small><strong>${escapeStandingsHTML(story.champion)}</strong></div>
+            </div>` : '<p class="hall-of-fame__empty">Champion non désigné.</p>';
+            const isCup = story.comp === 'cdf' || story.comp === 'ldc';
+            const facts = isCup
+                ? `<div class="season-story__fact"><small>Finaliste</small><strong>${story.finalist ? escapeStandingsHTML(story.finalist) : '—'}</strong></div>
+                   <div class="season-story__fact"><small>Finale</small><strong>${story.finalScore ? escapeStandingsHTML(story.finalScore + story.penaltyNote) : '—'}</strong></div>`
+                : `<div class="season-story__fact"><small>Podium</small><strong>${story.podium.slice(1).map((name, index) => `${index + 2}e ${escapeStandingsHTML(name)}`).join(' · ') || '—'}</strong></div>
+                   <div class="season-story__fact"><small>Saison</small><strong>${story.closed ? 'Clôturée' : 'En cours'}</strong></div>`;
+            const scorer = story.topScorer
+                ? `<div class="season-story__fact"><small>Meilleur buteur</small><strong>${escapeStandingsHTML(story.topScorer.name)} · ${story.topScorer.goals} but${story.topScorer.goals > 1 ? 's' : ''}</strong></div>`
+                : `<div class="season-story__fact"><small>Meilleur buteur</small><strong>—</strong></div>`;
+            const moves = !isCup
+                ? `<div class="season-story__moves"><b>Montées :</b> ${story.promotions.length ? story.promotions.map(escapeStandingsHTML).join(', ') : 'non renseignées'}<br><b>Descentes :</b> ${story.relegations.length ? story.relegations.map(escapeStandingsHTML).join(', ') : 'non renseignées'}</div>`
+                : '';
+            return `<article class="season-story">
+                <div class="season-story__head">
+                    <span class="season-story__name">${escapeStandingsHTML(story.name)}</span>
+                    <span class="season-story__comp">${escapeStandingsHTML(story.compLabel)}</span>
+                </div>
+                ${champion}
+                <div class="season-story__facts">${facts}${scorer}</div>
+                ${moves}
+            </article>`;
+        }
+
+        function populateHallOfFame() {
+            const container = document.getElementById('hall-of-fame-content');
+            const selector = document.getElementById('hall-of-fame-comp');
+            if (!container) return;
+            const compId = selector?.value || 'l1';
+            const stories = buildHallOfFameData(compId);
+            container.innerHTML = stories.length
+                ? `<div class="season-stories">${stories.map(renderHallOfFameCard).join('')}</div>`
+                : '<p class="hall-of-fame__empty">Aucune saison terminée pour cette compétition.</p>';
         }
 
         window.modifyPalmares = function (teamName, trophyType, isAdding) {
@@ -10820,6 +12564,7 @@
             observeActiveTabSections();
 
             if (tabId === 'joueurs') renderPlayersTab();
+            if (tabId === 'palmares') populateHallOfFame();
 
             document.querySelectorAll('.carousel').forEach(carousel => {
                 const ci = carousel.carouselInstance;
@@ -12159,8 +13904,38 @@
                     else if (event.target.closest('#scorers-save')) saveScorersFromModal();
                 });
             }
+            const penaltyModal = document.getElementById('penalty-modal');
+            if (penaltyModal) {
+                penaltyModal.addEventListener('click', event => {
+                    if (event.target === penaltyModal || event.target.closest('[data-close-penalty]')) closePenaltyShootout();
+                });
+            }
+            const clubProfileModal = document.getElementById('club-profile-modal');
+            if (clubProfileModal) {
+                clubProfileModal.addEventListener('click', event => {
+                    if (event.target === clubProfileModal || event.target.closest('[data-close-club-profile]')) closeClubProfile();
+                });
+                document.getElementById('club-profile-logo-btn')?.addEventListener('click', () => {
+                    const context = clubProfileContext;
+                    if (!context) return;
+                    closeClubProfile();
+                    if (typeof window.openLogoModal === 'function') window.openLogoModal(context.displayName, context.leagueId);
+                });
+                document.getElementById('club-profile-fixtures-btn')?.addEventListener('click', () => {
+                    const context = clubProfileContext;
+                    if (!context || !context.canShowFixtures) return;
+                    closeClubProfile();
+                    setActiveTab(context.leagueId);
+                    setTimeout(() => document.getElementById(`${context.leagueId}-fixtures-section`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+                });
+            }
+            document.getElementById('hall-of-fame-comp')?.addEventListener('change', populateHallOfFame);
+            document.getElementById('hall-of-fame-print')?.addEventListener('click', () => window.print());
+            document.getElementById('close-season-assistant-modal')?.addEventListener('click', closeSeasonAssistant);
+            document.getElementById('cancel-season-assistant')?.addEventListener('click', closeSeasonAssistant);
+            document.getElementById('confirm-season-assistant')?.addEventListener('click', confirmSeasonAssistant);
             document.addEventListener('keydown', event => {
-                if (event.key === 'Escape') { closePlayerModal(); closeScorersModal(); }
+                if (event.key === 'Escape') { closePlayerModal(); closeScorersModal(); closeClubProfile(); closePenaltyShootout(); closeSeasonAssistant(); }
             });
         }
 

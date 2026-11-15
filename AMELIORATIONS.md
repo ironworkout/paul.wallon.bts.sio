@@ -95,11 +95,11 @@ Vérifier que le bracket CDF/LDC (qui utilise `overflow-x: auto`) soit bien util
 
 ## 🛠️ Technique / robustesse
 
-### 13. Découper le fichier `index.html` (6 786 lignes au 7 nov. 2026)
+### 13. Découper le fichier `index.html` (14 391 lignes au 15 nov. 2026)
 Tout est dans un seul fichier (HTML + CSS + JS). Le découper en `style.css`, `app.js` et `index.html` réduirait le risque de bugs et faciliterait la maintenance.
 - **Effort** : élevé · **Impact** : ⭐⭐⭐⭐ (qualité de code)
 - [ ] **Statut (7 nov. 2026)** : non fait. Aucun CSS/JS externe : les anciens `style.css` et `app.js`,
-  jamais chargés, ont été retirés du dépôt le 7 nov. 2026. `index.html` reste à 6 786 lignes.
+  jamais chargés, ont été retirés du dépôt le 7 nov. 2026. `index.html` reste à 14 391 lignes.
 
 ### ✅ 14. Créer un `.gitignore` avec `.freebuff/`
 Le dossier `.freebuff/` (base de données interne de l'app) apparaît constamment en untracked. L'ajouter au `.gitignore` éviterait tout risque de le committer par erreur.
@@ -114,7 +114,7 @@ Les clubs sont définis dans plusieurs endroits (données initiales, base clubs,
 ### 16. Tests automatisés plus complets
 Le fichier `cdf_format_test.js` teste déjà la CDF et le Classement. Étendre aux saisons (création, switch, suppression, migration) et à la LDC sécuriserait les évolutions futures.
 - **Effort** : faible · **Impact** : ⭐⭐⭐⭐
-- [ ] **Statut (7 nov. 2026)** : partiellement fait. La suite compte désormais **151 assertions**
+- [ ] **Statut (15 nov. 2026)** : partiellement fait. La suite compte désormais **177 assertions**
   (et non 26) et couvre la CDF, la LDC (tirage, BYE, vainqueurs, trophée), le Classement, le tri,
   les swap, le catalogue de logos et l'univers des saisons passées. Restent à couvrir : création,
   bascule, suppression et migration d'une saison.

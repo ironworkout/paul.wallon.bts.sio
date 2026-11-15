@@ -50,6 +50,11 @@ js += `
 ;globalThis.__test = {
     startCDFDraw, buildCDFDemies, resolveCDFDemies, advanceCDFWinner, isByeTeam, renderCDFBracket, populateCDF,
     calculateStandings, getSeasonTeamUniverse, getClubTrophiesHTML, executeSwapOrChangeClub, getClubLogo, getClubTribune,
+    sortStandingsEntries, getTeamForm, getStandingsInsights, buildFormGuideHTML,
+    getClubSeasonSnapshot, buildHallOfFameData, getCupSeasonSources, getCupFinalDetails,
+    isPenaltyShootoutDecided, createPenaltyShootoutState, penaltyKicks,
+    buildSeasonAssistantAudit, archiveSeasonAssistant, applySeasonAssistantMovements, getLeagueMissingScores,
+    getActiveLeagueStandings,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
     populateSwapTargetClubs, onSwapSeasonChange, getClubRawLogo, getSeasonTeamUniverse, executeSwapOrChangeClub,
@@ -696,6 +701,100 @@ const palmaresActus = T.buildPalmaresActuItems('l1', {
 });
 assert(palmaresActus.some(item => item.text.includes('Peluche FC') && item.text.includes('plus titré en Ligue 1')), 'Actus palmares citent le club le plus titre en L1');
 assert(palmaresActus.some(item => item.text.includes('Coupe de France') && item.text.includes('Peluche FC')), 'Actus palmares citent le specialiste de la CDF');
+
+// Forme et variation de position dans les classements
+console.log('\n=== TEST FORME ET MOUVEMENT AU CLASSEMENT ===\n');
+const formSeason = {
+    season_id: 990,
+    fixtures: [
+        [ { home: 'A', away: 'B', scoreHome: 2, scoreAway: 0 }, { home: 'C', away: 'D', scoreHome: 1, scoreAway: 1 } ],
+        [ { home: 'B', away: 'A', scoreHome: 1, scoreAway: 1 }, { home: 'D', away: 'C', scoreHome: 0, scoreAway: 2 } ],
+        [ { home: 'A', away: 'C', scoreHome: 0, scoreAway: 3 }, { home: 'B', away: 'D', scoreHome: 2, scoreAway: 2 } ]
+    ]
+};
+T.leagueDataStore.l1.teams = { A: {}, B: {}, C: {}, D: {} };
+T.leagueDataStore.l1.seasons = [formSeason];
+T.leagueDataStore.l1.active_season_id = 990;
+const formA = T.getTeamForm(formSeason, 'A');
+assert(formA.games.map(g => g.result).join('') === 'VND', 'Forme de A sur ses 3 matchs : V-N-D');
+assert(formA.streak === 1 && formA.streakResult === 'D', 'Série de A : une défaite');
+const insightsForm = T.getStandingsInsights('l1', 990);
+assert(insightsForm.movement.C === 1 && insightsForm.movement.A === -1, 'Flèches : C gagne une place, A en perd une');
+assert(insightsForm.form.B.streak === 2 && insightsForm.form.B.streakResult === 'N', 'Série de B : deux nuls');
+assert(T.buildFormGuideHTML(formA).includes('form-pill--v') && T.buildFormGuideHTML(formA).includes('form-pill--d'), 'Pastilles de forme rendues en HTML');
+
+// Fiche club
+console.log('\n=== TEST FICHE CLUB ===\n');
+const clubProfileSeason = {
+    season_id: 991,
+    fixtures: [
+        [ { home: 'A', away: 'B', scoreHome: 2, scoreAway: 0 }, { home: 'C', away: 'D', scoreHome: 1, scoreAway: 1 } ],
+        [ { home: 'A', away: 'C', scoreHome: 1, scoreAway: 1 }, { home: 'B', away: 'D', scoreHome: 0, scoreAway: 2 } ],
+        [ { home: 'A', away: 'D', scoreHome: null, scoreAway: null } ]
+    ]
+};
+T.leagueDataStore.l1.teams = { A: {}, B: {}, C: {}, D: {} };
+T.leagueDataStore.l1.seasons = [clubProfileSeason];
+T.leagueDataStore.l1.active_season_id = 991;
+const clubSnapshot = T.getClubSeasonSnapshot('A', 'l1');
+assert(clubSnapshot.rank === 1, 'Fiche club : rang actuel');
+assert(clubSnapshot.form?.games?.length === 2, 'Fiche club : deux matchs joués dans la forme');
+assert(clubSnapshot.nextMatch && clubSnapshot.nextMatch.roundIndex === 2 && clubSnapshot.nextMatch.opponent === 'D', 'Fiche club : prochain match identifié');
+
+// Tirs au but : arrêt anticipé, mort subite et état interactif
+console.log('\n=== TEST TIRS AU BUT ===\n');
+const earlyPenalty = { score1: 3, score2: 0, kicks1: [{ scored: true }, { scored: true }, { scored: true }], kicks2: [{ scored: false }, { scored: false }, { scored: false }], suddenDeath: false };
+assert(T.isPenaltyShootoutDecided(earlyPenalty), 'Tirs au but : séance décidée par avance irrattrapable');
+const tiedPenalty = { score1: 5, score2: 5, kicks1: Array(5).fill({ scored: true }), kicks2: Array(5).fill({ scored: true }), suddenDeath: false };
+assert(!T.isPenaltyShootoutDecided(tiedPenalty) && tiedPenalty.suddenDeath, 'Tirs au but : passage en mort subite après 5-5');
+const suddenPenalty = { score1: 6, score2: 5, kicks1: Array(6).fill({ scored: true }), kicks2: Array(6).fill({ scored: true }), suddenDeath: true };
+assert(T.isPenaltyShootoutDecided(suddenPenalty), 'Tirs au but : mort subite décidée');
+T.cdfData = { participants: [], currentRound: 0, rounds: { 0: [{ team1: 'A', team2: 'B', score1: 1, score2: 1 }] }, champion: null, _trophyAwarded: false, seasons: [], active_season_id: null };
+const penaltyState = T.createPenaltyShootoutState('cdf', 0, 0);
+assert(penaltyState && penaltyState.team1 === 'A' && penaltyState.team2 === 'B', 'Tirs au but : état créé pour une égalité');
+assert(penaltyState.shooters1.length > 0 && penaltyState.shooters2.length > 0, 'Tirs au but : tireurs disponibles');
+assert(T.penaltyKicks(penaltyState) === 0 && !T.isPenaltyShootoutDecided(penaltyState), 'Tirs au but : séance neuve non décidée');
+
+// Hall of Fame / récits de saison
+console.log('\n=== TEST HALL OF FAME ===\n');
+T.leagueDataStore.l1.teams = { A: {}, B: {}, C: {}, D: {} };
+T.leagueDataStore.l1.seasons = [{ season_id: 992, nom_saison: 'Saison 992', closed: true, promotions: ['B'], relegations: ['D'], fixtures: clubProfileSeason.fixtures }];
+T.leagueDataStore.l1.active_season_id = 992;
+T.cdfData = { participants: [], currentRound: 3, rounds: { 3: [{ team1: 'A', team2: 'B', score1: 2, score2: 1, winner: 'A' }] }, champion: 'A', _trophyAwarded: true, seasons: [{ season_id: 1, nom_saison: 'Saison 1', rounds: { 3: [{ team1: 'A', team2: 'B', score1: 2, score2: 1, winner: 'A' }] }, champion: 'A' }], active_season_id: 1 };
+const hallL1 = T.buildHallOfFameData('l1');
+assert(hallL1.length === 1 && hallL1[0].champion === 'A', 'Hall of Fame : champion de ligue');
+assert(hallL1[0].promotions.includes('B') && hallL1[0].relegations.includes('D'), 'Hall of Fame : montées et descentes');
+const hallCdf = T.buildHallOfFameData('cdf');
+assert(hallCdf.length === 1 && hallCdf[0].champion === 'A' && hallCdf[0].finalist === 'B', 'Hall of Fame : champion et finaliste de coupe');
+assert(hallCdf[0].finalScore === '2-1', 'Hall of Fame : score de la finale');
+
+// Assistant de fin de saison
+console.log('\n=== TEST ASSISTANT DE FIN DE SAISON ===\n');
+const assistantSeason = { season_id: 993, nom_saison: 'Saison 993', fixtures: [[
+    { home: 'A', away: 'B', scoreHome: 3, scoreAway: 0 },
+    { home: 'A', away: 'C', scoreHome: 2, scoreAway: 0 },
+    { home: 'B', away: 'C', scoreHome: 1, scoreAway: 0 }
+]] };
+T.leagueDataStore.l1 = { teams: { A: { logo: 'a.png' }, B: { logo: 'b.png' }, C: { logo: 'c.png' } }, seasons: [assistantSeason], active_season_id: 993 };
+T.leagueDataStore.l2 = { teams: { D: { logo: 'd.png' }, E: { logo: 'e.png' }, F: { logo: 'f.png' } }, seasons: [{ season_id: 993, fixtures: [[
+    { home: 'D', away: 'E', scoreHome: 3, scoreAway: 0 },
+    { home: 'D', away: 'F', scoreHome: 2, scoreAway: 0 },
+    { home: 'E', away: 'F', scoreHome: 1, scoreAway: 0 }
+]] }], active_season_id: 993 };
+const assistantAudit = T.buildSeasonAssistantAudit('l1');
+assert(assistantAudit.canClose && assistantAudit.champion === 'A', 'Assistant : saison complète et champion identifié');
+assert(assistantAudit.proposals.some(move => move.club === 'D' && move.to === 'l1'), 'Assistant : proposition de montée L2 vers L1');
+assert(assistantAudit.proposals.some(move => move.club === 'C' && move.to === 'l2'), 'Assistant : proposition de descente L1 vers L2');
+T.leagueDataStore.l1.seasons[0].fixtures[0][2].scoreAway = null;
+const assistantMissing = T.buildSeasonAssistantAudit('l1');
+assert(!assistantMissing.canClose && assistantMissing.missing.length === 1, 'Assistant : score manquant détecté');
+T.leagueDataStore.l1.seasons[0].fixtures[0][2].scoreAway = 0;
+T.applySeasonAssistantMovements(assistantAudit);
+assert(!!T.leagueDataStore.l1.teams.D && !T.leagueDataStore.l2.teams.D, 'Assistant : montée appliquée');
+assert(!!T.leagueDataStore.l2.teams.C && !T.leagueDataStore.l1.teams.C, 'Assistant : descente appliquée');
+T.archiveSeasonAssistant(assistantAudit, true);
+assert(assistantSeason.closed === true && assistantSeason.champion === 'A', 'Assistant : saison archivée avec champion');
+assert(assistantSeason.promotions.includes('D') && assistantSeason.relegations.includes('C'), 'Assistant : mouvements archivés');
 
 // Feuilles de match par saison
 const saisonGroups = T.groupMatchesBySeason([{ seasonId: 1, match: {} }, { seasonId: 2, match: {} }, { seasonId: 2, match: {} }]);

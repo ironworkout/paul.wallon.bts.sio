@@ -1918,6 +1918,244 @@
 
         .assistant-empty { margin: 4px 0; opacity: 0.7; font-size: 0.86rem; }
 
+        /* Saisie rapide de journée */
+        .matchday-entry {
+            margin: 0 0 18px;
+            padding: 14px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.09), rgba(16, 28, 58, 0.035));
+        }
+
+        .matchday-entry:empty { display: none; }
+
+        .matchday-entry__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .matchday-entry__kicker {
+            display: block;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            opacity: 0.62;
+        }
+
+        .matchday-entry__title {
+            margin: 2px 0 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.05rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .matchday-entry__progress {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(16, 28, 58, 0.1);
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .matchday-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .matchday-card {
+            display: grid;
+            gap: 7px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            background: var(--card-bg);
+        }
+
+        .matchday-team {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .matchday-team img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            flex: 0 0 22px;
+        }
+
+        .matchday-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .matchday-score input {
+            width: 54px;
+            padding: 7px 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            background: #fff;
+        }
+
+        .matchday-score input:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 1px;
+        }
+
+        .matchday-entry__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .matchday-entry__hint { margin: 0; font-size: 0.76rem; opacity: 0.68; }
+
+        .matchday-entry__validate {
+            padding: 8px 14px;
+            font-size: 0.82rem;
+        }
+
+        .matchday-entry__validate:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .matchday-empty { margin: 0; font-size: 0.85rem; opacity: 0.7; }
+
+        /* Graphiques de saison */
+        .standings-chart:empty { display: none; }
+
+        .chart-card {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border: 1px solid rgba(16, 28, 58, 0.12);
+            border-radius: 12px;
+            background: var(--card-bg);
+        }
+
+        .chart-card__head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .chart-card__title {
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+
+        .chart-card__hint { margin: 0; font-size: 0.72rem; opacity: 0.6; }
+
+        .position-chart { display: block; width: 100%; height: auto; overflow: visible; }
+        .position-chart text { font-family: 'Open Sans', sans-serif; }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 14px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+
+        .chart-legend__item { display: inline-flex; align-items: center; gap: 5px; }
+        .chart-legend__dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+        .chart-data { margin-top: 9px; font-size: 0.75rem; }
+        .chart-data summary { cursor: pointer; opacity: 0.7; }
+        .chart-data table { width: 100%; border-collapse: collapse; margin-top: 6px; min-width: 0; }
+        .chart-data th, .chart-data td { padding: 3px 5px; border-bottom: 1px solid var(--border-color); text-align: center; }
+        .chart-data th:first-child, .chart-data td:first-child { text-align: left; }
+
+        .club-profile__chart {
+            margin: 0 0 16px;
+            padding: 12px 14px;
+            border: 1px solid rgba(212, 175, 55, 0.22);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .club-profile__chart h4 { margin: 0 0 8px; }
+
+        /* Records all-time */
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+        }
+
+        .record-card {
+            padding: 15px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.26);
+            border-radius: 12px;
+            background: linear-gradient(155deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+            color: var(--palmares-text-light);
+        }
+
+        .record-card__kicker {
+            display: block;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.62;
+        }
+
+        .record-card__value {
+            display: block;
+            margin: 5px 0 2px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            line-height: 1.2;
+        }
+
+        .record-card__detail { margin: 0; font-size: 0.8rem; line-height: 1.4; opacity: 0.86; }
+        .record-card__meta { margin: 6px 0 0; font-size: 0.7rem; opacity: 0.58; }
+
+        @media (max-width: 768px) {
+            .standings-table th:first-child,
+            .standings-table td:first-child {
+                position: sticky;
+                left: 0;
+                z-index: 2;
+                background-color: var(--card-bg);
+                box-shadow: 1px 0 0 var(--border-color);
+            }
+            .standings-table th:first-child { z-index: 3; }
+            .matchday-grid { grid-template-columns: 1fr; }
+            .position-chart { min-width: 560px; }
+            .chart-card { overflow-x: auto; }
+            .records-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .confetti { display: none !important; }
+            .penalty-board,
+            .penalty-controls,
+            .penalty-finished { animation: none !important; transition: none !important; }
+        }
+
         /* Récits des saisons */
         .hall-of-fame__header {
             display: flex;
@@ -6510,6 +6748,7 @@
                 <div class="section-header">
                     <h2 class="section-title">Calendrier & Scores L1</h2>
                 </div>
+                <div class="matchday-entry" id="l1-matchday-entry"></div>
                 <div class="section-content table-container">
                     <table class="fixtures-table">
                         <thead>
@@ -6545,6 +6784,7 @@
                         <tbody id="l1-standings-body"></tbody>
                     </table>
                 </div>
+                <div class="standings-chart" id="l1-standings-chart"></div>
             </div>
             <div class="section" id="l1-teams-section">
                 <div class="section-header">
@@ -6632,6 +6872,7 @@
                 <div class="section-header">
                     <h2 class="section-title">Calendrier & Scores L2</h2>
                 </div>
+                <div class="matchday-entry" id="l2-matchday-entry"></div>
                 <div class="section-content table-container">
                     <table class="fixtures-table">
                         <thead>
@@ -6667,6 +6908,7 @@
                         <tbody id="l2-standings-body"></tbody>
                     </table>
                 </div>
+                <div class="standings-chart" id="l2-standings-chart"></div>
             </div>
             <div class="section" id="l2-teams-section">
                 <div class="section-header">
@@ -6971,6 +7213,14 @@
                 </div>
                 <div class="section-content" id="hall-of-fame-content"></div>
             </div>
+            <div class="section records-section" id="records-section">
+                <div class="section-header">
+                    <h2 class="section-title" style="color: var(--accent-gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+                        <i class="fas fa-star"></i> Records des Peluches
+                    </h2>
+                </div>
+                <div class="section-content" id="records-content"></div>
+            </div>
         </div>
     </div>
 
@@ -7130,6 +7380,7 @@
                 <button class="modal-close" type="button" data-close-penalty aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body" id="penalty-body"></div>
+            <p class="sr-only" id="penalty-announcer" aria-live="polite" aria-atomic="true"></p>
         </div>
     </div>
 
@@ -7195,10 +7446,10 @@
     </div>
 
     <!-- ASSISTANT DE FIN DE SAISON -->
-    <div class="modal-overlay" id="season-assistant-modal">
+    <div class="modal-overlay" id="season-assistant-modal" aria-labelledby="season-assistant-title">
         <div class="modal-content season-assistant">
             <div class="modal-header">
-                <h2><i class="fas fa-clipboard-check"></i> Assistant de fin de saison</h2>
+                <h2 id="season-assistant-title"><i class="fas fa-clipboard-check"></i> Assistant de fin de saison</h2>
                 <button class="modal-close" id="close-season-assistant-modal" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body" id="season-assistant-body"></div>
@@ -7802,6 +8053,7 @@
         const CONFETTI_DEFAULT_PALETTE = ['#ffd700', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#ff9f43', '#c0c0c0'];
 
         function launchConfetti(trophyType) {
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             const palette = CONFETTI_PALETTES[trophyType] || CONFETTI_DEFAULT_PALETTE;
             const particleCount = 80;
             for (let i = 0; i < particleCount; i++) {
@@ -8458,7 +8710,7 @@
                     const status = getFixtureStatus(match, index, activeRound);
                     const homeShot = leagueId === 'ldc' ? getClubTribune(displayHome) : null;
                     const shotAttr = homeShot ? ` style="--fixture-shot:url('${homeShot.card}')"` : '';
-                    roundHtml += `<td><div class="fixture-match${homeShot ? ' fixture-match--shot' : ''}"${shotAttr}><div class="fixture-line"><div class="fixture-team home"><span>${displayHome}</span><img src="${resolveSeasonLogo(seasonLogos, match.home, displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}"></div><div class="fixture-team away"><img src="${resolveSeasonLogo(seasonLogos, match.away, displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div>${buildFixtureStatusHTML(status)}</div></td>`;
+                    roundHtml += `<td><div class="fixture-match${homeShot ? ' fixture-match--shot' : ''}"${shotAttr}><div class="fixture-line"><div class="fixture-team home"><span>${displayHome}</span><img src="${resolveSeasonLogo(seasonLogos, match.home, displayHome)}" alt="${displayHome}" class="team-logo"></div><div class="fixture-score-inputs"><input type="number" class="fixture-score-input" id="${scoreHomeInputId}" value="${scoreHomeVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="home" data-league="${leagueId}" aria-label="Score de ${escapeStandingsHTML(displayHome)} contre ${escapeStandingsHTML(displayAway)}, domicile"><span class="vs-separator">-</span><input type="number" class="fixture-score-input" id="${scoreAwayInputId}" value="${scoreAwayVal}" min="0" data-round="${index}" data-matchidx="${matchIdx}" data-team="away" data-league="${leagueId}" aria-label="Score de ${escapeStandingsHTML(displayHome)} contre ${escapeStandingsHTML(displayAway)}, extérieur"></div><div class="fixture-team away"><img src="${resolveSeasonLogo(seasonLogos, match.away, displayAway)}" alt="${displayAway}" class="team-logo"><span>${displayAway}</span></div></div>${buildFixtureStatusHTML(status)}</div></td>`;
                 });
                 for (let i = (round || []).length; i < matchesPerDay; i++) roundHtml += '<td class="fixture-empty">-</td>';
                 row.innerHTML = roundHtml; fixturesBody.appendChild(row);
@@ -8658,6 +8910,7 @@
             refreshPlayersTabIfVisible();
             refreshActuTickers();
             if (document.getElementById(initialLeagueData[leagueId]?.standingsBodyId)) populateStandingsDOM(initialLeagueData[leagueId].standingsBodyId, activeSeason.standings, league.teams, activeSeason.logos || {}, leagueId, activeSeason.season_id);
+            syncMatchdayFromMatch(leagueId, roundIndex, matchIndex);
         }
 
         function createNewSeason(leagueId) {
@@ -8689,6 +8942,172 @@
             }
         }
 
+        // ==================== SAISIE RAPIDE DE JOURNÉE ====================
+        function hasCompleteMatchScore(match) {
+            const valid = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+            return !!match && valid(match.scoreHome) && valid(match.scoreAway);
+        }
+
+        const matchdayRoundState = {};
+
+        function getMatchdayStateKey(leagueId) {
+            const season = getActiveLeagueSeason(leagueId);
+            return season ? `${leagueId}:${season.season_id}` : null;
+        }
+
+        function getMatchdayContext(leagueId, roundOverride = null) {
+            const season = getActiveLeagueSeason(leagueId);
+            if (!season || !Array.isArray(season.fixtures) || season.fixtures.length === 0) return null;
+            const activeRound = findActiveRound(season.fixtures);
+            const roundIndex = roundOverride === null || roundOverride === undefined
+                ? activeRound
+                : Math.max(0, Math.min(season.fixtures.length - 1, Number(roundOverride)));
+            const matches = season.fixtures[roundIndex] || [];
+            const total = matches.filter(Boolean).length;
+            const filled = matches.filter(match => match && hasCompleteMatchScore(match)).length;
+            const seasonComplete = season.fixtures.every(round => (round || []).every(match => !match || hasCompleteMatchScore(match)));
+            return { season, roundIndex, activeRound, matches, total, filled, complete: total > 0 && filled === total, seasonComplete };
+        }
+
+        function matchdayInput(leagueId, roundIndex, matchIndex, team) {
+            return document.querySelector(`#${leagueId}-matchday-entry .matchday-score-input[data-round="${roundIndex}"][data-matchidx="${matchIndex}"][data-team="${team}"]`);
+        }
+
+        function updateMatchdayProgress(leagueId) {
+            const entry = document.getElementById(`${leagueId}-matchday-entry`);
+            const key = getMatchdayStateKey(leagueId);
+            const context = key ? getMatchdayContext(leagueId, matchdayRoundState[key]) : null;
+            if (!entry || !context) return;
+            let filled = 0;
+            context.matches.forEach((match, matchIndex) => {
+                if (!match) return;
+                const home = matchdayInput(leagueId, context.roundIndex, matchIndex, 'home');
+                const away = matchdayInput(leagueId, context.roundIndex, matchIndex, 'away');
+                const valid = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+                if (home && away && valid(home.value) && valid(away.value)) filled++;
+            });
+            const progress = entry.querySelector('[data-matchday-progress]');
+            if (progress) progress.textContent = `${filled}/${context.total}`;
+            const button = entry.querySelector('[data-matchday-validate]');
+            if (button) {
+                button.disabled = filled !== context.total || context.total === 0;
+                button.textContent = context.seasonComplete ? 'Sauvegarder la saison' : 'Valider la journée';
+            }
+        }
+
+        function syncMatchdayFromMatch(leagueId, roundIndex, matchIndex) {
+            const key = getMatchdayStateKey(leagueId);
+            const context = key ? getMatchdayContext(leagueId, matchdayRoundState[key]) : null;
+            if (!context || context.roundIndex !== roundIndex) return;
+            const match = context.matches[matchIndex];
+            if (!match) return;
+            ['home', 'away'].forEach(team => {
+                const input = matchdayInput(leagueId, roundIndex, matchIndex, team);
+                if (input) input.value = match[team === 'home' ? 'scoreHome' : 'scoreAway'] ?? '';
+            });
+            updateMatchdayProgress(leagueId);
+        }
+
+        function syncFixtureFromMatchday(leagueId, roundIndex, matchIndex, team, value) {
+            const input = document.getElementById(`${leagueId}-r${roundIndex}-m${matchIndex}-${team === 'home' ? 'h' : 'a'}`);
+            if (input) input.value = value;
+        }
+
+        function renderMatchdayEntry(leagueId) {
+            const entry = document.getElementById(`${leagueId}-matchday-entry`);
+            if (!entry) return;
+            const key = getMatchdayStateKey(leagueId);
+            if (!key) { entry.innerHTML = ''; return; }
+            if (matchdayRoundState[key] === null || matchdayRoundState[key] === undefined) {
+                matchdayRoundState[key] = getMatchdayContext(leagueId)?.activeRound ?? 0;
+            }
+            const context = getMatchdayContext(leagueId, matchdayRoundState[key]);
+            if (!context || !context.total) {
+                entry.innerHTML = '';
+                return;
+            }
+            matchdayRoundState[key] = context.roundIndex;
+            const seasonLogos = context.season.logos || {};
+            const cards = context.matches.map((match, matchIndex) => {
+                if (!match) return '';
+                const homeDisplay = resolveCurrentClubName(match.home);
+                const awayDisplay = resolveCurrentClubName(match.away);
+                const homeLogo = resolveSeasonLogo(seasonLogos, match.home, homeDisplay);
+                const awayLogo = resolveSeasonLogo(seasonLogos, match.away, awayDisplay);
+                return `<div class="matchday-card">
+                    <div class="matchday-team"><span>${escapeStandingsHTML(homeDisplay)}</span><img src="${homeLogo}" alt=""></div>
+                    <div class="matchday-score">
+                        <input class="matchday-score-input" type="number" min="0" max="99" inputmode="numeric" value="${match.scoreHome ?? ''}" data-round="${context.roundIndex}" data-matchidx="${matchIndex}" data-team="home" data-league="${leagueId}" aria-label="Score de ${escapeStandingsHTML(homeDisplay)} contre ${escapeStandingsHTML(awayDisplay)}, domicile">
+                        <span aria-hidden="true">–</span>
+                        <input class="matchday-score-input" type="number" min="0" max="99" inputmode="numeric" value="${match.scoreAway ?? ''}" data-round="${context.roundIndex}" data-matchidx="${matchIndex}" data-team="away" data-league="${leagueId}" aria-label="Score de ${escapeStandingsHTML(homeDisplay)} contre ${escapeStandingsHTML(awayDisplay)}, extérieur">
+                    </div>
+                    <div class="matchday-team"><span>${escapeStandingsHTML(awayDisplay)}</span><img src="${awayLogo}" alt=""></div>
+                </div>`;
+            }).join('');
+            entry.innerHTML = `<div class="matchday-entry__head">
+                <div><span class="matchday-entry__kicker">Saisie rapide</span><h3 class="matchday-entry__title">Journée ${context.roundIndex + 1}</h3></div>
+                <span class="matchday-entry__progress" data-matchday-progress>${context.filled}/${context.total}</span>
+            </div>
+            <div class="matchday-grid">${cards}</div>
+            <div class="matchday-entry__footer">
+                <p class="matchday-entry__hint">Entrée passe au champ suivant. Validez quand tous les scores sont saisis.</p>
+                <button class="btn btn-success matchday-entry__validate" type="button" data-matchday-validate ${context.complete ? '' : 'disabled'}>Valider la journée</button>
+            </div>`;
+            entry.onchange = event => {
+                if (event.target.classList.contains('matchday-score-input')) handleMatchdayScoreChange(event);
+            };
+            entry.oninput = event => {
+                if (event.target.classList.contains('matchday-score-input')) updateMatchdayProgress(leagueId);
+            };
+            entry.onkeydown = handleMatchdayKeydown;
+            entry.onclick = event => {
+                if (event.target.closest('[data-matchday-validate]')) validateMatchday(leagueId);
+            };
+            updateMatchdayProgress(leagueId);
+        }
+
+        function handleMatchdayScoreChange(event) {
+            const input = event.target;
+            if (!input.classList.contains('matchday-score-input')) return;
+            const leagueId = input.dataset.league;
+            handleScoreChange(event);
+            syncFixtureFromMatchday(leagueId, Number(input.dataset.round), Number(input.dataset.matchidx), input.dataset.team, input.value);
+            updateMatchdayProgress(leagueId);
+        }
+
+        function handleMatchdayKeydown(event) {
+            if (event.key !== 'Enter') return;
+            const entry = event.currentTarget;
+            const inputs = [...entry.querySelectorAll('.matchday-score-input')];
+            const index = inputs.indexOf(event.target);
+            if (index < 0) return;
+            event.preventDefault();
+            if (inputs[index + 1]) {
+                inputs[index + 1].focus();
+                inputs[index + 1].select();
+            } else {
+                entry.querySelector('[data-matchday-validate]')?.focus();
+            }
+        }
+
+        function validateMatchday(leagueId) {
+            const key = getMatchdayStateKey(leagueId);
+            const context = key ? getMatchdayContext(leagueId, matchdayRoundState[key]) : null;
+            if (!context || !context.complete) {
+                showMessage('Complétez tous les scores de la journée avant de la valider.', 3000, true);
+                return;
+            }
+            const validatedRound = context.roundIndex + 1;
+            if (context.roundIndex + 1 < context.season.fixtures.length) {
+                matchdayRoundState[key] = context.roundIndex + 1;
+            }
+            if (googleAccessToken) saveDataToDrive(leagueId);
+            populateSingleLeagueUI(leagueId);
+            const next = getMatchdayContext(leagueId, matchdayRoundState[key]);
+            document.getElementById(`${leagueId}-matchday-entry`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            showMessage(next?.seasonComplete ? 'Saison complète : tous les scores sont saisis.' : `Journée ${validatedRound} validée.`, 3000);
+        }
+
         function populateSingleLeagueUI(leagueId) {
             const league = leagueDataStore[leagueId]; if (!league) return;
             const refIds = initialLeagueData[leagueId];
@@ -8712,9 +9131,15 @@
                 const seasonLogos = activeSeason.logos || {};
                 if (fixturesBody) populateFixturesDOM(refIds.fixtureBodyId, activeSeason.fixtures, league.teams, leagueId, seasonLogos);
                 if (standingsBody) populateStandingsDOM(refIds.standingsBodyId, activeSeason.standings, league.teams, seasonLogos, leagueId, activeSeason.season_id);
+                renderMatchdayEntry(leagueId);
+                renderStandingsChart(leagueId);
             } else {
                 if (fixturesBody) fixturesBody.innerHTML = '<tr><td colspan="4">Sélectionnez ou créez une saison.</td></tr>';
                 if (standingsBody) standingsBody.innerHTML = '<tr><td colspan="7">Sélectionnez ou créez une saison.</td></tr>';
+                const matchday = document.getElementById(`${leagueId}-matchday-entry`);
+                if (matchday) matchday.innerHTML = '';
+                const chart = document.getElementById(`${leagueId}-standings-chart`);
+                if (chart) chart.innerHTML = '';
             }
             if (league.teams) populateTeamsGridDOM(refIds.teamsGridId, league.teams);
             populateSeasonSelector(leagueId);
@@ -8920,11 +9345,13 @@
             currentSeasonAssistantLeague = leagueId;
             const audit = buildSeasonAssistantAudit(leagueId);
             renderSeasonAssistant(audit);
-            document.getElementById('season-assistant-modal')?.classList.add('active');
+            const modal = document.getElementById('season-assistant-modal');
+            if (modal) openModalAccessible(modal);
         }
 
         function closeSeasonAssistant() {
-            document.getElementById('season-assistant-modal')?.classList.remove('active');
+            const modal = document.getElementById('season-assistant-modal');
+            if (modal) closeModalAccessible(modal);
             currentSeasonAssistantLeague = null;
         }
 
@@ -10408,6 +10835,12 @@
             const state = penaltyShootoutState;
             const modal = document.getElementById('penalty-modal');
             if (!state || !modal) return;
+            const announcer = document.getElementById('penalty-announcer');
+            if (announcer) {
+                announcer.textContent = state.finished
+                    ? `${resolveCurrentClubName(state.winner)} remporte la séance ${state.score1}-${state.score2}.`
+                    : `${state.message || ''}${state.detail ? ` ${state.detail}` : ''}`;
+            }
             const title = document.getElementById('penalty-title');
             if (title) title.innerHTML = `<i class="fas fa-futbol"></i> ${escapeStandingsHTML(resolveCurrentClubName(state.team1))} - ${escapeStandingsHTML(resolveCurrentClubName(state.team2))}`;
             const currentTeam = state.turn === 1 ? state.team1 : state.team2;
@@ -12031,6 +12464,98 @@
                 </li>`).join('')}</ul>`;
         }
 
+        // ==================== GRAPHIQUES DE SAISON ====================
+        function getStandingsProgression(leagueId, seasonId) {
+            const league = leagueDataStore[leagueId];
+            const season = (league?.seasons || []).find(item => Number(item.season_id) === Number(seasonId));
+            if (!league || !season) return { season: null, teamNames: [], series: {}, roundCount: 0, playedRounds: 0 };
+            const fixtures = season.fixtures || [];
+            const teamNames = Object.keys(getSeasonTeamUniverse(season)).filter(name => name !== 'BYE');
+            const series = {};
+            teamNames.forEach(name => { series[name] = []; });
+            fixtures.forEach((round, roundIndex) => {
+                const partial = fixtures.slice(0, roundIndex + 1);
+                const standings = calculateStandings(getSeasonTeamUniverse(season), partial);
+                sortStandingsEntries(standings).forEach(([name, stats], index) => {
+                    if (!series[name]) series[name] = [];
+                    series[name].push({ round: roundIndex, position: index + 1, points: stats.points });
+                });
+            });
+            const playedRounds = fixtures.filter(round => (round || []).some(match => {
+                if (!match) return false;
+                const valid = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+                return valid(match.scoreHome) && valid(match.scoreAway);
+            })).length;
+            return { season, teamNames, series, roundCount: fixtures.length, playedRounds };
+        }
+
+        function buildPositionChartHTML(progression, teamNames, title, hint = '') {
+            if (!progression || !progression.roundCount || !progression.playedRounds) {
+                return '<p class="matchday-empty">Aucun match joué pour tracer la courbe.</p>';
+            }
+            const names = (teamNames || []).filter(name => progression.series[name]?.length);
+            if (!names.length) return '<p class="matchday-empty">Aucune donnée de classement disponible.</p>';
+            const width = 680, height = 250, left = 34, right = 18, top = 18, bottom = 30;
+            const plotW = width - left - right, plotH = height - top - bottom;
+            const maxPosition = Math.max(2, progression.teamNames.length);
+            const x = round => progression.roundCount === 1 ? left + plotW / 2 : left + (round * plotW) / (progression.roundCount - 1);
+            const y = position => top + ((position - 1) * plotH) / (maxPosition - 1);
+            const palette = ['#d4af37', '#5dade2', '#58d68d', '#ec7063', '#af7ac5', '#f5b041', '#48c9b0', '#dc7633'];
+            const gridLines = [];
+            const step = maxPosition <= 8 ? 1 : 2;
+            for (let position = 1; position <= maxPosition; position += step) {
+                gridLines.push(`<line x1="${left}" y1="${y(position)}" x2="${width - right}" y2="${y(position)}" stroke="rgba(16,28,58,0.13)" stroke-width="1"/>`);
+                gridLines.push(`<text x="${left - 7}" y="${y(position) + 3}" text-anchor="end" font-size="9" fill="#53627a">${position}e</text>`);
+            }
+            const paths = names.map((name, index) => {
+                const color = palette[index % palette.length];
+                const points = progression.series[name].map(point => `${x(point.round).toFixed(1)},${y(point.position).toFixed(1)}`).join(' ');
+                const dots = progression.series[name].map(point => `<circle cx="${x(point.round).toFixed(1)}" cy="${y(point.position).toFixed(1)}" r="3" fill="${color}" stroke="#fff" stroke-width="1.2"><title>J${point.round + 1} · ${escapeStandingsHTML(resolveCurrentClubName(name))} : ${point.position}e</title></circle>`).join('');
+                return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+            }).join('');
+            const legend = names.map((name, index) => `<span class="chart-legend__item"><span class="chart-legend__dot" style="background:${palette[index % palette.length]}"></span>${escapeStandingsHTML(resolveCurrentClubName(name))}</span>`).join('');
+            const headers = names.map(name => `<th>${escapeStandingsHTML(resolveCurrentClubName(name))}</th>`).join('');
+            const rows = Array.from({ length: progression.roundCount }, (_, round) => {
+                const cells = names.map(name => {
+                    const point = progression.series[name].find(item => item.round === round);
+                    return `<td>${point ? point.position + 'e' : '—'}</td>`;
+                }).join('');
+                return `<tr><td>J${round + 1}</td>${cells}</tr>`;
+            }).join('');
+            return `<div class="chart-card">
+                <div class="chart-card__head"><h3 class="chart-card__title">${escapeStandingsHTML(title)}</h3>${hint ? `<p class="chart-card__hint">${escapeStandingsHTML(hint)}</p>` : ''}</div>
+                <svg class="position-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeStandingsHTML(title)} : évolution des positions journée par journée">
+                    ${gridLines.join('')}
+                    ${paths}
+                    <text x="${left}" y="${height - 8}" font-size="9" fill="#53627a">J1</text>
+                    <text x="${width - right}" y="${height - 8}" text-anchor="end" font-size="9" fill="#53627a">J${progression.roundCount}</text>
+                </svg>
+                <div class="chart-legend">${legend}</div>
+                <details class="chart-data"><summary>Voir les données</summary><table><thead><tr><th>Journée</th>${headers}</tr></thead><tbody>${rows}</tbody></table></details>
+            </div>`;
+        }
+
+        function buildClubPositionChart(storedName, leagueId) {
+            const season = getActiveLeagueSeason(leagueId);
+            if (!season) return '<p class="matchday-empty">Aucune saison active.</p>';
+            const progression = getStandingsProgression(leagueId, season.season_id);
+            const displayName = resolveCurrentClubName(storedName);
+            const name = progression.teamNames.find(item => item === storedName || resolveCurrentClubName(item) === displayName);
+            return name ? buildPositionChartHTML(progression, [name], `Position de ${displayName}`, 'Place au classement après chaque journée.') : '<p class="matchday-empty">Aucune donnée pour ce club.</p>';
+        }
+
+        function renderStandingsChart(leagueId) {
+            const container = document.getElementById(`${leagueId}-standings-chart`);
+            if (!container) return;
+            const season = getActiveLeagueSeason(leagueId);
+            if (!season) { container.innerHTML = ''; return; }
+            const standings = getActiveLeagueStandings(leagueId).slice(0, 5).map(team => team.name);
+            const progression = getStandingsProgression(leagueId, season.season_id);
+            container.innerHTML = standings.length
+                ? buildPositionChartHTML(progression, standings, 'Course au titre', 'Top 5 du classement actuel.')
+                : '';
+        }
+
         function openClubProfile(clubName, leagueId) {
             const modal = document.getElementById('club-profile-modal');
             if (!modal) return;
@@ -12049,6 +12574,7 @@
             const next = snapshot.nextMatch;
             const formHTML = renderClubProfileForm(snapshot.form);
             const matchesHTML = renderClubProfileMatches(snapshot.form);
+            const positionChartHTML = snapshot.season ? buildClubPositionChart(snapshot.storedName, leagueId) : '';
             const trophyHTML = getClubTrophiesHTML(displayName, 'team-trophies club-profile__trophies');
             const heroClass = tribune ? 'club-profile__hero has-photo' : 'club-profile__hero';
             const heroStyle = tribune ? ` style="--club-profile-shot: url('${tribune.full}')"` : '';
@@ -12076,6 +12602,7 @@
                             <div class="club-profile__stat"><b>${teamData.diff > 0 ? '+' : ''}${teamData.diff ?? 0}</b><small>Différence</small></div>
                             <div class="club-profile__stat"><b>${snapshot.form?.streak ? snapshot.form.streak + snapshot.form.streakResult : '—'}</b><small>Série</small></div>
                         </div>` : '<p class="club-profile__empty">Aucune saison active pour ce club.</p>'}
+                        ${snapshot.season ? `<div class="club-profile__chart"><h4>Courbe de position</h4>${positionChartHTML}</div>` : ''}
                         <div class="club-profile__grid">
                             <div class="club-profile__block">
                                 <h4>Derniers matchs</h4>
@@ -12172,6 +12699,7 @@
             });
             populateClassement();
             populateHallOfFame();
+            populateAllTimeRecords();
         }
 
         // ==================== RÉCITS DES SAISONS / HALL OF FAME ====================
@@ -12297,6 +12825,100 @@
             container.innerHTML = stories.length
                 ? `<div class="season-stories">${stories.map(renderHallOfFameCard).join('')}</div>`
                 : '<p class="hall-of-fame__empty">Aucune saison terminée pour cette compétition.</p>';
+        }
+
+        // ==================== RECORDS ALL-TIME ====================
+        function collectAllTimeMatches() {
+            const records = [];
+            const add = (comp, season, match, round) => {
+                if (!match) return;
+                const valid = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+                if (!valid(match.scoreHome) || !valid(match.scoreAway)) return;
+                if (!match.home || !match.away || String(match.home).startsWith('BYE') || String(match.away).startsWith('BYE')) return;
+                records.push({
+                    comp, compLabel: HALL_OF_FAME_LABELS[comp] || comp.toUpperCase(),
+                    seasonId: season.season_id, seasonName: season.nom_saison || `Saison ${season.season_id}`,
+                    round, home: match.home, away: match.away,
+                    scoreHome: Number(match.scoreHome), scoreAway: Number(match.scoreAway)
+                });
+            };
+            (leagueDataStore.l1?.seasons || []).forEach(season => (season.fixtures || []).forEach((round, index) => (round || []).forEach(match => add('l1', season, match, index + 1))));
+            (leagueDataStore.l2?.seasons || []).forEach(season => (season.fixtures || []).forEach((round, index) => (round || []).forEach(match => add('l2', season, match, index + 1))));
+            ['cdf', 'ldc'].forEach(comp => getCupSeasonSources(comp).forEach(season => {
+                Object.entries(season.rounds || {}).forEach(([roundKey, round]) => (round || []).forEach(match => {
+                    if (!match || !match.team1 || !match.team2 || match.team3) return;
+                    add(comp, season, { home: match.team1, away: match.team2, scoreHome: match.score1, scoreAway: match.score2 }, Number(roundKey) + 1);
+                }));
+            }));
+            return records;
+        }
+
+        function buildAllTimeRecords() {
+            const matches = collectAllTimeMatches();
+            const result = { empty: !matches.length, biggestWin: null, highestScoring: null, bestAttack: null, bestStreak: null, mostTitled: null };
+            if (matches.length) {
+                result.biggestWin = [...matches].sort((a, b) => (Math.abs(b.scoreHome - b.scoreAway) - Math.abs(a.scoreHome - a.scoreAway)) || ((b.scoreHome + b.scoreAway) - (a.scoreHome + a.scoreAway)))[0];
+                result.highestScoring = [...matches].sort((a, b) => ((b.scoreHome + b.scoreAway) - (a.scoreHome + a.scoreAway)) || (Math.abs(b.scoreHome - b.scoreAway) - Math.abs(a.scoreHome - a.scoreAway)))[0];
+                const attacks = new Map();
+                matches.forEach(match => {
+                    [['home', match.home, match.scoreHome], ['away', match.away, match.scoreAway]].forEach(([, team, goals]) => {
+                        const key = `${match.comp}|${match.seasonId}|${team}`;
+                        const entry = attacks.get(key) || { team, goals: 0, seasonName: match.seasonName, compLabel: match.compLabel };
+                        entry.goals += Number(goals) || 0;
+                        attacks.set(key, entry);
+                    });
+                });
+                result.bestAttack = [...attacks.values()].sort((a, b) => b.goals - a.goals)[0] || null;
+                const streaks = new Map();
+                matches.forEach(match => {
+                    [['home', match.home, match.scoreHome, match.scoreAway], ['away', match.away, match.scoreAway, match.scoreHome]].forEach(([, team, scored, conceded]) => {
+                        const key = `${match.comp}|${match.seasonId}|${team}`;
+                        const entry = streaks.get(key) || { team, streak: 0, max: 0, seasonName: match.seasonName, compLabel: match.compLabel };
+                        entry.streak = scored > conceded ? entry.streak + 1 : 0;
+                        entry.max = Math.max(entry.max, entry.streak);
+                        streaks.set(key, entry);
+                    });
+                });
+                result.bestStreak = [...streaks.values()].sort((a, b) => b.max - a.max)[0] || null;
+            }
+            const titles = Object.entries(palmaresData || {}).map(([club, counts]) => ({
+                club,
+                total: ['Ligue 1', 'Ligue 2', 'CDF', 'LDC'].reduce((sum, key) => sum + (Number(counts?.[key]) || 0), 0)
+            })).filter(entry => entry.total > 0).sort((a, b) => b.total - a.total);
+            result.mostTitled = titles[0] || null;
+            return result;
+        }
+
+        function renderRecordCard(kicker, value, detail, meta) {
+            return `<article class="record-card"><span class="record-card__kicker">${escapeStandingsHTML(kicker)}</span><strong class="record-card__value">${escapeStandingsHTML(value)}</strong><p class="record-card__detail">${detail}</p><p class="record-card__meta">${escapeStandingsHTML(meta)}</p></article>`;
+        }
+
+        function populateAllTimeRecords() {
+            const container = document.getElementById('records-content');
+            if (!container) return;
+            const data = buildAllTimeRecords();
+            const cards = [];
+            if (data.biggestWin) {
+                const m = data.biggestWin;
+                cards.push(renderRecordCard('Plus large victoire', `${Math.abs(m.scoreHome - m.scoreAway)} but${Math.abs(m.scoreHome - m.scoreAway) > 1 ? 's' : ''} d’écart`, `${escapeStandingsHTML(resolveCurrentClubName(m.home))} ${m.scoreHome}-${m.scoreAway} ${escapeStandingsHTML(resolveCurrentClubName(m.away))}`, `${m.compLabel} · ${m.seasonName} · J${m.round}`));
+            }
+            if (data.highestScoring) {
+                const m = data.highestScoring;
+                cards.push(renderRecordCard('Match le plus prolifique', `${m.scoreHome + m.scoreAway} but${m.scoreHome + m.scoreAway > 1 ? 's' : ''}`, `${escapeStandingsHTML(resolveCurrentClubName(m.home))} ${m.scoreHome}-${m.scoreAway} ${escapeStandingsHTML(resolveCurrentClubName(m.away))}`, `${m.compLabel} · ${m.seasonName} · J${m.round}`));
+            }
+            if (data.bestAttack) {
+                const r = data.bestAttack;
+                cards.push(renderRecordCard('Meilleure attaque', `${r.goals} but${r.goals > 1 ? 's' : ''}`, escapeStandingsHTML(resolveCurrentClubName(r.team)), `${r.compLabel} · ${r.seasonName}`));
+            }
+            if (data.bestStreak) {
+                const r = data.bestStreak;
+                cards.push(renderRecordCard('Plus longue série de victoires', `${r.max} victoire${r.max > 1 ? 's' : ''}`, escapeStandingsHTML(resolveCurrentClubName(r.team)), `${r.compLabel} · ${r.seasonName}`));
+            }
+            if (data.mostTitled) {
+                const r = data.mostTitled;
+                cards.push(renderRecordCard('Club le plus titré', `${r.total} titre${r.total > 1 ? 's' : ''}`, escapeStandingsHTML(resolveCurrentClubName(r.club)), 'Toutes compétitions confondues'));
+            }
+            container.innerHTML = cards.length ? `<div class="records-grid">${cards.join('')}</div>` : '<p class="hall-of-fame__empty">Aucun record pour l’instant : saisissez des scores.</p>';
         }
 
         window.modifyPalmares = function (teamName, trophyType, isAdding) {
@@ -12564,7 +13186,7 @@
             observeActiveTabSections();
 
             if (tabId === 'joueurs') renderPlayersTab();
-            if (tabId === 'palmares') populateHallOfFame();
+            if (tabId === 'palmares') { populateHallOfFame(); populateAllTimeRecords(); }
 
             document.querySelectorAll('.carousel').forEach(carousel => {
                 const ci = carousel.carouselInstance;

@@ -13,11 +13,11 @@ Navigation par onglets, une page unique :
 
 | Onglet | Contenu |
 |---|---|
-| Ligue 1 / Ligue 2 / Ligue 3 | Championnats avec journées, classements (forme récente, flèches, série) et fiches club au clic |
+| Ligue 1 / Ligue 2 / Ligue 3 | Championnats avec saisie rapide de journée, classements (forme, flèches, série, courbe) et fiches club au clic |
 | LDC | Coupe à 32 clubs (32es → finale), complétée à 32 par des BYE résolus automatiquement |
 | CDF | Coupe à 12 clubs : 8es (6 matchs) → quarts (3) → demie **à 3 clubs** → finale |
 | Barrages | Accession / maintien, avec échanges de places entre ligues et tirs au but interactifs |
-| Palmarès | Trophées par club (Ligue 1, Ligue 2, LDC, CDF) et Hall of Fame des saisons imprimable |
+| Palmarès | Trophées par club, Hall of Fame des saisons imprimable et records all-time |
 | Classement | Classement général, triable (officiel, total, par compétition) |
 | Joueurs | Fiches avec photo, buteurs saisis match par match, arrêts des gardiens calculés |
 | Base | Base de clubs, logos et saisons archivées |
@@ -48,7 +48,7 @@ node cdf_format_test.js
 Le script charge `index.html`, extrait son JavaScript et l'exécute dans un contexte simulé, puis affiche :
 
 ```
-RESULTAT: 177 reussis, 0 echecs
+RESULTAT: 185 reussis, 0 echecs
 ```
 
 Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement en CI
@@ -58,8 +58,8 @@ Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement e
 ## Structure du dépôt
 
 ```
-index.html            # TOUT le site : HTML + CSS + JS (672 Ko, ~14 400 lignes)
-cdf_format_test.js    # Suite de tests Node (177 assertions)
+index.html            # TOUT le site : HTML + CSS + JS (707 Ko, ~15 000 lignes)
+cdf_format_test.js    # Suite de tests Node (185 assertions)
 AMELIORATIONS.md      # Feuille de route : 20 idées, cases cochées quand c'est fait
 INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données, vérifications
 VISUELS.md            # Direction artistique LDC/CDF et prompts des visuels à produire

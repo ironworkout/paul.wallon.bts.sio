@@ -13,8 +13,8 @@ Créé le **7 novembre 2026**, après une vérification complète du dépôt et 
 | Visibilité | publique |
 | Branches | `main` uniquement (branche par défaut) |
 | Tête de `main` | `c5dbd37` — « Merge remote-tracking branch 'origin/main' », 6 août 2026 11:52 UTC |
-| `index.html` | 672 848 octets, **14 391 lignes** (HTML + CSS + JS tout-en-un) |
-| Suite de tests | `cdf_format_test.js` → **177 réussis, 0 échec** |
+| `index.html` | 707 194 octets, **15 013 lignes** (HTML + CSS + JS tout-en-un) |
+| Suite de tests | `cdf_format_test.js` → **185 réussis, 0 échec** |
 | Taille du dépôt | ~22 Mo |
 | Build | **aucun** (pas de bundler) ; Node ne sert qu'aux tests |
 
@@ -69,7 +69,7 @@ Contrôle d'intégrité du clone : `git hash-object index.html` doit renvoyer le
 node cdf_format_test.js
 ```
 
-Doit finir par **`RESULTAT: 177 reussis, 0 echecs`** (référence du 15 nov. 2026).
+Doit finir par **`RESULTAT: 185 reussis, 0 echecs`** (référence du 15 nov. 2026).
 À relancer après **toute** modification touchant CDF, LDC, classement, palmarès, saisons, logos ou le
 moteur de match. Le test charge `index.html` et l'exécute dans un contexte simulé : il fournit
 `googleAccessToken = 'fake-token'` mais **aucun `fetch`**, donc les appels Drive échouent silencieusement

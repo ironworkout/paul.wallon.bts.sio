@@ -55,6 +55,9 @@ js += `
     isPenaltyShootoutDecided, createPenaltyShootoutState, penaltyKicks,
     buildSeasonAssistantAudit, archiveSeasonAssistant, applySeasonAssistantMovements, getLeagueMissingScores,
     getActiveLeagueStandings,
+    getMatchdayContext, getMatchdayStateKey,
+    getStandingsProgression, buildPositionChartHTML, buildClubPositionChart,
+    buildAllTimeRecords, collectAllTimeMatches, populateAllTimeRecords,
     getClassementData, populateClassement, sortClassementBy, getAllTeamsInStore, resolveLogoUrl, CLASSEMENT_TROPHY_ORDER,
     GITHUB_LOGOS_CATALOG, getVisibleCatalogLogos, getRemovedCatalogLogos, setRemovedCatalogLogos, populateGithubLogoSelect,
     populateSwapTargetClubs, onSwapSeasonChange, getClubRawLogo, getSeasonTeamUniverse, executeSwapOrChangeClub,
@@ -795,6 +798,36 @@ assert(!!T.leagueDataStore.l2.teams.C && !T.leagueDataStore.l1.teams.C, 'Assista
 T.archiveSeasonAssistant(assistantAudit, true);
 assert(assistantSeason.closed === true && assistantSeason.champion === 'A', 'Assistant : saison archivée avec champion');
 assert(assistantSeason.promotions.includes('D') && assistantSeason.relegations.includes('C'), 'Assistant : mouvements archivés');
+
+// Saisie de journée, graphiques et records
+console.log('\n=== TEST SAISIE DE JOURNEE / GRAPHIQUES / RECORDS ===\n');
+const matchdaySeason = {
+    season_id: 994,
+    nom_saison: 'Saison 994',
+    fixtures: [
+        [ { home: 'A', away: 'B', scoreHome: null, scoreAway: null }, { home: 'C', away: 'D', scoreHome: null, scoreAway: null } ],
+        [ { home: 'B', away: 'C', scoreHome: null, scoreAway: null }, { home: 'D', away: 'A', scoreHome: null, scoreAway: null } ]
+    ]
+};
+T.leagueDataStore.l1 = { teams: { A: {}, B: {}, C: {}, D: {} }, seasons: [matchdaySeason], active_season_id: 994 };
+const matchdayInitial = T.getMatchdayContext('l1');
+assert(matchdayInitial.roundIndex === 0 && matchdayInitial.total === 2 && !matchdayInitial.complete, 'Saisie journée : journée active et incomplète');
+matchdaySeason.fixtures[0][0].scoreHome = 3;
+matchdaySeason.fixtures[0][0].scoreAway = 0;
+matchdaySeason.fixtures[0][1].scoreHome = 1;
+matchdaySeason.fixtures[0][1].scoreAway = 1;
+const matchdayDone = T.getMatchdayContext('l1', 0);
+assert(matchdayDone.complete && matchdayDone.activeRound === 1 && !matchdayDone.seasonComplete, 'Saisie journée : journée validable, saison encore en cours');
+const progression = T.getStandingsProgression('l1', 994);
+assert(progression.roundCount === 2 && progression.playedRounds === 1, 'Graphique : deux journées, une jouée');
+assert(progression.series.A[0].position === 1 && progression.series.B[0].position === 4, 'Graphique : positions après la première journée');
+const chart = T.buildPositionChartHTML(progression, ['A'], 'Position de A');
+assert(chart.includes('<svg') && chart.includes('polyline') && chart.includes('Voir les données'), 'Graphique : SVG et données accessibles rendus');
+T.leagueDataStore.l2 = { teams: {}, seasons: [], active_season_id: null };
+const records = T.buildAllTimeRecords();
+assert(records.biggestWin.home === 'A' && records.biggestWin.scoreHome === 3 && records.biggestWin.scoreAway === 0, 'Records : plus large victoire');
+assert(records.bestAttack.team === 'A' && records.bestAttack.goals === 3, 'Records : meilleure attaque');
+assert(records.highestScoring.home === 'A' || records.highestScoring.away === 'A', 'Records : match le plus prolifique');
 
 // Feuilles de match par saison
 const saisonGroups = T.groupMatchesBySeason([{ seasonId: 1, match: {} }, { seasonId: 2, match: {} }, { seasonId: 2, match: {} }]);

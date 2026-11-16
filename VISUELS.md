@@ -99,9 +99,10 @@ font en CSS (cercle bordé or ou violet, bande dégradée), pour rester nets sur
 > No text, no logos.
 
 ### CDF — trophée (800×800, transparent)
-> Studio shot of a modern silver cup trophy with a wide bowl and short handles, violet and magenta rim
-> lighting, clean white-to-transparent background for removal, crisp edges, glossy metal. Energetic modern
-> sports aesthetic. No text, no crest.
+> Studio shot of a modern legendary magenta crystal cup trophy with a wide bowl and short handles,
+> faceted rose and fuchsia surfaces, sparkling highlights, violet and magenta rim lighting, clean
+> white-to-transparent background for removal, crisp edges. Energetic modern sports aesthetic. No text,
+> no crest.
 
 ### CDF — tirage (1200×800)
 > Plush paws mixing violet and magenta balls in a bowl, bright studio lighting with magenta gradient

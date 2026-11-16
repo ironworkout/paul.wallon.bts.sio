@@ -1243,8 +1243,8 @@
         }
 
         .trophy-cdf {
-            color: #ff9f43;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.4), 0 0 15px #ff9f43, 0 0 22px #ff9f43;
+            color: #ff8ae4;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.4), 0 0 15px #ff5cd8, 0 0 24px #c724b1;
         }
 
         .palmares-table .action-cell {
@@ -3511,14 +3511,30 @@
             filter: drop-shadow(0 0 3px rgba(192, 132, 252, 0.8));
             animation: ldcTrophyShimmer 3.4s ease-in-out infinite;
         }
-        @media (prefers-reduced-motion: reduce) {
-            .trophee--ldc { animation: none; }
+
+        @keyframes cdfTrophyShimmer {
+            0%, 100% {
+                filter: drop-shadow(0 0 2px rgba(255, 179, 230, 0.8)) drop-shadow(0 0 5px rgba(199, 36, 177, 0.45));
+            }
+            50% {
+                filter: drop-shadow(0 0 4px rgba(255, 228, 250, 0.95)) drop-shadow(0 0 13px rgba(255, 92, 216, 0.8));
+            }
         }
-        /* Les trophées à zéro restent discrets et ne consomment pas d'animation. */
-        .trophy-cell__value.is-zero .trophee--ldc { animation: none; }
-        .trophee--cdf { --r: 1.027; filter: drop-shadow(0 0 3px rgba(199, 36, 177, 0.45)); }
+
+        .trophee--cdf {
+            --r: 1.027;
+            filter: drop-shadow(0 0 3px rgba(255, 92, 216, 0.8));
+            animation: cdfTrophyShimmer 3.8s ease-in-out infinite;
+        }
         .trophee--l1 { --r: 0.625; filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.6)); }
         .trophee--l2 { --r: 0.625; filter: drop-shadow(0 0 3px rgba(200, 210, 225, 0.55)); }
+        @media (prefers-reduced-motion: reduce) {
+            .trophee--ldc,
+            .trophee--cdf { animation: none; }
+        }
+        /* Les trophées à zéro restent discrets et ne consomment pas d'animation. */
+        .trophy-cell__value.is-zero .trophee--ldc,
+        .trophy-cell__value.is-zero .trophee--cdf { animation: none; }
         .nav-link .trophee { --t: 1.3em; vertical-align: -0.3em; }
         .section-title .trophee { --t: 1.5em; vertical-align: -0.38em; margin-right: 2px; }
         .palmares-table th .trophee,
@@ -6598,6 +6614,21 @@
                 <stop offset="0%" stop-color="#3b0764"/><stop offset="48%" stop-color="#1b0a2e"/>
                 <stop offset="100%" stop-color="#08020f"/>
             </linearGradient>
+            <linearGradient id="troph-cdf-crystal" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff0fb"/><stop offset="16%" stop-color="#ffb3e6"/>
+                <stop offset="34%" stop-color="#ff5cd8"/><stop offset="52%" stop-color="#c724b1"/>
+                <stop offset="70%" stop-color="#6a0d5c"/><stop offset="86%" stop-color="#ff8ae4"/>
+                <stop offset="100%" stop-color="#ffe4fa"/>
+            </linearGradient>
+            <linearGradient id="troph-cdf-rim" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fff5fc"/><stop offset="24%" stop-color="#ffc2ec"/>
+                <stop offset="50%" stop-color="#ff5cd8"/><stop offset="76%" stop-color="#9d1c8a"/>
+                <stop offset="100%" stop-color="#4a0a42"/>
+            </linearGradient>
+            <linearGradient id="troph-cdf-creux" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#3d0735"/><stop offset="52%" stop-color="#8a1478"/>
+                <stop offset="100%" stop-color="#ff5cd8"/>
+            </linearGradient>
             <linearGradient id="troph-marbre" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#cfcdc6"/><stop offset="22%" stop-color="#fbfaf6"/>
                 <stop offset="46%" stop-color="#e4e2da"/><stop offset="68%" stop-color="#ffffff"/>
@@ -6635,17 +6666,23 @@
             <rect x="47" y="172" width="26" height="4" rx="1" fill="url(#troph-ldc-rim)"/>
         </symbol>
 
-        <!-- COUPE DE FRANCE : coupe Charles-Simon, argent ciselé sur socle de marbre blanc des Pyrénées -->
+        <!-- COUPE DE FRANCE : cristal magenta légendaire, socle de marbre blanc des Pyrénées -->
         <symbol id="trophee-cdf" viewBox="2 85 116 113">
-            <path d="M16 92C5 92 1 102 3 111C5 120 12 124 22 124L22 116C15 116 11 112 11 106C11 100 14 98 17 98Z" fill="url(#troph-argent)"/>
-            <path d="M104 92C115 92 119 102 117 111C115 120 108 124 98 124L98 116C105 116 109 112 109 106C109 100 106 98 103 98Z" fill="url(#troph-argent)"/>
-            <path d="M16 96C16 130 34 152 60 152C86 152 104 130 104 96Z" fill="url(#troph-argent)"/>
-            <ellipse cx="60" cy="96" rx="44" ry="10" fill="url(#troph-argent-v)" stroke="#5f6c78" stroke-width="1.1"/>
-            <ellipse cx="60" cy="95" rx="38" ry="7" fill="url(#troph-creux)"/>
-            <ellipse cx="44" cy="118" rx="6" ry="18" fill="#ffffff" opacity="0.28"/>
-            <path d="M52 152C50 160 48 166 48 170L72 170C72 166 70 160 68 152Z" fill="url(#troph-argent)"/>
-            <rect x="42" y="166" width="36" height="6" rx="2" fill="url(#troph-argent)"/>
-            <path d="M40 174h40l-4 20a4 4 0 0 1-4 3H48a4 4 0 0 1-4-3Z" fill="url(#troph-marbre)"/>
+            <path d="M16 92C5 92 1 102 3 111C5 120 12 124 22 124L22 116C15 116 11 112 11 106C11 100 14 98 17 98Z" fill="url(#troph-cdf-crystal)"/>
+            <path d="M104 92C115 92 119 102 117 111C115 120 108 124 98 124L98 116C105 116 109 112 109 106C109 100 106 98 103 98Z" fill="url(#troph-cdf-crystal)"/>
+            <path d="M16 96C16 130 34 152 60 152C86 152 104 130 104 96Z" fill="url(#troph-cdf-crystal)"/>
+            <!-- Facettes de cristal : deux arêtes roses et un reflet lumineux -->
+            <path d="M28 102L42 108L36 140L29 130Z" fill="#ffffff" opacity="0.2"/>
+            <path d="M78 102L88 108L82 140L75 128Z" fill="#ffe4fa" opacity="0.22"/>
+            <ellipse cx="60" cy="96" rx="44" ry="10" fill="url(#troph-cdf-rim)" stroke="#ffd6f3" stroke-width="0.9"/>
+            <ellipse cx="60" cy="95" rx="38" ry="7" fill="url(#troph-cdf-creux)"/>
+            <ellipse cx="44" cy="118" rx="6" ry="18" fill="#ffffff" opacity="0.34"/>
+            <path d="M52 152C50 160 48 166 48 170L72 170C72 166 70 160 68 152Z" fill="url(#troph-cdf-crystal)"/>
+            <rect x="42" y="166" width="36" height="6" rx="2" fill="url(#troph-cdf-rim)"/>
+            <path d="M40 174h40l-4 20a4 4 0 0 1-4 3H48a4 4 0 0 1-4-3Z" fill="url(#troph-marbre)" stroke="#d8a5c8" stroke-width="0.8"/>
+            <!-- Éclats de cristal autour de la coupe -->
+            <path d="M37 87l1.4 3.3 3.3 1.4-3.3 1.4-1.4 3.3-1.4-3.3-3.3-1.4 3.3-1.4z" fill="#fff0fb" opacity="0.9"/>
+            <path d="M93 89l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1z" fill="#ffd6f3" opacity="0.8"/>
             <path d="M44 181h32M46 187h28" stroke="#b9b5aa" stroke-width="0.9" opacity="0.75"/>
         </symbol>
 

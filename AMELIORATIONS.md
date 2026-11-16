@@ -95,11 +95,11 @@ Vérifier que le bracket CDF/LDC (qui utilise `overflow-x: auto`) soit bien util
 
 ## 🛠️ Technique / robustesse
 
-### 13. Découper le fichier `index.html` (15 013 lignes au 15 nov. 2026)
+### 13. Découper le fichier `index.html` (15 056 lignes au 15 nov. 2026)
 Tout est dans un seul fichier (HTML + CSS + JS). Le découper en `style.css`, `app.js` et `index.html` réduirait le risque de bugs et faciliterait la maintenance.
 - **Effort** : élevé · **Impact** : ⭐⭐⭐⭐ (qualité de code)
 - [ ] **Statut (7 nov. 2026)** : non fait. Aucun CSS/JS externe : les anciens `style.css` et `app.js`,
-  jamais chargés, ont été retirés du dépôt le 7 nov. 2026. `index.html` reste à 15 013 lignes.
+  jamais chargés, ont été retirés du dépôt le 7 nov. 2026. `index.html` reste à 15 056 lignes.
 
 ### ✅ 14. Créer un `.gitignore` avec `.freebuff/`
 Le dossier `.freebuff/` (base de données interne de l'app) apparaît constamment en untracked. L'ajouter au `.gitignore` éviterait tout risque de le committer par erreur.

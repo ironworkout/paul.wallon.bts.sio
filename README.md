@@ -58,7 +58,7 @@ Il sort en **code 1** dès qu'une assertion échoue, et tourne automatiquement e
 ## Structure du dépôt
 
 ```
-index.html            # TOUT le site : HTML + CSS + JS (707 Ko, ~15 000 lignes)
+index.html            # TOUT le site : HTML + CSS + JS (710 Ko, ~15 000 lignes)
 cdf_format_test.js    # Suite de tests Node (185 assertions)
 AMELIORATIONS.md      # Feuille de route : 20 idées, cases cochées quand c'est fait
 INSTRUCTIONS.md       # Consignes de travail : conventions, modèle de données, vérifications

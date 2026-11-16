@@ -13,7 +13,7 @@ Créé le **7 novembre 2026**, après une vérification complète du dépôt et 
 | Visibilité | publique |
 | Branches | `main` uniquement (branche par défaut) |
 | Tête de `main` | `c5dbd37` — « Merge remote-tracking branch 'origin/main' », 6 août 2026 11:52 UTC |
-| `index.html` | 707 194 octets, **15 013 lignes** (HTML + CSS + JS tout-en-un) |
+| `index.html` | 709 828 octets, **15 056 lignes** (HTML + CSS + JS tout-en-un) |
 | Suite de tests | `cdf_format_test.js` → **185 réussis, 0 échec** |
 | Taille du dépôt | ~22 Mo |
 | Build | **aucun** (pas de bundler) ; Node ne sert qu'aux tests |

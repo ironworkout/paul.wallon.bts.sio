@@ -77,9 +77,10 @@ font en CSS (cercle bordé or ou violet, bande dégradée), pour rester nets sur
 > No text, no logos, no human faces.
 
 ### LDC — trophée (800×800, transparent)
-> Studio product shot of a stylized silver and gold cup trophy, tall handles, polished metal, soft golden
-> halo behind it, pure black background to be removed. Ultra clean edges, no reflections of a room, no
-> text, no real club crest. Premium sports broadcast trophy aesthetic.
+> Studio product shot of a stylized legendary purple crystal cup trophy, tall handles, faceted amethyst
+> and lilac surfaces, sparkling highlights, soft violet halo behind it, pure black background to be
+> removed. Ultra clean edges, no reflections of a room, no text, no real club crest. Premium sports
+> broadcast trophy aesthetic.
 
 ### LDC — tirage (1200×800)
 > Close-up of plush paws drawing small golden balls from a glass bowl, dark velvet table, single warm
